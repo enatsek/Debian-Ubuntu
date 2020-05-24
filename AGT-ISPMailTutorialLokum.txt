@@ -1,0 +1,1003 @@
+ISPMailTutorialLokum: ISP Mail Tutorial Lokum Edition
+
+
+#---Copyright (C) 2020 Exforge exforge@karasite.com
+# This document is free text: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+# This document is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+
+#---Description
+# Multi Domain Mail Server with
+#   webmail interface: Nextcloud
+#   IMAP: Dovecot
+#   SPAM prevention, SPF, DKIM: Rspamd
+#   DB integrated users: PostreSQL
+# Very Highly Based on Original Document by Alexey Abel "ISP Mail Tutorial (Caramel Edition)" at:
+#      https://123qwe.com/
+# Alexey Credits that his tutorial is based on Christoph Haas' ISPmail tutorials at:
+#      https://workaround.org/ispmail
+# Summarized and adapted to Ubuntu Server by me
+# I have no claims for this document being flawless.
+
+
+#---Our Configuration
+# OS: Ubuntu Server 18.04 LTS
+# Main Domain: karasite.com
+# Main Mail Server: mail.karasite.com 89.47.167.194
+# Additional Domain: karasite.xyz
+
+#---Information 1. Email Receiving as Described by Alexey Abel
+# 1. A remote mail server connects on port 25 where Postfix is listening. They communicate through SMTP.
+# 2. Postfix makes some basic checks like verifying that the recipient of the e-mail actually exists on the mail server.
+# 3. Postfix forwards the e-mail to Rspamd for further inspection.
+# 4. Rspamd inspects the e-mail and
+#	if Rspamd is sure that its SPAM tells Postfix to reject the e-mail
+#	if Rspamd does not think its SPAM or is not sure, it adds an additional header and sends the e-mail back to Postfix
+# 5. If the e-mail was accepted it is forwarded to Dovecot
+# 6. Dovecot stores it in the file system
+# 7. A user client connects on port 143 where Dovecot is listening. They communicate through IMAP.
+# 8. The client browses mail folders and reads e-mails. Dovecot loads e-mails from the file system on the fly.
+
+#---Information 2. Email Sending as Described by Alexey Abel
+# 1. The user connects on port 25 or port 587 where Postfix is listening. They communicate through SMTP. The client provides a username and password through an encrypted connection.
+# 2. Posfix checks whether this username exsits and whether the password is correct.
+# 3. Postfix forwards the e-mail to Rspamd which adds a signature (DKIM) to "vouch" that this e-mail is coming from a legitimate mail server.
+# 4. Postfix connects to whichever remote mail server on the Internet responsible for the recipients domain.
+# 5. Postfix forwards the sent e-mail to Dovecot
+# 6. Dovecot stores the sent e-mail in the Sent folder.
+
+#---Information 3. Contact/Calendar Sync as Described by Alexey Abel
+# 1. The users phone connects on port 80 where Apache is listening and requests a specific URL.
+# 2. Apache lets Nextcloud handle the request.
+# 3. Nextcloud communicates with the users phone using CardDAV or CalDAV respectively. The phone sends/receives contacts/calendar events.
+
+#---Information 4. Nextcloud/Webmail as Described by Alexey Abel
+# 1. The user uses a browser to connect on port 80 using the URL mail.example.com where Apache is listening.
+# 2. Apache lets Nextcloud handle the request.
+# 3. Nextcloud shows the login page.
+# 4. The user logs in.
+# 5. The user navigates Nextcloud and can share files or use the webmail app to read or send e-mails.
+#	to read e-mails the webmail app connects through localhost to Dovecot and uses IMAP
+#	to send e-mails the webmail app connects through localhost to Posfix and uses SMTP
+
+#---Information 5. PostgreSQL as Described by Alexey Abel
+# There are 2 databases
+# 1. The first one will be created manually and will contain the mail server logic, i.e. domains that the mail server is responsible for, accounts (=users), mail aliases etc. It is used by Postfix, Dovecot and Nextcloud for their respective purposes.
+# 2. The second database is used by Nextcloud to store it's own configuration and data. It will be created automatically during the installation of Nextcloud an never edited manually.
+
+#---Configuration 1. DNS
+# A.Mail Server
+#   1.Set hostname of the server as mail.karasite.com
+#     hostnamectl must do that, but you may need to use VPS host administration
+sudo hostnamectl set-hostname mail.example.com
+#     Add following line to /etc/hosts
+sudo nano /etc/hosts
+#__________________________________
+89.47.167.194 mail.karasite.com
+#__________________________________
+#     reboot is advised
+sudo reboot
+#
+#   2.Add following DNS records to karasite.com domain
+#       I use cloudfare to admin DNS records of my sites
+#     A record   --> mail 89.47.167.194
+#     CAA --> @ 0 issue "letsencrypt.org"
+#     CAA --> @ 0 issuewild ";"
+#     CAA --> @ 0 iodef "mailto:postmaster@karasite.com"
+#
+#   3.Create reverse DNS record for 89.47.167.194 to mail.karasite.com
+#       This must be done by your VPS provider.
+#       VPS administration of change hostname mostly does that
+#
+# B. Managed Mail Domains
+#      Settings for domains to be managed, including karasite.com
+#   1.Add following DNS records to all domains including karasite.com
+#     MX --> 10 mail.karasite.com
+#     TXT --> @ v=spf1 mx -all
+#     TXT --> _dmarc v=DMARC1; aspf=s; adkim=s; pct=100; p=reject; rua=mailto:postmaster@karasite.com
+
+#---Configuration 2. Package Installations
+# A lot of modules needed to be installed
+# 0. Update repositories and the system
+sudo apt update
+sudo apt upgrade
+# 1. Install core packages
+sudo apt install postfix postfix-pgsql dovecot-imapd dovecot-pgsql dovecot-lmtpd dovecot-sieve dovecot-managesieved postgresql apache2 phppgadmin
+#   General type: Internet Site	 System mail name: mail.karasite.com
+#
+# 2. Install php modules
+sudo apt install php-apcu php-dom php-gd php-iconv php-json php-mbstring php-posix php-simplexml php-xmlreader php-xmlwriter php-zip php-curl php-fileinfo php-bz2 php-intl php-imagick
+#
+# 3. Install Rspamd
+#   rspamd is not in Debian/Ubuntu packages, so we will add it to repository
+#   Add public key of rspamd to verify the package
+sudo wget -O- https://rspamd.com/apt-stable/gpg.key | sudo apt-key add -
+#   Create new repository definition
+sudo touch /etc/apt/sources.list.d/rspamd.list
+sudo nano /etc/apt/sources.list.d/rspamd.list
+#     add the following line
+#__________________________________________________________
+deb [arch=amd64] http://rspamd.com/apt-stable/ bionic main
+#__________________________________________________________
+#   Read repository
+sudo apt update
+#   Install rpsamd
+sudo apt install rspamd
+# 4. Install libreoffice for office document previews
+#   !!! Takes about 1GB disk place !!!
+sudo apt install ffmpeg libreoffice
+# 5. Stop unconfigured services
+service apache2 stop
+service postfix stop 
+service dovecot stop
+service postgresql stop
+
+#---Configuration 3. Apache
+# 1. Clean up Apache
+#   Disable all active vhosts
+for i in /etc/apache2/sites-enabled/*; do sudo a2dissite `basename $i`; done
+#   Delete unused preinstalled vhosts
+sudo rm -i /etc/apache2/sites-available/000-default.conf
+sudo rm -i /etc/apache2/sites-available/default-ssl.conf
+#   Disable Local phpPgAdmin
+sudo a2disconf phppgadmin
+#
+# 2. Create a new vhost only accessible locally, phpPgAdmin conf will be here
+sudo nano /etc/apache2/sites-available/localhost.conf
+#_________________________________________________________
+<VirtualHost 127.0.0.1:80>
+    Include /etc/apache2/conf-available/phppgadmin.conf
+    DocumentRoot /var/www/localhost
+    # set session lifetime to 2h
+    php_value session.gc_maxlifetime 7200
+    ErrorLog ${APACHE_LOG_DIR}/localhost.error.log
+</VirtualHost>
+# _________________________________________________________
+#   Create directory for the vhost and give necessary permissions
+sudo mkdir -m 770 /var/www/localhost 
+sudo chown www-data:www-data /var/www/localhost
+#
+# 3. Create a public vhost to use with letsencrypt as a token    
+sudo nano /etc/apache2/sites-available/public-unencrypted.conf
+# _________________________________________________________
+<VirtualHost *:80>
+    ServerName mail.karasite.com
+    # Force redirect to HTTPS unless the request is for Let's Encrypt
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !^/.well-known/acme-challenge/
+    RewriteCond %{HTTPS} off
+    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301]
+    DocumentRoot /var/www/letsencrypt
+    <Directory "/var/www/letsencrypt">
+        Options None
+        AllowOverride None
+    </Directory>
+    ErrorLog ${APACHE_LOG_DIR}/public_unencrypted.error.log
+</VirtualHost>
+# _________________________________________________________
+#   Create directory for the vhost and give necessary permissions
+sudo mkdir -m 770 /var/www/letsencrypt 
+sudo chown www-data:www-data /var/www/letsencrypt
+#
+# 4. Create a public ssl vhost for Nexcloud
+sudo nano /etc/apache2/sites-available/mail.example.com.conf
+#_________________________________________________________
+<VirtualHost *:443>
+    ServerName mail.karasite.com
+    DocumentRoot /var/www/nextcloud
+    <Directory "/var/www/nextcloud">
+        Options +FollowSymLinks
+        AllowOverride All
+        <IfModule mod_dav.c>
+            Dav off
+        </IfModule>
+        SetEnv HOME /var/www/nextcloud
+        SetEnv HTTP_HOME /var/www/nextcloud
+    </Directory>
+    <Directory "/var/www/nextcloud/data/">
+        # just in case if .htaccess gets disabled
+        Require all denied
+    </Directory>
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/mail.karasite.com.fullchain.pem
+    SSLCertificateKeyFile /etc/ssl/private/mail.karasite.com.pem
+    # HSTS (mod_headers is required) (15768000 seconds = 6 months)
+    Header always set Strict-Transport-Security "max-age=15768000"
+    ErrorLog  ${APACHE_LOG_DIR}/mail.example.com.port443.error.log
+</VirtualHost>
+#_________________________________________________________
+#   Create directory for the vhost and give necessary permissions
+sudo mkdir -m 640 /var/www/nextcloud 
+sudo chown root:www-data /var/www/nextcloud
+#
+# 5. Create a more secure TLS conf
+sudo nano /etc/apache2/conf-available/ssl-stricter-options.conf 
+#_________________________________________________________
+# Generated by: https://mozilla.github.io/server-side-tls/ssl-config-generator/
+# modern configuration, tweak to your needs
+SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+SSLCipherSuite  ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256
+SSLHonorCipherOrder on
+SSLCompression off
+SSLSessionTickets off
+# OCSP Stapling, only in httpd 2.3.3 and later
+SSLUseStapling on
+SSLStaplingResponderTimeout 5
+SSLStaplingReturnResponderErrors off
+SSLStaplingCache shmcb:/var/run/ocsp(128000)
+#_________________________________________________________
+#  Enable new conf
+sudo a2enconf ssl-stricter-options
+#
+# 6. Disable all access logs (respect privacy)
+sudo a2disconf other-vhosts-access-log
+#
+# 7. Nextcloud requires Apache rewrite engine, enable it
+sudo a2enmod rewrite ssl headers
+#
+# 8. PHP Bytecode Cache (cache php scripts, prevent compiling each time)
+#   Add to the end of the file
+sudo nano /etc/php/7.2/apache2/php.ini
+#_________________________________________________________
+opcache.enable=1
+opcache.enable_cli=1
+opcache.memory_consumption=128
+opcache.interned_strings_buffer=8
+opcache.max_accelerated_files=10000
+opcache.revalidate_freq=1
+opcache.save_comments=1
+#_________________________________________________________
+#
+9. Enable vhosts other than nexcloud and start apache
+sudo a2ensite localhost public-unencrypted
+sudo service apache2 start
+
+
+#---Configuration 4. SSL/TLS certificates with Let's Encrypt
+# 1. Install acme.sh
+#    acme.sh is used to access and automate letsencrypt
+#    we have to install and run it as root
+#    temporarily become root
+sudo su -
+#    Install acme.sh
+wget -qO- https://get.acme.sh | sh
+#
+# 2. Register an acme.sh account
+/root/.acme.sh/acme.sh --register-account
+#
+# 3. Get certificates
+/root/.acme.sh/acme.sh --log --issue -d mail.karasite.com -w /var/www/letsencrypt
+#
+# 4. Install certificates
+/root/.acme.sh/acme.sh --install-cert -d mail.karasite.com --key-file /etc/ssl/private/mail.karasite.com.pem --fullchain-file /etc/ssl/certs/mail.karasite.com.fullchain.pem --reloadcmd "service apache2 force-reload"
+#
+# 5. Set acme.sh to automatically update itself
+/root/.acme.sh/acme.sh --upgrade --auto-upgrade
+# 6. We can stop being root
+exit
+
+#---Configuration 5. phpPgAdmin
+# We need to change some parameters of phpPgAdmin
+sudo nano /etc/phppgadmin/config.inc.php
+# Change following lines as below
+#______________________________________
+$conf['extra_login_security'] = false;
+$conf['max_chars'] = 120;
+#______________________________________
+
+
+#---Configuration 6. PostgreSQL 1/2
+# 1. Authentication
+#    Only postgres user can use the DB
+sudo nano /etc/postgresql/10/main/pg_hba.conf
+#   Comment following line
+#____________________________________________________________________
+#local   all             all                                     peer
+#____________________________________________________________________
+# 2. Start PostgreSQL
+sudo service postgresql start
+# 3. Run psql as postgresql user
+sudo su -c 'psql' postgres
+# 4. Set postgres DB users password (runs at postgresql shell)
+ALTER ROLE postgres WITH ENCRYPTED PASSWORD 'pAsswOrd12';
+# 5. Quit from the postgresql shell
+\q
+# 6. try if you can run postgresql from the local network
+psql --username postgres --dbname postgres --host 127.0.0.1
+
+#---Configuration 7. PostgreSQL 2/2
+# Create all database objects
+# 1. Login to postgresql shell
+psql --username postgres --dbname postgres --host 127.0.0.1
+# 2. Create mail_server DB and connect to it
+CREATE DATABASE mail_server;
+\c mail_server
+# 3. Create 3 data types, local_part and domain_part of
+#      the email address and user input
+#   local_part
+CREATE DOMAIN local_part TEXT
+  NOT NULL
+  CHECK (
+LENGTH(VALUE) <= 64
+  );
+#    domain_part
+CREATE DOMAIN domain_part TEXT
+  NOT NULL
+  CHECK (
+LENGTH(VALUE) <= 253
+  );
+#    user_input
+CREATE DOMAIN user_input TEXT
+  CHECK (
+LENGTH(VALUE) <= 256
+  );
+#
+# 4. Create 4 databases domains, users, aliases, and shared_mailboxex
+#   domains
+CREATE TABLE domains (
+    domain domain_part PRIMARY KEY -- e.g. example.com
+);
+#   users
+CREATE TABLE users (
+    domain domain_part REFERENCES domains(domain) ON DELETE RESTRICT,
+    local local_part NOT NULL, -- e.g. alice
+    password_hash user_input,
+    display_name user_input,
+    PRIMARY KEY(domain, local),
+    -- entire e-mail address should not exceed 254 characters (RFC 3696)
+    CHECK(char_length(local || domain) <= 254)
+);
+#    aliases
+CREATE TABLE aliases (
+    -- source is the alias, destination is the real e-mail account
+    -- local and domain part are stored separatelly to enable proper REFERENCES
+    source_local local_part NOT NULL,
+    source_domain domain_part REFERENCES domains(domain) ON DELETE RESTRICT,
+    destination_local local_part,
+    destination_domain domain_part,
+    PRIMARY KEY(source_local, source_domain),
+    FOREIGN KEY (destination_local, destination_domain) REFERENCES users (local, domain) ON DELETE RESTRICT,
+    -- entire e-mail address should not exceed 254 characters (RFC 3696)
+    CHECK(char_length(source_local || source_domain) <= 254)
+    -- destination needs no check because it references already existing (and already checked) rows.
+);
+#    shared_mailboxes
+CREATE TABLE shared_mailboxes (
+    -- local and domain part are stored separately to enable proper REFERENCES
+    shared_mailbox_local local_part,
+    shared_mailbox_domain domain_part,
+    shared_to_local local_part,
+    shared_to_domain domain_part,
+    PRIMARY KEY (shared_mailbox_local, shared_mailbox_domain, shared_to_local, shared_to_domain),
+    FOREIGN KEY (shared_mailbox_local, shared_mailbox_domain) REFERENCES users (local, domain) ON DELETE CASCADE,
+    FOREIGN KEY (shared_to_local, shared_to_domain) REFERENCES users (local, domain) ON DELETE CASCADE
+);
+# 5. Create four helper views
+#   users_fqda
+CREATE VIEW users_fqda AS
+    -- fqda = Fully qualified domain address, e.g. alice@example.com
+    SELECT users.local || '@' || domains.domain AS "fqda", users.password_hash, users.display_name
+    FROM users, domains
+    WHERE users.domain = domains.domain;
+#   aliases_fqda
+CREATE VIEW aliases_fqda AS
+    -- fqda = Fully qualified domain address,  e.g. alice@example.com
+    SELECT source_local || '@' || source_domain AS "fqda"
+    FROM aliases;
+#   view_shared_mailboxes
+CREATE VIEW view_shared_mailboxes AS
+    -- This view is needed for Dovecot because it needs fqda's and can't handle separate local and domain parts
+    -- dummy is 1 always because Dovecot needs this. Probably to indicate that this share is active.
+    SELECT shared_mailbox_local || '@' || shared_mailbox_domain AS "shared_mailbox", shared_to_local || '@' || shared_to_domain AS "shared_to", 1 AS "dummy"
+    FROM shared_mailboxes;
+#   view_public_mailboxes
+CREATE VIEW view_public_mailboxes AS
+    -- dummy view to satisfy Dovecot's shared/shared-boxes/anyone pattern mapping
+    SELECT NULL as "public_mailbox", NULL as "dummy" LIMIT 0;
+#
+# 6. Create two rules to allow Dovecot to update shared mailboxes
+#   insert
+CREATE RULE view_shared_mailboxes_insert AS ON INSERT TO view_shared_mailboxes
+  DO INSTEAD
+  INSERT INTO shared_mailboxes (shared_mailbox_local, shared_mailbox_domain, shared_to_local, shared_to_domain)
+  VALUES (split_part(NEW.shared_mailbox,'@',1), split_part(NEW.shared_mailbox,'@',2), split_part(NEW.shared_to,'@',1), split_part(NEW.shared_to,'@',2));
+#   delete
+CREATE RULE view_shared_mailboxes_delete AS ON DELETE TO view_shared_mailboxes
+  DO INSTEAD
+  DELETE FROM shared_mailboxes
+  WHERE shared_mailbox_local = split_part(OLD.shared_mailbox,'@',1) AND
+shared_mailbox_domain = split_part(OLD.shared_mailbox,'@',2) AND
+shared_to_local = split_part(OLD.shared_to,'@',1) AND
+shared_to_domain = split_part(OLD.shared_to,'@',2);
+#
+# 7. Create mail_user and give necessary privileges.
+#      This DB user will be used by Postfix and Dovecot.
+#   create user
+CREATE ROLE mail_user WITH LOGIN ENCRYPTED PASSWORD 'pAsswOrd12';
+#   grant connect to mail_server DB
+GRANT CONNECT ON DATABASE mail_server TO mail_user;
+#   grant read the tables and the views
+GRANT SELECT ON domains, users, aliases, users_fqda, aliases_fqda, view_shared_mailboxes, view_public_mailboxes TO mail_user;
+#   grant update shared mailboxes
+GRANT INSERT, DELETE ON view_shared_mailboxes TO mail_user;
+#
+# 8. Create mail_admin and give necessary privileges.
+#      This DB user will be used by Nextcloud.
+#   create user
+CREATE ROLE mail_admin WITH LOGIN ENCRYPTED PASSWORD 'pAsswOrd12';
+#   grant connect to mail_server DB
+GRANT CONNECT ON DATABASE mail_server TO mail_admin;
+#   grant read, create and delete users
+GRANT SELECT, INSERT, DELETE ON users TO mail_admin;
+#   grant read domains and domain addresses
+GRANT SELECT ON domains, users_fqda TO mail_admin;
+#   grant update the password hash and display name 
+GRANT UPDATE (password_hash, display_name) ON users TO mail_admin;
+#
+# 9. Insert test data into DB
+#   add 2 domains: karasite.com and karasite.xyz
+INSERT INTO domains (domain) VALUES
+('karasite.com'),
+('karasite.xyz');
+#   add 3 users: alice@karasite.com, bob@karasite.com, carl@karasite.xyz
+#     with passwords alice123, bob123, carl123
+INSERT INTO users (local, domain, password_hash) VALUES
+('alice','karasite.com','$6$s0BmnJw/bdKcfu$sHDIptazHnwjmvBcR.ZWHZdg8CZqKcIN/BHMnojA6djgx2Oaqytnkm2zv/SDTYUgcNW5r4vqxUyW8eefBNe7t.'),
+('bob','karasite.com','$6$4QrLzYYODp4XhD$GMzHbBufXu7K8qeTf.uKWXRI5xZhFDgndZ3eRD8SoeCcKe37xZcvjmTb4M0ao/RDCDIKAUxRmrh/XCsNZvXsq.'),
+('carl','karasite.xyz','$6$IcZJ97OCc5rRZSA/$ARq/7t6b3VFRKiBQOd.SiH8gx8MNwpHlLKB7ROqU29ct.eSsEK6xZiJyMg5FeCgzinR.HziO87DqRYUW2xOmf0');
+#   add 4 mail aliases, 
+#   boss@karasite.com and postmaster@karasite.com for alice@karasite.com
+#   secretary@karasite.com for bob@karasite.com
+#   orders@karasite.com for carl@karasite.xyz
+INSERT INTO aliases (source_local, source_domain, destination_local, destination_domain) VALUES
+('boss', 'karasite.com', 'alice', 'karasite.com'),
+('postmaster','karasite.com','alice','karasite.com'),
+('secretary', 'karasite.com', 'bob', 'karasite.com'),
+('orders', 'karasite.com', 'carl', 'karasite.xyz');
+#   bob@karasite.com has access to alice@karasite.com's mailbox
+INSERT into shared_mailboxes (shared_mailbox_local, shared_mailbox_domain, shared_to_local, shared_to_domain) VALUES
+('alice', 'karasite.com', 'bob', 'karasite.com');
+# 10. Quit from postgresql shell
+\q
+
+#---Configuration 8. Postfix
+# 1. Data Backends
+#    Create 3 Postfix config files, make them only readable by postfix group,
+#      and fill them with contents.
+sudo touch /etc/postfix/pgsql-virtual-mailbox-domains.cf /etc/postfix/pgsql-virtual-mailbox-maps.cf /etc/postfix/pgsql-virtual-alias-maps.cf
+sudo chgrp postfix /etc/postfix/pgsql-*.cf
+sudo chmod 640 /etc/postfix/pgsql-*.cf
+sudo nano /etc/postfix/pgsql-virtual-mailbox-domains.cf
+#_______________________________________________________________
+user = mail_user
+password = pAsswOrd12
+hosts = 127.0.0.1
+dbname = mail_server
+query = SELECT * FROM domains WHERE domain='%s'
+#_______________________________________________________________
+sudo nano /etc/postfix/pgsql-virtual-mailbox-maps.cf
+#_______________________________________________________________
+user = mail_user
+password = pAsswOrd12
+hosts = 127.0.0.1
+dbname = mail_server
+query = SELECT fqda FROM users_fqda WHERE fqda='%s';
+#_______________________________________________________________
+sudo nano /etc/postfix/pgsql-virtual-alias-maps.cf
+#_______________________________________________________________
+user = mail_user
+password = pAsswOrd12
+hosts = 127.0.0.1
+dbname = mail_server
+query = SELECT destination_local || '@' || destination_domain FROM aliases WHERE source_local='%u' AND source_domain='%d';
+#_______________________________________________________________
+#
+# 2. main.cf 
+#   /etc/postfix/main.cf file has the main configuration of postfix
+#   make following changes/additions on it
+sudo nano /etc/postfix/main.cf
+#___________________________________________________________________
+# change
+myhostname=mail.karasite.com
+smtpd_tls_cert_file=/etc/ssl/certs/mail.karasite.com.fullchain.pem
+smtpd_tls_key_file=/etc/ssl/private/mail.karasite.com.pem
+smtpd_relay_restrictions =
+  permit_sasl_authenticated
+  reject_unauth_destination
+# add
+smtpd_tls_security_level=may
+smtpd_tls_auth_only=yes
+smtp_tls_security_level=may
+smtpd_sasl_type=dovecot
+smtpd_sasl_path=private/auth
+smtpd_sasl_auth_enable=yes
+virtual_mailbox_domains=pgsql:/etc/postfix/pgsql-virtual-mailbox-domains.cf
+virtual_mailbox_maps=pgsql:/etc/postfix/pgsql-virtual-mailbox-maps.cf
+virtual_alias_maps=pgsql:/etc/postfix/pgsql-virtual-alias-maps.cf
+virtual_transport=lmtp:unix:private/dovecot-lmtp
+smtpd_client_restrictions =
+  permit_mynetworks
+  permit_sasl_authenticated
+  reject_unknown_reverse_client_hostname
+smtpd_helo_restrictions =
+  permit_mynetworks
+  permit_sasl_authenticated
+# The following 3 lines may cause your server not receiving mails
+#   from servers not with PTR record.
+#  reject_invalid_helo_hostname
+#  reject_non_fqdn_helo_hostname
+#  reject_unknown_helo_hostname
+smtpd_helo_required=yes
+smtpd_sender_login_maps=
+  pgsql:/etc/postfix/pgsql-virtual-mailbox-maps.cf
+  pgsql:/etc/postfix/pgsql-virtual-alias-maps.cf
+smtpd_sender_restrictions =
+  reject_non_fqdn_sender
+  reject_sender_login_mismatch
+  reject_unknown_sender_domain
+smtpd_recipient_restrictions =
+  reject_non_fqdn_recipient
+  reject_unknown_recipient_domain
+  reject_unauth_pipelining
+message_size_limit=52428800
+smtpd_milters=inet:127.0.0.1:11332
+non_smtpd_milters=inet:127.0.0.1:11332
+milter_mail_macros=i {mail_addr} {client_addr} {client_name} {auth_authen}
+#_________________________________________________________________________
+#   Check if postfix conf ok
+postfix check
+#
+# 3. master.cf
+#   /etc/postfix/master.cf file has the configuration of services started by
+#      postfix
+#   make following changes/additions on it
+sudo nano /etc/postfix/master.cf
+#   in master.cf the following configs are commented, remove them and put these
+#____________________________________________________________________
+submission inet n       -       -       -       -       smtpd
+  -o syslog_name=postfix/submission
+  -o smtpd_tls_security_level=encrypt
+  -o smtpd_client_restrictions=permit_sasl_authenticated,reject
+  -o cleanup_service_name=header_cleanup
+#____________________________________________________________________
+#   just after the following line:
+#cleanup   unix  n       -       y       -       0       cleanup
+#   add these:
+#____________________________________________________________________
+header_cleanup unix n   -       -       -       0       cleanup
+ -o header_checks=regexp:/etc/postfix/submission_header_cleanup.cf
+#____________________________________________________________________
+# 
+# 4. A new conf file
+sudo nano /etc/postfix/submission_header_cleanup.cf
+# Add the following to the file
+#____________________________________________________________________
+/^Received:/ IGNORE
+/^User-Agent:/ IGNORE
+#____________________________________________________________________
+# 5. Start Postfix
+sudo service postfix start
+
+
+#---Configuration 9. System User vmail
+#   A system user will be created with the name vmail
+#   Dovecot will use this user to read and write email files
+# 1. Create the group vmail
+sudo groupadd --gid 5000 vmail
+# 2. Create the vmail user with home folder and no login
+sudo useradd --gid vmail --uid 5000 --home /var/vmail --create-home --shell /usr/sbin/nologin vmail
+# 3. Make its home folder inaccessible by others
+sudo chmod o= /var/vmail
+
+#---Configuration 10. Rspamd
+# 1. Create a rspamd config file to send spam mails to Dovecot with spam header
+sudo nano /etc/rspamd/override.d/milter_headers.conf
+#____________________________________
+extended_spam_headers = true;
+#____________________________________
+# 
+# 2. DKIM Configuration
+#   Private key folder cration and ownership and permissions
+sudo mkdir --mode=770 /var/lib/rspamd/dkim
+sudo chown _rspamd:_rspamd /var/lib/rspamd/dkim
+#   Create configuration
+sudo nano /etc/rspamd/local.d/dkim_signing.conf
+#______________________________________________
+path = "/var/lib/rspamd/dkim/$domain.$selector.key";
+selector_map = "/etc/rspamd/dkim_selectors.map";
+#______________________________________________
+!!!!!!!!!!!!Buraya kadar yapıldı!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# 3. Setup Domains
+#   This setup is needed for all the domains we host
+#   create key
+sudo rspamadm dkim_keygen -b 2048 -d karasite.com -s 20200427 -k /var/lib/rspamd/dkim/karasite.com.20200427.key
+#   add it to the dns
+#   you have to use output from the last command, removing all " from it, and 
+#   removing last item, which is private key I guess
+#   TXT 20200427._domainkey.karasite.com v=DKIM; k=rsa p=MII...
+#
+#   Do it for other domains too
+sudo rspamadm dkim_keygen -b 2048 -d karasite.xyz -s 20200427 -k /var/lib/rspamd/dkim/karasite.xyz.20200427.key
+#   add it to the dns
+#   TXT 20200427._domainkey.karasite.xyz v=DKIM; k=rsa p=MII...
+#
+#   Add selectors to a new map file one domain/selector per line
+sudo nano /etc/rspamd/dkim_selectors.map
+#___________________________________________
+karasite.com 20200427
+karasite.xyz 20200427
+#___________________________________________
+#
+#   reload Rspamd
+sudo service rspamd reload
+
+#---Configuration 11. Dovecot
+# 1. Connection security and certificates
+sudo nano /etc/dovecot/conf.d/10-ssl.conf
+#   Make following changes
+#________________________________________________________
+ssl = required
+ssl_cert = </etc/ssl/certs/mail.karasite.com.fullchain.pem
+ssl_key = </etc/ssl/private/mail.karasite.com.pem
+#________________________________________________________
+# 2. User Authentication
+# 2.1. Change Authentication to SQL backend
+sudo nano /etc/dovecot/conf.d/10-auth.conf
+#     comment following line
+#___________________________________________________
+#!include auth-system.conf.ext
+#___________________________________________________
+#     uncomment following line
+#___________________________________________________
+!include auth-sql.conf.ext
+#___________________________________________________
+# 2.2. User and passwd databases
+sudo nano /etc/dovecot/conf.d/auth-sql.conf.ext
+#     make following changes
+#___________________________________________________
+passdb {
+  driver = sql
+  args = /etc/dovecot/dovecot-sql.conf.ext
+}
+userdb {
+  driver = static
+  args = uid=vmail gid=vmail home=/var/vmail/%d/%n
+}
+#___________________________________________________
+# 2.3. Data backends for passdb
+sudo nano /etc/dovecot/dovecot-sql.conf.ext
+#   This file is originally fully commented, add following lines to the end
+#_______________________________________________________________________
+driver = pgsql
+connect = host=127.0.0.1 dbname=mail_server port=5432 user=mail_user password=pAsswOrd12
+default_pass_scheme = SHA512-CRYPT
+password_query = SELECT fqda AS user, password_hash AS password FROM users_fqda WHERE fqda='%u';
+#_______________________________________________________________________
+#
+# 3. Mailboxes
+# 3.1. Location of mailboxes
+sudo nano /etc/dovecot/conf.d/10-mail.conf
+#   Make following changes
+#________________________________________________________
+mail_location = maildir:~/Maildir
+namespace inbox {
+  type = private
+  separator = /
+  prefix =
+  inbox = yes
+}
+namespace {
+  type = shared
+  separator = /
+  prefix = shared/%%u/
+  location = maildir:%%h/Maildir:INDEXPVT=~/Maildir/shared/%%u
+  subscriptions = no
+  list = children
+}
+mail_plugins = acl
+#________________________________________________________
+# 3.2. Default Mailbox Folders
+sudo nano /etc/dovecot/conf.d/15-mailboxes.conf
+#   Make following changes
+#________________________________________________________
+namespace inbox {
+  mailbox Inbox {
+    auto = subscribe
+  }
+  mailbox Drafts {
+    auto = subscribe
+    special_use = \Drafts
+  }
+  mailbox Junk {
+    auto = subscribe
+    special_use = \Junk
+  }
+  mailbox Trash {
+    auto = subscribe
+    special_use = \Trash
+  }
+  mailbox Sent {
+    auto = subscribe
+    special_use = \Sent
+  }
+}
+#________________________________________________________
+#
+# 4. Services
+# 4.1. Main Services
+sudo nano /etc/dovecot/conf.d/10-master.conf
+#   Make following changes
+#________________________________________________________
+service lmtp {
+  unix_listener /var/spool/postfix/private/dovecot-lmtp {
+    user = postfix
+    group = postfix
+    mode = 0600
+  }
+}
+service auth {
+  unix_listener /var/spool/postfix/private/auth {
+    user = postfix
+    group = postfix
+    mode = 0660
+  }
+}
+service dict {
+  unix_listener dict {
+  mode = 0600
+  user = vmail
+  }
+}
+process_min_avail = 1
+#________________________________________________________
+#
+# 4.2. lmtp conf
+sudo nano /etc/dovecot/conf.d/20-lmtp.conf
+#________________________________________________________
+protocol lmtp {
+  mail_plugins = $mail_plugins sieve
+}
+#________________________________________________________
+# 4.3. imap.conf
+sudo nano /etc/dovecot/conf.d/20-imap.conf
+#   add in section protocol imap {
+#________________________________________________________
+mail_plugins = $mail_plugins imap_acl
+mail_max_userip_connections = 50
+#________________________________________________________
+#
+# 5. ACL for Shared Mailboxes
+# 5.1. acl.conf
+sudo nano /etc/dovecot/conf.d/90-acl.conf
+#__________________________________
+plugin {
+  acl = vfile
+}
+plugin {
+  acl_shared_dict = proxy::acl
+}
+#__________________________________
+#
+# 5.2 dovecot.conf
+sudo nano /etc/dovecot/dovecot.conf
+#___________________________________________________
+dict {
+  acl = pgsql:/etc/dovecot/dovecot-dict-sql.conf.ext
+}
+#___________________________________________________
+# 5.3. dovecot-dict-sql.conf.ext
+sudo nano /etc/dovecot/dovecot-dict-sql.conf.ext
+# Comment/remove all other things in the file
+#___________________________________________________________________
+connect = host=127.0.0.1 dbname=mail_server port=5432 user=mail_user password=pAsswOrd12
+map {
+  pattern = shared/shared-boxes/user/$to/$from
+  table = view_shared_mailboxes
+  value_field = dummy
+  fields {
+    shared_mailbox = $from
+    shared_to = $to
+  }
+}
+map {
+  pattern = shared/shared-boxes/anyone/$from
+  table = view_public_mailboxes
+  value_field = dummy
+  fields {
+    public_mailbox = $from
+  }
+}
+#___________________________________________________________________
+#
+# 6. Global Spam Sieve Filter
+# 6.1. sieve.conf
+#   Create a folder for spam rules
+sudo mkdir /etc/dovecot/sieve-before
+sudo nano /etc/dovecot/conf.d/90-sieve.conf
+#________________________________________
+sieve_before = /etc/dovecot/sieve-before
+#________________________________________
+¾ 6.2. spam-to-junk.sieve
+#   Create a Spam Rule and compile it
+sudo nano /etc/dovecot/sieve-before/spam-to-junk.sieve
+#_________________________________________
+require "fileinto";
+if header :contains "X-Spam" "Yes" {
+ fileinto "Junk";
+ stop;
+}
+#_________________________________________
+sudo sievec /etc/dovecot/sieve-before/spam-to-junk.sieve
+#
+# 7. Start Dovecot
+sudo service dovecot start
+
+#---Configuration 12. Nextcloud
+# The original tutorial uses Nexcloud 15
+#   But we'll use the latest, Nexcloud 18
+# 1. Install nexcloud
+# 1.1. Download latest Nextcloud 18
+sudo wget https://download.nextcloud.com/server/releases/latest-18.tar.bz2 -P /tmp/nextcloud
+# 1.2. Download corresponding checksum file
+sudo wget https://download.nextcloud.com/server/releases/latest-18.tar.bz2.sha256 -P /tmp/nextcloud
+# 1.3. Check if checksum is OK
+cd /tmp/nextcloud 
+sudo sha256sum -c latest-18.tar.bz2.sha256
+#   If you get something like "latest-18.tar.bz2: OK" it is OK
+# 1.4. Extract the archive to where Apache expects
+sudo tar -jxf /tmp/nextcloud/latest-18.tar.bz2 -C /var/www
+# 1.5. Make www-data owner
+sudo chown -R www-data:www-data /var/www/nextcloud
+#
+# 2. Nexcloud Database
+# 2.1. Setup database
+cd /var/www/nextcloud
+sudo /bin/bash -c 'php occ maintenance:install --database "pgsql" --database-name "nextcloud" --database-user "postgres" --database-pass "pAsswOrd12" --admin-user "admin" --admin-pass "pAsswOrd12"' www-data
+#   You must have the following response if everything is fine
+#         Nextcloud was successfully installed
+# 2.2. Disallow anyone else access to nextcloud
+sudo chmod -R o-rwx /var/www/nextcloud
+#
+# 3. Separate Log File
+#   We will setup the system wise log service rsyslog to recognize Nextcloud's log
+#     and put them in /var/log/nextcloud.log
+# 3.1. Create a new conf file
+sudo nano /etc/rsyslog.d/nextcloud.conf
+#______________________________________________________________________
+# Match to program name 'Nextcloud' and all severities (debug=7, emergency=0) and
+# write into file.
+if $programname == 'nextcloud' and $syslogseverity <= '7' then /var/log/nextcloud.log
+# & refers to the previous rule, "stop" stops processing of this log message after
+# the rule has been applied.
+& stop
+#___________________________________________________________________________
+# 3.2. Restart rsyslog service
+sudo systemctl restart rsyslog
+#
+# 4. config.php
+#   There are a lot of configuration needed on nNexcloud's config.php
+#     Update/add all of them
+sudo nano /var/www/nextcloud/config/config.php
+#___________________________________________________________________
+#   Pretify URLs
+'overwrite.cli.url' => 'https://mail.karasite.com',
+'htaccess.RewriteBase' => '/',
+#   Whitelist Domains
+'trusted_domains' => array (
+    0 => 'localhost',
+    1 => 'mail.karasite.com',
+  ),
+#   Logging and logging timezone
+'log_type' => 'syslog',
+'syslog_tag' => 'nextcloud',
+'logtimezone' => 'Europe/Istanbul',
+#   Object Cache
+'memcache.local' => '\OC\Memcache\APCu',
+#   User Backend
+'user_backend_sql_raw' => array(
+    'db_name' => 'mail_server',
+    'db_user' => 'mail_admin',
+    'db_password' => 'pAsswOrd12',
+    'queries' => array(
+        'get_password_hash_for_user' => 'SELECT password_hash FROM users_fqda WHERE fqda = :username',
+        'user_exists' => 'SELECT EXISTS(SELECT 1 FROM users_fqda WHERE fqda = :username)',
+        'get_users' => 'SELECT fqda FROM users_fqda WHERE (fqda ILIKE :search) OR (display_name ILIKE :search)',
+        'set_password_hash_for_user' => 'UPDATE users SET password_hash = :new_password_hash WHERE local = split_part(:username, \'@\', 1) AND domain = split_part(:username, \'@\', 2)',
+        'delete_user' => 'DELETE FROM users WHERE local = split_part(:username, \'@\', 1) AND domain = split_part(:username, \'@\', 2)',
+        'get_display_name' => 'SELECT display_name FROM users WHERE local = split_part(:username, \'@\', 1) AND domain = split_part(:username, \'@\', 2)',
+        'set_display_name' => 'UPDATE users SET display_name = :new_display_name WHERE local = split_part(:username, \'@\', 1) AND domain = split_part(:username, \'@\', 2)',
+        'count_users' => 'SELECT COUNT (*) FROM users',
+        'create_user' => 'INSERT INTO users (local, domain, password_hash) VALUES (split_part(:username, \'@\', 1), split_part(:username, \'@\', 2), :password_hash)',
+    ),
+    'hash_algorithm_for_new_passwords' => 'sha512',
+),
+#   Email Transmission
+'mail_smtpmode' => 'sendmail',
+'mail_from_address' => 'no-reply',
+'mail_domain' => 'karasite.com',
+# 5. Enable Nexcloud vhost
+sudo a2ensite mail.example.com
+sudo systemctl reload apache2
+# 6. Connect to nexcloud and enable some apps
+# 6.1. Goto https://mail.karasite.com
+#   Username: admin password: pAsswOrd12 (DB passwd)
+# 6.2. Go to gear-wheel at top right, select Apps
+# 6.3. Add following apps
+# Security/User Backend Using Raw SQL
+#   Office & text/Calendar
+#   Office & text/Contacts
+#   Office & text/Mail: 
+#   Tools/Auto Mail Accounts
+# 7. You can add accounts and then those accounts can be used
+#   !!! Account names must be in the format of user@karasite.com
+# 8. Add a job to crontab for Nextcloud maintenance
+sudo echo "*/15 * * * * php -f /var/www/nextcloud/cron.php" | sudo crontab -u www-data -
+
+
+#---Adding a New Domain
+# You may need to add another domain after some time
+#   Assume that we are adding karasite.tk 
+# 1. DNS Configuration. Add following DNS records for karasite.tk
+#   MX --> 10 mail.karasite.com
+#   TXT --> @ v=spf1 mx -all
+#   TXT --> _dmarc v=DMARC1; aspf=s; adkim=s; pct=100; p=reject; rua=mailto:postmaster@karasite.com
+#
+# 2. Add karasite.tk to hosted mail domains
+# 2.1. Login to postgresql
+psql --username postgres --dbname postgres --host 127.0.0.1
+# 2.2. Connect to mail_server DB
+\c mail_server
+# 2.3. Insert record for the new domain
+INSERT INTO domains (domain) VALUES ('karasite.tk');
+# 2.4. Quit from postgresql
+\q
+# 2.5. Reload postfix (Actually not necessary)
+sudo systemctl reload postfix
+#
+# 3. Setup the new domain in Rspamd for DKIM
+# 3.1. Create key for rspamd
+sudo rspamadm dkim_keygen -b 2048 -d karasite.tk -s 20200507 -k /var/lib/rspamd/dkim/karasite.tk.20200507.key
+# 3.2. Add output of the command to the DNS removing all " in the following format
+#   TXT 20200507._domainkey.karasite.com v=DKIM; k=rsa p=MII...
+# 3.3. Add the line for the new domain to the selectors file
+sudo nano /etc/rspamd/dkim_selectors.map
+#___________________________________________
+karasite.tk 20200507
+#___________________________________________
+# 3.4. Reload Rspamd
+sudo systemctl reload rspamd
+#
+# 4. Login to Nexcloud with admin user and create users for the new domain
+
+
+
+#---Troubleshooting
+# 1. Nextcloud does not start
+# 1.1. Make sure following dirs have permission as 770 and owned by www-data:www.data
+#     There might be some subdirs with different properties. 
+#   /var/www/nextcloud 
+#   /var/www/localhost 
+#   /var/www/letsencrypt 
+# 1.2. In any case you can run following commands to make sure (They are safe)
+sudo chmod 770 /var/www/nextcloud -R
+sudo chmod 770 /var/www/localhost -R
+sudo chmod 770 /var/www/letsencrypt -R
+sudo chown www-data:www-data /var/www/nextcloud -R
+sudo chown www-data:www-data /var/www/localhost -R
+sudo chown www-data:www-data /var/www/letsencrypt -R
+# 2. Users are not added to mail server
+# 2.1. User name must be given the format of username@domain.ext
+
+
+
+
+

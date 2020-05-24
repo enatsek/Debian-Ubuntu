@@ -1,0 +1,60 @@
+CertbotOnUbuntu: Auto SSL Certificates for Apache 2 Tutorial on Ubuntu 18.04
+
+
+#---Copyright (C) 2020 Exforge exforge@karasite.com
+# This document is free text: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+# This document is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#---Specs
+# Automation of SSL and certificate renewal for Apache 2 on Ubuntu
+# Based on documents on https://certbot.eff.org/
+# Apache Site configurations without SSL must be ready on your servers
+#   Refer to ApacheOnUbuntu Tutorial
+
+#---A. Ubuntu 20.04 LTS
+# 1. Enable the universe repository
+#  May not be necessary, start with step 2, if it doesn't work return here
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository universe
+sudo apt-get update
+# 2. Install Certbot
+sudo apt-get install certbot python3-certbot-apache
+# 3. Enable Certbot
+sudo certbot --apache
+# 4. Test automatic renewal
+sudo certbot renew --dry-run
+# 5. All set, certificates generated and installed, all apache
+#   configurations are made, jobs added to crontab to renew certs.
+#   Check crontab:
+systemctl list-timers
+
+
+#---B. Ubuntu 18.04 LTS 
+# 1. Add Certbot PPA
+#  May not be necessary, start with step 2, if it doesn't work return here
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository universe
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+# 2. Install Certbot 
+sudo apt-get install certbot python3-certbot-apache
+# 3. Enable Certbot
+sudo certbot --apache
+# 4. Test automatic renewal
+sudo certbot renew --dry-run
+# 5. All set, certificates generated and installed, all apache
+#   configurations are made, jobs added to crontab to renew certs.
+#   Check crontab:
+systemctl list-timers
+
+

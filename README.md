@@ -1,4 +1,4 @@
-#Ubuntu Documents
+#Ubuntu Tutorials
 
 I am a learner of Ubuntu. These are the tutorials I prepared with the help of internet sources and books. I credited the sources that helped me on each document.
 

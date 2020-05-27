@@ -1,0 +1,126 @@
+PHPMyAdmin on Ubuntu 18.04 and 20.04 for MariaDB
+
+#---Copyright (C) Exforge exforge@karasite.com
+# This document is free text: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+# This document is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+#---Specs
+# PHPMyAdmin is a powerful web based management tool for Mysql and Mariadb
+# You have to install it on the server which has the DB installed
+# It is installed as an Apache conf and after installing, you can reach PHPMyAdmin
+#   with /phpmyadmin directory through all the apache sites on the server
+# On my config I wanted to bind PHPMyAdmin to only one site config on the server side
+#   and restrict it with only 1 client IP (might be more) to reach.
+#
+# My Hostname: test.karasite.com
+# Lamp is already installed (See LampOnUbuntu Tutorial)
+# My Client IP address: 35.209.74.9
+
+#---1. Revert mariadb root to unix_socket
+#   On LAMP installation, we changed the MariaDB root user plugin to mysql native.
+#   Unfortunately PHPMyAdmin gives an error on installation with this setting.
+#   So we'll revert it back to unix socket momentarily
+mariadb -u root -p
+#   On MariaDB shell:
+UPDATE mysql.user SET plugin = 'unix_socket' WHERE USER='root';
+FLUSH PRIVILEGES;
+exit;
+
+#---2. Install and configure phpmyadmin
+sudo apt install phpmyadmin 
+# First Screen: Make sure apache2 is selected, there must be an * on its box
+#    (press space to select, tab to go OK, press enter) 
+# Second screen: Select Yes and give a good password for phpmyadmin user
+
+#---3. Convert mariadb root to native again
+#  We will restore Maria root user plugin to mysql native 
+sudo mariadb
+#   On MariaDB shell:
+UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE USER='root';
+FLUSH PRIVILEGES;
+exit;
+
+#---4. Disable phpmyadmin apache mod, we'll configure it later in a more secure way
+sudo a2disconf phpmyadmin
+sudo systemctl reload apache2
+
+#---5. Create test.karasite.com.conf and secure it with SSL
+# 5.1. Make a home for the new site
+sudo mkdir /var/www/test.karasite.com
+# 5.2. Edit phpmyadmin to allow only our IPs
+#   Make a backup first (always)
+sudo cp /etc/phpmyadmin/apache.conf /etc/phpmyadmin/apache.conf.original
+sudo nano /etc/phpmyadmin/apache.conf
+#   Just after the line
+#      <Directory /usr/share/phpmyadmin>
+#      Add your IP as the following format, remember indenting
+#      You can add more than 1 IP if required
+    Require ip 35.209.74.9
+#
+# 5.2. Create a site config to reach PHPMyAdmin
+#   If you want to use your own conf file, just add the line starting with Include
+#      as in the following conf
+sudo nano /etc/apache2/sites-available/test.karasite.com.conf
+#_________________________________________________________________________
+<VirtualHost *:80>
+	Include /etc/apache2/conf-available/phpmyadmin.conf
+	ServerAdmin webmaster@karasite.com	
+	ServerName test.karasite.com
+	DocumentRoot /var/www/test.karasite.com
+	ErrorLog ${APACHE_LOG_DIR}/test.karasite.com-error.log
+	CustomLog ${APACHE_LOG_DIR}/test.karasite.com-access.log combined
+</VirtualHost>
+#_________________________________________________________________________
+#
+# 5.3. Enable new site
+sudo a2en test.karasite.com.conf
+# 5.4. Reload Apache
+sudo systemctl reload apache2
+# 5.5. Enable https for new site, refer CertbotOnUbuntu
+# 5.6. To use PHPMyAdmin on SSL site, you need to add a line to the SSL config file
+#   created by Certbot, which must be test.karasite.com-le-ssl.conf
+sudo nano /etc/apache2/sites-available/test.karasite.com-le-ssl.conf
+#   After line <VirtualHost *:443> add the following line: (remember indenting)
+	Include /etc/apache2/conf-available/phpmyadmin.conf
+
+
+#---6. PHPMyAdmin is ready
+https://test.karasite.com/phpmyadmin
+
+#---7. Troubleshooting
+# Taken from: DevAnswers:
+#    https://devanswers.co/problem-php-7-2-phpmyadmin-warning-in-librariessql-count/
+# 7.1. Problem with phpMyAdmin and PHP 7.2: 
+#   “Warning in ./libraries/sql.lib.php#613 count(): 
+#        Parameter must be an array or an object that implements Countable”
+#   This bug is an incompatability issue between PHP7.2 and PHPMyAdmin version in Ubuntu 18.04
+#   The easiest solution is to correct the line on sql.lib.php ourselves.
+# 7.1.1. Backup sql.lib.php
+sudo cp /usr/share/phpmyadmin/libraries/sql.lib.php /usr/share/phpmyadmin/libraries/sql.lib.php.original
+# 7.1.2. Modify sql.lib.php
+sudo nano /usr/share/phpmyadmin/libraries/sql.lib.php
+#   Find: (count($analyzed_sql_results['select_expr'] == 1)
+#   Change to:  ((count($analyzed_sql_results['select_expr']) == 1)
+#
+# 7.2. Problem with phpMyAdmin and PHP 7.2: (at import and export tabs)
+#   "Warning in ./libraries/plugin_interface.lib.php#551
+#        count(): Parameter must be an array or an object that implements Countable
+#   Again, this bug is an incompatability issue between PHP7.2 and PHPMyAdmin version in Ubuntu 18.04
+#   The easiest solution is to correct the line on plugin_interface.lib.php ourselves.
+# 7.2.1. Backup plugin_interface.lib.php
+sudo cp /usr/share/phpmyadmin/libraries/plugin_interface.lib.php /usr/share/phpmyadmin/libraries/plugin_interface.lib.php.original
+# 7.2.2. Modify plugin_interface.lib.php
+sudo nano /usr/share/phpmyadmin/libraries/plugin_interface.lib.php
+#   Find: if (! is_null($options) && count($options) > 0) {
+#   If you cannot find it Find: if ($options != null && count($options) > 0) {
+#   Change to: if (! is_null($options) && count((array)$options) > 0) {
+
+

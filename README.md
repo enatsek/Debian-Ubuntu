@@ -19,3 +19,5 @@ AGT-SimpleMailServerOnUbuntu: People who like the things at their simplest form 
 AGT-WordpressOnUbuntu: Installing and activating Wordpress on Ubuntu Server.
 
 AGT-PHPMyAminOnUbuntu: A somehow more secure PHPMyAdmin installation on Ubuntu Server for MySQL and MariaDB.
+
+AGT-DNSOnUbuntu: Installing and configuring Master and Slave DNS Servers on Ubuntu Server.

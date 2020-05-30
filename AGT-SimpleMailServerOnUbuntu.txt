@@ -1,4 +1,4 @@
-SimpleMailServerOnUbuntu: Mail Server with SMTP and IMAP on Ubuntu 18.04
+SimpleMailServerOnUbuntu: Mail Server with SMTP and IMAP on Ubuntu 18.04 and 20.04
 
 #---Copyright (C) 2020 Exforge exforge@karasite.com
 # This document is free text: you can redistribute it and/or modify
@@ -194,7 +194,7 @@ smtps     inet  n       -       y       -       -       smtpd
   -o smtpd_tls_wrappermode=yes
 #
 # 3.3. Dovecot config
-sudo vi /etc/dovecot/conf.d/10-ssl.conf
+sudo nano /etc/dovecot/conf.d/10-ssl.conf
 #   Around line 6: change
 ssl = yes
 #   Around line 12,13: uncomment and specify certificates

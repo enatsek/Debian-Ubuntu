@@ -35,7 +35,7 @@ sudo nano /etc/apache2/sites-available/karasite.com.conf
         ServerAdmin postmaster@karasite.com
         ServerName www.karasite.com
         ServerAlias karasite.com
-        DocumentRoot /var/www/karasite.com
+        DocumentRoot /var/www/wordpress
         ErrorLog ${APACHE_LOG_DIR}/karasite.com-error.log
         CustomLog ${APACHE_LOG_DIR}/karasite.com-access.log combined
 </VirtualHost>

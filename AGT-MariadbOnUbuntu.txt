@@ -1,4 +1,4 @@
-MariadbOnUbuntu: MariaDB Tutorial on Ubuntu 18.04
+MariadbOnUbuntu: MariaDB Tutorial on Ubuntu 20.04
 
 
 #---Copyright (C) 2020 Exforge exforge@karasite.com
@@ -15,7 +15,7 @@ MariadbOnUbuntu: MariaDB Tutorial on Ubuntu 18.04
 
 #---Specs
 # Mariadb 2 Installation, configuration, simple user and DB management
-#   on Ubuntu 18.04 Server
+#   on Ubuntu 20.04 Server
 # Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix
 #   This book hes introduced me to Ubuntu Server and I have to thank him for this
 #   excellent book. 

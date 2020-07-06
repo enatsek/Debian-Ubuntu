@@ -23,3 +23,5 @@ AGT-PHPMyAminOnUbuntu: A somehow more secure PHPMyAdmin installation on Ubuntu S
 AGT-DNSOnUbuntu: Installing and configuring Master and Slave DNS Servers on Ubuntu Server.
 
 AGT-ApacheFineTunesOnUbuntu: Some DNS and Apache tips (fine tunes).
+
+AGT-KeepalivedOnUbuntu: Clustering with keepalived on Ubuntu Server.

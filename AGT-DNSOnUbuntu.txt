@@ -1,7 +1,7 @@
 DNSOnUbuntu: Installation and Configuration of DNS Servers on Ubuntu 18.04
 
 
-#---Copyright (C) Exforge exforge@karasite.com
+#---Copyright (C) Exforge exforge@x386.xyz
 # This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or

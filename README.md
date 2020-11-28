@@ -27,3 +27,5 @@ AGT-ApacheFineTunesOnUbuntu: Some DNS and Apache tips (fine tunes).
 AGT-KeepalivedOnUbuntu: Clustering with keepalived on Ubuntu Server.
 
 AGT-UserAndGroupAdminOnUbuntu: User and Group administration on Ubuntu Server (and desktops).
+
+AGT-AnsibleOnUbuntu: Ansible tutorial based on Ubuntu workstation and servers.

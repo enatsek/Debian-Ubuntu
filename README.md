@@ -29,3 +29,5 @@ AGT-KeepalivedOnUbuntu: Clustering with keepalived on Ubuntu Server.
 AGT-UserAndGroupAdminOnUbuntu: User and Group administration on Ubuntu Server (and desktops).
 
 AGT-AnsibleOnUbuntu: Ansible tutorial based on Ubuntu workstation and servers.
+
+AGT-KVMOnUbuntu: KVM Virtualization tutorial on Ubuntu Server.

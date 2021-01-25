@@ -30,4 +30,7 @@ AGT-UserAndGroupAdminOnUbuntu: User and Group administration on Ubuntu Server (a
 
 AGT-AnsibleOnUbuntu: Ansible tutorial based on Ubuntu workstation and servers.
 
-AGT-KVMOnUbuntu: KVM Virtualization tutorial on Ubuntu Server. 
+AGT-KVMOnUbuntu1: KVM Virtualization tutorial (beginner) on Ubuntu Server. 
+
+AGT-KVMOnUbuntu2: KVM Virtualization tutorial (networking) on Ubuntu Server. 
+

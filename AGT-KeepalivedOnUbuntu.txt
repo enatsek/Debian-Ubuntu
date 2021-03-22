@@ -26,8 +26,8 @@ KeepalivedOnUbuntu: keepalived Clustering on Ubuntu 20.04
 #
 # Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix
 #   This book has introduced me to Ubuntu Server and I have to thank him for this
-#   excellent book. 
-#   https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
+#   excellent book:
+Link:https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
 #
 # You may establish a full cluster of LAMP stack by:
 #   1. Installing Apache on both servers
@@ -35,9 +35,7 @@ KeepalivedOnUbuntu: keepalived Clustering on Ubuntu 20.04
 #   3. Installing MariaDB on both server
 #   4. Establishing Master-Master Replication for Mariadb on 1st and 2nd servers
 #
-# I'm aiming to prepare a tutorial of MariaDB master-master replication. You can run it
-#   with master-slave replication too. But everytime the second server becomes active, you 
-#   have to replicate it manually with the first server.
+
 
 #---1. Install keepalived
 # install on both the first and the second servers

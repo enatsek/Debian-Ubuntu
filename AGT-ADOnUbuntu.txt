@@ -18,7 +18,7 @@ ADOnUbuntu: Active Directory Configuration on Ubuntu with Samba
 #   Windows workstations can join to AD
 #   No license costs except Windows workstation licences
 # Based on the valuable documents at:
-#    https://www.server-world.info/en/note?os=Ubuntu_18.04&p=samba&f=4
+Link:https://www.server-world.info/en/note?os=Ubuntu_18.04&p=samba&f=4
 # Domain Name: local.ev
 # Domain Netbios Name: localdom
 # First DC srv1.local.ev (Ubuntu Server 20.04)

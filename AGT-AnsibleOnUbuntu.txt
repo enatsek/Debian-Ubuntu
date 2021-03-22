@@ -34,9 +34,9 @@ AnsibleOnUbuntu - Ansible Tutorial for Ubuntu Linux
 # 0.3. Resources:
 # Book: 978-1-4842-1660-6 Ansible From Beginner to Pro by Michael Heap
 # Book: 978-1-78899-756-0 Mastering Ubuntu Server Second Edition by Jay LaCroix
-# Site: https://docs.ansible.com/ansible/
-# Site: https://www.howtoforge.com/ansible-guide-ad-hoc-command/
-# Site: https://www.golinuxcloud.com/ansible-tutorial/
+Link:https://docs.ansible.com/ansible/
+Link:https://www.howtoforge.com/ansible-guide-ad-hoc-command/
+Link:https://www.golinuxcloud.com/ansible-tutorial/
 
 
 

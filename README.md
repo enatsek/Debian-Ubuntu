@@ -8,9 +8,7 @@ AGT-ApacheOnUbuntu: Installing and configuring Apache 2 on Ubuntu server. With s
 
 AGT-CertbotOnUbuntu: Using certbot tool of eff.org to automatize obtaining and renewing letsencrytp.org SSL certificates on Apache 2 and Ubuntu Server.
 
-AGT-ISPMailTutorialLokum: A document to prepare multi domain mail server with all the necessary tools. This document is a very minor modification of Alexey Abel's ISP Mail Tutorial (Caramel Edition) at https://123qwe.com/. Also, Alexey's document is (not so minor) modification of ISPmail tutorials of Christop Haas at https://workaround.org/ispmail.
-
-AGT-LampOnUbuntu: Installation of Lamp stack on Ubuntu server. My choice is DB is Mariadb.
+AGT-LampOnUbuntu: Installation of Lamp stack on Ubuntu server. My choice of DB is Mariadb.
 
 AGT-MariadbOnUbuntu: Mariadb installation and basic configuration on Ubuntu. Includes some user management and master-slave replication.
 

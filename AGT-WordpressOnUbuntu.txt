@@ -15,7 +15,7 @@ WordpressOnUbuntu: Install Wordpress  On Ubuntu 20.04
 
 #---Specs
 # Based on Brian Boucheron's Tutorial on
-# https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lamp-on-ubuntu-18-04
+Link:https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lamp-on-ubuntu-18-04
 # My Server Name: www.karasite.com
 # Wordpress Mariadb Database Name: wordpress
 # Wordpress Mariadb Database User: wordpressuser

@@ -18,8 +18,8 @@ MariadbOnUbuntu: MariaDB Tutorial on Ubuntu 20.04
 #   on Ubuntu 20.04 Server
 # Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix
 #   This book hes introduced me to Ubuntu Server and I have to thank him for this
-#   excellent book. 
-#   https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
+#   excellent book:
+Link:https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
 # Almost (if not all) everything on this tutorial can be applied to Mysql
 #   Mariadb is a fork or Mysql, and I prefer using it, besides a lot of other reasons, 
 #   I just don't like Oracle

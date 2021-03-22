@@ -15,7 +15,7 @@ Apache Fine Tunes on Ubuntu 20.04 and Ubuntu 18.04
 
 #---Specs
 # Based on Alexey Abel's ISP Mail Tutorial Caramel Edition
-#   https://123qwe.com/
+Link:https://123qwe.com/
 
 #---1. Special DNS Records:
 # 1.1. Certificate Authorities

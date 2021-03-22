@@ -166,7 +166,7 @@ virsh net-undefine host-bridge2
 # Random UUID Generator
 uuidgen
 # Random MAC Address Generator
-https://www.browserling.com/tools/random-mac
+Link:https://www.browserling.com/tools/random-mac
 #
 # 2.1. Bridged Networks
 # I believe you already have an idea of bridged networks. It is like the host is sharing its

@@ -45,13 +45,13 @@ KVM Tutorial On Ubuntu Server (Beginner)
 # Snapshot: A saved state of an image. You can revert to that stage later.
 #
 # 0.4. Resources
-https://ostechnix.com/install-and-configure-kvm-in-ubuntu-20-04-headless-server/
-https://www.qemu.org/docs/master/interop/qemu-img.html
-https://www.libvirt.org/manpages/virsh.html
-https://docs.fedoraproject.org/en-US/Fedora/18/html/Virtualization_Administration_Guide/index.html
-https://libguestfs.org/
-https://fabianlee.org/2020/02/23/kvm-testing-cloud-init-locally-using-kvm-for-an-ubuntu-cloud-image/
-https://cloudinit.readthedocs.io/en/latest/topics/examples.html
+Link:https://ostechnix.com/install-and-configure-kvm-in-ubuntu-20-04-headless-server/
+Link:https://www.qemu.org/docs/master/interop/qemu-img.html
+Link:https://www.libvirt.org/manpages/virsh.html
+Link:https://docs.fedoraproject.org/en-US/Fedora/18/html/Virtualization_Administration_Guide/index.html
+Link:https://libguestfs.org/
+Link:https://fabianlee.org/2020/02/23/kvm-testing-cloud-init-locally-using-kvm-for-an-ubuntu-cloud-image/
+Link:https://cloudinit.readthedocs.io/en/latest/topics/examples.html
 ISBN: 979-10-91414-20-3 The Debian Administrator's Handbook by Raphaël Hertzog and Roland Mas
 ISBN: 978-1-78829-467-6 KVM Virtualization Cookbook by Konstantin Ivanov
 
@@ -217,7 +217,7 @@ sudo apt install cloud-image-utils
 #
 # 4.1. Acquiring Cloud Images
 # A search for "ubuntu cloud image" in duckduck2 gives the following address:
-https://cloud-images.ubuntu.com/
+Link:https://cloud-images.ubuntu.com/
 # Following focal and current, download kvm image focal-server-cloudimg-amd64.img 
 # Put it to server's /srv/isos folder.
 #
@@ -233,7 +233,7 @@ sudo qemu-img create -b /srv/isos/focal-server-cloudimg-amd64.img -F qcow2 \
 #   image. There is a wide range of instructions like; creating a user, creating and filling files, 
 #   adding apt repositories, running initial commands, installing packages, reboot and poweroff after
 #   finishing, disk and configuration. See below url for details:
-https://cloudinit.readthedocs.io/en/latest/topics/examples.html
+Link:https://cloudinit.readthedocs.io/en/latest/topics/examples.html
 # Our cloud-init file will configure the following:
 # Create a user named exforge with sudo privileges, assign its password, add it to exforge group as
 #   primary, also add it to users group, create its home directory as /home/exforge, and set its shell
@@ -327,7 +327,7 @@ sudo touch /etc/cloud/cloud-init.disabled
 # There are countless options to do with virsh command. I can only list a handfull
 #   of most useful ones (IMHO) here.
 # For a complete list of virsh command usage, see the following web page:
-https://www.libvirt.org/manpages/virsh.html
+Link:https://www.libvirt.org/manpages/virsh.html
 # In all examples, NAME is the name of your VM.
 #
 # 5.1. Info about host
@@ -772,7 +772,7 @@ virsh dominfo --help
 #   you start using qemu-img, you have to shut down the VM associated with it. 
 # !!! Do not use qemu-img with an image of running VM !!!
 # A full documentation can be found at the below site:
-https://www.qemu.org/docs/master/interop/qemu-img.html
+Link:https://www.qemu.org/docs/master/interop/qemu-img.html
 #
 # 7.1. Get Basic Info About an Image
 qemu-img info FILENAME
@@ -904,7 +904,7 @@ virsh start ubuntu20
 
 #---9. libguestfs: VM Disk Management
 # A set of commands for managing VM disks. Full documentation:
-https://libguestfs.org/
+Link:https://libguestfs.org/
 # Normally, as a system admin, you won't need to reach to VM's disks. But there may happen a need
 #   once in a while. 
 # I think you already understand that when you have a VPS on a cloud server, the administrators of

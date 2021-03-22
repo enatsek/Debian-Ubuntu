@@ -14,7 +14,7 @@ SimpleMailServerOnUbuntu: Mail Server with SMTP and IMAP on Ubuntu 18.04 and 20.
 
 #---Specs
 # Based on the valuable documents at:
-#    https://www.server-world.info/en/note?os=Ubuntu_18.04&p=mail&f=1
+Link:https://www.server-world.info/en/note?os=Ubuntu_18.04&p=mail&f=1
 # SMTP: Postfix
 # IMAP: Dovecot
 # No virtual domains, only Linux users will have email accounts
@@ -220,7 +220,7 @@ sudo systemctl restart postfix dovecot
 #  Username: Incoming: exforge        Outgoing: exforge
 #     
 #  See my config screenshot at:
-#     https://imgur.com/nUrjZTg
+Link:https://imgur.com/nUrjZTg
 
 #---5. Account Management
 # 5.1. All Linux users already have mail accounts with their login name and passwords.

@@ -20,7 +20,7 @@ UserAndGroupAdminOnUbuntu: User and Group Administration on Ubuntu 20.04
 # Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix
 #   This book has introduced me to Ubuntu Server and I have to thank him for this
 #   excellent book. 
-#   https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
+Link:https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
 #
 
 #---1. User Add and Delete

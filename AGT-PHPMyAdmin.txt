@@ -97,7 +97,7 @@ https://test.karasite.com/phpmyadmin
 
 #---7. Troubleshooting
 # Taken from: DevAnswers:
-#    https://devanswers.co/problem-php-7-2-phpmyadmin-warning-in-librariessql-count/
+Link:https://devanswers.co/problem-php-7-2-phpmyadmin-warning-in-librariessql-count/
 # 7.1. Problem with phpMyAdmin and PHP 7.2: 
 #   “Warning in ./libraries/sql.lib.php#613 count(): 
 #        Parameter must be an array or an object that implements Countable”

@@ -19,7 +19,8 @@ KVM Tutorial On Ubuntu Server (Beginner)
 # 0.0. Definition
 # KVM virtualization tutorial 1 on Ubuntu 20.04 LTS Server. 
 # Our aim is to install and configure a host computer for virtual machines. 
-# This tutorial aims to bring you (and me) to a moderate level of Virtualization Administration.
+# This tutorial aims to bring you (and me) to a moderate level of Virtualization
+#   Administration.
 #
 # 0.1. How It Works
 # KVM (Kernel-based Virtual Machine) is a loadable kernel module which supply
@@ -160,10 +161,12 @@ sudo virsh pool-create-as srv-kvm dir --target /srv/kvm
 # Now it is time to create our first vm
 # It will be Ubuntu Server 20.04 LTS with 1 GB RAM and 10 GB HDD
 # I already copied Ubuntu server iso ubuntu-20.04.1-live-server-amd64.iso to /srv/isos
-# Install a VM named testkvm, through QEMU with KVM virtualization, with 1024MiB memory and 1 vcpu,
-#   prepare a qcow2 format disk of 10GiB, connect a CDROM drive to it with the specified image, use
-#   the server's network bridge br0, allow VNC connections to the VM through the server, optimize it
-#   as Linux and Ubuntu 20.04 servers and don't try to attach a console from server.
+# Install a VM named testkvm, through QEMU with KVM virtualization, with 1024MiB memory 
+#   and 1 vcpu,
+#   prepare a qcow2 format disk of 10GiB, connect a CDROM drive to it with the specified
+#   image, use the server's network bridge br0, allow VNC connections to the VM through 
+#   the server, optimize it as Linux and Ubuntu 20.04 servers and don't try to attach a
+#   console from server.
 sudo virt-install --name testkvm \
     --connect qemu:///system  --virt-type kvm \
     --memory 1024 --vcpus 1 \
@@ -206,10 +209,10 @@ virt-manager
 
 
 #---4. Installing VMs from Ready Images
-# Starting a new VM and installing OS into is a good but time consuming way. Another way would be
-#   preparing an installed image and start it as a new VM. Most server distros supply cloud images. 
-#   By adding them some necessary configurations (user and network definitions), you can use them
-#   as ready images.
+# Starting a new VM and installing OS into is a good but time consuming way. Another way
+#   would be preparing an installed image and start it as a new VM. Most server distros
+#   supply cloud images. By adding them some necessary configurations (user and network
+#   definitions), you can use them as ready images.
 #
 # 4.0. Installing cloud-image-utils
 sudo apt update
@@ -222,26 +225,28 @@ Link:https://cloud-images.ubuntu.com/
 # Put it to server's /srv/isos folder.
 #
 # 4.2. Creating a New Image From the Original Image
-# We will create a new image from the image we downloaded. The original image has a max size of 2.25 GiB,
-#   it will be increased to 20 GiB and the new image format will be qcow2, the preferred format for
-#   KVM.
+# We will create a new image from the image we downloaded. The original image has a max
+#   size of 2.25 GiB, it will be increased to 20 GiB and the new image format will be
+#   qcow2, the preferred format for KVM.
 sudo qemu-img create -b /srv/isos/focal-server-cloudimg-amd64.img -F qcow2 \
     -f qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 20G
 #
 # 4.3. Cloud-init Configuration
-# The next step is to crate a cloud-init config file. This file contains instructions for the cloud
-#   image. There is a wide range of instructions like; creating a user, creating and filling files, 
-#   adding apt repositories, running initial commands, installing packages, reboot and poweroff after
-#   finishing, disk and configuration. See below url for details:
+# The next step is to crate a cloud-init config file. This file contains instructions for
+#   the cloud image. There is a wide range of instructions like; creating a user, creating
+#   and filling files, adding apt repositories, running initial commands, installing
+#   packages, reboot and poweroff after finishing, disk and configuration. See below url
+#   for details:
 Link:https://cloudinit.readthedocs.io/en/latest/topics/examples.html
 # Our cloud-init file will configure the following:
-# Create a user named exforge with sudo privileges, assign its password, add it to exforge group as
-#   primary, also add it to users group, create its home directory as /home/exforge, and set its shell
-#   to bash.
+# Create a user named exforge with sudo privileges, assign its password, add it to exforge
+#   group as primary, also add it to users group, create its home directory as 
+#   /home/exforge, and set its shell to bash.
 # To add our user's password, we need to have the hash of it.
 sudo apt install whois
 mkpasswd --method=SHA-512 --rounds=4096
-# Enter the user's assigned password here, it will display the hash, copy the hash, we will use it later.
+# Enter the user's assigned password here, it will display the hash, copy the hash, we will
+#   use it later.
 #
 # Create a place for our cloud-init files. /srv/init would be fine.
 sudo mkdir /srv/init
@@ -267,7 +272,8 @@ packages: qemu-guest-agent
 # Do not forget to change passwd value with your copied hash.
 #
 # 4.4. Cloud-init Network Configuration
-# If a network configuration other than DHCP is needed, a network configuration file is necessary.
+# If a network configuration other than DHCP is needed, a network configuration file is
+#   necessary.
 # Remember to change IP addresses as needed by your VM
 sudo nano /srv/init/ubuntu-network-init.cfg
 #______________________________________________________________
@@ -283,7 +289,8 @@ ethernets:
 #______________________________________________________________
 #
 # 4.5. Creating Cloud Seed Image
-# Now we will create an image file with our ubuntu-cloud-init.cfg and ubuntu-network-init.cfg inside.
+# Now we will create an image file with our ubuntu-cloud-init.cfg and 
+#   ubuntu-network-init.cfg inside.
 sudo cloud-localds --network-config /srv/init/ubuntu-network-init.cfg /srv/kvm/ubuntu20-seed.qcow2 \
    /srv/init/ubuntu-cloud-init.cfg
 #
@@ -298,7 +305,8 @@ virt-install --name ubuntu20 \
   --os-type linux --os-variant ubuntu20.04 \
   --network bridge=br0 \
   --noautoconsole
-# It might take a few minutes for cloud-init to finish. You can connect to your VM from your workstation.
+# It might take a few minutes for cloud-init to finish. You can connect to your VM from 
+#   your workstation.
 virt-viewer --connect qemu+ssh://exforge@srv/system ubuntu20
 #
 # 4.7. Clean-up Tasks for Cloud-init
@@ -399,10 +407,10 @@ virsh setmem ubuntu20 1536M --live --config
 #   current live   : Active number of vcpus, valid now (while running).
 # To see these values for your VM:
 virsh vcpucount NAME
-# I keep saying shutdown and start instead of restart or reboot, because kvm, qemu or whatever it is,
-#   acts differently when you reboot or shutdown and then start the VM. So when I say shutdown and 
-#   start, I mean shutdown first, wait a while (from 0.001 miliseconds to as long as you want) and 
-#   then start the VM.
+# I keep saying shutdown and start instead of restart or reboot, because kvm, qemu or
+#   whatever it is, acts differently when you reboot or shutdown and then start the VM. 
+#   So when I say shutdown and start, I mean shutdown first, wait a while (from 0.001
+#   miliseconds to as long as you want) and then start the VM.
 #
 # There is no way (AFAIK) to change maximum live value, you can change maximum config as:
 virsh setvcpus NAME NUMBER --maximum --config
@@ -421,19 +429,20 @@ virsh setvcpus ubuntu20 3 --config
 virsh setvcpus NAME NUMBER --config --live
 virsh setvcpus ubuntu20 3 --config --live
 #
-# You can both increase and decrease the vcpu count. But beware that decreasing vcpu count of a running
-#   VM could be dangerous.
+# You can both increase and decrease the vcpu count. But beware that decreasing vcpu count #   of a running VM could be dangerous.
 #
-# When you increase the current live vcpu count, the increased vcpus becomes offline. That means you
-#   cannot use them right away. At least that is what happened to me. You can see online and offline 
-#   vcpu information of your VM with the following command (run it on your VM):
+# When you increase the current live vcpu count, the increased vcpus becomes offline. That
+#   means you cannot use them right away. At least that is what happened to me. You can see
+#   online and offline vcpu information of your VM with the following command (run it on
+#   your VM):
 lscpu | head
-# To activate an offline cpu, first you have to know its number. cpu numbering starts from 0, so if you
-#   had 2 vcpus and increased them by 1, the number for the 3rd vcpu will be 2. You need to edit the
-#   following file and change the 0 inside to 1:
+# To activate an offline cpu, first you have to know its number. cpu numbering starts from
+#   0, so if you had 2 vcpus and increased them by 1, the number for the 3rd vcpu will be
+#   2. You need to edit the following file and change the 0 inside to 1:
 sudo nano /sys/devices/system/cpu/cpu2/online
-# The number 2 after cpu means the cpu with number 2 i.e. 3rd cpu. When you change the file, magically
-#   that vcpu will become online. For more vcpus, you have to change that file for each vcpu you added.
+# The number 2 after cpu means the cpu with number 2 i.e. 3rd cpu. When you change the
+#   file, magically that vcpu will become online. For more vcpus, you have to change that
+#   file for each vcpu you added.
 #
 # 5.9. Snapshots
 # When you take a snapshot, current disk and memory state is saved.
@@ -455,24 +464,25 @@ virsh snapshot-delete VMNAME --snapshotname SNAPSHOTNAME
 virsh snapshot-list VMNAME
 #
 # 5.10. Attach Another Disk to a VM
-# Suppose that, for our ubuntu20 VM, we need another disk of 20GB size. Because, we need to keep 
-#   some data on another disk. 
+# Suppose that, for our ubuntu20 VM, we need another disk of 20GB size. Because, we need to 
+#   keep some data on another disk. 
 # We need to create a new image and attach it to the VM.
 # Create a 20GB image in qcow2 format:
 sudo qemu-img create -f qcow2 /srv/kvm/ubuntu20-disk2.qcow2 20G
-# Now our image is ready to be attached to our VM. Before attaching it to the VM, we have to decide
-#   its name on the VM.
-# VM disks are named as vda, vdb, vdc ... so on. We have to give it a name just follows the last disk.
-#   Because my ubuntu20 VM has only one disk, name for the second one will be vdb. To see your disks
-#   on your VM, type the following command (On your VM)
+# Now our image is ready to be attached to our VM. Before attaching it to the VM, we have 
+#   to decide its name on the VM.
+# VM disks are named as vda, vdb, vdc ... so on. We have to give it a name just follows the
+#   last disk. Because my ubuntu20 VM has only one disk, name for the second one will be
+#   vdb. To see your disks on your VM, type the following command (On your VM):
 lsblk -o name -d | grep vd
-# Most probably you will have only vda, in that case you can use the name vdb. Otherwise use a name
-#   just after the last disk name.
+# Most probably you will have only vda, in that case you can use the name vdb. Otherwise
+#   use a name just after the last disk name.
 # Add the new image as a second disk to my ubuntu20 VM:
 virsh attach-disk ubuntu20 /srv/kvm/ubuntu20-disk2.qcow2 vdb --persistent
-# The disk is added persistently, that is it is added alive and it will be there after shutdown and 
-#   and start. If you want to add the disk for the session only, you can change --persistent to --live.
-#   Also, if you want to add the disk after shutdown and start you can change --persistent to --config.
+# The disk is added persistently, that is it is added alive and it will be there after
+#   shutdown and and start. If you want to add the disk for the session only, you can
+#   change --persistent to --live. Also, if you want to add the disk after shutdown and
+#   start you can change --persistent to --config.
 # Needless to say that, you are going to have to mount the new disk before using it.
 #
 # In any case, if you want to detach the added disk, solution is easy:
@@ -768,8 +778,9 @@ virsh dominfo --help
 
 
 #---7. qemu-img: Shell Based Image Management
-# qemu-img allows us to manipulate images. The command is expected to work offline. That means, before
-#   you start using qemu-img, you have to shut down the VM associated with it. 
+# qemu-img allows us to manipulate images. The command is expected to work offline. That
+#   means, before you start using qemu-img, you have to shut down the VM associated with
+#   it. 
 # !!! Do not use qemu-img with an image of running VM !!!
 # A full documentation can be found at the below site:
 Link:https://www.qemu.org/docs/master/interop/qemu-img.html
@@ -785,8 +796,8 @@ qemu-img create -f FORMAT FILENAME SIZE
 # Remember, at 5.10. we created an empty disk image to add as another disk to a VM:
 sudo qemu-img create -f qcow2 /srv/kvm/ubuntu20-disk2.qcow2 20G
 #
-# An image also can be created by backing from another image. In that way, we will have another image
-#   from an image, differentiating its format and size:
+# An image also can be created by backing from another image. In that way, we will have 
+#   another image from an image, differentiating its format and size:
 sudo qemu-img create -b BACKINGFILENAME -F BACKINGFILEFORMAT \
     -f OUTPUTFILEFORMAT OUTPUTFILENAME SIZE
 # Remember, at 4.2. we created a new cloud image from the cloud image we doownloaded:
@@ -804,9 +815,10 @@ sudo qemu-img create -b /srv/isos/focal-server-cloudimg-amd64.img -F qcow2 \
 #   vmdk  : VMW*re format
 #   vhdx  : Micros*ft HyperV format
 qemu-img convert -f SOURCEFORMAT -O DESTINATIONFORMAT SOURCEFILE DESTFILE
-# I have Virtualbox installed on my workstation (Ubuntu 20.04 LTS). There is a Windows 10 installed
-#   on it for testing purposes. I'll copy its image (obviously in vdi format) to my server to 
-#   /srv/kvm directory, convert it to qcow2 and run it on my server using KVM. 
+# I have Virtualbox installed on my workstation (Ubuntu 20.04 LTS). There is a Windows 10 
+#   installed on it for testing purposes. I'll copy its image (obviously in vdi format) 
+#   to my server to /srv/kvm directory, convert it to qcow2 and run it on my server using
+#   KVM. 
 # !!! On my workstation BEGIN !!!
 # Copy Windows 10 image to the server
 scp windows10.vdi exforge@srv:/tmp
@@ -833,7 +845,8 @@ sudo qemu-img resize FILENAME +SIZE
 # SIZE could be something like +10G. Image size will be increased by (not to) this amount. 
 # it is possible to shrink with -
 # You must use the parameter --shrink to shrink the image
-#   You must use partitioning tools in the VM to resize the disk to shrinked size before shrinking.
+# You must use partitioning tools in the VM to resize the disk to shrinked size before
+#   shrinking.
 # To increase the size of my ubuntu20 VM's image by 5GB:
 sudo qemu-img resize /srv/kvm/ubuntusrv-cloudimg.qcow2 +5G
 #
@@ -843,21 +856,22 @@ qemu-img check FILENAME
 
 
 #---8. Export and Import of VMs
-# If you want to move your VM to another host, or in a way you want to backup and restore your VM;
-#   there might be a lot of ways to do it. I'm going to demonstrate a very simple method which 
-#   requires shutting down the VM (you can try while it is running, but with no success guaranteed).
+# If you want to move your VM to another host, or in a way you want to backup and restore 
+#   your VM; there might be a lot of ways to do it. I'm going to demonstrate a very simple
+#   method which requires shutting down the VM (you can try while it is running, but with
+#   no success guaranteed).
 #
 # 8.1. Export
 # First of all, let's prepare a place for our backup files, /tmp/kvmbackup would be fine.
 mkdir /tmp/kvmbackup
-# We need the definition file of our VM and the image file it is using. "virsh dumpxml" command creates
-#   the definition file in xml format, we can save it with the VM's name.
+# We need the definition file of our VM and the image file it is using. "virsh dumpxml" 
+#   command creates the definition file in xml format, we can save it with the VM's name.
 virsh dumpxml ubuntu20 > /tmp/kvmbackup/ubuntu20.xml
 # This file contains all the necessary information about our VM.
 #
-# If our VM was installed from the scratch as in 2.1. there will be only 1 image file. But if it was 
-#   installed from a cloud image as we did in 4. or if another disk was added as in 5.10; there would 
-#   be more than 1 images. We need to copy all the images. 
+# If our VM was installed from the scratch as in 2.1. there will be only 1 image file. But
+#   if it was installed from a cloud image as we did in 4. or if another disk was added as
+#   in 5.10; there would be more than 1 images. We need to copy all the images. 
 #
 # Images used by the VM is listed in the xml file. Let's find them:
 grep "source file" /tmp/kvmbackup/ubuntu20.xml
@@ -867,12 +881,13 @@ grep "source file" /tmp/kvmbackup/ubuntu20.xml
       <source file='/srv/kvm/ubuntusrv-cloudimg.qcow2' index='1'/>
         <source file='/srv/isos/focal-server-cloudimg-amd64.img'/>
 #_____________________________________________________________________
-# That means I need to prepare 3 files: /srv/kvm/ubuntu20-seed.qcow2, /srv/kvm/ubuntusrv-cloudimg.qcow2
-#   and /srv/isos/focal-server-cloudimg-amd64.img. Lets copy them to our backup locations.
+# That means I need to prepare 3 files: /srv/kvm/ubuntu20-seed.qcow2, 
+#   /srv/kvm/ubuntusrv-cloudimg.qcow2 #   and /srv/isos/focal-server-cloudimg-amd64.img.
+#   Lets copy them to our backup locations.
 cp /srv/kvm/ubuntu20-seed.qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 \
    /srv/isos/focal-server-cloudimg-amd64.img /tmp/kvmbackup
-# Beware: You can copy the files while the VM is running, but it is advised to shutdown (or at least 
-#   suspend your VM) before copying. Continue at your own risk.
+# Beware: You can copy the files while the VM is running, but it is advised to shutdown (or 
+#   at least suspend your VM) before copying. Continue at your own risk.
 #
 # Let's package them
 tar -cf /tmp/ubuntu20.tar -C /tmp/kvmbackup .
@@ -880,22 +895,24 @@ tar -cf /tmp/ubuntu20.tar -C /tmp/kvmbackup .
 # You have to copy this file to another server, before importing there.
 #
 # 8.2. Import
-# Assuming we have another virtualization server and we have copied ubuntu20.tar there, we are going
-#   to import it and make it operational.
-# Beware: Before importing your VM to another server, you have to remove it on the original server, 
-#   otherwise you would have 2 guests with the same IP and that may cause unexpected results.
+# Assuming we have another virtualization server and we have copied ubuntu20.tar there, we 
+#   are going to import it and make it operational.
+# Beware: Before importing your VM to another server, you have to remove it on the original 
+#   server, #   otherwise you would have 2 guests with the same IP and that may cause
+#   unexpected results.
 # ubuntu20.tar is copied to the server's /tmp directory as /tmp/ubuntu20.tar
 # Create a place for our import files
 mkdir /tmp/import
 # Extract tar file there
 tar -xf /tmp/ubuntu20.tar -C /tmp/import
-# Now we need to move our image files to their directories as in the original server. If you have a 
-#   different directory structure on your new server, and you want to copy files to different directories
-#   you have to edit the xml file and change directories there.
+# Now we need to move our image files to their directories as in the original server. If 
+#   you have a different directory structure on your new server, and you want to copy files
+#   to different directories you have to edit the xml file and change directories there.
 sudo cp /tmp/import/ubuntu20-seed.qcow2 /tmp/import/ubuntusrv-cloudimg.qcow2 /srv/kvm
 sudo cp /tmp/import/focal-server-cloudimg-amd64.img /srv/isos
 # 
-# It is time to define our server. Remember the xml file? We will use it to define our ubuntu20 server.
+# It is time to define our server. Remember the xml file? We will use it to define our
+#   ubuntu20 server.
 virsh define /tmp/import/ubuntu20.xml
 # Now we can start it
 virsh start ubuntu20
@@ -905,10 +922,10 @@ virsh start ubuntu20
 #---9. libguestfs: VM Disk Management
 # A set of commands for managing VM disks. Full documentation:
 Link:https://libguestfs.org/
-# Normally, as a system admin, you won't need to reach to VM's disks. But there may happen a need
-#   once in a while. 
-# I think you already understand that when you have a VPS on a cloud server, the administrators of
-#   that cloud environment can reach your VPS' data. 
+# Normally, as a system admin, you won't need to reach to VM's disks. But there may happen 
+#   a need once in a while. 
+# I think you already understand that when you have a VPS on a cloud server, the 
+#   administrators of that cloud environment can reach your VPS' data. 
 # There are many tools, I'm going to try to explain only mounting commands. 
 #
 # 9.1. Installation
@@ -918,8 +935,8 @@ sudo apt-get install libguestfs-tools
 # 9.2. Mounting VM's Disks
 # Works online (While the VM is running) Mount my VMs disk on my host's /mnt directory:
 sudo guestmount -d ubuntu20 -i --ro /mnt
-# /mnt directory holds all the files of my VM. If you remove --ro, you can mount it with write
-#  permissions. But be very careful.
+# /mnt directory holds all the files of my VM. If you remove --ro, you can mount it with 
+#  write permissions. But be very careful.
 # Unmount it:
 sudo guestunmount /mnt
 # I prefer mounting with readonly permissions just to be safe.
@@ -927,7 +944,7 @@ sudo guestunmount /mnt
 guestmount --help
 guestunmount --help
 #
-# 7.3. All Commands
+# 9.3. All Commands
 # guestfish(1) — interactive shell
 # guestmount(1) — mount guest filesystem in host
 # guestunmount(1) — unmount guest filesystem

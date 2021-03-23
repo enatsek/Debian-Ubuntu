@@ -174,9 +174,9 @@ Link:https://www.browserling.com/tools/random-mac
 #   DHCP Server on the network the host resides, the VM can use it to get an IP.
 # If you are going to use a server which directly serves information or a service to the 
 #   users, most probably you'll use a Bridged Network.
-# To use a bridged network, first you need to create the bridge in the netplan file, and then
-#   prepare an XML file and add the network to the KVM with "virsh net-define" command, as we
-#   did in 1.2.
+# To use a bridged network, first you need to create the bridge in the netplan file, and 
+#   then prepare an XML file and add the network to the KVM with "virsh net-define" 
+#   command, as we did in 1.2.
 # A sample Bridged Network XML File:
 #_____________________________________________________
 <network>
@@ -196,8 +196,8 @@ Link:https://www.browserling.com/tools/random-mac
 #   network behind your internet router. Your host's interface stands like your internet 
 #   router and VMs are like your home devices. When VMs want to access to the network, they
 #   use host's IP address, but the other devices on the network cannot access to your VMs.
-# This type of network is useful when you don't want anyone to access your VMs, but you want 
-#   your VMs to access everywhere. 
+# This type of network is useful when you don't want anyone to access your VMs, but you 
+#   want your VMs to access everywhere. 
 # An example of Routed Network XML File:
 #_____________________________________________________
 <network>
@@ -227,14 +227,14 @@ Link:https://www.browserling.com/tools/random-mac
 #
 # 2.3. Isolated Network
 # An Isolated Network, as the name implies, is isolated. Noone can go out, noone can come in.
-#   The VMs in the isolated network cannot reach outside, and the devices outside cannot reach
-#   the VMs in the isolated network.
+#   The VMs in the isolated network cannot reach outside, and the devices outside cannot 
+#   reach the VMs in the isolated network.
 # Although it is very useful for testing purposes, there might be some situations that 
 #   isolated network could be very useful. Consider you have a web server and a database 
 #   server. The DB server can only be accessed by the web server and the web server will be 
 #   accessed by everyone. You can put the DB server in an isolated network and define 2 
-#   interfaces for the web server as 1 in a bridged network and the other one in the isolated 
-#   network. That way, noone other than the web server can access the DB server. See 
+#   interfaces for the web server as 1 in a bridged network and the other one in the 
+#   isolated network. That way, noone other than the web server can access the DB server.
 # An example of Isolated Network XML File:
 #_____________________________________________________
 <network>
@@ -320,15 +320,15 @@ sudo virt-install --name vm2 \
 # 
 # 3.4. Considerations for Isolated Networks
 # If a VM is in an isolated network, and if it has no connections to other networks, it 
-#   cannot connect to the internet. That means, VM1 can connect to the internet and VM2 cannot
-#   connect to the internet. 
-# Actually, when we put it in an isolated network, we accepted that it won't connect to other
-#   networks. But we need internet to install or update application.
+#   cannot connect to the internet. That means, VM1 can connect to the internet and VM2 
+#   cannot connect to the internet. 
+# Actually, when we put it in an isolated network, we accepted that it won't connect to 
+#   other networks. But we need internet to install or update application.
 # I have a not so bad solution for this situation. Install squid proxy to the host, make it 
 #   listen to Isolated Network IP of host (192.168.20.1), allow all IPs to access it. 
 #   Configure your VMs to use "apt" command through a proxy.
-# I won't go in the details of installing and configuring squid proxy here, there are tons of
-#   materials on the internet about it. 
+# I won't go in the details of installing and configuring squid proxy here, there are tons 
+#   of materials on the internet about it. 
 # Configure your VM to use apt commands through a proxy:
 # !!! Run on your VM !!!
 sudo nano /etc/apt/apt.conf

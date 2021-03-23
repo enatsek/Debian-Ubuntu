@@ -152,7 +152,8 @@ ansible all -m ping -vvvv
 
 
 #---3. More on Inventory
-# 3.1. it is possible to use a different inventory for each ansible or ansible-playbook command:
+# 3.1. it is possible to use a different inventory for each ansible or ansible-playbook
+#   command:
 ansible all –i /path/to/inventory –m ping
 #
 # 3.2. to use a different ssh port
@@ -169,7 +170,8 @@ frontend.example.com ansible_port=50022
 yellow.example.com ansible_host=192.168.33.10
 #
 # 3.5. If you want to use more than 1 inventory file you can put all your inventories 
-#   in a directory and specify the directory as the inventory file. Below is a simple example.
+#   in a directory and specify the directory as the inventory file. Below is a simple 
+#   example.
 sudo su ansible
 mkdir /home/ansible/ansible/inventory
 nano /home/ansible/ansible/inventory/inventory1
@@ -182,8 +184,9 @@ test203
 #__________________________________
 ansible all -i /home/ansible/ansible/inventory -m ping
 #
-# 3.6. If you want to use a dynamic host file, you can use a program which outputs the inventory.
-#   Then you can give your program as inventory file. Below is a very simple example.
+# 3.6. If you want to use a dynamic host file, you can use a program which outputs the 
+#   inventory. #   Then you can give your program as inventory file. Below is a very 
+#   simple example.
 sudo su ansible
 nano /home/ansible/ansible/inventory.py
 #______________________________________
@@ -194,8 +197,8 @@ print("test202")
 chmod +x /home/ansible/ansible/inventory.py
 ansible all -i /home/ansible/ansible/inventory.py -m ping
 #
-# 3.7. Needless to say; you can combine dynamic and static inventories, by combining methods in
-#   3.5. and 3.6.
+# 3.7. Needless to say; you can combine dynamic and static inventories, by combining 
+#   methods in 3.5. and 3.6.
 #
 # 3.8. Groups of Groups
 # You can create master groups to include other groups. Master groups require

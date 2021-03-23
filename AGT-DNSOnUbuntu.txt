@@ -18,23 +18,23 @@ DNSOnUbuntu: Installation and Configuration of DNS Servers on Ubuntu 18.04
 # Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix
 #   This book hes introduced me to Ubuntu Server and I have to thank him for this
 #   excellent book. 
-#   https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
+Link:https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
 #
 # There will be 2 DNS Servers, 1 Master and 1 Slave. 
 # For every domain on the internet, 2 DNS Servers are needed. So if you want to
 #    run your own DNS Server, you need 2 servers.
 # If you need DNS Servers for your internal network, it might be a good idea to
 #    install a spare one.
-# I, myself use www.cloudfare.com for DNS services of my domain. But you can prefer
-#    running on your servers.
+# I, myself prefer using www.cloudfare.com for DNS services of my domain. But you may
+#   prefer running on your servers.
 #
 # My Specs: (Change the values to your ones)
-#  Domain Name:   		example.com    	(Change it to your domain name)
-#  Master DNS Server:		ns1.example.com	192.168.1.1
-#  Slave DNS Server:		ns2.example.com	192.168.1.2
+#  Domain Name:   		x11.xyz	    	(Change it to your domain name)
+#  Master DNS Server:		ns1.x11.xyz		192.168.0.161
+#  Slave DNS Server:		ns2.x11.xyz		192.168.0.162
 #  Some sample servers to add as DNS records:
-#  filesrv.example.com:	192.168.1.3
-#  mail.example.com:		192.168.1.5
+#  filesrv.x11.xyz:		192.168.0.171
+#  mail.x11.xyz:		192.168.0.172
 #  mailsrv as a canonical name for mail
 #  mail as a mail server for the domain
 #  Google DNS servers 8.8.8.8 8.8.4.4 are used as forwarder DNSs
@@ -45,11 +45,11 @@ sudo apt install bind9
 #
 # 1.2. Edit main config file
 sudo nano /etc/bind/named.conf.options
-#   Allow slave to transfer and add forwarders
+# Change as below
 #_________________________________________________________
 options {
 	directory "/var/cache/bind";
-		allow-transfer { localhost; 192.168.1.2; };
+		allow-transfer { localhost; 192.168.0.162; };
 		forwarders {
 		8.8.8.8;
 		8.8.4.4;
@@ -60,34 +60,34 @@ options {
 };
 #___________________________
 #
-# 1.3. Add a local zone (that is our zone example.com)
+# 1.3. Add a local zone (that is our zone x11.xyz)
 sudo nano /etc/bind/named.conf.local
 #_________________________________
-zone "example.com" IN {
+zone "x11.xyz" IN {
    type master;
-   file "/etc/bind/net.example.com";
+   file "/etc/bind/net.x11.xyz";
 };
 #_________________________________
 # 
 # 1.4. Fill the local zone file we just defined
-sudo nano /etc/bind/net.example.com
+sudo nano /etc/bind/net.x11.xyz
 #__________________________________________
 $TTL 1D
-@ IN SOA example.com hostmaster.example.com (
-202005291 ; serial
+@ IN SOA x11.xyz hostmaster.x11.xyz (
+2021032401 ; serial
 8H ; refresh
 4H ; retry
 4W ; expire
 1D ) ; minimum
-IN A 192.168.1.1
+IN A 192.168.0.1
 ;
 @               IN NS     ns1
-@               IN MX 10  mail.example.com
-ns1             IN A      192.168.0.101
-ns2             IN A      192.168.0.102
-filesrv         IN A      192.168.0.103
-mail            IN A      192.168.0.105
-mailsrv         IN CNAME  mail.example.com
+@               IN MX 10  mail.x11.xyz
+ns1             IN A      192.168.0.161
+ns2             IN A      192.168.0.162
+filesrv         IN A      192.168.0.171
+mail            IN A      192.168.0.172
+mailsrv         IN CNAME  mail.xyz.x11
 #__________________________________________
 
 
@@ -114,10 +114,10 @@ options {
 # 2.3. Add the local zone (this zone will be replicated from the master DNS)
 sudo nano /etc/bind/named.conf.local
 #____________________________
-zone "example.com" IN {
+zone "x11.xyz" IN {
 	type slave;
-	masters { 192.168.1.1; };
-	file "/var/lib/bind/net.example.com";
+	masters { 192.168.0.161; };
+	file "/var/lib/bind/net.x11.xyz";
 };
 #____________________________
 # This time local zone file is placed at /var/lib

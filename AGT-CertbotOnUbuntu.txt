@@ -1,4 +1,4 @@
-CertbotOnUbuntu: Auto SSL Certificates for Apache 2 Tutorial on Ubuntu 18.04
+CertbotOnUbuntu: Auto SSL Certificates for Apache2 Tutorial on Ubuntu 20.04
 
 
 #---Copyright (C) 2020 Exforge exforge@x386.xyz
@@ -15,47 +15,43 @@ CertbotOnUbuntu: Auto SSL Certificates for Apache 2 Tutorial on Ubuntu 18.04
 
 #---Specs
 # Automation of SSL and certificate renewal for Apache 2 on Ubuntu
-# Based on documents on:
-Link:https://certbot.eff.org/
+# Totally based on the document at:
+Link:https://certbot.eff.org/lets-encrypt/ubuntufocal-apache
 # Apache Site configurations without SSL must be ready on your servers
 #   Refer to ApacheOnUbuntu Tutorial
 
-#---A. Ubuntu 20.04 LTS
-# 1. Enable the universe repository
-#  May not be necessary, start with step 2, if it doesn't work return here
-sudo apt-get update
-sudo apt-get install software-properties-common
-sudo add-apt-repository universe
-sudo apt-get update
-# 2. Install Certbot
-sudo apt-get install certbot python3-certbot-apache
-# 3. Enable Certbot
+
+
+#---1. Preliminary Tasks
+# 1.1. Snap Daemon
+# Certbot is installed as a snap, Ubuntu 20.04 installs snap daemon (snapd) 
+#   by default. If in any case it is not installed, you can install snapd by 
+#   the following command:
+sudo apt install snapd
+# 1.2. Remove Old Certbot Packages (If any)
+# If you've installed certbot's apt package before, remove it:
+sudo apt remove certbot
+
+
+#---2. Installation and Getting SSL Certificate
+# 2.1. Ensure that your snapd (snap deamon) is up to date:
+sudo snap install core; sudo snap refresh core
+#
+# 2.2. Install Certbot
+sudo snap install --classic certbot
+#
+# 2.3. Get SSL Certificate
 sudo certbot --apache
-# 4. Test automatic renewal
+# Asks your email, don't hesitate giving it, you will be informed if any problems
+#   occurs at the renewal of certificates.
+#
+# 2.4. Test automatic renewal
 sudo certbot renew --dry-run
-# 5. All set, certificates generated and installed, all apache
+#
+# 2.5. All set, certificates generated and installed, all apache
 #   configurations are made, jobs added to crontab to renew certs.
 #   Check crontab:
 systemctl list-timers
 
-
-#---B. Ubuntu 18.04 LTS 
-# 1. Add Certbot PPA
-#  May not be necessary, start with step 2, if it doesn't work return here
-sudo apt-get update
-sudo apt-get install software-properties-common
-sudo add-apt-repository universe
-sudo add-apt-repository ppa:certbot/certbot
-sudo apt-get update
-# 2. Install Certbot 
-sudo apt-get install certbot python3-certbot-apache
-# 3. Enable Certbot
-sudo certbot --apache
-# 4. Test automatic renewal
-sudo certbot renew --dry-run
-# 5. All set, certificates generated and installed, all apache
-#   configurations are made, jobs added to crontab to renew certs.
-#   Check crontab:
-systemctl list-timers
 
 

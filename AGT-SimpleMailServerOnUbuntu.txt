@@ -1,4 +1,4 @@
-SimpleMailServerOnUbuntu: Mail Server with SMTP and IMAP on Ubuntu 18.04 and 20.04
+SimpleMailServerOnUbuntu: Mail Server with SMTP and IMAP on Ubuntu 20.04
 
 #---Copyright (C) 2020 Exforge exforge@x386.xyz
 # This document is free text: you can redistribute it and/or modify
@@ -20,8 +20,10 @@ Link:https://www.server-world.info/en/note?os=Ubuntu_18.04&p=mail&f=1
 # No virtual domains, only Linux users will have email accounts
 # Tried to be as simple as possible
 #
-# Hostname: mail.karasite.com
-# Mail Domain: karasite.com
+# Hostname: mail.x11.xyz
+# Mail Domain: x11.xyz
+#
+# An MX record must be created at the DNS Server with the value of mail.x11.xyz
 
 
 #---1. Install and Configure Postfix
@@ -39,10 +41,10 @@ sudo nano /etc/postfix/main.cf
 mail_owner = postfix
 #
 # around line 94: uncomment and specify hostname
-myhostname = mail.karasite.com
+myhostname = mail.x11.xyz
 #
 # around line 102: uncomment and specify domainname
-mydomain = karasite.com
+mydomain = x11.xyz
 #
 # around line 123: uncomment
 myorigin = $mydomain
@@ -142,7 +144,7 @@ mail_location = maildir:~/Maildir
 #
 # 2.5. Dovecot master config
 sudo nano /etc/dovecot/conf.d/10-master.conf
-# around line 96-98: uncomment and add
+# around line 107-109: uncomment and add
 # Postfix smtp-auth
 unix_listener /var/spool/postfix/private/auth {
     mode = 0666
@@ -155,18 +157,18 @@ sudo systemctl restart dovecot
 
 #---Break Time
 # At this point we have a very basic mail config, all our linux users at 
-#   mail.karasite.com have mail addresses. They can access smtp at port 25 and imap at
+#   mail.x11.xyz have mail addresses. They can access smtp at port 25 and imap at
 #   port 143. But unfortunately there is no encryption. 
 # At the next step we will add SSL encrytpion and that will change our smtp port to 587.
 #
 # The easiest way to get SSL certificate for our mail server is:
 #   Install apache2
-#   Create a site with servername mail.karasite.com
+#   Create a site with servername mail.x11.xyz
 #   Get ssl certificate with Certbot
 #   (See tutorial CertbotOnUbuntu)
 # At the next section I assume you have certificates  as
-#    /etc/letsencrypt/live/mail.karasite.com/fullchain.pem
-#    /etc/letsencrypt/live/mail.karasite.com/privkey.pem
+#    /etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
+#    /etc/letsencrypt/live/mail.x11.xyz/privkey.pem
 
 
 #---3. Add SSL/TLS to Postfix and Dovecot
@@ -176,8 +178,8 @@ sudo nano /etc/postfix/main.cf
 smtpd_use_tls = yes
 smtp_tls_mandatory_protocols = !SSLv2, !SSLv3
 smtpd_tls_mandatory_protocols = !SSLv2, !SSLv3
-smtpd_tls_cert_file = /etc/letsencrypt/live/mail.karasite.com/fullchain.pem
-smtpd_tls_key_file = /etc/letsencrypt/live/mail.karasite.com/privkey.pem
+smtpd_tls_cert_file = /etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
+smtpd_tls_key_file = /etc/letsencrypt/live/mail.x11.xyz/privkey.pem
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 #
 # 3.2. Postfix master config
@@ -195,32 +197,31 @@ smtps     inet  n       -       y       -       -       smtpd
 #
 # 3.3. Dovecot config
 sudo nano /etc/dovecot/conf.d/10-ssl.conf
-#   Around line 6: change
-ssl = yes
-#   Around line 12,13: uncomment and specify certificates
-ssl_cert = </etc/letsencrypt/live/mail.karasite.com/fullchain.pem
-ssl_key = </etc/letsencrypt/live/mail.karasite.com/privkey.pem
+# Around line 12,13: Specify certificates (change as below)
+#   Remember to change domain names:  
+ssl_cert = </etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
+ssl_key = </etc/letsencrypt/live/mail.x11.xyz/privkey.pem
 #
 # 3.4. Restart Postfix and Dovecot
 sudo systemctl restart postfix dovecot 
 
 #---4. Client Mail Settings
-# For Linux User exforge at mail.karasite.com
+# For Linux User exforge at mail.x11.xyz
 # Replace all occurences of:
 #  exforge --> your user name
-#  mail.karasite.com --> your server name
-#  karasite.com --> your domain
+#  mail.x11.xyz --> your server name
+#  x11.xyz --> your domain
 #
 # Thunderbird Config:
 #  Your name: Exforge
-#  Email address: exforge@karasite.com
+#  Email address: exforge@x11.xyz
 #  Password: (Your Linux Password)
-#  Incoming: IMAP  mail.karasite.com  143  STARTTLS  Normal password
-#  Outgoing: SMTP  mail.karasite.com  465  SSL/TLS   Normal password
-#  Username: Incoming: exforge        Outgoing: exforge
+#  Incoming: IMAP  mail.x11.xyz  	143  STARTTLS  Normal password
+#  Outgoing: SMTP  mail.x11.xyz  	465  SSL/TLS   Normal password
+#  Username: Incoming: exforge    	Outgoing: exforge
 #     
 #  See my config screenshot at:
-Link:https://imgur.com/nUrjZTg
+Link:https://imgur.com/a/RVIAy3o
 
 #---5. Account Management
 # 5.1. All Linux users already have mail accounts with their login name and passwords.
@@ -229,18 +230,18 @@ sudo useradd -d /home/exforge -m exforge
 #   And you need to give her a password too
 sudo passwd exforge
 #
-# 5.2. If you want to use aliases, say postmaster and webmaster for user exforge.
+# 5.2. If you want to use aliases, say postmaster and abuse for user exforge.
 #   First create Linux users
 sudo useradd -d /home/postmaster -m postmaster
-sudo useradd -d /home/webmaster -m webmaster
+sudo useradd -d /home/abuse -m abuse
 sudo passwd postmaster
-sudo passwd webmaster
+sudo passwd abuse
 #   Add them to /etc/aliases file
 sudo nano /etc/aliases
 #_______________________________________
 # See man 5 aliases for format
 postmaster:    exforge
-webmaster:     exforge
+abuse:     exforge
 #_______________________________________
 #
 #   Activate aliases

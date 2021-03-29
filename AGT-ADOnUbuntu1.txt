@@ -47,8 +47,8 @@ Link:https://www.samba.org/
 #   (actually Netbios Name of your domain).
 # If your company's internet domain name is example.com, then you can choose your
 #   Realm and Domain Name as following:
-# Realm:	EXAMPLE
-# Domain Name:	EXAMPLE.COM
+# Realm:	EXAMPLE.COM
+# Domain Name:	EXAMPLE
 # Whenever you use them, they must be UPPERCASE. Don't ask me why, that is 
 #   something about Micros*ft's bad design.
 #

@@ -34,7 +34,7 @@ sudo apt install mariadb-server
 systemctl status mariadb
 #
 # 1.3. Secure MariaDB, 
-#   select Y for all questions
+#   select Default for all questions, give a good password
 sudo mysql_secure_installation
 #
 # 1.4. Enter Mariadb shell
@@ -155,17 +155,17 @@ DROP DATABASE mysampledb;
 
 #---6. Backup and Restore
 # 6.1. Backup a database
-mysqldump -u admin -p --databases mysampledb > mysampledb.sql
+mysqldump -u root -p --databases mysampledb > mysampledb.sql
 #
 # 6.2. Restore it
-mariadb -u admin -p < mysampledb.sql
+mariadb -u root -p < mysampledb.sql
 
 
 #---7. Master-Slave Replication Configuration
 # 7.1. Specs and Preliminary Tasks
-#   Master Server: 172.16.63.128
-#   Slave Server:  172.16.63.131
-#   Replication User: 'replicate'@'172.16.63.131'
+#   Master Server: 192.168.0.161
+#   Slave Server:  192.168.0.162
+#   Replication User: 'replicate'@'192.168.0.162'
 #   Rep. User Password: Pass1234 
 #   Database instance to replicate: mysampledb
 #
@@ -181,6 +181,7 @@ mariadb -u admin -p < mysampledb.sql
 # 7.2. Master Server Configuration
 # 7.2.1. Configure master for bin log
 sudo nano /etc/mysql/conf.d/mysql.cnf
+# Change as below:
 #__________________
 [mysql]
 [mysqld]
@@ -190,7 +191,7 @@ server-id=1
 #__________________
 # 7.2.2. Change bind address to outside
 sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
-# Change following line
+# Change following line (Around line 28)
 #_______________________
 bind-address = 127.0.0.1
 #_______________________
@@ -199,9 +200,8 @@ bind-address = 127.0.0.1
 bind-address = 0.0.0.0
 #_______________________
 # 7.2.3. Create replication user
-#   Run on Master server Mariadb shell
 # Run following command on master mariadb shell
-GRANT REPLICATION SLAVE ON *.* to 'replicate'@'172.16.63.131' identified by 'Pass1234';
+GRANT REPLICATION SLAVE ON *.* to 'replicate'@'192.168.0.162' identified by 'Pass1234';
 #
 # 7.2.4. Restart master mariadb server
 sudo systemctl restart mariadb
@@ -211,7 +211,7 @@ sudo systemctl restart mariadb
 FLUSH TABLES WITH READ LOCK;
 #
 # 7.2.6. Backup the database at master server
-mysqldump -u admin -p --databases mysampledb > mysampledb.sql
+mysqldump -u root -p --databases mysampledb > mysampledb.sql
 # Move backup file to the slave server for restoring later
 #
 # 7.3. Slave Server Config
@@ -231,9 +231,9 @@ server-id=2
 sudo systemctl restart mariadb
 #
 # 7.3.4. Run the commands on slave mariadb shell
-CHANGE MASTER TO MASTER_HOST="172.16.63.128", MASTER_USER='replicate', MASTER_PASSWORD='Pass1234';
+CHANGE MASTER TO MASTER_HOST="192.168.0.161", MASTER_USER='replicate', MASTER_PASSWORD='Pass1234';
 # Check to see if slave running (mariadb shell)
-SHOW SLAVE STATUSG;
+SHOW SLAVE STATUS;
 # If Slave_IO_State is empty run (mariadb shell)
 START SLAVE;
 #

@@ -165,7 +165,7 @@ charlie  ubuntu-server=(dscully:admins) /usr/bin/apt
 #   can only use sudo on ubuntu_server
 #   can only impersonate dscully user
 #   can only impersonate admins group
-#   can only run /usr/bin/aptimp
+#   can only run /usr/bin/apt
 #  For a user to sudo without passwd
 #_____________________
 ansible ALL=(ALL) NOPASSWD: ALL

@@ -20,8 +20,8 @@ MariadbOnUbuntu: MariaDB Tutorial on Ubuntu 20.04
 #   This book hes introduced me to Ubuntu Server and I have to thank him for this
 #   excellent book:
 Link:https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
-# Almost (if not all) everything on this tutorial can be applied to Mysql
-#   Mariadb is a fork or Mysql, and I prefer using it, besides a lot of other reasons, 
+# Almost (if not all) everything on this tutorial can be applied to Mysql.
+# Mariadb is a fork or Mysql, and I prefer using it, besides a lot of other reasons, 
 #   I just don't like Oracle
 # !!! Do not ever install Mariadb and Mysql on the same server !!! 
 
@@ -75,8 +75,8 @@ basedir = /usr
 sudo mariadb
 #  or
 mariadb -u root -p
-# 3.2. To use the fprmer, we first enter with sudo mariadb and 
-#     enter following commands on Mariadb shell
+# 3.2. To use the latter, we first enter with sudo mariadb and enter following 
+#   commands on Mariadb shell
 UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE USER='root';
 FLUSH PRIVILEGES;
 EXIT;

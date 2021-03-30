@@ -14,9 +14,9 @@ KeepalivedOnUbuntu: keepalived Clustering on Ubuntu 20.04
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #---Specs
-# 2 Ubuntu 20.04 Servers with IPs 192.168.0.41 and 192.168.0.42
-# Floating IP Address: 192.168.0.40
-# Floating IP address will point to first server; if first server goes of
+# 2 Ubuntu 20.04 Servers with IPs 192.168.0.161 and 192.168.0.162
+# Floating IP Address: 192.168.0.160
+# Floating IP address will point to first server; if first server goes off
 #   for any reason, then floating IP address will point to second server. 
 #   It will return to the first server again when it goes back online.
 # This looks like clustering only at the network level.
@@ -50,10 +50,10 @@ sudo nano /etc/keepalived/keepalived.conf
 #________________________________________
 global_defs {
 	notification_email {
-	myemail@mycompany.com
+	notify@x11.xyz
 	}
-	notification_email_from keepalived@mycompany.com
-	smtp_server 192.168.1.150
+	notification_email_from keepalived@x11.xyz
+	smtp_server 192.168.0.150
 	smtp_connect_timeout 30
 	router_id mycompany_web_prod
 }
@@ -64,16 +64,16 @@ vrrp_instance VI_1 {
 	priority 100
 	advert_int 5
 	virtual_ipaddress {
-	192.168.1.200
+	192.168.0.160
 	}
 }
 #________________________________________
 # explanations
 #   global_defs
 #       notification_email
-#           email address to notify oc cluster changes
-#           replace myemail@mycompany.com with your email
-#	notification_email_from keepalived@mycompany.com
+#           email address to notify of cluster changes
+#           replace notify@x11.xyz with your email
+#	notification_email_from keepalived@x11.xyz
 #           from address on the email, change as you wish
 #       smtp_server
 #           smtp server to send the mail through

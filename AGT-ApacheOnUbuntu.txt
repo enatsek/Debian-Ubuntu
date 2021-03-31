@@ -1,4 +1,4 @@
-ApacheOnUbuntu: Apache 2 Tutorial on Ubuntu 18.04
+ApacheOnUbuntu: Apache 2 Tutorial on Ubuntu 20.04
 
 
 #---Copyright (C) 2020 Exforge exforge@x386.xyz
@@ -15,12 +15,12 @@ ApacheOnUbuntu: Apache 2 Tutorial on Ubuntu 18.04
 
 #---Specs
 # Apache 2 Installation, configuration, sample sites, enablement of PHP, SSL etc
-#   on Ubuntu 18.04 Server
+#   on Ubuntu 20.04 Server
 # Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix
 #   This book hes introduced me to Ubuntu Server and I have to thank him for this
 #   excellent book. 
 #   https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
-# srv1.local.ev, srv2.local.ev and srv3.local.ev all have the ip of my server
+# srv1.x11.xyz, srv2.x11.xyz and srv3.x11.xyz all have the ip of my server
 
 #---1. Apache Installation
 # 1.1. Install
@@ -48,20 +48,20 @@ sudo nano /etc/apache2/sites-available/000-virtual-hosts.conf
 # Sample content for 2 virtual hosts
 #______________________________________-
 <VirtualHost *:80>
-	ServerAdmin webmaster@localhost	
-	ServerName srv1.local.ev
-	ServerAlias srv1
-	DocumentRoot /var/www/srv1
-	ErrorLog ${APACHE_LOG_DIR}/srv1.local.ev-error.log
-	CustomLog ${APACHE_LOG_DIR}/srv1.local.ev-access.log combined
+    ServerAdmin webmaster@x11.xyz	
+    ServerName srv1.x11.xyz
+    ServerAlias srv1
+    DocumentRoot /var/www/srv1
+    ErrorLog ${APACHE_LOG_DIR}/srv1.x11.xyz-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv1.x11.xyz-access.log combined
 </VirtualHost>
 <VirtualHost *:80>
-	ServerAdmin webmaster@localhost	
-	ServerName srv2.local.ev
-	ServerAlias srv2
-	DocumentRoot /var/www/srv2
-	ErrorLog ${APACHE_LOG_DIR}/srv2.local.ev-error.log
-	CustomLog ${APACHE_LOG_DIR}/srv2.local.ev-access.log combined
+    ServerAdmin webmaster@x11.xyz	
+    ServerName srv2.x11.xyz
+    ServerAlias srv2
+    DocumentRoot /var/www/srv2
+    ErrorLog ${APACHE_LOG_DIR}/srv2.x11.xyz-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv2.x11.xyz-access.log combined
 </VirtualHost>
 #______________________________________
 # 1.8. We need to enable the new conf to make it active
@@ -86,10 +86,11 @@ apache2 -l
 # 2.5. All installed and ready to be enabled modules
 a2enmod
 #
-# 2.6. Enable php for apache
-sudo a2enmod php7.2
-# 2.7. Disable php for apache
-sudo a2dismod php7.2
+# 2.6. Enable proxy module
+sudo a2enmod proxy
+#
+# 2.7. Disable proxy module
+sudo a2dismod proxy
 
 
 #---3. Adding SSL to Apache
@@ -106,52 +107,53 @@ sudo mkdir /etc/apache2/certs
 sudo openssl req -x509 -nodes -days 730 -newkey rsa:2048 -keyout /etc/apache2/certs/srv1.key -out /etc/apache2/certs/srv1.crt
 #
 # 3.5. To get a formal certificate, create a certificate signing request
-openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr
+sudo openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr
 #
 # 3.6. Create a conf file for ssl site
 sudo nano /etc/apache2/sites-available/000-virtual-ssl.conf
 #____________________________________________
 <IfModule mod_ssl.c>
-	<VirtualHost *:443>
-		ServerName srv1.local.ev:443
-		ServerAdmin webmaster@localhost
-		DocumentRoot /var/www/srv1
-		ErrorLog ${APACHE_LOG_DIR}/srv1.local.ev-error.log
-		CustomLog ${APACHE_LOG_DIR}/srv.local.ev-access.log combined
-		SSLEngine on
-	SSLCertificateFile	/etc/apache2/certs/srv1.crt
-	SSLCertificateKeyFile	/etc/apache2/certs/srv1.key
-		<FilesMatch ".(cgi|shtml|phtml|php)$">
-			SSLOptions +StdEnvVars
-		</FilesMatch>
-	<Directory /usr/lib/cgi-bin>
-		SSLOptions +StdEnvVars
-	</Directory>
-	</VirtualHost>
+    <VirtualHost *:443>
+        ServerName srv1.x11.xyz:443
+        ServerAdmin webmaster@x11.xyz
+        DocumentRoot /var/www/srv1
+        ErrorLog ${APACHE_LOG_DIR}/srv1.x11.xyz-error.log
+        CustomLog ${APACHE_LOG_DIR}/srv.x11.xyz-access.log combined
+        SSLEngine on
+        SSLCertificateFile	/etc/apache2/certs/srv1.crt
+        SSLCertificateKeyFile	/etc/apache2/certs/srv1.key
+        <FilesMatch ".(cgi|shtml|phtml|php)$">
+            SSLOptions +StdEnvVars
+    </FilesMatch>
+    <Directory /usr/lib/cgi-bin>
+        SSLOptions +StdEnvVars
+    </Directory>
+    </VirtualHost>
 </IfModule>
 #____________________________________________
 # 3.7. Enable new ssl site
 sudo a2ensite 000-virtual-ssl.conf
-# 3.8. Restart apache - SSL Site is ready
+#
+# 3.8. Reload apache - SSL Site is ready
 sudo systemctl reload apache2
 
 
 #---4. Auto http-->https redirect
-# 4.1. http://srv1.local.lan automatically redirects to https://srv1.local.ev
+# 4.1. http://srv1.x11.xyz automatically redirects to https://srv1.x11.xyz
 #    First we need to enable rewrite mode
 sudo a2enmod rewrite.load
 # 4.2. Modify conf file of the site to redirect (last 3 lines to be added)
 #______________________________________________________________________________
 <VirtualHost *:80>
-        ServerAdmin webmaster@localhost
-        ServerName srv1.local.lan
-        DocumentRoot /var/www/srv1
-        ErrorLog ${APACHE_LOG_DIR}/srv1-error.log
-        CustomLog ${APACHE_LOG_DIR}/srv1-access.log combined
-#redirection
-        RewriteEngine on
-        RewriteCond %{SERVER_NAME} =srv1.local.lan
-        RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permane$
+    ServerAdmin webmaster@x11.xyz
+    ServerName srv1.x11.xyz
+    DocumentRoot /var/www/srv1
+    ErrorLog ${APACHE_LOG_DIR}/srv1-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv1-access.log combined
+    #redirection
+    RewriteEngine on
+    RewriteCond %{SERVER_NAME} =srv1.x11.xyz
+    RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permane$
 </VirtualHost>
 #______________________________________________________________________________
 # 4.3. Reload apache
@@ -173,134 +175,130 @@ sudo nano /var/www/srv1/info.php
 phpinfo();
 #__________________________________
 #  Test your page 
-http://srv1.local.ev/info.php
+http://srv1.x11.xyz/info.php
 
 
 #---6. Some Sample Apache Confs
 # 6.1. 3 different sites on 1 server in 1 conf file
 #_____________________________________________________________________
 <VirtualHost *:80>
-	ServerAdmin webmaster@localhost	
-	ServerName srva.local.ev
-	DocumentRoot /var/www/srva
-	ErrorLog ${APACHE_LOG_DIR}/srva.local.ev-error.log
-	CustomLog ${APACHE_LOG_DIR}/srva.local.ev-access.log combined
+    ServerAdmin webmaster@x11.xyz	
+    ServerName srv1.x11.xyz
+    DocumentRoot /var/www/srv1
+    ErrorLog ${APACHE_LOG_DIR}/srv1.x11.xyz-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv1.x11.xyz-access.log combined
 </VirtualHost>
 <VirtualHost *:80>
-	ServerAdmin webmaster@localhost	
-	ServerName srvb.local.ev
-	DocumentRoot /var/www/srvb
-	ErrorLog ${APACHE_LOG_DIR}/srvb.local.ev-error.log
-	CustomLog ${APACHE_LOG_DIR}/srvb.local.ev-access.log combined
+    ServerAdmin webmaster@x11.xyz	
+    ServerName srv2.x11.xyz
+    DocumentRoot /var/www/srv2
+    ErrorLog ${APACHE_LOG_DIR}/srv2.x11.xyz-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv2.x11.xyz-access.log combined
 </VirtualHost>
 <VirtualHost *:80>
-	ServerAdmin webmaster@localhost	
-	ServerName srvc.local.ev
-	DocumentRoot /var/www/srvc
-	ErrorLog ${APACHE_LOG_DIR}/srvc.local.ev-error.log
-	CustomLog ${APACHE_LOG_DIR}/srvc.local.ev-access.log combined
+    ServerAdmin webmaster@x11.xyz	
+    ServerName srv3.x11.xyz
+    DocumentRoot /var/www/srv3
+    ErrorLog ${APACHE_LOG_DIR}/srv3.x11.xyz-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv3.x11.xyz-access.log combined
 </VirtualHost>
 #_____________________________________________________________________
+#
 # 6.2. A server with only local access, to be used for configuration
 #_____________________________________________________________________
 <VirtualHost 127.0.0.1:80>
-    Include /etc/apache2/conf-available/phppgadmin.conf
+    ServerAdmin webmaster@x11.xyz	
+    ServerName srv3.x11.xyz
     DocumentRoot /var/www/localhost
-    # set session lifetime to 2h
-    php_value session.gc_maxlifetime 7200
-    ErrorLog ${APACHE_LOG_DIR}/localhost.error.log
+    ErrorLog ${APACHE_LOG_DIR}/localhost-error.log
+    CustomLog ${APACHE_LOG_DIR}/localhost-access.log combined
 </VirtualHost>
 #_____________________________________________________________________
-# 6.3. This server allows letsencrypt's acme challenge, otherwise redirects to https
+#
+# 6.3. This server allows letsencrypt's acme challenge, otherwise redirects to
+#   https. You are going to need to enable rewrite module with:
+sudo a2enmod rewrite
+#
+#_____________________________________________________________________
 <VirtualHost *:80>
-    ServerName mail.karasite.com
+    ServerAdmin webmaster@x11.xyz	
+    ServerName srv1.x11.xyz
+    DocumentRoot /var/www/srv1
     # Force redirect to HTTPS unless the request is for Let's Encrypt
     RewriteEngine On
     RewriteCond %{REQUEST_URI} !^/.well-known/acme-challenge/
     RewriteCond %{HTTPS} off
     RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301]
-    DocumentRoot /var/www/letsencrypt
-    <Directory "/var/www/letsencrypt">
+    <Directory "/var/www/srv1">
         Options None
         AllowOverride None
     </Directory>
     ErrorLog ${APACHE_LOG_DIR}/public_unencrypted.error.log
 </VirtualHost>
 #_____________________________________________________________________
-# 6.4. Https config for nextcloud
-#_____________________________________________________________________
-<VirtualHost *:443>
-    ServerName mail.karasite.com
-    DocumentRoot /var/www/nextcloud
-    <Directory "/var/www/nextcloud">
-        Options +FollowSymLinks
-        AllowOverride All
-        <IfModule mod_dav.c>
-            Dav off
-        </IfModule>
-        SetEnv HOME /var/www/nextcloud
-        SetEnv HTTP_HOME /var/www/nextcloud
-    </Directory>
-    <Directory "/var/www/nextcloud/data/">
-        # just in case if .htaccess gets disabled
-        Require all denied
-    </Directory>
-    SSLEngine on
-    SSLCertificateFile /etc/ssl/certs/mail.karasite.com.fullchain.pem
-    SSLCertificateKeyFile /etc/ssl/private/mail.karasite.com.pem
-    # HSTS (mod_headers is required) (15768000 seconds = 6 months)
-    Header always set Strict-Transport-Security "max-age=15768000"
-    ErrorLog  ${APACHE_LOG_DIR}/mail.example.com.port443.error.log
-</VirtualHost>
-#_____________________________________________________________________
-# 6.5. A site with auto https redirection
+#
+# 6.4. A site with auto https redirection. Rewrite module is needed again.
 #_____________________________________________________________________
 <VirtualHost *:80>
-	ServerAdmin postmaster@karasite.com	
-	ServerName www.karasite.com
-	ServerAlias karasite.com
-	DocumentRoot /var/www/karasite.com
-	ErrorLog ${APACHE_LOG_DIR}/karasite.com-error.log
-	CustomLog ${APACHE_LOG_DIR}/karasite.com-access.log combined
-RewriteEngine on
-RewriteCond %{SERVER_NAME} =karasite.com [OR]
-RewriteCond %{SERVER_NAME} =www.karasite.com
-RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+   ServerAdmin webmaster@x11.xyz	
+   ServerName srv1.x11.xyz
+   ServerAlias www.x11.xyz
+   DocumentRoot /var/www/srv1
+   ErrorLog ${APACHE_LOG_DIR}/srv1-error.log
+   CustomLog ${APACHE_LOG_DIR}/srv1-access.log combined
+   RewriteEngine on
+   RewriteCond %{SERVER_NAME} =srv1.x11.xyz [OR]
+   RewriteCond %{SERVER_NAME} =www.x11.xyz
+   RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 </VirtualHost>
 #_____________________________________________________________________
-# 6.6. Https conf of the site in # 5.
-#_____________________________________________________________________
-<IfModule mod_ssl.c>
-<VirtualHost *:443>
-	ServerAdmin postmaster@karasite.com	
-	ServerName www.karasite.com
-	ServerAlias karasite.com
-	DocumentRoot /var/www/karasite.com
-	ErrorLog ${APACHE_LOG_DIR}/karasite.com-error.log
-	CustomLog ${APACHE_LOG_DIR}/karasite.com-access.log combined
-Include /etc/letsencrypt/options-ssl-apache.conf
-SSLCertificateFile /etc/letsencrypt/live/karasite.xyz/fullchain.pem
-SSLCertificateKeyFile /etc/letsencrypt/live/karasite.xyz/privkey.pem
-</VirtualHost>
-</IfModule>
-#_____________________________________________________________________
-# 6.7. A site only allowing 1 IP to connect, all others are refused
+#
+# 6.5. A site only allowing 2 IPs to connect, all others are refused
 <VirtualHost *:80>
-        <Directory "/var/www/karasite.tk">
-                Require ip 195.174.215.212
-        </Directory>
-        ServerAdmin postmaster@karasite.com
-        ServerName www.karasite.tk
-        ServerAlias karasite.tk
-        DocumentRoot /var/www/karasite.tk
-        ErrorLog ${APACHE_LOG_DIR}/karasite.tk-error.log
-        CustomLog ${APACHE_LOG_DIR}/karasite.tk-access.log combined
+    <Directory "/var/www/srv1">
+        Require ip 195.174.209.24
+        Require ip 138.199.28.46
+    </Directory>
+    ServerAdmin postmaster@x11.xyz
+    ServerName srv1.x11.xyz
+    DocumentRoot /var/www/srv1
+    ErrorLog ${APACHE_LOG_DIR}/srv1-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv1-access.log combined
 </VirtualHost>
+#_____________________________________________________________________
+#
+# 6.6. Reverse Proxy Configuration
+# Assume that we have a program on server which runs a web server, serving
+#   some content at some specific port and only allows connections from 
+#   localhost. That means, we cannot access it from other computers.
+# Apache allows us using it as a reverse proxy. That way we can connect that
+#   web server using apache.
+# Rspamd is a good example of that kind of a program. It runs a web server at
+#   port 11334, and only allows connections from the computer itself.
+# We need to enable 2 Apache mods for the configuration:
+a2enmod proxy_http
+a2enmod rewrite
+# And our configuration:
+#_____________________________________________________________________
+<VirtualHost *:80>
+    <Location /reverse>
+        Require all granted
+    </Location>
+    RewriteEngine On
+    RewriteRule ^/reverse$ /reverse/ [R,L]
+    RewriteRule ^/reverse/(.*) http://localhost:11334/$1 [P,L]
+    ServerAdmin webmaster@x11.xyz
+    ServerName srv1.x11.xyz
+    DocumentRoot /var/www/srv1
+    ErrorLog ${APACHE_LOG_DIR}/srv1-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv1-access.log combined
+</VirtualHost>
+
 #_____________________________________________________________________
 
 
 #---7. Free SSL Certificates
 # You can use free, autorenewing SSL certificates from Letsencrypt.org 
-#   with Certbot tool. Check it out at my CertbotOnUbuntu Tutorial.
+#   with Certbot tool from EFF. Check it out at my CertbotOnUbuntu Tutorial.
 
 

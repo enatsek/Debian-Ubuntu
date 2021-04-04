@@ -1,0 +1,137 @@
+Mariadb Master-Master Replication with Galera Cluster Tutorial on Ubuntu 20.04
+
+
+#---Copyright (C) 2021 Exforge exforge@x386.xyz
+# This document is free text: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+# This document is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+
+#---0. Specs
+# 0.1. Definitions
+# 3 servers will be installed and configured as Mariadb clusters. All the 
+#   changes in one server will be updated to others momentarily.
+# You can use as many servers as you want.
+#
+# 0.2. My Configuration
+testsrv1 -> Ubuntu 20.04 Server 192.168.0.161
+testsrv2 -> Ubuntu 20.04 Server 192.168.0.162
+testsrv3 -> Ubuntu 20.04 Server 192.168.0.163
+#
+# 0.3. Resources
+# Totally based on:
+Link:https://www.howtoforge.com/how-to-setup-mariadb-galera-multi-master-synchronous-replication-using-debian-10/
+
+
+#---1. Mariadb Installations (Execute on all servers)
+# 1.1. Install Mariadb and Galera Cluster on all servers
+sudo apt update
+sudo apt install mariadb-server mariadb-client galera-3
+#
+# 1.2. Secure Mariadb Installations
+sudo mysql_secure_installation
+# Give a good root password
+# 
+# 1.3. Set Mariadb root User to Native Mode
+sudo mariadb
+# Run on mariadb shell
+UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE USER='root';
+FLUSH PRIVILEGES;
+EXIT;
+# Now you can run mariadb with root user and password
+mariadb -u root -p
+
+
+
+#---2. Mariadb Configurations (Execute on all servers)
+# 2.1. Temporarily Stop Mariadb
+sudo systemctl stop mariadb
+#
+# 2.2. Bind Address Enablement
+# Mariadb daemon must listen to the network for the cluster
+sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
+# Change the following line
+#______________________________________
+bind-address = 127.0.0.1
+#______________________________________
+# to:
+#______________________________________
+bind-address = 0.0.0.0
+#______________________________________
+#
+# 2.3. Cluster Options
+# Create a new conf file and fill it
+sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
+# Fill as below, remember to use your ip addresses
+#______________________________________
+[galera]
+wsrep_on = on 
+wsrep_provider = /lib/galera/libgalera_smm.so 
+wsrep_cluster_address = gcomm://192.168.0.161,192.168.0.162,192.168.0.163 
+wsrep_cluster_name = galera_cluster_0 
+default_storage_engine = InnoDB 
+innodb_autoinc_lock_mode = 2 
+innodb_doublewrite = 1 
+binlog_format = ROW
+#______________________________________
+
+
+
+#---3. Start Cluster
+# 3.1. Start Cluster on One of the Nodes
+# !!! You should run this only on one of the servers !!!
+sudo galera_new_cluster
+# This command should also start mariadb on this node, check it:
+systemctl status mariadb
+#
+# 3.2. Start Mariadb on Other Nodes too
+# Run on the other servers:
+sudo systemctl start mariadb
+# Our Cluster is established
+
+
+
+#---4. Test Mariadb Cluster 
+# We will run commands on the nodes and see the changes on other nodes
+# 4.1. Create a Database on the First Node
+# !!! Run on the first server !!!
+mariadb -u root -p
+# Run on mariadb shell
+CREATE DATABASE Test;
+exit;
+#
+# 4.2. Create a Table on the Database on the Second Node
+# !!! Run on second server !!!
+mariadb -u root -p
+# Run on mariadb shell
+USE Test;
+CREATE TABLE People (Name char(15), Age int(3));
+exit;
+#
+# 4.3. Add Records to the Table on the Third Node
+# !!! Run on third server !!!
+mariadb -u root -p
+# Run on mariadb shell
+USE Test;
+INSERT INTO People VALUES ('Exforge', '52');
+INSERT INTO People VALUES ('Kedi', '8');
+SELECT * FROM People;
+exit;
+#
+# 4.4. Check First and Second Node for the Records
+# !!! Run on first and second server !!!
+mariadb -u root -p
+# Run on mariadb shell
+USE Test;
+SELECT * FROM People;
+exit;
+
+

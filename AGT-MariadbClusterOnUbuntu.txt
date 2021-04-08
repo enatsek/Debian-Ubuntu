@@ -19,7 +19,7 @@ Mariadb Master-Master Replication with Galera Cluster Tutorial on Ubuntu 20.04
 # 0.1. Definitions
 # 3 servers will be installed and configured as Mariadb clusters. All the 
 #   changes in one server will be updated to others momentarily.
-# You can use as many servers as you want.
+# At least 3 nodes are advised for Mariadb cluster, there is no upper limit.
 #
 # 0.2. My Configuration
 testsrv1 -> Ubuntu 20.04 Server 192.168.0.161

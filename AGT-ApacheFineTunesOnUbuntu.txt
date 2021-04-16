@@ -32,7 +32,7 @@ CAA 0 iodef "mailto:postmaster@x11.xyz"
 @ TXT "v=spf1 mx -all"
 #
 # 1.3. DMARC Policy for Email Server
-# Dmarc Version 1, reject non coplied mail, report to postmaster, strict dkim
+# Dmarc Version 1, reject non complied mail, report to postmaster, strict dkim
 #   and spf policy, filter 100% of the messages.
 # Add as a txt record for _dmarc.x11.xyz (replace with your domain)
 _dmarc "v=DMARC1; p=reject; rua=mailto:postmaster@x11.xyz; adkim=s; aspf=s; pct=100;"
@@ -40,17 +40,18 @@ _dmarc "v=DMARC1; p=reject; rua=mailto:postmaster@x11.xyz; adkim=s; aspf=s; pct=
 
 
 #---2. Apache More Secure Configuration
-#   https://ssl-config.mozilla.org/ is a good place to start
+Link:https://ssl-config.mozilla.org/ 
+#   is a good place to start
 # 2.1. More Secure HTTPS redirect
 #   Contents of the conf file
 #      rewrite mod must be enabled
 <VirtualHost *:80>
-    ServerName my.server.com
+    ServerName www.x11.xyz
     # Force redirect to HTTPS
     RewriteEngine On
     RewriteCond %{HTTPS} off
     RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301]
-    ErrorLog ${APACHE_LOG_DIR}/my.server.com-error.log
+    ErrorLog ${APACHE_LOG_DIR}/www.x11.xyz-error.log
 </VirtualHost>
 #
 # 2.2. More Secure HTTPS conf
@@ -58,10 +59,10 @@ _dmarc "v=DMARC1; p=reject; rua=mailto:postmaster@x11.xyz; adkim=s; aspf=s; pct=
 #       headers and ssl mods must be enabled
 <VirtualHost *:443>
     ServerName my.server.com
-    DocumentRoot /var/www/my.server.com
+    DocumentRoot /var/www/www.x11.xyz
     SSLEngine on
-    SSLCertificateFile /etc/letsencrypt/live/my.server.com/fullchain.pem
-    SSLCertificateKeyFile /etc/letsencrypt/live/my.server.com/privkey.pem
+    SSLCertificateFile /etc/letsencrypt/live/www.x11.xyz/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/www.x11.xyz/privkey.pem
     # enable HTTP/2, if available
     Protocols h2 http/1.1
     # HSTS (mod_headers is required) (63072000 seconds = 2 years)
@@ -112,7 +113,7 @@ sudo a2disconf other-vhosts-access-log
 #
 # 4.1. Christoph's Method:
 # Add a line to certbot ini file
-nano /etc/letsencrypt/cli.ini
+sudo nano /etc/letsencrypt/cli.ini
 #___________________________________________________________________________
 post-hook = systemctl restart postfix ; systemctl restart dovecot ; systemctl restart apache2
 #___________________________________________________________________________
@@ -128,7 +129,7 @@ systemctl reload postfix
 systemctl reload dovecot
 #__________________________________________
 # Make the script executable
-/etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
+sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
 
 
 

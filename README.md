@@ -36,5 +36,5 @@ AGT-ADOnUbuntu1: Simple Active Directory, with 1 domain, 2 DCs and 1 Fileserver 
 
 AGT-MariadbClusterOnUbuntu: MariaDB master-master replication with Galera Cluster tutorial on Ubuntu Servers.
 
-AGT-HAProxyOnUbuntu: HAProxy High Availability Load Balancing with Letsencrypt free certificates HTTPS support.
+AGT-HAProxyOnUbuntu: HAProxy High Availability Load Balancing with Letsencrypt free certificates HTTPS support and keepalived.
  

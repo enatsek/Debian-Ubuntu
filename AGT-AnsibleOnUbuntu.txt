@@ -93,13 +93,15 @@ sudo chmod 440 /etc/sudoers.d/ansible
 #  - ./ansible.cfg (ansible.cfg in the current directory)
 #  - ~/.ansible.cfg (.ansible.cfg in your home directory)
 #  - /etc/ansible/ansible.cfg
-# My choice is to use 3. option
+# My choice is to use the 3. option
+# First change to user ansible (If you haven't done already)
+sudo su ansible
 nano /home/ansible/.ansible.cfg
 #_________________________
 [defaults]
 inventory = .hosts
 remote_user = ansible
-roles_path = /etc/ansible/roles
+roles_path = /home/ansible/ansible/playbooks
 forks = 5
 #_________________________
 # We stated as:
@@ -111,19 +113,19 @@ forks = 5
 #   at file /etc/ansible/ansible.cfg
 #
 # 2.2. Making a home for Ansible files
-# I prefer placing all ansible files on /etc/home/ansible
-mkdir /etc/home/ansible
+# I prefer placing all ansible files on /home/ansible/ansible
+mkdir /home/ansible/ansible
 # And a subdirectory for playbook (explained later)
-mkdir /etc/home/ansible/playbooks
+mkdir /home/ansible/ansible/playbooks
 #
 # 2.3. Inventory File
 # Create a clean inventory file
-sudo touch /home/exforge/.hosts
+touch /home/ansible/.hosts
 # Change ownership and permissions for ansible user
-sudo chown ansible /home/exforge/.hosts
-sudo chmod 600 /home/exforge/.hosts
+sudo chown ansible /home/ansible/.hosts
+sudo chmod 600 /home/ansible/.hosts
 # Populate the file with server IPs or names
-sudo nano /etc/ansible/hosts
+nano /home/ansible/.hosts
 #________________________
 [ubuntu20]
 test201.x386.xyz
@@ -254,6 +256,8 @@ role="dbserver"
 #________________________
 # That way, using ansible, you can install apache to servers with webserver role and
 #   install mariadb to servers with role dbserver.
+
+
 
 #---4. Ansible Ad Hoc Commands
 # You can run Ansible commands in 2 ways, 1 is direct (adhoc), 2 through playbooks. 

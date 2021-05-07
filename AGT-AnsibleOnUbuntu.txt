@@ -48,7 +48,7 @@ sudo apt install ansible
 # 1.2. Create ansible user on all the servers and on the workstation
 # !!!Run on workstation and on all servers!!!
 #  Create user ansible and give it a password 
-sudo useradd -d /home/ansible -m ansible
+sudo useradd -d /home/ansible -m ansible -s /bin/bash
 sudo passwd ansible
 #  add it to the sudo group
 sudo usermod -aG sudo ansible
@@ -478,9 +478,58 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
   tasks:
   - name: Start apache if not started
     service:
-  apt:
-    name: apache2
+      name: apache2
+      state: started
 #_______________________________________________________________________
+
+
+
+#---7.0. apk Module: Manages Alpine apk packages.
+# Examples:
+#______________________________________________________________
+- name: Install apache, don't do anything if already installed
+  apk:
+    name: apache2
+#______________________________________________________________
+- name: Install apache, don't do anything if already installed
+  apk:
+    name: apache2
+    state: present
+#______________________________________________________________
+- name: Install apache, upgrade to latest if already installed
+  apk:
+    name: apache2
+    state: latest
+#______________________________________________________________
+- name: Update repositories and install apache
+  apk:
+    name: apache2
+    update_cache: yes
+#______________________________________________________________
+- name: Remove apache
+  apk:
+    name: apache2
+    state: absent
+#______________________________________________________________
+- name: Install more than 1 packages
+  apk:
+    name: apache2, php
+#______________________________________________________________
+- name: Update cache and update apache to latest
+  apk:
+    name: apache2
+    state: latest
+    update_cache: yes
+#______________________________________________________________
+- name: Update all packages to their latest version
+  apk:
+    upgrade: yes
+#______________________________________________________________
+- name: Update cache (apt-get update)
+  apk:
+    update_cache: yes
+#______________________________________________________________
+
 
 
 
@@ -724,7 +773,7 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
   expect:
     command: /bin/bash -c "mariadb -u root -p < /tmp/test.sql"
     responses:
-      (.*)password: "121896"
+      (.*)password: "password12"
   register: DBUsers
   no_log: true
   # hide your password from log
@@ -1261,14 +1310,15 @@ ansible-galaxy init exforge.apache
 # test directory is used to create test playbooks to consume the role. Mostly used to
 #   test roleswith a system like Jenkins or Travis.
 # vars/main.yml is similar to defaults/main.yml with an exception. Variables defined 
-#   here overrides the variables defined at fact gathering section. Variables defined here
-#   also overrides the variables defined in defaults/main.yml.
+#   here overrides the variables defined at fact gathering section. Variables defined
+#   here also overrides the variables defined in defaults/main.yml.
 #
 # 8.2. Preparing LAMP Roles
-# We will have 5 roles for LAMP installation. Namely 4; aptcache, apache, mariadb and php.
+# We will have 4 roles for LAMP installation. Namely; aptcache, apache, mariadb and
+#   php.
 # Create a directory for the roles and init the roles:
-mkdir -p /home/ansible/ansible/playbooks/provisioning/roles
-cd /home/ansible/ansible/playbooks/provisioning/roles
+mkdir -p /home/ansible/ansible/playbooks/roles
+cd /home/ansible/ansible/playbooks/roles
 ansible-galaxy init exforge.aptcache
 ansible-galaxy init exforge.apache
 ansible-galaxy init exforge.mariadb
@@ -1285,14 +1335,14 @@ nano /home/ansible/ansible/playbooks/lamp.yml
   - exforge.aptcache 
   - exforge.apache 
   - exforge.mariadb
-  - exforge.php  ---
+  - exforge.php 
 #_______________________________________
 #
 # Make it executable
 chmod +x /home/ansible/ansible/playbooks/lamp.yml
 #
 # 8.4. aptcache role
-nano /home/ansible/ansible/playbooks/provisioning/roles/exforge.aptcache/tasks/main.yml
+nano /home/ansible/ansible/playbooks/roles/exforge.aptcache/tasks/main.yml
 #_______________________________________
 ---
 # tasks file for exforge.aptcache
@@ -1303,7 +1353,7 @@ nano /home/ansible/ansible/playbooks/provisioning/roles/exforge.aptcache/tasks/m
 #_______________________________________
 #
 # 8.5. apache role
-nano /home/ansible/ansible/playbooks/provisioning/roles/exforge.apache/tasks/main.yml
+nano /home/ansible/ansible/playbooks/roles/exforge.apache/tasks/main.yml
 #_______________________________________
 ---
 # tasks file for exforge.apache
@@ -1314,7 +1364,7 @@ nano /home/ansible/ansible/playbooks/provisioning/roles/exforge.apache/tasks/mai
 #_______________________________________
 #
 # 8.6. mariadb role
-nano /home/ansible/ansible/playbooks/provisioning/roles/exforge.mariadb/tasks/main.yml
+nano /home/ansible/ansible/playbooks/roles/exforge.mariadb/tasks/main.yml
 #_______________________________________
 ---
 # tasks file for exforge.mariadb
@@ -1325,7 +1375,7 @@ nano /home/ansible/ansible/playbooks/provisioning/roles/exforge.mariadb/tasks/ma
 #_______________________________________
 #
 # 8.7. php role
-nano /home/ansible/ansible/playbooks/provisioning/roles/exforge.php/tasks/main.yml
+nano /home/ansible/ansible/playbooks/roles/exforge.php/tasks/main.yml
 #_______________________________________
 - name: Install PHP and dependencies
   apt:
@@ -1444,15 +1494,16 @@ ansible_check_mode: Boolean, set to True if you run Ansible with --check.
 
 
 #---10. Distinguishing Linux Distribution
-# Debian and Ubuntu name Apache Server as apache2, RHEL and Centos name it as httpd. 
-#   The former pair uses apt for package management and the latter use dnf. Our example
-#   role will distinguish the distribution and call appropriate tasks.
+# Debian and Ubuntu name name Apache Server as apache2 and use apt package manager. 
+#   Alpine also names Apache Server as apache2 and uses apk package manager. RHEL 
+#   (and Alma) names it as httpd and use dnf package manager. 
+# Our example role will distinguish the distribution and call appropriate tasks.
 #
 # 10.1. A Playbook to install Apache on Ubuntu (and Debian) and Centos (and Redhat)
 nano /home/ansible/ansible/playbooks/apache.yml
 #______________________________________________________
 #!/usr/bin/env ansible-playbook
-- name: Install Apache on Ubuntu or CentOS (Debian or RHEL also)
+- name: Install Apache on Ubuntu (Debian), RHEL (Alma) and Alpine
   become: True
   hosts: all
   tasks:
@@ -1461,38 +1512,45 @@ nano /home/ansible/ansible/playbooks/apache.yml
       name: apache2 
       update_cache: yes
     when: ansible_os_family == "Debian"
-  - name: install apache if CentOS or RedHat
+  - name: install apache if Redhat or Alma
     dnf: 
       name: httpd
-    when: ansible_os_family == "RedHat"
+    when: (ansible_os_family == "RedHat") or (ansible_os_family == "AlmaLinux")
+  - name: install apache if Alpine
+    apk: 
+      name: apache2 
+      update_cache: yes
+    when: ansible_os_family == "Alpine"
 #______________________________________________________
 #
 # 10.2. Other OS Families
 # Some of the other possible ansible_os_family options are:
 #   "Debian" for Linux Mint, Neon, KDE Neon, Raspbian
-#   "RedHat" for Fedora, Scientific, Ascendos, CloudLinux, PSBM, OracleLinux, Amazon
+#   "RedHat" for Centos, Fedora, Scientific, CloudLinux, PSBM, OracleLinux, Amazon
+#   "AlmaLinux" for Alma
 #   "Suse" for Suse, OpenSuSe, SLES, SLED
 #   "Gentoo" for Gentoo
 #   "Archlinux" for ArchLinux, Manjaro
 #   "Mandrake" for Mandrake, Mandriva
 #   "Solaris"  for Solaris, Nexenta, OnmiOS, OpenIndiana, SmartOS
 #   "Slackware" for Slackware
-#   "Alpine" for Alpine
 #   "Darwin" for MacOSX
 #
-# 10.3. A Role to install Apache on Ubuntu (and Debian) and Centos (and Redhat)
+# 10.3. A Role to install Apache on Ubuntu (Debian), Alma (Redhat), and Alpine
 cd /home/ansible/ansible/playbooks/roles
-ansible-galaxy init exforge.apacheDR
-nano  /home/ansible/ansible/playbooks/roles/exforge.apacheDR/tasks/main.yml
+ansible-galaxy init exforge.apacheDRA
+nano  /home/ansible/ansible/playbooks/roles/exforge.apacheDRA/tasks/main.yml
 #_______________________________________________________________
 ---
-# tasks file for exforge.apacheDR
+# tasks file for exforge.apacheDRA
 - include_tasks: debian.yml
   when: ansible_os_family == "Debian"
 - include_tasks: redhat.yml
-  when: ansible_os_family == "RedHat"
+  when: (ansible_os_family == "RedHat") or (ansible_os_family == "AlmaLinux")
+- include_tasks: alpine.yml
+  when: ansible_os_family == "Alpine"
 #_______________________________________________________________
-nano  /home/ansible/ansible/playbooks/roles/exforge.apacheDR/tasks/debian.yml
+nano  /home/ansible/ansible/playbooks/roles/exforge.apacheDRA/tasks/debian.yml
 #_______________________________________________________________
 - name: install apache if Ubuntu or Debian
   apt: 
@@ -1500,26 +1558,34 @@ nano  /home/ansible/ansible/playbooks/roles/exforge.apacheDR/tasks/debian.yml
     state: present
     update_cache: yes
 #_______________________________________________________________
-nano  /home/ansible/ansible/playbooks/roles/exforge.apacheDR/tasks/redhat.yml
+nano  /home/ansible/ansible/playbooks/roles/exforge.apacheDRA/tasks/redhat.yml
 #_______________________________________________________________
-- name: install apache if RedHat or CentOS
+- name: install apache if RedHat or Alma
   dnf: 
     name: httpd 
     state: present
 #_______________________________________________________________
+nano  /home/ansible/ansible/playbooks/roles/exforge.apacheDRA/tasks/alpine.yml
+#_______________________________________________________________
+- name: install apache if Alpine
+  apk: 
+    name: apache2 
+    state: present
+    update_cache: yes
+#_______________________________________________________________
 # Now we can create a playbook to consume this role
-nano  /home/ansible/ansible/playbooks/apacheDR.yml
+nano  /home/ansible/ansible/playbooks/apacheDRA.yml
 #_______________________________________________________________
 #!/usr/bin/env ansible-playbook
 ---
-- hosts: test201
+- hosts: test
   become: true
   roles:
-  - exforge.apacheDR
+  - exforge.apacheDRA
 #_______________________________________________________________
 # Run the playbook
 cd /home/ansible/ansible/playbooks
-ansible-playbook apacheDR.yml
+ansible-playbook apacheDRA.yml
 #
 # 10.1.4. Exercise
 # Redesign apacheDR role, using package module.
@@ -1661,7 +1727,7 @@ ansible-playbook apachesite.yml
 # my_message: We are the world
 # {{ my_message | lower }}  --> we are the world
 # {{ my_message | upper }}  --> WE ARE THE WORLD
-# {{ my_message | lower }}  --> We are the world
+# {{ my_message | capitalize }}  --> We are the world
 # {{ my_message | title }}  --> We Are The World
 #
 # 12.2. Default Filter
@@ -1675,7 +1741,7 @@ ansible-playbook apachesite.yml
 # Some of the list filters are: max, min and random
 # {{ num_list | max }}  --> 9
 # {{ num_list | min }}  --> 0
-# {{ num_list | max }}  --> a random one
+# {{ num_list | random }}  --> a random one
 #
 # 12.4. Pathname Filters
 # First, let's define a variable containing a path
@@ -1764,8 +1830,7 @@ nano /home/ansible/ansible/playbooks/filters.yml
 #   expected to put your handlers there. 
 #
 # 13.1. A Simple Example
-# Our example playbook will install apache, copy a conf file and reload it if it is
-#   copied. 
+# Our example playbook will install apache and reload it if it is installed. 
 nano /home/ansible/ansible/playbooks/simple_handler.yml
 #_____________________________________________________
 #!/usr/bin/env ansible-playbook
@@ -1776,7 +1841,7 @@ nano /home/ansible/ansible/playbooks/simple_handler.yml
   - name: Install Apache
     apt:
       name: apache2
-      state: installed
+      state: present
     notify: restart_apache
   handlers:
   - name: restart_apache

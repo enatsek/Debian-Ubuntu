@@ -1,4 +1,4 @@
-LampOnUbuntu: LAMP Stack On Ubuntu 20.04
+LampOnUbuntu: LAMP Stack On Ubuntu 22.04
 
 #---Copyright (C) 2020 Exforge exforge@x386.xyz
 # This document is free text: you can redistribute it and/or modify
@@ -16,7 +16,7 @@ LampOnUbuntu: LAMP Stack On Ubuntu 20.04
 #---Specs
 # Based on Mark Drake's Tutorial on:
 Link:https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-ubuntu-18-04
-# L: Ubuntu Server 20.04
+# L: Ubuntu 22.04 Sever (and 20.04)
 # A: Apache 2 
 # M: MariaDB (Mysql could be another option)
 # P: PHP (Python or Perl could be other options)
@@ -29,14 +29,15 @@ sudo apt install apache2
 # 2.1. Install
 sudo apt install mariadb-server
 # 2.1. Secure Mariadb
+#   The following command makes some fine tunes regarding Mariadb security.
 sudo mysql_secure_installation
-#   All default answers, give a good password
-# 2.2. Configure root user for Mariadb
-sudo mariadb
-#  Run on mariadb shell
-UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE USER='root';
-FLUSH PRIVILEGES;
-exit
+#   You will be asked some questions.
+#     "Enter current password for root (enter for none):"
+#     There is no password yet, so press enter.
+#   The next 2 questions are about securing root account. In Ubuntu root
+#     account is already protected, so you can answer n.
+#   For the next questions you can select default answers.
+
 
 #--- 3. Install PHP
 sudo apt install php libapache2-mod-php php-mysql

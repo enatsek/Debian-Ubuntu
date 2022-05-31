@@ -1,7 +1,7 @@
 ApacheOnUbuntu: Apache 2 Tutorial on Ubuntu 20.04
 
 
-#---Copyright (C) 2020 Exforge exforge@x386.xyz
+#---Copyright (C) 2020 - 2022 Exforge exforge@x386.xyz
 # This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -15,16 +15,19 @@ ApacheOnUbuntu: Apache 2 Tutorial on Ubuntu 20.04
 
 #---Specs
 # Apache 2 Installation, configuration, sample sites, enablement of PHP, SSL etc
-#   on Ubuntu 20.04 Server
+#   on Ubuntu 22.04 (and 20.04) Server
 # Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix
 #   This book hes introduced me to Ubuntu Server and I have to thank him for this
 #   excellent book. 
 Link:https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
 # srv1.x11.xyz, srv2.x11.xyz and srv3.x11.xyz all have the ip of my server
 
+#---0. Update Software Repositories
+sudo apt update
+
 #---1. Apache Installation
 # 1.1. Install
-sudo apt install apache2
+sudo apt install apache2 --yes
 #
 # 1.2. Check status, it must be working with the test page
 systemctl status apache2
@@ -71,6 +74,7 @@ sudo a2dissite 000-virtual-hosts.conf
 #   And reload Apache
 sudo systemctl reload apache2
 #   Remember to copy sites' pages on DocumentRoot Directories
+#      create /var/www/srv1 and /var/www/srv2 and fill them with htmls
 
 
 #---2. Apache Additional Modules
@@ -91,6 +95,8 @@ sudo a2enmod proxy
 #
 # 2.7. Disable proxy module
 sudo a2dismod proxy
+# 2.8. Remember to restart Apache after enabling or disabling a module
+sudo systemctl restart apache2
 
 
 #---3. Adding SSL to Apache
@@ -105,11 +111,12 @@ sudo mkdir /etc/apache2/certs
 #
 # 3.4. Create self signed certificate files for srv1
 sudo openssl req -x509 -nodes -days 730 -newkey rsa:2048 -keyout /etc/apache2/certs/srv1.key -out /etc/apache2/certs/srv1.crt
+#   You need to answer all the questions, default values OK for a test site
 #
 # 3.5. To get a formal certificate, create a certificate signing request
 sudo openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr
 #
-# 3.6. Create a conf file for ssl site
+# 3.6. Create a conf file for the ssl site
 sudo nano /etc/apache2/sites-available/000-virtual-ssl.conf
 #____________________________________________
 <IfModule mod_ssl.c>
@@ -135,6 +142,8 @@ sudo nano /etc/apache2/sites-available/000-virtual-ssl.conf
 sudo a2ensite 000-virtual-ssl.conf
 #
 # 3.8. Reload apache - SSL Site is ready
+#    Please consider, your browser will give an error/warning message because
+#        the certificate is self signed.
 sudo systemctl reload apache2
 
 
@@ -143,6 +152,7 @@ sudo systemctl reload apache2
 #    First we need to enable rewrite mode
 sudo a2enmod rewrite.load
 # 4.2. Modify conf file of the site to redirect (last 3 lines to be added)
+sudo nano /etc/apache2/sites-available/000-virtual-hosts.conf
 #______________________________________________________________________________
 <VirtualHost *:80>
     ServerAdmin webmaster@x11.xyz
@@ -153,11 +163,11 @@ sudo a2enmod rewrite.load
     #redirection
     RewriteEngine on
     RewriteCond %{SERVER_NAME} =srv1.x11.xyz
-    RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permane$
+    RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 </VirtualHost>
 #______________________________________________________________________________
-# 4.3. Reload apache
-sudo systemctl reload apache2
+# 4.3. Restart apache
+sudo systemctl restart apache2
 
 
 #---5. Enable PHP on Apache2
@@ -167,7 +177,7 @@ sudo apt install php libapache2-mod-php
 #    extensions for them too
 sudo apt install php-mysql
 #  Restart apache
-sudo systemctl restart apache
+sudo systemctl restart apache2
 #  Create a test file
 sudo nano /var/www/srv1/info.php
 #__________________________________

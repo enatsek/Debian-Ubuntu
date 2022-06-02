@@ -1,6 +1,6 @@
-WordpressOnUbuntu: Install Wordpress  On Ubuntu 20.04
+WordpressOnUbuntu: Install Wordpress  On Ubuntu 22.04
 
-#---Copyright (C) 2020 Exforge exforge@x386.xyz
+#---Copyright (C) 2020 - 2022 Exforge exforge@x386.xyz
 # This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -16,7 +16,7 @@ WordpressOnUbuntu: Install Wordpress  On Ubuntu 20.04
 #---Specs
 # Based on Brian Boucheron's Tutorial on
 Link:https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lamp-on-ubuntu-18-04
-# My Server Name: www.x11.xyz
+# My Server Name: www.x11.xyz  Ubuntu 22.04 Server (or 20.04 Server)
 # Wordpress Mariadb Database Name: wordpress
 # Wordpress Mariadb Database User: wordpressuser
 # Password of wordpressuser: pAsswOrd1234
@@ -49,7 +49,7 @@ sudo systemctl reload apache2
 
 #---2. Create a MariaDB DB User for Wordpress
 # 2.1. Login to MariaDB
-mariadb -u root -p
+sudo mariadb
 # 2.2. Create a database named as wordpress, create a user named as wordpressuser
 #      and give the user necessarry permissions for the database.
 CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;

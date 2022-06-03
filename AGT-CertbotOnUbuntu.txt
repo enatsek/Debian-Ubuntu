@@ -1,7 +1,7 @@
-CertbotOnUbuntu: Auto SSL Certificates for Apache2 Tutorial on Ubuntu 20.04
+CertbotOnUbuntu: Auto SSL Certificates for Apache2 Tutorial on Ubuntu 22.04
 
 
-#---Copyright (C) 2020 Exforge exforge@x386.xyz
+#---Copyright (C) 2020 - 2022 Exforge exforge@x386.xyz
 # This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -17,6 +17,8 @@ CertbotOnUbuntu: Auto SSL Certificates for Apache2 Tutorial on Ubuntu 20.04
 # Automation of SSL and certificate renewal for Apache 2 on Ubuntu
 # Totally based on the document at:
 Link:https://certbot.eff.org/lets-encrypt/ubuntufocal-apache
+# Based on Alexey Abel's ISP Mail Tutorial Caramel Edition
+Link:https://123qwe.com/
 # Apache Site configurations without SSL must be ready on your servers
 #   Refer to ApacheOnUbuntu Tutorial
 
@@ -24,7 +26,7 @@ Link:https://certbot.eff.org/lets-encrypt/ubuntufocal-apache
 
 #---1. Preliminary Tasks
 # 1.1. Snap Daemon
-# Certbot is installed as a snap, Ubuntu 20.04 installs snap daemon (snapd) 
+# Certbot is installed as a snap, Ubuntu 22.04 installs snap daemon (snapd) 
 #   by default. If in any case it is not installed, you can install snapd by 
 #   the following command:
 sudo apt install snapd
@@ -53,5 +55,21 @@ sudo certbot renew --dry-run
 #   Check crontab:
 systemctl list-timers
 
+
+#---3. Certbot Renewal Hooks
+# When your free certificate is automatically renewed, apache needs to be 
+#   restarted. Any other software using your certificate needs to be reloaded
+#   also (like postfix and dovecot). 
+# Certbot runs all scripts in the  /etc/letsencrypt/renewal-hooks/deploy
+#   directory after a successfull renewal. We'll put there a scipt.
+sudo nano /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
+#__________________________________________
+#!/bin/bash
+systemctl reload apache2
+systemctl reload postfix
+systemctl reload dovecot
+#__________________________________________
+# Make the script executable
+sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
 
 

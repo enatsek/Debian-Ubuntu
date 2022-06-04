@@ -14,7 +14,7 @@ AGT-SimpleMailServerOnUbuntu: People who like the things at their simplest form 
 
 AGT-WordpressOnUbuntu: Installing and activating Wordpress on Ubuntu Server.
 
-AGT-PHPMyAminOnUbuntu: A somehow more secure PHPMyAdmin installation on Ubuntu Server for MySQL and MariaDB.
+AGT-PHPMyAdminOnUbuntu: A somehow more secure PHPMyAdmin installation on Ubuntu Server for MySQL and MariaDB. !!! Deprecated, refer to AGT-AdminerOnUbuntu.
 
 AGT-DNSOnUbuntu: Installing and configuring Master and Slave DNS Servers on Ubuntu Server.
 
@@ -38,3 +38,4 @@ AGT-MariadbClusterOnUbuntu: MariaDB master-master replication with Galera Cluste
 
 AGT-HAProxyOnUbuntu: HAProxy High Availability Load Balancing with Letsencrypt free certificates HTTPS support and keepalived.
  
+AGT-AdminerOnUbuntu: Adminer, a replacement for PHPMyAdmin. Web based Database Management.

@@ -1,7 +1,7 @@
-DNSOnUbuntu: Installation and Configuration of DNS Servers on Ubuntu 20.04
+DNSOnUbuntu: Installation and Configuration of DNS Servers on Ubuntu 22.04
 
 
-#---Copyright (C) Exforge exforge@x386.xyz
+#---Copyright (C) 2020 - 2022 Exforge exforge@x386.xyz
 # This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -21,17 +21,17 @@ DNSOnUbuntu: Installation and Configuration of DNS Servers on Ubuntu 20.04
 Link:https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
 #
 # There will be 2 DNS Servers, 1 Master and 1 Slave. 
-# For every domain on the internet, 2 DNS Servers are needed. So if you want to
-#    run your own DNS Server, you need 2 servers.
+# For every domain on the internet, at least 2 DNS Servers are needed. 
+#    So if you want to run your own DNS Server, you need at least 2 servers.
 # If you need DNS Servers for your internal network, it might be a good idea to
 #    install a spare one.
-# I, myself prefer using www.cloudfare.com for DNS services of my domain. But you may
-#   prefer running on your servers.
+# I, myself prefer using www.cloudfare.com for DNS services of my domain. But you #  #   may prefer running on your servers.
 #
 # My Specs: (Change the values to your ones)
+   Both DNS Servers are Ubuntu 22.04 Server (20.04 works too)
 #  Domain Name:   		x11.xyz	    	(Change it to your domain name)
-#  Master DNS Server:		ns1.x11.xyz		192.168.0.161
-#  Slave DNS Server:		ns2.x11.xyz		192.168.0.162
+#  Master DNS Server:		ns1.x11.xyz		192.168.0.231
+#  Slave DNS Server:		ns2.x11.xyz		192.168.0.232
 #  Some sample servers to add as DNS records:
 #  filesrv.x11.xyz:		192.168.0.171
 #  mail.x11.xyz:		192.168.0.172
@@ -49,7 +49,7 @@ sudo nano /etc/bind/named.conf.options
 #_________________________________________________________
 options {
 	directory "/var/cache/bind";
-		allow-transfer { localhost; 192.168.0.162; };
+		allow-transfer { localhost; 192.168.0.232; };
 		forwarders {
 		8.8.8.8;
 		8.8.4.4;
@@ -74,20 +74,20 @@ sudo nano /etc/bind/net.x11.xyz
 #__________________________________________
 $TTL 1D
 @ IN SOA x11.xyz hostmaster.x11.xyz (
-2021032401 ; serial
+2022060501 ; serial
 8H ; refresh
 4H ; retry
 4W ; expire
 1D ) ; minimum
-IN A 192.168.0.1
+IN A 192.168.0.231
 ;
 @               IN NS     ns1
 @               IN MX 10  mail.x11.xyz
-ns1             IN A      192.168.0.161
-ns2             IN A      192.168.0.162
+ns1             IN A      192.168.0.231
+ns2             IN A      192.168.0.232
 filesrv         IN A      192.168.0.171
 mail            IN A      192.168.0.172
-mailsrv         IN CNAME  mail.xyz.x11
+mailsrv         IN CNAME  mail.x11.xyz
 #__________________________________________
 
 
@@ -116,7 +116,7 @@ sudo nano /etc/bind/named.conf.local
 #____________________________
 zone "x11.xyz" IN {
 	type slave;
-	masters { 192.168.0.161; };
+	masters { 192.168.0.231; };
 	file "/var/lib/bind/net.x11.xyz";
 };
 #____________________________
@@ -130,6 +130,5 @@ sudo systemctl restart bind9
 # !!! Remember !!!
 # 3.1. When you change the zone file on your master server, remember to increase
 #    the number given before serial. 
-# 3.2. You can change DNS server settings of your computers (including DNS Servers) to the
-#    new DNS servers.
+# 3.2. You can change DNS server settings of your computers (including DNS Servers) #    to the new DNS servers.
 

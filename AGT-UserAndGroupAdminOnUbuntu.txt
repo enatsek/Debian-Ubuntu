@@ -1,7 +1,7 @@
-UserAndGroupAdminOnUbuntu: User and Group Administration on Ubuntu 20.04
+UserAndGroupAdminOnUbuntu: User and Group Administration on Ubuntu 22.04
 
 
-#---Copyright (C) 2020 Exforge exforge@x386.xyz
+#---Copyright (C) 2020 - 2022 Exforge exforge@x386.xyz
 # This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -14,7 +14,7 @@ UserAndGroupAdminOnUbuntu: User and Group Administration on Ubuntu 20.04
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #---Specs
-# Aimed for Ubuntu 20.04 Servers, but works fine on Ubuntu 18.04 Server and
+# Aimed for Ubuntu 22.04 Servers, but works fine on Ubuntu 20.04 Server and
 #   on for all Ubuntu Desktops (Ubuntu, Kubuntu, Xubuntu, Lubuntu etc) too
 #
 # Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix
@@ -131,7 +131,7 @@ sudo gpasswd -d <username> <grouptoremove>
 #---6. User manipulation
 # 6.1. Change username
 #   first change home directory
-sudo usermod -d /home/jsmith jdoe -m
+sudo usermod -d /home/jsmith -m jdoe 
 #   then change username
 sudo usermod -l jsmith jdoe
 #
@@ -166,6 +166,7 @@ charlie  ubuntu-server=(dscully:admins) /usr/bin/apt
 #   can only impersonate dscully user
 #   can only impersonate admins group
 #   can only run /usr/bin/apt
+#
 #  For a user to sudo without passwd
 #_____________________
 ansible ALL=(ALL) NOPASSWD: ALL

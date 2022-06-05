@@ -1,7 +1,7 @@
-KeepalivedOnUbuntu: keepalived Clustering on Ubuntu 20.04
+KeepalivedOnUbuntu: keepalived Clustering on Ubuntu 22.04
 
 
-#---Copyright (C) 2020 Exforge exforge@x386.xyz
+#---Copyright (C) 2020 - 2022 Exforge exforge@x386.xyz
 # This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -14,8 +14,9 @@ KeepalivedOnUbuntu: keepalived Clustering on Ubuntu 20.04
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #---Specs
-# 2 Ubuntu 20.04 Servers with IPs 192.168.0.161 and 192.168.0.162
-# Floating IP Address: 192.168.0.160
+# 2 Ubuntu 22.04 Servers with IPs 192.168.0.231 and 192.168.0.232
+#   Everything works with 20.04 version too
+# Floating IP Address: 192.168.0.230
 # Floating IP address will point to first server; if first server goes off
 #   for any reason, then floating IP address will point to second server. 
 #   It will return to the first server again when it goes back online.
@@ -64,7 +65,7 @@ vrrp_instance VI_1 {
 	priority 100
 	advert_int 5
 	virtual_ipaddress {
-	192.168.0.160
+	192.168.0.230
 	}
 }
 #________________________________________

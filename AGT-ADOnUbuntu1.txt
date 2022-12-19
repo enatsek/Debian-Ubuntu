@@ -1,7 +1,7 @@
 ADOnUbuntu1:  Simple Active Directory Configuration on Ubuntu with Samba
 
 
-#---Copyright (C) 2021 Exforge exforge@x386.xyz
+#---Copyright (C) 2021 - 2022 Exforge exforge@x386.xyz
 # This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -27,16 +27,16 @@ Link:https://www.samba.org/
 # 0.2. Configuration
 # Domain Name: X11.XYZ
 # Domain Netbios Name: X11
-# First DC srv1.x11.xyz (Ubuntu Server 20.04)
-# Second DC srv2.x11.xyz (Ubuntu Server 20.04)
-# File Server: srvf.x11.xyz (Ubuntu Server 20.04)
+# First DC:    srv1.x11.xyz 192.168.0.231 (Ubuntu Server 22.04)
+# Second DC    srv2.x11.xyz 192.168.0.232 (Ubuntu Server 22.04)
+# File Server: srvf.x11.xyz 192.168.0.233 (Ubuntu Server 22.04)
 # Windows workstations can connect to the domain
 # 
 # 0.3. Phases
-# 0.3.1. Add First DC (Ubuntu 20.04 Server)
-# 0.3.2. Add Additional DC (Ubuntu 20.04 Server)
+# 0.3.1. Add First DC (srv1.x11.xyz)
+# 0.3.2. Add Additional DC (srv2.x11.xyz)
 # 0.3.3. AD User Management
-# 0.3.4. Add a Linux File Server to the Domain (Ubuntu 20.04 Server)
+# 0.3.4. Add a Linux File Server to the Domain (srvf.x11.xyz)
 # 0.3.5. Add a Windows Computer to the Domain
 #
 # 0.4. Preliminary Tasks
@@ -56,7 +56,7 @@ Link:https://www.samba.org/
 # Domain Controllers and Domain Members should have static IP addresses. There 
 #   might be some ways to use DHCP but I don't know how and actually I don't see 
 #   any reason to use DHCP for Domain Controllers.
-# Hostname's must be in the format of name.example.com (lowercase this time) and due
+# Hostname must be in the format of name.example.com (lowercase this time) and due
 #   to an imcompatability with Samba and Ubuntu (Actually all Debian based Linuxes)
 #   you have to erase the line starting with 127.0.1.1 (not 127.0.0.1) from your
 #   /etc/hosts file and add the IP and hostname (short and long formats) in your 
@@ -64,19 +64,20 @@ Link:https://www.samba.org/
 #
 #____________________________________________
 127.0.0.1	localhost
-192.168.0.161	srv1.x11.xyz srv1
+192.168.0.231	srv1.x11.xyz srv1
 #____________________________________________
 # 
 # 0.4.3. Mixed Environment
 # You should have at least 2 DCs (Domain Controllers), you can use 1 Wind*ws and
 #   1 Linux to benefit from Micros*ft's AD Management programs. But actually it is 
-#   not necessary. I'd advice to install all DCs as Linux and use any Wind*ws 
+#   not necessary. I'd advice installing all DCs as Linux and use any Wind*ws 
 #   workstation to manage AD. You can install RSAT Management Tools to a Wind*ws
-#   computer and use AD Manager programs (including DNS and WINS server) from there.
+#   workstation and use AD Manager programs (including DNS and WINS server) from
+#   there.
 #
 # 0.4.4. Default Values 
-# Remember to replace all the occurences of X11, x11, X11.XYZ, and x11.xyz with yours,
-#   regarding the cases. 
+# Remember to replace all the occurences of X11, x11, X11.XYZ, and x11.xyz with
+#   yours, regarding the cases. 
 
 
 #--- 1. Add First Domain Controller
@@ -84,7 +85,7 @@ Link:https://www.samba.org/
 #   Domain Name:	X11
 #   Realm: 		X11.XYZ	
 #   Hostname:		srv1.x11.xyz
-#   IP:		192.168.0.161
+#   IP:		192.168.0.231
 # 1.1. Install required packages
 sudo apt update
 sudo apt -y install samba krb5-config winbind smbclient 
@@ -147,9 +148,9 @@ sudo samba-tool user create exforge
 #   Domain Name:	X11
 #   Realm: 		X11.xyz	
 #   Hostname:		srv2.x11.xyz
-#   IP:		192.168.0.162
+#   IP:		192.168.0.232
 #   Org. DC Hostname:	srv1.x11.xyz
-#   Org. DC IP:	192.168.0.161
+#   Org. DC IP:	192.168.0.231
 # 2.1. Get domain administrator's kerberos ticket
 # 2.1.1. Install kerberos and edit conf
 sudo apt -y install krb5-user
@@ -173,7 +174,7 @@ sudo nano /etc/resolv.conf
 #   Add following lines
 #_____________________________________
 domain x11.xyz
-nameserver 192.168.0.161
+nameserver 192.168.0.231
 #_____________________________________
 #
 # 2.1.4. Get Kerberos ticket
@@ -198,7 +199,7 @@ sudo systemctl enable samba-ad-dc
 sudo smbclient //127.0.0.1/netlogon -U Administrator -c 'ls'
 # 2.2.5. Verify replication status with AD
 sudo samba-tool drs showrepl
-#   Following warning is not important you can ignore it:
+#   Following warning is not important, you can ignore it:
 #       Warning: No NC replicated for Connection!
 
 
@@ -240,15 +241,16 @@ sudo samba-tool group addmembers ServerWorld ubuntu
 sudo samba-tool group removemembers ServerWorld ubuntu
 
 
-#---4. Add Linux File Server to the Domain (Ubuntu 20.04 Server)
+#---4. Add Linux File Server to the Domain (Ubuntu 22.04 Server)
 # 4.0. Specs
 #   Domain Name:	X11
 #   Realm: 		X11.XYZ	
 #   Hostname:		srvf.x11.xyz
-#   IP:		192.168.0.163
+#   IP:		192.168.0.233
 #   Org. DC Hostname:	srv1.x11.xyz
-#   Org. DC IP:	192.168.0.161
+#   Org. DC IP:	192.168.0.231
 # 4.1. Install necessary packages
+sudo apt update
 sudo apt -y install winbind libpam-winbind libnss-winbind krb5-config samba-dsdb-modules samba-vfs-modules 
 #  Answers to parameter questions:
 ## Default Kerberos version 5 realm:
@@ -298,7 +300,7 @@ sudo nano /etc/netplan/01-netcfg.yaml
 #   Change as below
 #____________________________________________
       nameservers:
-        addresses: [192.168.0.161,192.168.0.162]
+        addresses: [192.168.0.231,192.168.0.232]
 #____________________________________________
 #
 # 4.2.5. Restart network settings

@@ -1,4 +1,4 @@
-ADOnUbuntu1:  Simple Active Directory Configuration on Ubuntu with Samba
+ADOnUbuntu1:  Simple Active Directory Configuration on Ubuntu 22.04 Server with Samba
 
 
 #---Copyright (C) 2021 - 2022 Exforge exforge@x386.xyz

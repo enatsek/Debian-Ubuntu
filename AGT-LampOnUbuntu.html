@@ -1,0 +1,59 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"> </head> <body><H1>LampOnUbuntu: LAMP Stack On Ubuntu 22.04
+</H1><p> <a href="javascript:myFunction('Div1')">Copyright (C) 2020 Exforge exforge@x386.xyz
+</a> <div id="Div1" style="margin-left:10%;"><pre><code># This document is free text: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+# This document is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
+</code> </pre> </div> </p>
+<p> <a href="javascript:myFunction('Div2')">Specs
+</a> <div id="Div2" style="margin-left:10%;"><pre><code># Based on Mark Drake's Tutorial on:
+<a href="https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-ubuntu-18-04" target="_blank">https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-ubuntu-18-04</a>
+# L: Ubuntu 22.04 Sever (and 20.04)
+# A: Apache 2 
+# M: MariaDB (Mysql could be another option)
+# P: PHP (Python or Perl could be other options)
+</code> </pre> </div> </p>
+<p> <a href="javascript:myFunction('Div3')"> 1. Install Apache 2
+</a> <div id="Div3" style="margin-left:10%;"><pre><code>sudo apt update
+sudo apt install apache2
+</code> </pre> </div> </p>
+<p> <a href="javascript:myFunction('Div4')"> 2. Install And Configure MariaDB
+</a> <div id="Div4" style="margin-left:10%;"><pre><code># 2.1. Install
+sudo apt install mariadb-server
+# 2.1. Secure Mariadb
+#   The following command makes some fine tunes regarding Mariadb security.
+sudo mysql_secure_installation
+#   You will be asked some questions.
+#     "Enter current password for root (enter for none):"
+#     There is no password yet, so press enter.
+#   The next 2 questions are about securing root account. In Ubuntu root
+#     account is already protected, so you can answer n.
+#   For the next questions you can select default answers.
+</code> </pre> </div> </p>
+<p> <a href="javascript:myFunction('Div5')"> 3. Install PHP
+</a> <div id="Div5" style="margin-left:10%;"><pre><code>sudo apt install php libapache2-mod-php php-mysql
+</code> </pre> </div> </p>
+</code> </pre> </div> </p>
+<br /><br /><br /><script>
+function myFunction(divid) {
+  var x = document.getElementById(divid);
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+var i;
+var str;
+
+for (i=1; i<6; i++) {
+    str = "Div" + i.toString();
+    myFunction(str);
+}
+</script></body> </html>

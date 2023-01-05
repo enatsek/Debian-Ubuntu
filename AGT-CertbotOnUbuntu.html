@@ -1,0 +1,86 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"> </head> <body><H1>CertbotOnUbuntu: Auto SSL Certificates for Apache2 Tutorial on Ubuntu 22.04
+</H1><p> <a href="javascript:myFunction('Div1')">Copyright (C) 2020 - 2022 Exforge exforge@x386.xyz
+</a> <div id="Div1" style="margin-left:10%;"><pre><code># This document is free text: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+# This document is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
+</code> </pre> </div> </p>
+<p> <a href="javascript:myFunction('Div2')">Specs
+</a> <div id="Div2" style="margin-left:10%;"><pre><code># Automation of SSL and certificate renewal for Apache 2 on Ubuntu
+# Totally based on the document at:
+<a href="https://certbot.eff.org/lets-encrypt/ubuntufocal-apache" target="_blank">https://certbot.eff.org/lets-encrypt/ubuntufocal-apache</a>
+# Based on Alexey Abel's ISP Mail Tutorial Caramel Edition
+<a href="https://123qwe.com/" target="_blank">https://123qwe.com/</a>
+# Apache Site configurations without SSL must be ready on your servers
+#   Refer to ApacheOnUbuntu Tutorial
+</code> </pre> </div> </p>
+<p> <a href="javascript:myFunction('Div3')">1. Preliminary Tasks
+</a> <div id="Div3" style="margin-left:10%;"><pre><code># 1.1. Snap Daemon
+# Certbot is installed as a snap, Ubuntu 22.04 installs snap daemon (snapd) 
+#   by default. If in any case it is not installed, you can install snapd by 
+#   the following command:
+sudo apt install snapd
+# 1.2. Remove Old Certbot Packages (If any)
+# If you've installed certbot's apt package before, remove it:
+sudo apt remove certbot
+</code> </pre> </div> </p>
+<p> <a href="javascript:myFunction('Div4')">2. Installation and Getting SSL Certificate
+</a> <div id="Div4" style="margin-left:10%;"><pre><code># 2.1. Ensure that your snapd (snap deamon) is up to date:
+sudo snap install core; sudo snap refresh core
+#
+# 2.2. Install Certbot
+sudo snap install --classic certbot
+#
+# 2.3. Get SSL Certificate
+sudo certbot --apache
+# Asks your email, don't hesitate giving it, you will be informed if any problems
+#   occurs at the renewal of certificates.
+#
+# 2.4. Test automatic renewal
+sudo certbot renew --dry-run
+#
+# 2.5. All set, certificates generated and installed, all apache
+#   configurations are made, jobs added to crontab to renew certs.
+#   Check crontab:
+systemctl list-timers
+</code> </pre> </div> </p>
+<p> <a href="javascript:myFunction('Div5')">3. Certbot Renewal Hooks
+</a> <div id="Div5" style="margin-left:10%;"><pre><code># When your free certificate is automatically renewed, apache needs to be 
+#   restarted. Any other software using your certificate needs to be reloaded
+#   also (like postfix and dovecot). 
+# Certbot runs all scripts in the  /etc/letsencrypt/renewal-hooks/deploy
+#   directory after a successfull renewal. We'll put there a scipt.
+sudo nano /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
+#__________________________________________
+#!/bin/bash
+systemctl reload apache2
+systemctl reload postfix
+systemctl reload dovecot
+#__________________________________________
+# Make the script executable
+sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
+</code> </pre> </div> </p>
+</code> </pre> </div> </p>
+<br /><br /><br /><script>
+function myFunction(divid) {
+  var x = document.getElementById(divid);
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+var i;
+var str;
+
+for (i=1; i<6; i++) {
+    str = "Div" + i.toString();
+    myFunction(str);
+}
+</script></body> </html>

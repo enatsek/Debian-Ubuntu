@@ -2,6 +2,8 @@
 
 I am a learner of Ubuntu. These are the tutorials I prepared with the help of internet sources and books. I credited the sources that helped me on each document.
 
+There are txt and html versions of each document.
+
 AGT-ApacheOnUbuntu: Installing and configuring Apache 2 on Ubuntu server. With sample configuration and SSL support.
 
 AGT-CertbotOnUbuntu: Using certbot tool of eff.org to automatize obtaining and renewing letsencrytp.org SSL certificates on Apache 2 and Ubuntu Server.

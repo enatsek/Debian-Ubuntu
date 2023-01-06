@@ -1,4 +1,4 @@
-SimpleMailServerOnUbuntu: Mail Server with SMTP and IMAP on Ubuntu 20.04
+SimpleMailServerOnUbuntu: Mail Server with SMTP and IMAP on Ubuntu 22.04
 
 #---Copyright (C) 2020 Exforge exforge@x386.xyz
 # This document is free text: you can redistribute it and/or modify
@@ -22,14 +22,17 @@ Link:https://www.server-world.info/en/note?os=Ubuntu_18.04&p=mail&f=1
 #
 # Hostname: mail.x11.xyz
 # Mail Domain: x11.xyz
+# Operating System: Ubuntu 22.04 LTS Server
 #
-# An MX record must be created at the DNS Server with the value of mail.x11.xyz
+# An MX record must be created at the DNS Server with the value of 
+#    mail.x11.xyz
 
 
 #---1. Install and Configure Postfix
 # 1.1. Install Postfix and SASL (Simple Auth. & Security Layer)
 sudo apt -y install postfix sasl2-bin 
-#   Select No configuration at the install question, we will configure manually
+# Select No configuration at the install question, we will configure
+#    it manually
 #
 # 1.2. Create a standart config file for postfix
 sudo cp /usr/share/postfix/main.cf.dist /etc/postfix/main.cf
@@ -40,10 +43,10 @@ sudo nano /etc/postfix/main.cf
 # around line 78: uncomment
 mail_owner = postfix
 #
-# around line 94: uncomment and specify hostname
+# around line 94: uncomment and change hostname
 myhostname = mail.x11.xyz
 #
-# around line 102: uncomment and specify domainname
+# around line 102: uncomment and change domainname
 mydomain = x11.xyz
 #
 # around line 123: uncomment
@@ -73,7 +76,7 @@ alias_database = hash:/etc/aliases
 # around line 440: uncomment
 home_mailbox = Maildir/
 #
-# around line 576: comment out and add
+# around line 576: change the line as below (remove "$mail_name (Ubuntu)
 #smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 smtpd_banner = $myhostname ESMTP
 #
@@ -102,9 +105,9 @@ setgid_group = postdrop
 #readme_directory =
 #
 # add to the end: 
-# limit an email size 10M
+# limit email size to 10MB
 message_size_limit = 10485760
-# limit mailbox 1G
+# limit mailbox size to 1GB
 mailbox_size_limit = 1073741824
 # SMTP-Auth setting
 smtpd_sasl_type = dovecot
@@ -157,22 +160,23 @@ sudo systemctl restart dovecot
 
 #---Break Time
 # At this point we have a very basic mail config, all our linux users at 
-#   mail.x11.xyz have mail addresses. They can access smtp at port 25 and imap at
-#   port 143. But unfortunately there is no encryption. 
-# At the next step we will add SSL encrytpion and that will change our smtp port to 587.
+#   mail.x11.xyz have mail addresses. They can access smtp at port 25 and imap 
+#   at port 143. But unfortunately there is no encryption. 
+# At the next step we will add SSL encrytpion and that will change our smtp 
+#   port to 587.
 #
-# The easiest way to get SSL certificate for our mail server is:
-#   Install apache2
-#   Create a site with servername mail.x11.xyz
-#   Get ssl certificate with Certbot
-#   (See tutorial CertbotOnUbuntu)
-# At the next section I assume you have certificates  as
-#    /etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
-#    /etc/letsencrypt/live/mail.x11.xyz/privkey.pem
+# We will use Certbot tool of Let's Encrytp to have a free certificate
 
 
 #---3. Add SSL/TLS to Postfix and Dovecot
-# 3.1. Postfix main config
+# 3.1. Install Certbot to get TLS certificates
+sudo apt -y install certbot
+# 3.2. Run certbot to get certificates. Enter an email address and
+#   accept TOS
+sudo certbot certonly --standalone -d mail.x11.xyz
+# Certificates are installed to /etc/letsencrypt/live/mail.x11.xyz/
+#
+# 3.3. Add certificates to Postfix main config
 sudo nano /etc/postfix/main.cf 
 #   Add to the end
 smtpd_use_tls = yes
@@ -182,27 +186,27 @@ smtpd_tls_cert_file = /etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
 smtpd_tls_key_file = /etc/letsencrypt/live/mail.x11.xyz/privkey.pem
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 #
-# 3.2. Postfix master config
+# 3.4. Postfix master config
 sudo nano /etc/postfix/master.cf
-#  Around line 17-21: uncomment like follows
+#  Around line 19-23 uncomment like below
 submission inet n       -       y       -       -       smtpd
   -o syslog_name=postfix/submission
 #  -o smtpd_tls_security_level=encrypt
   -o smtpd_sasl_auth_enable=yes
   -o smtpd_tls_auth_only=yes
-#  Around line 29-31: uncomment like follows
+#  Around line 33-35: uncomment like below
 smtps     inet  n       -       y       -       -       smtpd
   -o syslog_name=postfix/smtps
   -o smtpd_tls_wrappermode=yes
 #
-# 3.3. Dovecot config
+# 3.5. Add certificates to Dovecot config
 sudo nano /etc/dovecot/conf.d/10-ssl.conf
 # Around line 12,13: Specify certificates (change as below)
-#   Remember to change domain names:  
+#   Remember to change domain names to yours:  
 ssl_cert = </etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
 ssl_key = </etc/letsencrypt/live/mail.x11.xyz/privkey.pem
 #
-# 3.4. Restart Postfix and Dovecot
+# 3.6. Restart Postfix and Dovecot
 sudo systemctl restart postfix dovecot 
 
 #---4. Client Mail Settings

@@ -1,5 +1,5 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"> </head> <body><H1>Mariadb Master-Master Replication with Galera Cluster Tutorial on Ubuntu 20.04
-</H1><p> <a href="javascript:myFunction('Div1')">Copyright (C) 2021 Exforge exforge@x386.xyz
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"> </head> <body><H1>Mariadb Master-Master Replication with Galera Cluster Tutorial on Ubuntu 22.04
+</H1><p> <a href="javascript:myFunction('Div1')">Copyright (C) 2021 - 2023 Exforge exforge@x386.xyz
 </a> <div id="Div1" style="margin-left:10%;"><pre><code># This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -22,9 +22,9 @@
 #   and you need some work to (hopefully) start again. !!!
 #
 # 0.2. My Configuration
-testsrv1 -&gt; Ubuntu 20.04 Server 192.168.0.161
-testsrv2 -&gt; Ubuntu 20.04 Server 192.168.0.162
-testsrv3 -&gt; Ubuntu 20.04 Server 192.168.0.163
+srv1 -&gt; Ubuntu 22.04 Server 192.168.0.231
+srv2 -&gt; Ubuntu 22.04 Server 192.168.0.232
+srv3 -&gt; Ubuntu 22.04 Server 192.168.0.233
 #
 # 0.3. Resources
 <a href="https://www.howtoforge.com/how-to-setup-mariadb-galera-multi-master-synchronous-replication-using-debian-10/" target="_blank">https://www.howtoforge.com/how-to-setup-mariadb-galera-multi-master-synchronous-replication-using-debian-10/</a>
@@ -32,10 +32,10 @@ testsrv3 -&gt; Ubuntu 20.04 Server 192.168.0.163
 <a href="https://mariadb.com/docs/multi-node/galera-cluster/understand-mariadb-galera-cluster/" target="_blank">https://mariadb.com/docs/multi-node/galera-cluster/understand-mariadb-galera-cluster/</a>
 <a href="https://mariadb.com/kb/en/galera-cluster-recovery/" target="_blank">https://mariadb.com/kb/en/galera-cluster-recovery/</a>
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div3')">1. Mariadb Installations (Execute on all servers)
+<p> <a href="javascript:myFunction('Div3')">1. Mariadb Installations (Run on all servers)
 </a> <div id="Div3" style="margin-left:10%;"><pre><code># 1.1. Install Mariadb and Galera Cluster on all servers
 sudo apt update
-sudo apt install mariadb-server galera-3 --yes
+sudo apt install mariadb-server galera-4 --yes
 #
 # 1.2. Secure Mariadb Installations
 sudo mysql_secure_installation
@@ -50,14 +50,14 @@ EXIT;
 # Now you can run mariadb with root user and password
 mariadb -u root -p
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div4')">2. Mariadb Configurations (Execute on all servers)
+<p> <a href="javascript:myFunction('Div4')">2. Mariadb Configurations (Run on all servers)
 </a> <div id="Div4" style="margin-left:10%;"><pre><code># 2.1. Temporarily Stop Mariadb
 sudo systemctl stop mariadb
 #
 # 2.2. Bind Address Enablement
 # Mariadb daemon must listen to the network for the cluster
 sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
-# Change the following line (Around line 28)
+# Change the following line (Around line 27)
 #______________________________________
 bind-address = 127.0.0.1
 #______________________________________
@@ -77,7 +77,7 @@ innodb_autoinc_lock_mode = 2
 # Name of the cluster, you can change it
 wsrep_cluster_name    = "x386_cluster"
 # List of cluster nodes
-wsrep_cluster_address = "gcomm://192.168.0.161,192.168.0.162,192.168.0.163"
+wsrep_cluster_address = "gcomm://192.168.0.231,192.168.0.232,192.168.0.233"
 # Galera plugin path
 wsrep_provider = /usr/lib/galera/libgalera_smm.so
 # If a node does not respond in 10 second, it is assumed to be offline
@@ -166,7 +166,7 @@ show status like 'wsrep_local_state_comment';
 # You added the ip of the new node to the configuration of the new node only. Before,
 #   it is too late, You need to add it to the other cluster member configuraitons too.
 #   Otherwise, it would be very difficult to resolve if any cluster error occurs in 
-#   the future.
+#   the future.exi
 # Run on other cluster members one by one:
 sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
 # At the line starting with wsrep_cluster_address, add the IP of the new server.
@@ -187,7 +187,7 @@ sudo systemctl restart mariadb
 #   shutdown all the cluster (e.g. to physically move to somewhere else), or a 
 #   total power failure occurs; you may try to shutdown server one at a time and 
 #   when they are ready to start, first you have to turn on the last shutdowned node.
-#   If the cluster doesn't go online, refer ro 6.
+#   If the cluster doesn't go online, refer to 6.
 </code> </pre> </div> </p>
 <p> <a href="javascript:myFunction('Div8')">6. Recovery
 </a> <div id="Div8" style="margin-left:10%;"><pre><code># Mariadb Galera Cluster would run fine for a long time, as long as you keep at 
@@ -234,7 +234,8 @@ WSREP: Recovered position 2d878884-9ae6-11eb-955f-fa6fa258f122:8
 #___________________________________________________
 #
 # The node with the highest value after ":" will be our candidate to restart the
-#   cluster. We have found the safe node.
+#   cluster. We have found the safe node. If more than 1 node has the same highest 
+#   value, just choose one.
 # We need to set safe node to restart the cluster:
 # !!! Run on the Safe Node !!!
 sudo nano /var/lib/mysql/grastate.dat
@@ -250,6 +251,47 @@ sudo galera_new_cluster
 sudo systemctl restart mariadb
 # The cluster is working again, we are done
 # It would be wise to make a healthcheck as in 5.1. and see cluster is working.
+#
+# If this step doesn't work either. We have just one more thing to do. Go to the 
+#    next step.
+#
+# 
+# 6.4. Last Chance
+# !! On the safe node !!
+# Disable mariadb and reboot
+sudo systemctl disable mariadb
+sudo reboot
+#
+# Edit cluster config at the safe node:
+sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
+# Change the wsrep_cluster_address parameter to contain only the safe node
+#    e.g. if the 3rd node is the safe node as below
+wsrep_cluster_address = "gcomm://192.168.0.233"
+# Enable mariadb 
+sudo systemctl enable mariadb
+# Start Galera Cluster
+sudo galera_new_cluster
+#
+# !! On the other nodes !!
+# Restart mariadb 
+sudo systemctl restart mariadb
+# If they cannot restart, it is because it cannot be stopped
+#   Do the disable, reboot, enable trick on them too
+sudo systemctl disable mariadb
+sudo reboot
+# After reboot enable and start mariadb
+sudo systemctl enable mariadb
+sudo systemctl start mariadb
+# If they start, most probably your cluster is working again
+#    Otherwise, you need professional support
+# 
+# !! On the safe node
+# Revert the first node to the original configuration
+sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
+# Change the wsrep_cluster_address parameter to original
+wsrep_cluster_address = "gcomm://192.168.0.231,192.168.0.232,192.168.0.233"
+# Restart mariadb
+sudo systemctl restart mariadb
 </code> </pre> </div> </p>
 </code> </pre> </div> </p>
 <br /><br /><br /><script>

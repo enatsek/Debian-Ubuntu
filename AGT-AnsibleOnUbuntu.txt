@@ -1,7 +1,7 @@
 AnsibleOnUbuntu - Ansible Tutorial for Ubuntu Linux
 
 
-#---Copyright (C) 2020 Exforge exforge@x386.xyz
+#---Copyright (C) 2020 - 2023 Exforge exforge@x386.xyz
 # This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -17,19 +17,19 @@ AnsibleOnUbuntu - Ansible Tutorial for Ubuntu Linux
 #---0. Specs
 # 0.0. Servers managed from a workstation
 #   This tutorial aims to bring you to a moderate level using Ansible. (Almost) All 
-#      examples are tested and verified as working. There might be slight mistakes and
-#      you can think of them as small challenges. 
-#   This tutorial is about using Ansible on Ubuntu (and Debian) servers, but I believe
-#      you can apply most of the examples to other servers like Centos.
+#      examples are tested and verified as working. There might be slight mistakes 
+#      and you can think of them as small challenges. 
+#   This tutorial is about using Ansible on Ubuntu (and Debian) servers, but I 
+#      believe you can apply most of the examples to other servers like Alma Linux.
 #   I am not an expert of Ansible. Actually I prepared this tutorial while I was 
 #     learning it. 
 #
-# 0.1. Workstation: lahana -> Ubuntu 20.04 LTS Desktop
+# 0.1. Workstation: wrk -> Ubuntu 22.04 LTS Desktop
 # 0.2. Servers:
 #        Local Virtual Servers:
-#          test201, test202, test203 -> Ubuntu 20.04 LTS Server
-#          test2010                  -> Ubuntu 20.10 Server
-#          debian10                  -> Debian 10 Server
+#          srv1, srv2, srv3    -> Ubuntu 22.04 LTS Server
+#          ubuntu20            -> Ubuntu 20.04 LTS Server
+#          debian11            -> Debian 11 Server
 #        
 # 0.3. Resources:
 # Book: 978-1-4842-1660-6 Ansible From Beginner to Pro by Michael Heap
@@ -43,7 +43,7 @@ Link:https://www.golinuxcloud.com/ansible-tutorial/
 #---1. Installation and Main Configuration
 # 1.1. Install ansible on workstation
 sudo apt update
-sudo apt install ansible
+sudo apt install ansible --yes
 #
 # 1.2. Create ansible user on all the servers and on the workstation
 # !!!Run on workstation and on all servers!!!
@@ -62,11 +62,11 @@ sudo su ansible
 # Create SSH keys, leave passfield empty
 ssh-keygen
 # Copy ansible users SSH key to the servers
-ssh-copy-id -i ~/.ssh/id_rsa.pub test201
-ssh-copy-id -i ~/.ssh/id_rsa.pub test202
-ssh-copy-id -i ~/.ssh/id_rsa.pub test203
-ssh-copy-id -i ~/.ssh/id_rsa.pub test2010
-ssh-copy-id -i ~/.ssh/id_rsa.pub debian10
+ssh-copy-id -i ~/.ssh/id_rsa.pub srv1
+ssh-copy-id -i ~/.ssh/id_rsa.pub srv2
+ssh-copy-id -i ~/.ssh/id_rsa.pub srv3
+ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu20
+ssh-copy-id -i ~/.ssh/id_rsa.pub debian11
 #  Now we can ssh to servers with ansible user without password
 #
 # 1.4. On all servers, configure ansible user to sudo without password
@@ -107,7 +107,7 @@ forks = 5
 # We stated as:
 #   our hosts file will be /home/ansible/.hosts
 #   the remote user to use on servers is ansible
-#   look to /etc/ansible/roles for extra roles
+#   look to /home/ansible/ansible/playbooks for extra roles
 #   maximum 5 parallel tasks between the workstation and servers
 # There are numerous thing to be configured, you may check them
 #   at file /etc/ansible/ansible.cfg
@@ -127,21 +127,16 @@ sudo chmod 600 /home/ansible/.hosts
 # Populate the file with server IPs or names
 nano /home/ansible/.hosts
 #________________________
-[ubuntu20]
-test201.x386.xyz
-test202.x386.xyz
-test203.x386.xyz
-test2010.x386.xyz
+[ubuntu2204]
+srv1
+srv2
+srv3
 #
 [debian]
-debian10.x386.xyz
+debian11
 #
-[internet]
-hostens
-hostens2
-#
-[local]
-ubuntu
+[ubuntu2004]
+ubuntu20
 #________________________
 # As in our sample, you can group hosts
 #
@@ -171,63 +166,56 @@ bravo.example.com ansible_user=mary ansible_ssh_private_key_file=/path/to/mary.k
 frontend.example.com ansible_port=50022
 yellow.example.com ansible_host=192.168.33.10
 #
-# 3.5. If you want to use more than 1 inventory file you can put all your inventories 
-#   in a directory and specify the directory as the inventory file. Below is a simple 
-#   example.
+# 3.5. If you want to use more than 1 inventory file you can put all your 
+#   inventories in a directory and specify the directory as the inventory file. 
+#   Below is a simple example.
 sudo su ansible
 mkdir /home/ansible/ansible/inventory
 nano /home/ansible/ansible/inventory/inventory1
 #__________________________________
-test201
+srv1
 #__________________________________
 nano /home/ansible/ansible/inventory/inventory2
 #__________________________________
-test203
+srv3
 #__________________________________
 ansible all -i /home/ansible/ansible/inventory -m ping
 #
-# 3.6. If you want to use a dynamic host file, you can use a program which outputs the 
-#   inventory. #   Then you can give your program as inventory file. Below is a very 
-#   simple example.
+# 3.6. If you want to use a dynamic host file, you can use a program which outputs 
+#   the inventory in Json format. Then you can give your program as inventory file. 
+#   Below is a very simple example.
 sudo su ansible
 nano /home/ansible/ansible/inventory.py
 #______________________________________
 #!/usr/bin/env python3
-print("test201")
-print("test202")
+print('{"srv": {"hosts" : ["srv1", "srv2", "srv3"]}}')
 #______________________________________
 chmod +x /home/ansible/ansible/inventory.py
 ansible all -i /home/ansible/ansible/inventory.py -m ping
 #
-# 3.7. Needless to say; you can combine dynamic and static inventories, by combining 
-#   methods in 3.5. and 3.6.
+# 3.7. Needless to say; you can combine dynamic and static inventories, by 
+#   combining methods in 3.5. and 3.6.
 #
 # 3.8. Groups of Groups
 # You can create master groups to include other groups. Master groups require
 #   children keyword.
-# In my inventory, if I want to combine all local servers (virtual or not) I would
-#   modify my inventory file as follows:
+# In my inventory, if I want to combine all ubuntu servers I would modify my 
+#   inventory file as follows:
 #________________________
-[ubuntu20]
-test201.x386.xyz
-test202.x386.xyz
-test203.x386.xyz
-test2010.x386.xyz
+[ubuntu2204]
+srv1
+srv2
+srv3
 #
 [debian]
-debian10.x386.xyz
+debian11
 #
-[internet]
-hostens
-hostens2
-#
-[local]
-ubuntu
-#
-[localservers:children]
+[ubuntu2004]
 ubuntu20
-debian
-local
+#
+[ubuntu:children]
+ubuntu2204
+ubuntu2004
 #________________________
 #
 # 3.9. Inventory Variables
@@ -235,23 +223,19 @@ local
 #   For group based variables; var keyword is used. 
 # Below, using my inventory file, I created a variable named role for a group and 
 #   a host. 
-[ubuntu20]
-test201.x386.xyz
-test202.x386.xyz
-test203.x386.xyz
-test2010.x386.xyz
+[ubuntu2204]
+srv1
+srv2
+srv3
 #
 [debian]
-debian10.x386.xyz
+debian11
 #
-[internet]
-hostens role=webserver
-hostens2
+[ubuntu2004]
+ubuntu20
 #
-[local]
-ubuntu
 #
-[ubuntu20:vars]
+[ubuntu22.04:vars]
 role="dbserver"
 #________________________
 # That way, using ansible, you can install apache to servers with webserver role and
@@ -262,82 +246,80 @@ role="dbserver"
 #---4. Ansible Ad Hoc Commands
 # You can run Ansible commands in 2 ways, 1 is direct (adhoc), 2 through playbooks. 
 #   In the next section we will work on our first playbook. 
-# Ad hoc commands might be suitable for one time tasks. For recurring tasks it would 
-#   be wise to use playbooks.
+# Ad hoc commands might be suitable for one time tasks. For recurring tasks it 
+#   would be better to use playbooks.
 # 4.1. Ping host(s)
 # Actually we ran our 1st command at 2.4. Ping all hosts in default inventory.
 ansible all -m ping
 # We can specify another inventory
-ansible all -i /home/ansible/ansible/inventory.py
+ansible all -i /home/ansible/ansible/inventory.py -m ping
 ansible all -i /home/ansible/ansible/inventory -m ping
 #
 # 4.2. Run a shell command on hosts
 ansible all -m shell -a "ls -al"
 # -m can be ommitted
-ansible test201 -a "ls -al"
+ansible srv1 -a "ls -al"
 # List of open ports on the servers
 ansible all -m shell -a 'netstat -plntu' --become
 #
 # 4.3. File and Directory Operations
 # Copy a file to servers
-ansible all -m copy -a "src=/etc/apache2/apache2.conf dest=/tmp/apache2.conf"
+ansible all -m copy -a "src=/tmp/testfile dest=/tmp/testfile"
 # Create a directory on server
 ansible all -m file -a "dest=/tmp/test mode=777 owner=ansible group=ansible state=directory"
 # Delete a file or directory on server
-ansible all -m file -a "dest=/home/ansible/test state=absent"
+ansible all -m file -a "dest=/tmp/testfile state=absent"
 # Copy a file from server
-ansible ubuntu20 -m fetch -a "src=/var/www/html/index.html dest=/home/ansible/backup flat=yes"
+ansible srv1 -m fetch -a "src=/var/log/dmesg dest=/home/ansible/backup flat=yes"
 #
 # 4.4. Reboot Servers
-# Reboot all servers
+# Reboot all servers  (Does not reboot because of the permissions)
 ansible all -a "/sbin/reboot"
-# Reboot all servers in 10 parallel forks (default is 5)
-ansible all -a "/sbin/reboot" -f 10
 # Reboot all servers with sudo privilege
 ansible all -a "/sbin/reboot" --become
+# Reboot all servers in 10 parallel forks (default is 5)
+ansible all -a "/sbin/reboot" -f 10 --become
 # Reboot all servers with sudo privilege, manually enter sudo password
 ansible all -a "/sbin/reboot" --become --ask-become-pass
 #
 # 4.5. User Management
 # Add a user
-ansible all -m ansible.builtin.user -a "name=foo"
+ansible srv1 -m ansible.builtin.user -a "name=foo" --become
 # Remove a user
-ansible all -m ansible.builtin.user -a "name=foo state=absent"
+ansible srv1 -m ansible.builtin.user -a "name=foo state=absent" --become
 #
 # 4.6. Package Management (apt)
 # Add a ppa repository
-ansible ubuntu20 -m apt_repository -a "repo=ppa:ondrej/php state=present" --become 
+ansible srv1 -m apt_repository -a "repo=ppa:ondrej/php state=present" --become 
 # Remove a ppa repository
-ansible ubuntu20 -m apt_repository -a "repo=ppa:ondrej/php state=absent" --become
+ansible srv1 -m apt_repository -a "repo=ppa:ondrej/php state=absent" --become
 # Update cache (apt update)
-ansible ubuntu20 -m apt -a "update_cache=yes" --become
+ansible srv1 -m apt -a "update_cache=yes" --become
 # update cache and upgrade all modules (apt update && apt upgrade)
-ansible ubuntu20 -m apt -a "upgrade=dist update_cache=yes" --become
+ansible srv1 -m apt -a "upgrade=dist update_cache=yes" --become
 # Install apache (don't do anything if it is already installed)
-ansible ubuntu20 -m apt -a "name=apache2 state=present" --become 
-#  or
-ansible ubuntu20 -m apt -a "name=apache2 state=installed" --become 
+ansible srv1 -m apt -a "name=apache2 state=present" --become 
 # Install apache, if it is already installed, update it
-ansible ubuntu20 -m apt -a "name=apache2 state=latest" --become
+ansible srv1 -m apt -a "name=apache2 state=latest" --become
 # Remove apache
-ansible ubuntu20 -m apt -a "name=apache2 state=absent" --become
+ansible srv1 -m apt -a "name=apache2 state=absent" --become
 # Remove apache and remove all configuration about it
-ansible ubuntu20 -m apt -a "name=apache2 state=absent purge=yes" --become
+ansible srv1 -m apt -a "name=apache2 state=absent purge=yes" --become
 # Remove apache, remove all configuration about it, and also remove all unused packages
-ansible ubuntu20 -m apt -a "name=apache2 state=absent purge=yes autoremove=yes" --become
+ansible srv1 -m apt -a "name=apache2 state=absent purge=yes autoremove=yes" --become
 #
 # 4.7. Service Management
 # Start and Enable Apache service
-ansible ubuntu20 -m service -a "name=apache2 state=started enabled=yes" --become
+ansible srv1 -m service -a "name=apache2 state=started enabled=yes" --become
 # Stop Apache service
-ansible ubuntu20 -m service -a "name=apache2 state=stopped" --become
+ansible srv1 -m service -a "name=apache2 state=stopped" --become
 # Restart Apache service
-ansible ubuntu20 -m service -a "name=apache2 state=restarted" --become
+ansible srv1 -m service -a "name=apache2 state=restarted" --become
 
 
 
 #---5. A Simple Playbook to Install Apache
-# Playbooks are files in YAML format. They contains commands
+# Playbooks are files in YAML format. They contain commands
 #   to run by Ansible.
 # Our playbook will install apache, and prepare a sample 
 #   homepage containing the host name
@@ -353,7 +335,7 @@ nano /home/ansible/ansible/playbooks/apache/apache.yml
 #!/usr/bin/env ansible-playbook
 - name: Create webserver with apache
   become: True
-  hosts: ubuntu20
+  hosts: srv1
   tasks:
   - name: install apache
     apt: name=apache2 update_cache=yes
@@ -363,7 +345,7 @@ nano /home/ansible/ansible/playbooks/apache/apache.yml
   - name: restart apache
     service: name=apache2 state=restarted
 #_____________________________________________________
-nano /home/ansible/playbooks/apache/templates/index.html.j2
+nano /home/ansible/ansible/playbooks/apache/templates/index.html.j2
 #_____________________________________________________
 <html>
 <head>
@@ -383,29 +365,29 @@ nano /home/ansible/playbooks/apache/templates/index.html.j2
 - name: Create webserver with apache
 # Name of the playbook, displayed when the playbook runs
   become: True
-  # Use sudo
-  hosts: ubuntu20
-  # Host or host group to run on
+# Use sudo
+  hosts: srv1
+# Host or host group to run on
   tasks:
-  # Tasks to do in this playbook
+# Tasks to do in this playbook
   - name: install apache
-  # Name of task, displayed when the playbook runs, install apache
+# Name of task, displayed when the playbook runs, install apache
     apt: name=apache2 update_cache=yes
-    # Install apache2, first update the cache
-    # Equivalent to:
-    #   apt update
-    #   apt install apache2
+  # Install apache2, first update the cache
+  # Equivalent to:
+  #   apt update
+  #   apt install apache2
   - name: copy index.html
-  # Name of task, displayed when the playbook runs, copy customized index.html
-  #   from the template
+# Name of task, displayed when the playbook runs, copy customized index.html
+#   from the template
     template: src=templates/index.html.j2 dest=/var/www/html/index.html
-    # variables in index.html.j2 are updated and copied to server
+  # variables in index.html.j2 are updated and copied to server
       mode=0644
-      # File mode will be 0644
+    # File mode will be 0644
   - name: restart apache
-  # Name of task, displayed when the playbook runs, restart apache
+# Name of task, displayed when the playbook runs, restart apache
     service: name=apache2 state=restarted
-  # Restart apache, systemctl restart apache2
+# Restart apache, systemctl restart apache2
 #_____________________________________________________
 # Variables in /home/ansible/playbooks/apache/templates/index.html.j2
 # {{ ansible_hostname }} : hostname as ansible gathers
@@ -436,7 +418,7 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
 #!/usr/bin/env ansible-playbook
 - name: Install LAMP; Apache, MariaDB, PHP
   become: True
-  hosts: test201
+  hosts: srv1
   tasks:
   - name: Update apt cache if not updated in 1 hour
     apt:
@@ -474,7 +456,7 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
 #!/usr/bin/env ansible-playbook
 - name: Tutorial tasks
   become: True
-  hosts: test201
+  hosts: srv1
   tasks:
   - name: Start apache if not started
     service:
@@ -483,51 +465,50 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
 #_______________________________________________________________________
 
 
-
-#---7.0. apk Module: Manages Alpine apk packages.
+#---7.0. apk Module: Manages Alpine Linux apk packages.
 # Examples:
 #______________________________________________________________
-- name: Install apache, don't do anything if already installed
-  apk:
-    name: apache2
+  - name: Install apache, don't do anything if already installed
+    apk:
+      name: apache2
 #______________________________________________________________
-- name: Install apache, don't do anything if already installed
-  apk:
-    name: apache2
-    state: present
+  - name: Install apache, don't do anything if already installed
+    apk:
+      name: apache2
+      state: present
 #______________________________________________________________
-- name: Install apache, upgrade to latest if already installed
-  apk:
-    name: apache2
-    state: latest
+  - name: Install apache, upgrade to latest if already installed
+    apk:
+      name: apache2
+      state: latest
 #______________________________________________________________
-- name: Update repositories and install apache
-  apk:
-    name: apache2
-    update_cache: yes
+  - name: Update repositories and install apache
+    apk:
+      name: apache2
+      update_cache: yes
 #______________________________________________________________
-- name: Remove apache
-  apk:
-    name: apache2
-    state: absent
+  - name: Remove apache
+    apk:
+      name: apache2
+      state: absent
 #______________________________________________________________
-- name: Install more than 1 packages
-  apk:
-    name: apache2, php
+  - name: Install more than 1 packages
+    apk:
+      name: apache2, php
 #______________________________________________________________
-- name: Update cache and update apache to latest
-  apk:
-    name: apache2
-    state: latest
-    update_cache: yes
+  - name: Update cache and update apache to latest
+    apk:
+      name: apache2
+      state: latest
+      update_cache: yes
 #______________________________________________________________
-- name: Update all packages to their latest version
-  apk:
-    upgrade: yes
+  - name: Update all packages to their latest version
+    apk:
+      upgrade: yes
 #______________________________________________________________
-- name: Update cache (apt-get update)
-  apk:
-    update_cache: yes
+  - name: Update cache
+    apk:
+      update_cache: yes
 #______________________________________________________________
 
 
@@ -536,73 +517,73 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
 #---7.1. apt Module: Manages Debian/Ubuntu apt packages.
 # Examples:
 #______________________________________________________________
-- name: Install apache, don't do anything if already installed
-  apt:
-    name: apache2
+  - name: Install apache, don't do anything if already installed
+    apt:
+      name: apache2
 #______________________________________________________________
-- name: Install apache, don't do anything if already installed
-  apt:
-    name: apache2
-    state: present
+  - name: Install apache, don't do anything if already installed
+    apt:
+      name: apache2
+      state: present
 #______________________________________________________________
-- name: Install apache, upgrade to latest if already installed
-  apt:
-    name: apache2
-    state: latest
+  - name: Install apache, upgrade to latest if already installed
+    apt:
+      name: apache2
+      state: latest
 #______________________________________________________________
-- name: Update repositories and install apache
-  apt:
-    name: apache2
-    update_cache: yes
+  - name: Update repositories and install apache
+    apt:
+      name: apache2
+      update_cache: yes
 #______________________________________________________________
-- name: Remove apache
-  apt:
-    name: apache2
-    state: absent
+  - name: Remove apache
+    apt:
+      name: apache2
+      state: absent
 #______________________________________________________________
-- name: Install more than 1 packages
-  apt:
-    pkg:
-    - apache2
-    - php
+  - name: Install more than 1 packages
+    apt:
+      pkg:
+      - apache2
+      - php
 #______________________________________________________________
-- name: Update cache and update apache to latest
-  apt:
-    name: apache2
-    state: latest
-    update_cache: yes
+  - name: Update cache and update apache to latest
+    apt:
+      name: apache2
+      state: latest
+      update_cache: yes
 #______________________________________________________________
-- name: Install latest php, ignore "install-recommends"
-  apt:
-    name: php
-    state: latest
-    install_recommends: no
+  - name: Install latest php, ignore "install-recommends"
+    apt:
+      name: php
+      state: latest
+      install_recommends: no
 #______________________________________________________________
-- name: Update all packages to their latest version
-  apt:
-    name: "*"
-    state: latest
+  - name: Update all packages to their latest version
+    apt:
+      name: "*"
+      state: latest
 #______________________________________________________________
-- name: Upgrade the OS (apt-get dist-upgrade)
-  apt:
-    upgrade: dist
+  - name: Upgrade the OS (apt-get dist-upgrade)
+    apt:
+      upgrade: dist
 #______________________________________________________________
-- name: Update cache (apt-get update)
-  apt:
-    update_cache: yes
+  - name: Update cache (apt-get update)
+    apt:
+      update_cache: yes
 #______________________________________________________________
-- name: Update cache if the last update is more than 1 hour
-  apt:
-    update_cache: yes
-    cache_valid_time: 3600
+  - name: Update cache if the last update is more than 1 hour
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600
 #______________________________________________________________
-- name: Remove unused packages
-  apt:
-    autoclean: yes
+  - name: Remove unused packages
+    apt:
+      autoclean: yes
 #______________________________________________________________
-- name: Remove unused dependencies
-  apt:
-    autoremove: yes
+  - name: Remove unused dependencies
+    apt:
+      autoremove: yes
 #______________________________________________________________
 
 
@@ -610,652 +591,650 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
 #---7.2. blockinfile Module: Insert/update/remove a text block between marked lines 
 # Examples:
 #______________________________________________________________
-- name: Add or update a block to a html file
-  blockinfile:
-    path: /var/www/html/index.html
-    marker: "<!-- {mark} MANAGED by ANSIBLE BLOCK -->"
-    # The block will be wrapper by this marker
+  - name: Add or update a block to a html file
+    blockinfile:
+      path: /var/www/html/index.html
+      marker: "<!-- {mark} MANAGED by ANSIBLE BLOCK -->"
+    # The block will be wrapped by this marker
     # {mark} is replaced as BEGIN at the beginning
     #   and END at the end.
-    insertafter: "<body>"
+      insertafter: "<body>"
     # The block with the markers will be inserted after the last
     #   match of this this text. Regexps can be used. If there is no
     #   match or value is EOF, block is added at the end of file.
     # Similarly insertbefore can be used.
-    block: |
-      <h1>Web server: {{ ansible_hostname }}</h1>
-      <p>Update time: {{ ansible_date_time.date }}
-      {{ ansible_date_time.time }} </p>
+      block: |
+        <h1>Web server: {{ ansible_hostname }}</h1>
+        <p>Update time: {{ ansible_date_time.date }}
+        {{ ansible_date_time.time }} </p>
 #______________________________________________________________
-- name: Remove previously added block
-  blockinfile:
-    path: /var/www/html/index.html
-    marker: "<!-- {mark} MANAGED by ANSIBLE BLOCK -->"
-    block: ""
+  - name: Remove previously added block
+    blockinfile:
+      path: /var/www/html/index.html
+      marker: "<!-- {mark} MANAGED by ANSIBLE BLOCK -->"
+      block: ""
 #______________________________________________________________
-- name: Add mappings to /etc/hosts file, make a backup of file
-  blockinfile:
-    path: /etc/hosts
-    backup: yes
-    block: |
-      {{ item.ip }} {{ item.hostname }}
-    marker: "<!-- {mark} {{ item.hostname }} MANAGED by ANSIBLE BLOCK -->"
-  loop:
-    - { hostname: test201, ip: 192.168.0.201 }
-    - { hostname: test202, ip: 192.168.0.202 }
-    - { hostname: test203, ip: 192.168.0.203 }
+  - name: Add mappings to /etc/hosts file, make a backup of file
+    blockinfile:
+      path: /etc/hosts
+      backup: yes
+      block: |
+        {{ item.ip }} {{ item.hostname }}
+      marker: "<!-- {mark} {{ item.hostname }} MANAGED by ANSIBLE BLOCK -->"
+    loop:
+      - { hostname: srv1, ip: 192.168.0.231 }
+      - { hostname: srv2, ip: 192.168.0.232 }
+      - { hostname: srv3, ip: 192.168.0.233 }
 #______________________________________________________________
-
-
-
-
+  
+  
+  
+  
 #---7.3. command Module: Execute commands
 # Examples:
 #______________________________________________________________
-- name: Run a command on server and take its output to a variable
-  command: free
-  register: freevals
+  - name: Run a command on server and take its output to a variable
+    command: free
+    register: freevals
 #______________________________________________________________
-- name: Run a command if a path does not exist
-  command: /usr/sbin/reboot now creates=/etc/flag
+  - name: Run a command if a path does not exist
+    command: /usr/sbin/reboot now creates=/etc/flag
 #______________________________________________________________
-- name: Run a command if a path does not exist
-  command:
-    cmd: /usr/sbin/reboot now
-    creates: /etc/flag
+  - name: Run a command if a path does not exist
+    command:
+      cmd: /usr/sbin/reboot now
+      creates: /etc/flag
 #______________________________________________________________
-- name: Run a command if a path does not exist
-  command:
-    argv:
-      - /usr/sbin/reboot
-      - now
-    creates: /etc/flag
-#______________________________________________________________
-- name Become user dbadmin, change to home dir and run mariad backup
-  command: mysqldump 
-  become: yes
-  become_user: dbadmin
-  args:
-    chdir: /home/dbadmin
+  - name: Run a command if a path does not exist
+    command:
+      argv:
+        - /usr/sbin/reboot
+        - now
+      creates: /etc/flag
 #______________________________________________________________
 
-
-
+  
+  
 #---7.4. copy Module: Copy files to remote servers
 # Examples
 #______________________________________________________________
-- name: Copy a file with specified owner and permissions, backup the file
-  copy:
-    src: /home/ansible/main.cf
-    dest: /etc/postfix/master.cf
-    owner: root
-    group: root
-    mode: '0644'
-    backup: yes
+  - name: Copy a file with specified owner and permissions, backup the file
+    copy:
+      src: /home/ansible/main.cf
+      dest: /etc/postfix/main.cf
+      owner: root
+      group: root
+      mode: '0644'
+      backup: yes
 #______________________________________________________________
-- name: Copy a file with specified owner and permissions
-  copy:
-    src: /home/ansible/main.cf
-    dest: /etc/postfix/master.cf
-    owner: root
-    group: root
-    mode: u=rw,g=r,o=r
+  - name: Copy a file with specified owner and permissions
+    copy:
+      src: /home/ansible/main.cf
+      dest: /etc/postfix/main.cf
+      owner: root
+      group: root
+      mode: u=rw,g=r,o=r
 #______________________________________________________________
-- name: Copy a file with specified owner and permissions
-  copy:
-    src: /home/ansible/main.cf
-    dest: /etc/postfix/master.cf
-    owner: root
-    group: root
-    mode: u+rw,g-wx,o-rwx
+  - name: Copy a file with specified owner and permissions
+    copy:
+      src: /home/ansible/main.cf
+      dest: /etc/postfix/main.cf
+      owner: root
+      group: root
+      mode: u+rw,g-wx,o-rwx
 #______________________________________________________________
-- name: Copy a file with specified owner and permissions, backup the file
-  copy:
-    src: /home/ansible/main.cf
-    dest: /etc/postfix/master.cf
-    owner: root
-    group: root
-    mode: '0644'
-    backup: yes
+  - name: Copy a file with specified owner and permissions, backup the file
+    copy:
+      src: /home/ansible/main.cf
+      dest: /etc/postfix/main.cf
+      owner: root
+      group: root
+      mode: '0644'
+      backup: yes
 #______________________________________________________________
-- name: Copy a file on the server to another location
-  copy:
-    src: /etc/apache2/apache.conf
-    dest: /etc/apache2/apache.conf.backup
-    remote_src: yes
+  - name: Copy a file on the server to another location
+    copy:
+      src: /etc/apache2/apache2.conf
+      dest: /etc/apache2/apache2.conf.backup
+      remote_src: yes
 #______________________________________________________________
-- name: Copy an inline text to a file
-  copy:
-    content: "This file is empty"
-    dest: /etc/test
+  - name: Copy an inline text to a file
+    copy:
+      content: "This file is empty"
+      dest: /etc/test
 #______________________________________________________________
-
-
-
+  
+  
+  
 #---7.5. debug Module: Print debug messages
 # Examples:
 #______________________________________________________________
-- name: Display all variables/facts known for a host
-  debug:
-    var: hostvars[inventory_hostname]
+  - name: Display all variables/facts known for a host
+    debug:
+      var: hostvars[inventory_hostname]
 #______________________________________________________________
-- name: Display a message
-  debug:
-    msg: Working fine so far
+  - name: Display a message
+    debug:
+      msg: Working fine so far
 #______________________________________________________________
-- name: Print return information from a previous task part 1
-  shell: /usr/bin/date
-  register: result 
-- name: Print return information from a previous task part 2
-  debug:
-    var: result.stdout_lines
+  - name: Print return information from a previous task part 1
+    shell: /usr/bin/date
+    register: result 
+  - name: Print return information from a previous task part 2
+    debug:
+      var: result.stdout_lines
 #______________________________________________________________
-- name: Print multi lines of information from variables part1
-  shell: whoami
-  register: var1
-- name: Print multi lines of information from variables part2
-  shell: who -b
-  register: var2
-- name: Print multi lines of information from variables part3
-  debug:
-    msg:
-    - "Information gathered so far:"
-    - "1. User name is {{ var1.stdout_lines }}"
-    - "2. System is on since {{ var2.stdout_lines }}"
+  - name: Print multi lines of information from variables part1
+    shell: whoami
+    register: var1
+  - name: Print multi lines of information from variables part2
+    shell: who -b
+    register: var2
+  - name: Print multi lines of information from variables part3
+    debug:
+      msg:
+      - "Information gathered so far:"
+      - "1. User name is {{ var1.stdout_lines }}"
+      - "2. System is on since {{ var2.stdout_lines }}"
 #______________________________________________________________
+  
 
-
-
+  
 #---7.6. expect Module: Executes a command and responds to prompts
 # Examples:
 #______________________________________________________________
-- name: Login to mariadb asking the root password and run a command from a file
-  expect:
-    command: /bin/bash -c "mariadb -u root -p < /tmp/test.sql"
-    responses:
-      (.*)password: "password12"
-  register: DBUsers
-  no_log: true
+  - name: Login to mariadb asking the root password and run a command from a file
+    expect:
+      command: /bin/bash -c "mariadb -u root -p < /tmp/test.sql"
+      responses:
+        (.*)password: "password12"
+    register: DBUsers
+    no_log: true
   # hide your password from log
-- name: Display Result
-  debug:
-    var: DBUsers.stdout_lines
+  - name: Display Result
+    debug:
+      var: DBUsers.stdout_lines
 #______________________________________________________________
-- name: Generic question with multiple different responses
-  expect:
-    command: command
+  - name: Generic question with multiple different responses
+    expect:
+      command: command
     # Assuming a command asking 3 questions
-    responses:
-      Question:
-        - Answer 1
-        - Answer 2
-        - Answer 3
+      responses:
+        Question:
+          - Answer 1
+          - Answer 2
+          - Answer 3
 #______________________________________________________________
-
-
-
+  
+  
+  
 #---7.7. fail Module: Fail with a message
 # Examples:
 #______________________________________________________________
-- name: Stop execution if hostname is something special
-  fail:
-    msg: Cannot continue with hostname Test201
-  when: inventory_hostname == "Test201"
+  - name: Stop execution if hostname is something special
+    fail:
+      msg: Cannot continue with hostname srv1
+    when: inventory_hostname == "srv1"
 #______________________________________________________________
-
-
-
+  
+  
+  
 #---7.8. fetch Module: Fetch files from server to the workstation
 # Examples:
 #______________________________________________________________
-- name: Fetch server file, preserve directory information
-  fetch:
-    src: /etc/apache2/apache.conf
-    dest: /tmp/conf
+  - name: Fetch server file, preserve directory information
+    fetch:
+      src: /etc/apache2/apache2.conf
+      dest: /tmp/conf
     # File will be copied to /tmp/conf/hostname/etc/apache2/apache.conf
 #______________________________________________________________
-- name: Fetch server file, directly to the specified directory
-  fetch:
-    src: /etc/apache2/apache.conf
-    dest: /tmp/conf/apache.conf
+  - name: Fetch server file, directly to the specified directory
+    fetch:
+      src: /etc/apache2/apache2.conf
+      dest: /tmp/conf/apache.conf
     # File will be copied to /tmp/conf/apache.conf
     # Consecutive files will be overwritten
-    flat: yes
+      flat: yes
 #______________________________________________________________
-- name: Fetch server file, directly to the specified directory
+  - name: Fetch server file, directly to the specified directory
 #   directly to the specified directory for every server
-  fetch:
-    src: /etc/apache2/apache.conf
-    dest: /tmp/conf/{{ inventory_hostname }}/apache.conf
-    flat: yes
+    fetch:
+      src: /etc/apache2/apache2.conf
+      dest: /tmp/conf/{{ inventory_hostname }}/apache.conf
+      flat: yes
 #______________________________________________________________
-
-
-
+  
+  
+  
 #---7.9. file Module: File and directory management
 # Examples:
 #______________________________________________________________
-- name: Change ownership and permission of a file
-  file:
-    path: /etc/test.conf
-    owner: ansible
-    group: ansible
-    mode: '0644'
+  - name: Change ownership and permission of a file
+    file:
+      path: /tmp/test.conf
+      owner: ansible
+      group: ansible
+      mode: '0644'
 #______________________________________________________________
-- name: Create a symbolic link of a file, change ownership of the original file
-  file:
-    src: /etc/test.conf
-    dest: /home/ansible/test.conf
-    owner: ansible
-    group: ansible
-    state: link
+  - name: Create a symbolic link of a file, change ownership of the original file
+    file:
+      src: /tmp/test.conf
+      dest: /home/ansible/test.conf
+      owner: ansible
+      group: ansible
+      state: link
 #______________________________________________________________
-- name: Create a hard link
-  file:
-    src: /tmp/test.conf
-    dest: /home/ansible/test.conf
-    state: hard
+  - name: Create a hard link
+    file:
+      src: /tmp/test.conf
+      dest: /home/ansible/test.conf
+      state: hard
 #______________________________________________________________
-- name: Touch a file and set permissions
-  file:
-    path: /etc/test.conf
-    state: touch
-    mode: u=rw,g=r,o=r
+  - name: Touch a file and set permissions
+    file:
+      path: /tmp/test.conf
+      state: touch
+      mode: u=rw,g=r,o=r
 #______________________________________________________________
-- name: Touch a file, but preserve its times. 
+  - name: Touch a file, but preserve its times. 
 #  so there is no change if it was touched before
-  file:
-    path: /etc/foo.conf
-    state: touch
-    modification_time: preserve
-    access_time: preserve
+    file:
+      path: /tmp/test.conf
+      state: touch
+      modification_time: preserve
+      access_time: preserve
 #______________________________________________________________
-- name: Create a directory, do nothing if it already exists
-  file:
-    path: /tmp/test
-    state: directory
-    mode: '0755'
+  - name: Create a directory, do nothing if it already exists
+    file:
+      path: /tmp/test
+      state: directory
+      mode: '0755'
 #______________________________________________________________
-- name: Update modification and access time of a file to now
-  file:
-    path: /tmp/test.conf
-    state: file
-    modification_time: now
-    access_time: now
+  - name: Update modification and access time of a file to now
+    file:
+      path: /tmp/test.conf
+      state: file
+      modification_time: now
+      access_time: now
 #______________________________________________________________
-- name: Change ownership of a directory recursively 
-  file:
-    path: /var/www
-    state: directory
-    recurse: yes
-    owner: www-data
-    group: www-data
+  - name: Change ownership of a directory recursively 
+    file:
+      path: /var/www
+      state: directory
+      recurse: yes
+      owner: www-data
+      group: www-data
 #______________________________________________________________
-- name: Delete a file
-  file:
-    path: /etc/test.conf
-    state: absent
+  - name: Delete a file
+    file:
+      path: /tmp/test.conf
+      state: absent
 #______________________________________________________________
-- name: Remove a directory recursively
-  file:
-    path: /etc/test
-    state: absent
+  - name: Remove a directory recursively
+    file:
+      path: /tmp/test
+      state: absent
 #______________________________________________________________
-
-
-
+  
+  
+  
 #---7.10. geturl Module: Download files
 # Examples:
 #______________________________________________________________
-- name: Download a file (wordpress)
-  get_url:
-    url: https://wordpress.org/latest.tar.gz
-    dest: /tmp/wordpress.tar.gz
-    mode: '0440'
+  - name: Download a file (wordpress)
+    get_url:
+      url: https://wordpress.org/latest.tar.gz
+      dest: /tmp/wordpress.tar.gz
+      mode: '0440'
 #______________________________________________________________
-- name: Download file with md5 checksum
-  get_url:
-    url: https://wordpress.org/latest.tar.gz
-    dest: /tmp/wordpress/wordpress.tar.gz
-    checksum: md5:b7a9eb3560e5e17df79b7131a9fafdd7
+  - name: Download file with md5 checksum
+    get_url:
+      url: https://wordpress.org/latest.tar.gz
+      dest: /tmp/wordpress.tar.gz
+      checksum: md5:4bdc05b00725cc0fb72991d3290e4b8d
 #______________________________________________________________
+  
 
-
-
+  
 #---7.11. group Module: Linux group management
 # Examples:
 #______________________________________________________________
-- name: Create a group named admins
-  group:
-    name: admins
-    state: present
+  - name: Create a group named admins
+    group:
+      name: admins
+      state: present
 #______________________________________________________________
-- name: Create a group named admins gid 1250
-  group:
-    name: admins
-    state: present
-    gid: 1250
+  - name: Create a group named admins gid 1250
+    group:
+      name: admins
+      state: present
+      gid: 1250
 #______________________________________________________________
-- name: Delete admins group
-  group:
-    name: admins
-    state: absent
+  - name: Delete admins group
+    group:
+      name: admins
+      state: absent
 #______________________________________________________________
-
-
-
+  
+  
+  
 #---7.12. lineinfile Module: Manage lines in text files
 # Uses a back referenced rexexp, and puts, updates or deletes a 
 #   line in a file
 # Examples:
 #______________________________________________________________
-- name: Change or add the name of an host in /etc/hosts
-  lineinfile:
-    path: /etc/hosts
-    regexp: '^192\.168\.0\.201'
-    line: 192.168.0.201 test201.x386.xyz
+  - name: Change or add the name of an host in /etc/hosts
+    lineinfile:
+      path: /etc/hosts
+      regexp: '^192\.168\.0\.201'
+      line: 192.168.0.201 srv1.x386.xyz
 #______________________________________________________________
-- name: Remove previously added line in /etc/hosts
-  lineinfile:
-    path: /etc/hosts
-    regexp: '^192\.168\.0\.201'
-    state: absent
+  - name: Remove previously added line in /etc/hosts
+    lineinfile:
+      path: /etc/hosts
+      regexp: '^192\.168\.0\.201'
+      state: absent
 #______________________________________________________________
-- name: Create a file if it does not exist and add a line
-  lineinfile:
-    path: /tmp/test
-    line: 192.168.0.201 test201.x386.xyz
-    create: yes
+  - name: Create a file if it does not exist and add a line
+    lineinfile:
+      path: /tmp/test
+      line: 192.168.0.201 srv1.x386.xyz
+      create: yes
 #______________________________________________________________
-
-
-
+  
+  
+  
 #---7.13. pause Module: Pause execution
 # Examples:
 #______________________________________________________________
-- name: Pause for 5 minutes
-  pause:
-    minutes: 5
+  - name: Pause for 5 minutes
+    pause:
+      minutes: 5
 #______________________________________________________________
-- name: Pause for 30 seconds
-  pause:
-    seconds: 30
+  - name: Pause for 30 seconds
+    pause:
+      seconds: 30
 #______________________________________________________________
-- name: Pause until prompted
-  pause:
+  - name: Pause until prompted
+    pause:
 #______________________________________________________________
-- name: Pause until prompted with message
-  pause:
-    prompt : "Press enter to continue"
+  - name: Pause until prompted with message
+    pause:
+      prompt : "Press enter to continue"
 #______________________________________________________________
-- name: Pause to get password
-  pause:
-    prompt: "Enter password"
-    echo: no
-  register: password
+  - name: Pause to get password
+    pause:
+      prompt: "Enter password"
+      echo: no
+    register: password
 #______________________________________________________________
-
-
-
+  
+  
+  
 #---7.14. reboot Module: Reboot server
 # Examples:
 #______________________________________________________________
- name: Reboot and connect again
-  reboot:
+  - name: Reboot and connect again
+    reboot:
 #______________________________________________________________
-- name: Reboot and wait up to 1 hour for connecting again
-  reboot:
-    reboot_timeout: 3600
+  - name: Reboot and wait up to 1 hour for connecting again
+    reboot:
+      reboot_timeout: 3600
 #______________________________________________________________
-- name: Display a message to users, wait 5 minutes and reboot
-  reboot:
-    pre_reboot_delay: 300
-    msg: "Rebooting in 5 minutes, please save your work and exit"
+  - name: Display a message to users, wait 5 minutes and reboot
+    reboot:
+      pre_reboot_delay: 300
+      msg: "Rebooting in 5 minutes, please save your work and exit"
 #______________________________________________________________
-
-
-
+  
+  
+  
 #---7.15. replace Module: Replace a string in a file using a back ref regexp
 # Examples:
 #______________________________________________________________
-- name: Replace all .org names with .com names in /etc/hosts
-  replace:
-    path: /etc/hosts
-    regexp: '(.*)\.org(\s+)'
+  - name: Replace all .org names with .com names in /etc/hosts
+    replace:
+      path: /etc/hosts
+      regexp: '(.*)\.org(\s+)'
     # Starts with anything, then comes .org and one or more whitespace
-    replace: '\1.com\2'
+      replace: '\1.com\2'
     # \1 = (.*)   \2 = (\s+)
 #______________________________________________________________
-- name: Do the same, but start after and expression and end other another
-  replace:
-    path: /etc/hosts
-    after: 'Start Here'
-    before: 'End Here'
-    regexp: '(.*)\.org(\s+)'
+  - name: Do the same, but start after and expression and end before another
+    replace:
+      path: /etc/hosts
+      after: 'Start Here'
+      before: 'End Here'
+      regexp: '(.*)\.org(\s+)'
     # Starts with anything, then comes .org and one or more whitespace
-    replace: '\1.com\2'
+      replace: '\1.com\2'
     # \1 = (.*)   \2 = (\s+)
 #______________________________________________________________
-- name: Comment every line containing TEST, backup the original file
-  replace:
-    path: /tmp/test.sh
-    regexp: '^(.*)TEST(.*)$'
-    replace: '#\1TEST\2'
-    backup: yes
+  - name: Comment every line containing TEST, backup the original file
+    replace:
+      path: /tmp/test.sh
+      regexp: '^(.*)TEST(.*)$'
+      replace: '#\1TEST\2'
+      backup: yes
 #______________________________________________________________
+  
 
-
-
-
+  
+  
 #---7.16. script Module: Transfer and run a script from workstation to server
 # A script on the worktation is copied to the server(s) and run there
 # Examples:
 #______________________________________________________________
-- name: Run a script 
-  script: /home/ansible/ansible/backup.sh all
+  - name: Run a script 
+    script: /home/ansible/ansible/backup.sh
 #______________________________________________________________
-- name: Run a script
-  script:
-    cmd: /home/ansible/ansible/backup.sh all
+  - name: Run a script
+    script:
+      cmd: /home/ansible/ansible/backup.sh
 #______________________________________________________________
-- name: Run a script only if a file does not exist on the server
-  script: /home/ansible/ansible/backup.sh all
-  args:
-    creates: /tmp/backup.txt
+  - name: Run a script only if a file does not exist on the server
+    script: /home/ansible/ansible/backup.sh
+    args:
+      creates: /tmp/backup.txt
 #______________________________________________________________
-- name: Run a script only if a file exists on the server
-  script: /home/ansible/ansible/backup.sh all
-  args:
-    removes: /tmp/backup.txt
+  - name: Run a script only if a file exists on the server
+    script: /home/ansible/ansible/backup.sh
+    args:
+      removes: /tmp/backup.txt
 #______________________________________________________________
-- name: Run a script using bash
-  script: /home/ansible/ansible/backup.sh
-  args:
-    executable: /bin/bash
+  - name: Run a script using bash
+    script: /home/ansible/ansible/backup.sh
+    args:
+      executable: /bin/bash
 #______________________________________________________________
-- name: Run a python script
-  script: /home/ansible/ansible/backup.py
-  args:
-    executable: python3
+  - name: Run a python script
+    script: /home/ansible/ansible/backup.py
+    args:
+      executable: python3
 #______________________________________________________________
-
-
-
+  
+  
+  
 #---7.17. service Module: Manage services
 # Examples:
 #______________________________________________________________
-- name: Start apache if not started
-  service:
-    name: apache2
-    state: started
+  - name: Start apache if not started
+    service:
+      name: apache2
+      state: started
 #______________________________________________________________
-- name: Stop apache if started
-  service:
-    name: apache2
-    state: stopped
+  - name: Stop apache if started
+    service:
+      name: apache2
+      state: stopped
 #______________________________________________________________
-- name: Restart apache
-  service:
-    name: apache2
-    state: restarted
+  - name: Restart apache
+    service:
+      name: apache2
+      state: restarted
 #______________________________________________________________
-- name: Reload apache
-  service:
-    name: apache2
-    state: reloaded
+  - name: Reload apache
+    service:
+      name: apache2
+      state: reloaded
 #______________________________________________________________
-- name: Enable apache service, do not touch the state
-  service:
-    name: apache2
-        enabled: yes
+  - name: Enable apache service, do not touch the state
+    service:
+      name: apache2
+      enabled: yes
 #______________________________________________________________
-
-
-
+  
+  
+  
 #---7.18. shell Module: Execute shell commands on servers
 # Different from command module, redirection and pipes are safe
 # Examples:
 #______________________________________________________________
-- name: Execute command on remote shell; stdout to a file
-  shell: backup.sh >> backup.log
+  - name: Execute command on remote shell; stdout to a file
+    shell: backup.sh >> backup.log
 #______________________________________________________________
-- name: Execute command on remote shell; stdout to a file
-  shell: 
-    cmd: backup.sh >> backup.log
+  - name: Execute command on remote shell; stdout to a file
+    shell: 
+      cmd: backup.sh >> backup.log
 #______________________________________________________________
-- name: Change to a directory before executing a command
-  shell: backup.sh >> backup.log
-  args:
-    chdir: /tmp/
+  - name: Change to a directory before executing a command
+    shell: backup.sh >> backup.log
+    args:
+      chdir: /tmp/
 #______________________________________________________________
-- name: command only if a file does not exist
-  shell: backup.sh >> backup.log
-  args:
-    creates: backup.log
+  - name: command only if a file does not exist
+    shell: backup.sh >> backup.log
+    args:
+      creates: backup.log
 #______________________________________________________________
-- name: Change to a directory before executing a command, disable warning
-  shell: backup.sh >> backup.log
-  args:
-    chdir: /tmp/
-    warn: no
+  - name: Change to a directory before executing a command, disable warning
+    shell: backup.sh >> backup.log
+    args:
+      chdir: /tmp/
+      warn: no
 #______________________________________________________________
-
-
-
+  
+  
+  
 #---7.19. tempfile Module: Create a temporary file or directory
 # Examples:
 #______________________________________________________________
-- name: Create a temporary directory with suffix tempdir
-  tempfile:
-    state: directory
-    suffix: tempdir
+  - name: Create a temporary directory with suffix tempdir
+    tempfile:
+      state: directory
+      suffix: tempdir
 #______________________________________________________________
-- name: Create a temporary file with suffix and save its name to a variable
-  tempfile:
-    state: file
-    suffix: temp
-  register: tempfilename
+  - name: Create a temporary file with suffix and save its name to a variable
+    tempfile:
+      state: file
+      suffix: temp
+    register: tempfilename
 #______________________________________________________________
-- name: Use the variable created above to remove the file
-  file:
-    path: "{{ tempfilename.path }}"
-    state: absent
-  when: tempfilename.path is defined
+  - name: Use the variable created above to remove the file
+    file:
+      path: "{{ tempfilename.path }}"
+      state: absent
+    when: tempfilename.path is defined
 #______________________________________________________________
-
-
-
+  
+  
+  
+  
+  
 #---7.20. template Module: Copy a file to servers using a template
 # Unlike file module, you can use variables in template files
 #   like in 5.2.
 # Examples:
 #______________________________________________________________
-- name: Create an html file from a template
-  template:
-    src: /home/ansible/ansible/playbooks/apache/templates/index.html.j2
-    dest: /var/www/html/index.html
-    owner: www-data
-    group: www-data
-    mode: '0660'
+  - name: Create an html file from a template
+    template:
+      src: /home/ansible/ansible/playbooks/apache/templates/index.html.j2
+      dest: /var/www/html/index.html
+      owner: www-data
+      group: www-data
+      mode: '0660'
 #______________________________________________________________
-- name: Create an html file from a template
-  template:
-    src: /home/ansible/ansible/playbooks/apache/templates/index.html.j2
-    dest: /var/www/html/index.html
-    owner: www-data
-    group: www-data
-    mode: u=rw,g=r
+  - name: Create an html file from a template
+    template:
+      src: /home/ansible/ansible/playbooks/apache/templates/index.html.j2
+      dest: /var/www/html/index.html
+      owner: www-data
+      group: www-data
+      mode: u=rw,g=r
 #______________________________________________________________
-
-
-
+  
+  
+  
 #---7.21. unarchive Module: Unpack an archive
 # The archive might be on the workstation or on the server
 # Examples:
 #______________________________________________________________
-- name: Extract a tar.xz file
-  unarchive:
-    src: /home/ansible/test.tar.xz
-    dest: /tmp
+  - name: Extract a tar.xz file
+    unarchive:
+      src: /home/ansible/test.tar.xz
+      dest: /tmp
 #______________________________________________________________
-- name: Unarchive a file on the server
-  unarchive:
-    src: /home/ansible/test.zip
-    dest: /tmp
-    remote_src: yes
+  - name: Unarchive a file on the server
+    unarchive:
+      src: /home/ansible/test.zip
+      dest: /tmp
+      remote_src: yes
 #______________________________________________________________
-- name: Download and unpack wordpress
-  unarchive:
-    src: https://wordpress.org/latest.zip
-    dest: /var/www/html
-    remote_src: yes
+  - name: Download and unpack wordpress
+    unarchive:
+      src: https://wordpress.org/latest.tar.gz
+      dest: /var/www/html
+      remote_src: yes
 #______________________________________________________________
-    
-
-
+      
+  
+  
 #---7.22. user Module: User management
 # Examples:
 #______________________________________________________________
-- name: Add user exforge with a primary group with the same name
-  user:
-    name: exforge
-    comment: main user
-    group: exforge
+  - name: Add user exforge with a primary group with the same name
+# group must exist
+    user:
+      name: exforge
+      comment: main user
+      group: exforge
 #______________________________________________________________
-- name: Add user exforge with a primary group with the same name,
-#   with a specific uid
-  user:
-    name: exforge
-    comment: main user
-    uid: 1111
-    group: exforge
+  - name: Add user exforge with a primary group with the same name,
+#   with a specific uid. group must exist.
+    user:
+      name: exforge
+      comment: main user
+      uid: 1111
+      group: exforge
 #______________________________________________________________
-- name: Add user exforge with bash shell, append the user to www-data and postfix group
-  user:
-    name: exforge
-    shell: /bin/bash
-    groups: www-data,postfix
-    append: yes
+  - name: Add user exforge with bash shell, append the user to www-data and postfix group
+    user:
+      name: exforge
+      shell: /bin/bash
+      groups: www-data,postfix
+      append: yes
 #______________________________________________________________
-- name: Add vmail user with a specific home dir
-  user:
-    name: vmail
-    comment: Postfix Mail User
-    uid: 2222
-    group: vmail
-    home: /var/mail
+  - name: Add vmail user with a specific home dir
+    user:
+      name: vmail
+      comment: Postfix Mail User
+      uid: 2222
+      group: vmail
+      home: /var/mail
 #______________________________________________________________
-- name: Remove user exforge
-  user:
-    name: exforge
-    state: absent
+  - name: Remove user exforge
+    user:
+      name: exforge
+      state: absent
 #______________________________________________________________
-- name: Remove user exforge, remove directories too
-  user:
-    name: exforge
-    state: absent
-    remove: yes
+  - name: Remove user exforge, remove directories too
+    user:
+      name: exforge
+      state: absent
+      remove: yes
 #______________________________________________________________
+
+
 
 
 
@@ -1268,9 +1247,9 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
 #   Install MariaDB
 #   Install PHP and dependencies
 # 8.1. Role Structure
-# Roles are created with ansible-galaxy init command. Naming convetion for roles is
-#   as identifier.role. I use exforge as my identifier, you can use anything you 
-#   want. For a role to install apache, my rolename would be exforge.apache
+# Roles are created with ansible-galaxy init command. Naming convention for roles 
+#   is as identifier.role. I use exforge as my identifier, you can use anything you 
+#   want. For a role to install apache, my rolename would be exforge.apache: 
 ansible-galaxy init exforge.apache
 # A directory with role.name is created under the current directory with
 #   the following structure:
@@ -1307,11 +1286,16 @@ ansible-galaxy init exforge.apache
 #   Actions here will be executed when your role runs.
 # templates directory is used to place template (dynamic) files. The files here can 
 #   contain variables to interpolate them before using on target systems.
-# test directory is used to create test playbooks to consume the role. Mostly used to
-#   test roleswith a system like Jenkins or Travis.
-# vars/main.yml is similar to defaults/main.yml with an exception. Variables defined 
-#   here overrides the variables defined at fact gathering section. Variables defined
-#   here also overrides the variables defined in defaults/main.yml.
+# test directory is used to create test playbooks to consume the role. Mostly used 
+#   to test roles with a system like Jenkins or Travis.
+# vars/main.yml is similar to defaults/main.yml with an exception. Variables 
+#   defined here overrides the variables defined at fact gathering section. 
+#   Variables defined here also overrides the variables defined in defaults/
+#   main.yml.
+# Note: The new version of Ansible, does not create templates and files 
+#   directories, but they still exist in the documentation. I am not sure if it 
+#   is a bug or something else. In any way, I create this directories when I need 
+#   them.
 #
 # 8.2. Preparing LAMP Roles
 # We will have 4 roles for LAMP installation. Namely; aptcache, apache, mariadb and
@@ -1329,13 +1313,13 @@ nano /home/ansible/ansible/playbooks/lamp.yml
 #_______________________________________
 #!/usr/bin/env ansible-playbook
 ---
-- hosts: test201
+- hosts: srv1
   become: true
   roles:
-  - exforge.aptcache 
-  - exforge.apache 
+  - exforge.aptcache
+  - exforge.apache
   - exforge.mariadb
-  - exforge.php 
+  - exforge.php
 #_______________________________________
 #
 # Make it executable
@@ -1396,10 +1380,10 @@ ansible-playbook lamp.yml
 # 9.1. Ansible Facts
 # 9.1.1. Getting Facts
 # Get all facts for test201 server
-ansible test201 -m setup
+ansible srv1 -m setup
 # The output will be long, something like:
 #_____________________________________________________________________
-test201 | SUCCESS => {
+srv1 | SUCCESS => {
     "ansible_facts": {
         "ansible_all_ipv4_addresses": [
             "192.168.0.111"
@@ -1469,7 +1453,7 @@ test201 | SUCCESS => {
 {{ ansible_facts['nodename'] }}
 # Using another system's fact
 {{ hostvars['asdf.example.com']['ansible_facts']['os_family'] }}
-# 10.1.3. Important Ansible Facts
+# 9.1.3. Important Ansible Facts
 # Date and time
 ansible_date_time.date -->  "2020-11-11"
 ansible_date_time.time -->  "08:44:06"
@@ -1493,13 +1477,14 @@ ansible_check_mode: Boolean, set to True if you run Ansible with --check.
 
 
 
+
 #---10. Distinguishing Linux Distribution
-# Debian and Ubuntu name name Apache Server as apache2 and use apt package manager. 
+# Debian and Ubuntu name Apache Server as apache2 and use apt package manager. 
 #   Alpine also names Apache Server as apache2 and uses apk package manager. RHEL 
 #   (and Alma) names it as httpd and use dnf package manager. 
 # Our example role will distinguish the distribution and call appropriate tasks.
 #
-# 10.1. A Playbook to install Apache on Ubuntu (and Debian) and Centos (and Redhat)
+# 10.1. A Playbook to install Apache on Ubuntu (and Debian) and Alma (and Redhat)
 nano /home/ansible/ansible/playbooks/apache.yml
 #______________________________________________________
 #!/usr/bin/env ansible-playbook
@@ -1578,7 +1563,7 @@ nano  /home/ansible/ansible/playbooks/apacheDRA.yml
 #_______________________________________________________________
 #!/usr/bin/env ansible-playbook
 ---
-- hosts: test
+- hosts: all
   become: true
   roles:
   - exforge.apacheDRA
@@ -1588,8 +1573,7 @@ cd /home/ansible/ansible/playbooks
 ansible-playbook apacheDRA.yml
 #
 # 10.1.4. Exercise
-# Redesign apacheDR role, using package module.
-
+# Redesign apacheDRA role, using package module.
 
 
 #---11. Role Variables
@@ -1597,14 +1581,15 @@ ansible-playbook apacheDRA.yml
 #   are defined in the roles and can be set values at the playbook.
 # Our example will install apache (if it is not installed), create a configuration
 #   with the given site name and create a default page with the given parameters.
-# After creating the role, default variables will be defined in defaults/main.yml dir,
-#   apache conf file and html templates will be created at templates/ dir, and role 
-#   tasks will be coded at tasks/main.yml. After all, we will create a playbook, 
-#   set all variables there and run the role.
+# After creating the role, default variables will be defined in defaults/main.yml 
+#   dir, apache conf file and html templates will be created at templates/ dir, and 
+#   role tasks will be coded at tasks/main.yml. After all, we will create a 
+#   playbook, set all variables there and run the role.
 #
 # 11.1. Create the role apachesite
 cd /home/ansible/ansible/playbooks/roles
 ansible-galaxy init exforge.apachesite
+mkdir /home/ansible/ansible/playbooks/roles/exforge.apachesite/templates
 # 
 # 11.2. Define Variables
 nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/defaults/main.yml
@@ -1670,7 +1655,6 @@ nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/tasks/main.yml
   file:
     src: /etc/apache2/sites-available/{{ server_name }}.conf
     dest: /etc/apache2/sites-enabled/{{ server_name }}.conf
-    remote_src: yes
     owner: root
     group: root
     state: link
@@ -1700,13 +1684,13 @@ nano /home/ansible/ansible/playbooks/apachesite.yml
 #____________________________________________________
 #!/usr/bin/env ansible-playbook
 ---
-- hosts: test201
+- hosts: srv1
   become: true
   vars:
-    server_name: test201.x386.xyz
-    server_alias: test201
-    html_title: test201.x386.xyz Homepage
-    html_header: This is the homepage of test201.x386.xyz
+    server_name: srv1.x386.xyz
+    server_alias: srv1
+    html_title: srv1.x386.xyz Homepage
+    html_header: This is the homepage of srv1.x386.xyz
     html_text: This is a sample page created by Ansible    
   roles:
   - exforge.apachesite
@@ -1775,7 +1759,7 @@ nano /home/ansible/ansible/playbooks/filters.yml
 #!/usr/bin/env ansible-playbook
 - name: Demonstration of Filters
   become: True
-  hosts: test201
+  hosts: srv1
   vars:
     my_message: "We are the world"
     num_list: [1,2,3,4,5,6,7,8,9,0]
@@ -1822,12 +1806,15 @@ nano /home/ansible/ansible/playbooks/filters.yml
 #_____________________________________________________        
 
 
+###
+
+
 #---13. Handlers
 # If you want a task to run when something is changed, you can use handlers. For
 #   example, a task tries to change a conf file for apache, and you need to reload
 #   or restart apache if the file is changed. That is when you use handlers.
-# You might remember, there is a folder for handlers for the roles. That is you are
-#   expected to put your handlers there. 
+# You might remember, there is a folder for handlers for the roles. That is where 
+#   you are expected to put your handlers. 
 #
 # 13.1. A Simple Example
 # Our example playbook will install apache and reload it if it is installed. 
@@ -1836,7 +1823,7 @@ nano /home/ansible/ansible/playbooks/simple_handler.yml
 #!/usr/bin/env ansible-playbook
 - name: Simple handler example
   become: true
-  hosts: test201
+  hosts: srv1
   tasks:
   - name: Install Apache
     apt:
@@ -1875,11 +1862,11 @@ nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/tasks/main.yml
     group: root
   notify: reload_apache
 - name: Enable new conf
-# It will be enabled if we create a link to this conf file in /etc/apache2/sites-enabled
+# It will be enabled if we create a link to this conf file in 
+#   /etc/apache2/sites-enabled
   file:
     src: /etc/apache2/sites-available/{{ server_name }}.conf
     dest: /etc/apache2/sites-enabled/{{ server_name }}.conf
-    remote_src: yes
     owner: root
     group: root
     state: link
@@ -1902,8 +1889,8 @@ nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/tasks/main.yml
     group: www-data
   notify: reload_apache
 #____________________________________________________
-# Handlers run after the play is finished, so if a handler called twice (or more), it will
-#   run only once.
+# Handlers run after the play is finished, so if a handler called twice (or more), 
+#   it will run only once.
 #
 # Add handlers
 nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/handlers/main.yml
@@ -1933,7 +1920,7 @@ nano /home/ansible/ansible/playbooks/blocktest.yml
 #!/usr/bin/env ansible-playbook
 - name: Demonstration block-rescue-always
   become: True
-  hosts: test201
+  hosts: srv1
   vars:
     message1: "1. Message"
     message2: "2. Message"
@@ -1964,14 +1951,15 @@ nano /home/ansible/ansible/playbooks/blocktest.yml
 # 14.2. Explanations
 # Tasks in the block (Tasks 1, 2, 3 and 4 in our example) run sequentially. 
 # If an error occurs in any task (Task 3 in our example), execution stops and 
-#   the control goes to rescue task. Then the tasks in rescue block (Rescue Task in our
-#   example) run. Then the tasks in always block (Always task in our example) run.
-# If there is no error in tasks, rescue block is skipped and the tasks in always block
-#   (Always task in our example) run.
+#   the control goes to rescue task. Then the tasks in rescue block (Rescue Task in 
+#   our example) run. Then the tasks in always block (Always task in our example) 
+#   run.
+# If there is no error in tasks, rescue block is skipped and the tasks in always 
+#   block (Always task in our example) run.
 #
-# Error recovery is a very important subject in all kinds of programming. I believe you
-#   should use it as much as possible to prevent an unexpected termination of programs
-#   (playbooks for ansible).
+# Error recovery is a very important subject in all kinds of programming. I believe 
+#   you should use it as much as possible to prevent an unexpected termination of
+#   programs (playbooks for ansible).
 
 
 

@@ -1,5 +1,6 @@
 PHPMyAdmin on Ubuntu 20.04 for MariaDB
 
+#---!!! Deprecation Notice !!!
 # !!!!!!!!  This tutorial is no longer maintained. !!!!!!!! 
 # I prefer using Adminer instead of PHPMyAdmin. Please refer to 
 #   AdminerOnUbuntu tutorial if you'd like.

@@ -1,6 +1,11 @@
 <!DOCTYPE html> <html> <head> <meta charset="UTF-8"> </head> <body><H1>PHPMyAdmin on Ubuntu 20.04 for MariaDB
-</H1><p> <a href="javascript:myFunction('Div1')">Copyright (C) 2020 Exforge exforge@x386.xyz
-</a> <div id="Div1" style="margin-left:10%;"><pre><code># This document is free text: you can redistribute it and/or modify
+</H1><p> <a href="javascript:myFunction('Div1')">!!! Deprecation Notice !!!
+</a> <div id="Div1" style="margin-left:10%;"><pre><code># !!!!!!!!  This tutorial is no longer maintained. !!!!!!!! 
+# I prefer using Adminer instead of PHPMyAdmin. Please refer to 
+#   AdminerOnUbuntu tutorial if you'd like.
+</code> </pre> </div> </p>
+<p> <a href="javascript:myFunction('Div2')">Copyright (C) 2020 Exforge exforge@x386.xyz
+</a> <div id="Div2" style="margin-left:10%;"><pre><code># This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version.
@@ -11,8 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div2')">Specs
-</a> <div id="Div2" style="margin-left:10%;"><pre><code># PHPMyAdmin is a powerful web based management tool for Mysql and Mariadb.
+<p> <a href="javascript:myFunction('Div3')">Specs
+</a> <div id="Div3" style="margin-left:10%;"><pre><code># PHPMyAdmin is a powerful web based management tool for Mysql and Mariadb.
 # You have to install it on the server which has the DB installed.
 # It is installed as an Apache conf and after installing, you can reach
 #   PHPMyAdmin with /phpmyadmin directory through all the apache sites on the 
@@ -24,8 +29,8 @@
 # Lamp is already installed (See LampOnUbuntu Tutorial)
 # My Client IP address: 195.174.209.24
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div3')">1. Revert mariadb root to unix_socket
-</a> <div id="Div3" style="margin-left:10%;"><pre><code># On LAMP installation, we changed the MariaDB root user plugin to mysql
+<p> <a href="javascript:myFunction('Div4')">1. Revert mariadb root to unix_socket
+</a> <div id="Div4" style="margin-left:10%;"><pre><code># On LAMP installation, we changed the MariaDB root user plugin to mysql
 #   native.
 # Unfortunately PHPMyAdmin gives an error on installation with this setting.
 #   So we'll revert it back to unix socket momentarily
@@ -35,27 +40,27 @@ UPDATE mysql.user SET plugin = 'unix_socket' WHERE USER='root';
 FLUSH PRIVILEGES;
 exit;
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div4')">2. Install and configure phpmyadmin
-</a> <div id="Div4" style="margin-left:10%;"><pre><code>sudo apt install phpmyadmin 
+<p> <a href="javascript:myFunction('Div5')">2. Install and configure phpmyadmin
+</a> <div id="Div5" style="margin-left:10%;"><pre><code>sudo apt install phpmyadmin 
 # First Screen: Make sure apache2 is selected, there must be an * on its box
 #    (press space to select, tab to go OK, press enter) 
 # Second screen: Select Yes and give a good password for phpmyadmin user
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div5')">3. Revert mariadb root to native again
-</a> <div id="Div5" style="margin-left:10%;"><pre><code>#  We will restore Maria root user plugin to mysql native. As it was before.
+<p> <a href="javascript:myFunction('Div6')">3. Revert mariadb root to native again
+</a> <div id="Div6" style="margin-left:10%;"><pre><code>#  We will restore Maria root user plugin to mysql native. As it was before.
 sudo mariadb
 #   On MariaDB shell:
 UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE USER='root';
 FLUSH PRIVILEGES;
 exit;
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div6')">4. Disable phpmyadmin apache mod.
-</a> <div id="Div6" style="margin-left:10%;"><pre><code># We'll configure it later in a more secure way
+<p> <a href="javascript:myFunction('Div7')">4. Disable phpmyadmin apache mod.
+</a> <div id="Div7" style="margin-left:10%;"><pre><code># We'll configure it later in a more secure way
 sudo a2disconf phpmyadmin
 sudo systemctl reload apache2
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div7')">5. Create test.x11.xyz.conf 
-</a> <div id="Div7" style="margin-left:10%;"><pre><code># 5.1. Make a home for the new site
+<p> <a href="javascript:myFunction('Div8')">5. Create test.x11.xyz.conf 
+</a> <div id="Div8" style="margin-left:10%;"><pre><code># 5.1. Make a home for the new site
 sudo mkdir /var/www/test.x11.xyz
 #
 # 5.2. Edit phpmyadmin to allow only our IPs
@@ -113,14 +118,14 @@ sudo nano /etc/apache2/sites-available/test.karasite.com-le-ssl.conf
 #   After line &lt;VirtualHost *:443&gt; add the following line: (remember indenting)
 	Include /etc/apache2/conf-available/phpmyadmin.conf
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div8')">6. PHPMyAdmin is ready
-</a> <div id="Div8" style="margin-left:10%;"><pre><code>https://test.x11.xyz/phpmyadmin
+<p> <a href="javascript:myFunction('Div9')">6. PHPMyAdmin is ready
+</a> <div id="Div9" style="margin-left:10%;"><pre><code>https://test.x11.xyz/phpmyadmin
 # You can use username: phpmyadmin and the password you gave at 2.
 # For a full administrative operation on the database you can use root user
 #   of maridab or create a new user for web administration.
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div9')">7. Troubleshooting
-</a> <div id="Div9" style="margin-left:10%;"><pre><code># Taken from: DevAnswers:
+<p> <a href="javascript:myFunction('Div10')">7. Troubleshooting
+</a> <div id="Div10" style="margin-left:10%;"><pre><code># Taken from: DevAnswers:
 <a href="https://devanswers.co/problem-php-7-2-phpmyadmin-warning-in-librariessql-count/" target="_blank">https://devanswers.co/problem-php-7-2-phpmyadmin-warning-in-librariessql-count/</a>
 # 7.1. Problem with phpMyAdmin and PHP 7.2: 
 #   “Warning in ./libraries/sql.lib.php#613 count(): 
@@ -160,7 +165,7 @@ function myFunction(divid) {
 var i;
 var str;
 
-for (i=1; i<10; i++) {
+for (i=1; i<11; i++) {
     str = "Div" + i.toString();
     myFunction(str);
 }

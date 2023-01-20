@@ -1,6 +1,11 @@
 <!DOCTYPE html> <html> <head> <meta charset="UTF-8"> </head> <body><H1>Apache Fine Tunes on Ubuntu 20.04
-</H1><p> <a href="javascript:myFunction('Div1')">Copyright (C) 2020 Exforge exforge@x386.xyz
-</a> <div id="Div1" style="margin-left:10%;"><pre><code># This document is free text: you can redistribute it and/or modify
+</H1><p> <a href="javascript:myFunction('Div1')">!!! Deprecation Notice !!!
+</a> <div id="Div1" style="margin-left:10%;"><pre><code># !!!!!!!!  This tutorial is no longer maintained. !!!!!!!! 
+# I'm planning to write a comprehensive Apache Web Server tutorial 
+#   in the (hopefully) near future.
+</code> </pre> </div> </p>
+<p> <a href="javascript:myFunction('Div2')">Copyright (C) 2020 Exforge exforge@x386.org
+</a> <div id="Div2" style="margin-left:10%;"><pre><code># This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version.
@@ -11,12 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div2')">Specs
-</a> <div id="Div2" style="margin-left:10%;"><pre><code># Based on Alexey Abel's ISP Mail Tutorial Caramel Edition
+<p> <a href="javascript:myFunction('Div3')">Specs
+</a> <div id="Div3" style="margin-left:10%;"><pre><code># Based on Alexey Abel's ISP Mail Tutorial Caramel Edition
 <a href="https://123qwe.com/" target="_blank">https://123qwe.com/</a>
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div3')">1. Special DNS Records:
-</a> <div id="Div3" style="margin-left:10%;"><pre><code># 1.1. Certificate Authorities
+<p> <a href="javascript:myFunction('Div4')">1. Special DNS Records:
+</a> <div id="Div4" style="margin-left:10%;"><pre><code># 1.1. Certificate Authorities
 # 1.1.1. Letsencrypt may issue normal certificates 
 @ CAA 0 issue "letsencrypt.org"
 # 1.1.2. Wildcard domains are not allowed by anyone
@@ -36,8 +41,8 @@ CAA 0 iodef "mailto:postmaster@x11.xyz"
 # Add as a txt record for _dmarc.x11.xyz (replace with your domain)
 _dmarc "v=DMARC1; p=reject; rua=mailto:postmaster@x11.xyz; adkim=s; aspf=s; pct=100;"
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div4')">2. Apache More Secure Configuration
-</a> <div id="Div4" style="margin-left:10%;"><pre><code><a href="https://ssl-config.mozilla.org/ " target="_blank">https://ssl-config.mozilla.org/ </a>
+<p> <a href="javascript:myFunction('Div5')">2. Apache More Secure Configuration
+</a> <div id="Div5" style="margin-left:10%;"><pre><code><a href="https://ssl-config.mozilla.org/ " target="_blank">https://ssl-config.mozilla.org/ </a>
 #   is a good place to start
 # 2.1. More Secure HTTPS redirect
 #   Contents of the conf file
@@ -87,8 +92,8 @@ sudo a2enconf ssl-stricter-options
 # 2.4. Enable all mentioned mods
 sudo a2enmod rewrite ssl headers
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div5')">3. Disabling All Apache Access Logs
-</a> <div id="Div5" style="margin-left:10%;"><pre><code>#   You may consider respecting your user's privacy by not keeping any
+<p> <a href="javascript:myFunction('Div6')">3. Disabling All Apache Access Logs
+</a> <div id="Div6" style="margin-left:10%;"><pre><code>#   You may consider respecting your user's privacy by not keeping any
 #     access logs on Apache Servers. I'd like to follow Alexey Abel's
 #     approach.
 #   We start by  not configuring any access or custom logs on apache confs, 
@@ -96,8 +101,8 @@ sudo a2enmod rewrite ssl headers
 #     So we have to disable it.
 sudo a2disconf other-vhosts-access-log
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div6')">4. Certbot Post Hooks
-</a> <div id="Div6" style="margin-left:10%;"><pre><code># For HTTPS we use letsencrypt's certificates, Certbot automates the renewal 
+<p> <a href="javascript:myFunction('Div7')">4. Certbot Post Hooks
+</a> <div id="Div7" style="margin-left:10%;"><pre><code># For HTTPS we use letsencrypt's certificates, Certbot automates the renewal 
 #   process of the certificates. It is a good thing, because letsencrypt 
 #   certificates last only 2 months. 
 # I use the certificates mostly for Apache, Postfix and Dovecot. When Certbot
@@ -140,7 +145,7 @@ function myFunction(divid) {
 var i;
 var str;
 
-for (i=1; i<7; i++) {
+for (i=1; i<8; i++) {
     str = "Div" + i.toString();
     myFunction(str);
 }

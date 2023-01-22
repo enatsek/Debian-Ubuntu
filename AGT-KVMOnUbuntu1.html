@@ -44,12 +44,12 @@
 #
 # 0.4. Resources
 <a href="https://ostechnix.com/install-and-configure-kvm-in-ubuntu-20-04-headless-server/" target="_blank">https://ostechnix.com/install-and-configure-kvm-in-ubuntu-20-04-headless-server/</a>
-<a href="https://www.qemu.org/docs/master/interop/qemu-img.html" target="_blank">https://www.qemu.org/docs/master/interop/qemu-img.html</a>
+<a href="https://www.qemu.org/docs/master/tools/qemu-img.html" target="_blank">https://www.qemu.org/docs/master/tools/qemu-img.html</a>
 <a href="https://www.libvirt.org/manpages/virsh.html" target="_blank">https://www.libvirt.org/manpages/virsh.html</a>
-<a href="https://docs.fedoraproject.org/en-US/Fedora/18/html/Virtualization_Administration_Guide/index.html" target="_blank">https://docs.fedoraproject.org/en-US/Fedora/18/html/Virtualization_Administration_Guide/index.html</a>
+https://docs.fedoraproject.org/en-US/Fedora/18/html/Virtualization_Administration_Guide/index.html (not working now)
 <a href="https://libguestfs.org/" target="_blank">https://libguestfs.org/</a>
 <a href="https://fabianlee.org/2020/02/23/kvm-testing-cloud-init-locally-using-kvm-for-an-ubuntu-cloud-image/" target="_blank">https://fabianlee.org/2020/02/23/kvm-testing-cloud-init-locally-using-kvm-for-an-ubuntu-cloud-image/</a>
-<a href="https://cloudinit.readthedocs.io/en/latest/topics/examples.html" target="_blank">https://cloudinit.readthedocs.io/en/latest/topics/examples.html</a>
+<a href="https://cloudinit.readthedocs.io/en/latest/reference/examples.html" target="_blank">https://cloudinit.readthedocs.io/en/latest/reference/examples.html</a>
 ISBN: 979-10-91414-20-3 The Debian Administrator's Handbook by Raphaël Hertzog and Roland Mas
 ISBN: 978-1-78829-467-6 KVM Virtualization Cookbook by Konstantin Ivanov
 </code> </pre> </div> </p>
@@ -159,28 +159,32 @@ osinfo-query os
 # 2.3. Connecting to the VM
 # A graphical desktop is needed to connect to the VM. You can install virt-viewer 
 #   package on your Ubuntu workstation and connect to the VM.
-###----------- Run on your workstation BEGIN ----------------###
-sudo apt update
+</code> </pre> </div> </p>
+<p> <a href="javascript:myFunction('Div5')">-------- Run on your workstation BEGIN ----------------#
+</a> <div id="Div5" style="margin-left:10%;"><pre><code>sudo apt update
 sudo apt install virt-viewer --yes
 virt-viewer --connect qemu+ssh://exforge@apple/system testkvm
-###----------- Run on your workstation END ------------------###
-# Remember to replace exforge with your user name on the server and srv with your
+</code> </pre> </div> </p>
+<p> <a href="javascript:myFunction('Div6')">-------- Run on your workstation END ------------------#
+</a> <div id="Div6" style="margin-left:10%;"><pre><code># Remember to replace exforge with your user name on the server and srv with your
 #   server's hostname
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div5')">3. Remote Graphical Management
-</a> <div id="Div5" style="margin-left:10%;"><pre><code># Our server has no graphical interface (like the most servers). If you really want
+<p> <a href="javascript:myFunction('Div7')">3. Remote Graphical Management
+</a> <div id="Div7" style="margin-left:10%;"><pre><code># Our server has no graphical interface (like the most servers). If you really want
 #   a graphical management, you can install virt-manager on your workstation and 
 #   manage your VMs from there. 
-###----------- Run on your workstation BEGIN ----------------###
-sudo apt update
+</code> </pre> </div> </p>
+<p> <a href="javascript:myFunction('Div8')">-------- Run on your workstation BEGIN ----------------#
+</a> <div id="Div8" style="margin-left:10%;"><pre><code>sudo apt update
 sudo apt install virt-manager --yes
 virt-manager
-###----------- Run on your workstation END ------------------###
-# The application is added to Applications Menu with the name 
+</code> </pre> </div> </p>
+<p> <a href="javascript:myFunction('Div9')">-------- Run on your workstation END ------------------#
+</a> <div id="Div9" style="margin-left:10%;"><pre><code># The application is added to Applications Menu with the name 
 #   "Virtual Machine Manager"
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div6')">4. Installing VMs from Ready Images
-</a> <div id="Div6" style="margin-left:10%;"><pre><code># Starting a new VM and installing OS into it is a good but time consuming way. 
+<p> <a href="javascript:myFunction('Div10')">4. Installing VMs from Ready Images
+</a> <div id="Div10" style="margin-left:10%;"><pre><code># Starting a new VM and installing OS into it is a good but time consuming way. 
 #   Another way would be preparing an installed image and start it as a new VM. 
 #   Most server distros supply cloud images. By adding them some necessary 
 #   configurations (user and network definitions), you can use them as ready 
@@ -209,7 +213,7 @@ sudo qemu-img create -b /srv/isos/jammy-server-cloudimg-amd64.img -F qcow2 \
 #   creating a user, creating and filling files, adding apt repositories, running 
 #   initial commands, installing  packages, reboot and poweroff after finishing, 
 #   disk and configuration. See below url for details:
-<a href="https://cloudinit.readthedocs.io/en/latest/topics/examples.html" target="_blank">https://cloudinit.readthedocs.io/en/latest/topics/examples.html</a>
+<a href="https://cloudinit.readthedocs.io/en/latest/reference/examples.html" target="_blank">https://cloudinit.readthedocs.io/en/latest/reference/examples.html</a>
 # Our cloud-init file will configure the following:
 # Create a user named exforge with sudo privileges, assign its password, add it to 
 #   exforge group as primary, also add it to users group, create its home directory
@@ -298,8 +302,8 @@ sudo touch /etc/cloud/cloud-init.disabled
 # A system call to run a command to start the new image 4.6.
 #   Memory size, vcpu count can be parameters.
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div7')">5. virsh: Shell Based VM Management
-</a> <div id="Div7" style="margin-left:10%;"><pre><code># virt-manager can only help with the basic management tasks. If you want to dive 
+<p> <a href="javascript:myFunction('Div11')">5. virsh: Shell Based VM Management
+</a> <div id="Div11" style="margin-left:10%;"><pre><code># virt-manager can only help with the basic management tasks. If you want to dive 
 #   deep, you need the old-style shell.
 # There are countless options to do with virsh command. I can only list a handfull
 #   of most useful ones (IMHO) here.
@@ -465,8 +469,8 @@ virsh detach-disk ubuntu22 vdb --persistent
 # As in virsh attach-disk, you can change --persistent option to --live or --
 #   config.
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div8')">6. All virsh Commands
-</a> <div id="Div8" style="margin-left:10%;"><pre><code># The following output is taken from the following command: 
+<p> <a href="javascript:myFunction('Div12')">6. All virsh Commands
+</a> <div id="Div12" style="margin-left:10%;"><pre><code># The following output is taken from the following command: 
 virsh --help
 # You can get detailed help for each subcommand with: virsh SUBCOMMAND --help, 
 #   like:
@@ -752,13 +756,13 @@ virsh dominfo --help
 #    vol-upload                     upload file contents to a volume
 #    vol-wipe                       wipe a vol
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div9')">7. qemu-img: Shell Based Image Management
-</a> <div id="Div9" style="margin-left:10%;"><pre><code># qemu-img allows us to manipulate images. The command is expected to work offline. 
+<p> <a href="javascript:myFunction('Div13')">7. qemu-img: Shell Based Image Management
+</a> <div id="Div13" style="margin-left:10%;"><pre><code># qemu-img allows us to manipulate images. The command is expected to work offline. 
 #   That means, before you start using qemu-img, you have to shut down the VM 
 #   associated with it. 
 # !!! Do not use qemu-img with an image of running VM !!!
 # A full documentation can be found at the below site:
-<a href="https://www.qemu.org/docs/master/interop/qemu-img.html" target="_blank">https://www.qemu.org/docs/master/interop/qemu-img.html</a>
+<a href="https://www.qemu.org/docs/master/tools/qemu-img.html" target="_blank">https://www.qemu.org/docs/master/tools/qemu-img.html</a>
 #
 # 7.1. Get Basic Info About an Image
 qemu-img info FILENAME
@@ -797,7 +801,7 @@ qemu-img convert -f SOURCEFORMAT -O DESTINATIONFORMAT SOURCEFILE DESTFILE
 #   it on my server using KVM. 
 # !!! On my workstation BEGIN !!!
 # Copy Windows 10 image to the server
-scp windows10.vdi exforge@srv:/tmp
+scp windows10.vdi exforge@apple:/tmp
 # !!! On my workstation END !!!
 # On my server
 sudo qemu-img convert -f vdi -O qcow2 /tmp/windows10.vdi /srv/kvm/windows10.qcow2
@@ -811,7 +815,7 @@ virt-install --name windows10 \
   --boot hd,menu=on \
   --disk path=/srv/kvm/windows10.qcow2,device=disk \
   --graphics vnc,port=5901,listen=0.0.0.0 \
-  --os-type windows --os-variant win10 \
+  --os-variant win10 \
   --network bridge=br0 \
   --noautoconsole
 #   
@@ -832,8 +836,8 @@ sudo qemu-img resize /srv/kvm/ubuntusrv-cloudimg.qcow2 +5G
 qemu-img check FILENAME
 # In any case if you suspect the integrity of the image file
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div10')">8. Export and Import of VMs
-</a> <div id="Div10" style="margin-left:10%;"><pre><code># If you want to move your VM to another host, or in a way you want to backup and 
+<p> <a href="javascript:myFunction('Div14')">8. Export and Import of VMs
+</a> <div id="Div14" style="margin-left:10%;"><pre><code># If you want to move your VM to another host, or in a way you want to backup and 
 #   restore your VM; there might be a lot of ways to do it. I'm going to 
 #   demonstrate a very simple  method which requires shutting down the VM (you can 
 #   try while it is running, but with no success guaranteed).
@@ -845,7 +849,7 @@ mkdir /tmp/kvmbackup
 # We need the definition file of our VM and the image file it is using. "virsh 
 #   dumpxml" command creates the definition file in xml format, we can save it with 
 #   the VM's name.
-virsh dumpxml ubuntu20 &gt; /tmp/kvmbackup/ubuntu20.xml
+virsh dumpxml ubuntu22 &gt; /tmp/kvmbackup/ubuntu22.xml
 # This file contains all the necessary information about our VM.
 #
 # If our VM was installed from the scratch as in 2.1. there will be only 1 image 
@@ -854,19 +858,17 @@ virsh dumpxml ubuntu20 &gt; /tmp/kvmbackup/ubuntu20.xml
 #   all the images. 
 #
 # Images used by the VM is listed in the xml file. Let's find them:
-grep "source file" /tmp/kvmbackup/ubuntu20.xml
-# For my ubuntu20 VM, output is listed below:
+grep "source file" /tmp/kvmbackup/ubuntu22.xml
+# For my ubuntu22 VM, output is listed below:
 #_____________________________________________________________________
-      &lt;source file='/srv/kvm/ubuntu20-seed.qcow2' index='2'/&gt;
-      &lt;source file='/srv/kvm/ubuntusrv-cloudimg.qcow2' index='1'/&gt;
-        &lt;source file='/srv/isos/focal-server-cloudimg-amd64.img'/&gt;
+      &lt;source file='/srv/kvm/ubuntu22-seed.qcow2'/&gt;
+      &lt;source file='/srv/kvm/ubuntusrv-cloudimg.qcow2'/&gt;
 #_____________________________________________________________________
-# That means I need to prepare 3 files: /srv/kvm/ubuntu20-seed.qcow2, 
-#   /srv/kvm/ubuntusrv-cloudimg.qcow2 
-#   and /srv/isos/focal-server-cloudimg-amd64.img.
+# That means I need to prepare 2 files: /srv/kvm/ubuntu22-seed.qcow2 and
+#   /srv/kvm/ubuntusrv-cloudimg.qcow2 .
 # Lets copy them to our backup locations.
-cp /srv/kvm/ubuntu20-seed.qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 \
-   /srv/isos/focal-server-cloudimg-amd64.img /tmp/kvmbackup
+cp /srv/kvm/ubuntu22-seed.qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 \
+   /tmp/kvmbackup
 # Beware: You can copy the files while the VM is running, but it is advised to 
 #   shutdown (or at least suspend your VM) before copying. Continue at your own 
 #   risk.
@@ -881,28 +883,27 @@ tar -cf /tmp/ubuntu22.tar -C /tmp/kvmbackup .
 # Assuming we have another virtualization server and we have copied ubuntu20.tar 
 #   there, we are going to import it and make it operational.
 # Beware: Before importing your VM to another server, you have to remove it on the 
-#   original server, #   otherwise you would have 2 guests with the same IP and 
-#   that may cause unexpected results.
-# ubuntu20.tar is copied to the server's /tmp directory as /tmp/ubuntu20.tar
+#   original server, otherwise you would have 2 guests with the same IP and that
+#   may cause unexpected results.
+# ubuntu22.tar is copied to the server's /tmp directory as /tmp/ubuntu22.tar
 # Create a place for our import files
 mkdir /tmp/import
 # Extract tar file there
-tar -xf /tmp/ubuntu20.tar -C /tmp/import
+tar -xf /tmp/ubuntu22.tar -C /tmp/import
 # Now we need to move our image files to their directories as in the original 
 #   server. If you have a different directory structure on your new server, and you
 #   want to copy files to different directories you have to edit the xml file and 
 #   change directories there.
-sudo cp /tmp/import/ubuntu20-seed.qcow2 /tmp/import/ubuntusrv-cloudimg.qcow2 /srv/kvm
-sudo cp /tmp/import/focal-server-cloudimg-amd64.img /srv/isos
+sudo cp /tmp/import/ubuntu22-seed.qcow2 /tmp/import/ubuntusrv-cloudimg.qcow2 /srv/kvm
 # 
 # It is time to define our server. Remember the xml file? We will use it to define 
 #   our ubuntu22 server.
-virsh define /tmp/import/ubuntu20.xml
+virsh define /tmp/import/ubuntu22.xml
 # Now we can start it
 virsh start ubuntu22
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div11')">9. libguestfs: VM Disk Management
-</a> <div id="Div11" style="margin-left:10%;"><pre><code># A set of commands for managing VM disks. Full documentation:
+<p> <a href="javascript:myFunction('Div15')">9. libguestfs: VM Disk Management
+</a> <div id="Div15" style="margin-left:10%;"><pre><code># A set of commands for managing VM disks. Full documentation:
 <a href="https://libguestfs.org/" target="_blank">https://libguestfs.org/</a>
 # Normally, as a system admin, you won't need to reach to VM's disks. But there may 
 #   happen a need once in a while. 
@@ -976,7 +977,7 @@ function myFunction(divid) {
 var i;
 var str;
 
-for (i=1; i<12; i++) {
+for (i=1; i<16; i++) {
     str = "Div" + i.toString();
     myFunction(str);
 }

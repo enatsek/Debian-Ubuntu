@@ -159,32 +159,28 @@ osinfo-query os
 # 2.3. Connecting to the VM
 # A graphical desktop is needed to connect to the VM. You can install virt-viewer 
 #   package on your Ubuntu workstation and connect to the VM.
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div5')">-------- Run on your workstation BEGIN ----------------#
-</a> <div id="Div5" style="margin-left:10%;"><pre><code>sudo apt update
+#!!!-------- Run on your workstation BEGIN -------------!!!#
+sudo apt update
 sudo apt install virt-viewer --yes
 virt-viewer --connect qemu+ssh://exforge@apple/system testkvm
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div6')">-------- Run on your workstation END ------------------#
-</a> <div id="Div6" style="margin-left:10%;"><pre><code># Remember to replace exforge with your user name on the server and srv with your
+#!!!-------- Run on your workstation END ---------------!!!#
+# Remember to replace exforge with your user name on the server and srv with your
 #   server's hostname
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div7')">3. Remote Graphical Management
-</a> <div id="Div7" style="margin-left:10%;"><pre><code># Our server has no graphical interface (like the most servers). If you really want
+<p> <a href="javascript:myFunction('Div5')">3. Remote Graphical Management
+</a> <div id="Div5" style="margin-left:10%;"><pre><code># Our server has no graphical interface (like the most servers). If you really want
 #   a graphical management, you can install virt-manager on your workstation and 
 #   manage your VMs from there. 
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div8')">-------- Run on your workstation BEGIN ----------------#
-</a> <div id="Div8" style="margin-left:10%;"><pre><code>sudo apt update
+#!!!-------- Run on your workstation BEGIN -------------!!!#
+sudo apt update
 sudo apt install virt-manager --yes
 virt-manager
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div9')">-------- Run on your workstation END ------------------#
-</a> <div id="Div9" style="margin-left:10%;"><pre><code># The application is added to Applications Menu with the name 
+#!!!-------- Run on your workstation END ---------------!!!#
+# The application is added to Applications Menu with the name 
 #   "Virtual Machine Manager"
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div10')">4. Installing VMs from Ready Images
-</a> <div id="Div10" style="margin-left:10%;"><pre><code># Starting a new VM and installing OS into it is a good but time consuming way. 
+<p> <a href="javascript:myFunction('Div6')">4. Installing VMs from Ready Images
+</a> <div id="Div6" style="margin-left:10%;"><pre><code># Starting a new VM and installing OS into it is a good but time consuming way. 
 #   Another way would be preparing an installed image and start it as a new VM. 
 #   Most server distros supply cloud images. By adding them some necessary 
 #   configurations (user and network definitions), you can use them as ready 
@@ -302,8 +298,8 @@ sudo touch /etc/cloud/cloud-init.disabled
 # A system call to run a command to start the new image 4.6.
 #   Memory size, vcpu count can be parameters.
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div11')">5. virsh: Shell Based VM Management
-</a> <div id="Div11" style="margin-left:10%;"><pre><code># virt-manager can only help with the basic management tasks. If you want to dive 
+<p> <a href="javascript:myFunction('Div7')">5. virsh: Shell Based VM Management
+</a> <div id="Div7" style="margin-left:10%;"><pre><code># virt-manager can only help with the basic management tasks. If you want to dive 
 #   deep, you need the old-style shell.
 # There are countless options to do with virsh command. I can only list a handfull
 #   of most useful ones (IMHO) here.
@@ -469,8 +465,8 @@ virsh detach-disk ubuntu22 vdb --persistent
 # As in virsh attach-disk, you can change --persistent option to --live or --
 #   config.
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div12')">6. All virsh Commands
-</a> <div id="Div12" style="margin-left:10%;"><pre><code># The following output is taken from the following command: 
+<p> <a href="javascript:myFunction('Div8')">6. All virsh Commands
+</a> <div id="Div8" style="margin-left:10%;"><pre><code># The following output is taken from the following command: 
 virsh --help
 # You can get detailed help for each subcommand with: virsh SUBCOMMAND --help, 
 #   like:
@@ -756,8 +752,8 @@ virsh dominfo --help
 #    vol-upload                     upload file contents to a volume
 #    vol-wipe                       wipe a vol
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div13')">7. qemu-img: Shell Based Image Management
-</a> <div id="Div13" style="margin-left:10%;"><pre><code># qemu-img allows us to manipulate images. The command is expected to work offline. 
+<p> <a href="javascript:myFunction('Div9')">7. qemu-img: Shell Based Image Management
+</a> <div id="Div9" style="margin-left:10%;"><pre><code># qemu-img allows us to manipulate images. The command is expected to work offline. 
 #   That means, before you start using qemu-img, you have to shut down the VM 
 #   associated with it. 
 # !!! Do not use qemu-img with an image of running VM !!!
@@ -836,8 +832,8 @@ sudo qemu-img resize /srv/kvm/ubuntusrv-cloudimg.qcow2 +5G
 qemu-img check FILENAME
 # In any case if you suspect the integrity of the image file
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div14')">8. Export and Import of VMs
-</a> <div id="Div14" style="margin-left:10%;"><pre><code># If you want to move your VM to another host, or in a way you want to backup and 
+<p> <a href="javascript:myFunction('Div10')">8. Export and Import of VMs
+</a> <div id="Div10" style="margin-left:10%;"><pre><code># If you want to move your VM to another host, or in a way you want to backup and 
 #   restore your VM; there might be a lot of ways to do it. I'm going to 
 #   demonstrate a very simple  method which requires shutting down the VM (you can 
 #   try while it is running, but with no success guaranteed).
@@ -902,8 +898,8 @@ virsh define /tmp/import/ubuntu22.xml
 # Now we can start it
 virsh start ubuntu22
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div15')">9. libguestfs: VM Disk Management
-</a> <div id="Div15" style="margin-left:10%;"><pre><code># A set of commands for managing VM disks. Full documentation:
+<p> <a href="javascript:myFunction('Div11')">9. libguestfs: VM Disk Management
+</a> <div id="Div11" style="margin-left:10%;"><pre><code># A set of commands for managing VM disks. Full documentation:
 <a href="https://libguestfs.org/" target="_blank">https://libguestfs.org/</a>
 # Normally, as a system admin, you won't need to reach to VM's disks. But there may 
 #   happen a need once in a while. 
@@ -977,7 +973,7 @@ function myFunction(divid) {
 var i;
 var str;
 
-for (i=1; i<16; i++) {
+for (i=1; i<12; i++) {
     str = "Div" + i.toString();
     myFunction(str);
 }

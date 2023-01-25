@@ -362,8 +362,6 @@ Acquire::http::proxy "http://user:pass@proxyserver:port";
 #_____________________________________________________
 
 
-###
-
 
 #---4. Case Study B: Separating Host and VM Access with 2 NICs
 # I don't know if it would be a best practice but definitely it will be a good 

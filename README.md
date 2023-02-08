@@ -41,3 +41,6 @@ AGT-MariadbClusterOnUbuntu: MariaDB master-master replication with Galera Cluste
 AGT-HAProxyOnUbuntu: HAProxy High Availability Load Balancing with Letsencrypt free certificates HTTPS support and keepalived.
  
 AGT-AdminerOnUbuntu: Adminer, a replacement for PHPMyAdmin. Web based Database Management.
+
+AGT-PostgresqlOnUbuntu: Postgresql installation and basic configuration on Ubuntu. Includes some user management, cluster management, backup and restore.
+

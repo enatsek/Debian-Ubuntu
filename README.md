@@ -44,3 +44,4 @@ AGT-AdminerOnUbuntu: Adminer, a replacement for PHPMyAdmin. Web based Database M
 
 AGT-PostgresqlOnUbuntu: Postgresql installation and basic configuration on Ubuntu. Includes some user management, cluster management, backup and restore.
 
+AGT-OtherLinuxesOnUbuntu: Basic management of Debian, Red Hat, OpenSuse, and Alpine distributions.

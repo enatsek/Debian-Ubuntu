@@ -195,11 +195,11 @@ osinfo-query os
 # 2.3. Connecting to the VM
 # A graphical desktop is needed to connect to the VM. You can install virt-viewer 
 #   package on your Ubuntu workstation and connect to the VM.
-#----------- Run on your workstation BEGIN ----------------#
+#!!!-------- Run on your workstation BEGIN -------------!!!#
 sudo apt update
 sudo apt install virt-viewer --yes
 virt-viewer --connect qemu+ssh://exforge@apple/system testkvm
-#----------- Run on your workstation END ------------------#
+#!!!-------- Run on your workstation END ---------------!!!#
 # Remember to replace exforge with your user name on the server and srv with your
 #   server's hostname
 
@@ -209,11 +209,11 @@ virt-viewer --connect qemu+ssh://exforge@apple/system testkvm
 # Our server has no graphical interface (like the most servers). If you really want
 #   a graphical management, you can install virt-manager on your workstation and 
 #   manage your VMs from there. 
-#----------- Run on your workstation BEGIN ----------------#
+#!!!-------- Run on your workstation BEGIN -------------!!!#
 sudo apt update
 sudo apt install virt-manager --yes
 virt-manager
-#----------- Run on your workstation END ------------------#
+#!!!-------- Run on your workstation END ---------------!!!#
 # The application is added to Applications Menu with the name 
 #   "Virtual Machine Manager"
 

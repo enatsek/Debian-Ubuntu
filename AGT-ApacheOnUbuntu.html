@@ -20,11 +20,11 @@
 <a href="https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition" target="_blank">https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition</a>
 # srv1.x11.xyz, srv2.x11.xyz and srv3.x11.xyz all have the ip of my server
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div3')">0. Update Software Repositories
-</a> <div id="Div3" style="margin-left:10%;"><pre><code>sudo apt update
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div4')">1. Apache Installation
-</a> <div id="Div4" style="margin-left:10%;"><pre><code># 1.1. Install
+<p> <a href="javascript:myFunction('Div3')">1. Apache Installation
+</a> <div id="Div3" style="margin-left:10%;"><pre><code># 1.0. Update Repositories
+sudo apt update
+#
+# 1.1. Install
 sudo apt install apache2 --yes
 #
 # 1.2. Check status, it must be working with the test page
@@ -74,8 +74,8 @@ sudo systemctl reload apache2
 #   Remember to copy sites' pages on DocumentRoot Directories
 #      create /var/www/srv1 and /var/www/srv2 and fill them with htmls
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div5')">2. Apache Additional Modules
-</a> <div id="Div5" style="margin-left:10%;"><pre><code># 2.1. List of Apache modules
+<p> <a href="javascript:myFunction('Div4')">2. Apache Additional Modules
+</a> <div id="Div4" style="margin-left:10%;"><pre><code># 2.1. List of Apache modules
 apt search libapache2-mod
 #
 # 2.3. Modules mut be enabled by a2enmod after installing
@@ -95,8 +95,8 @@ sudo a2dismod proxy
 # 2.8. Remember to restart Apache after enabling or disabling a module
 sudo systemctl restart apache2
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div6')">3. Adding SSL to Apache
-</a> <div id="Div6" style="margin-left:10%;"><pre><code># 3.1. Enable ssl
+<p> <a href="javascript:myFunction('Div5')">3. Adding SSL to Apache
+</a> <div id="Div5" style="margin-left:10%;"><pre><code># 3.1. Enable ssl
 sudo a2enmod ssl
 #
 # 3.2. Restart apache needed
@@ -142,8 +142,8 @@ sudo a2ensite 000-virtual-ssl.conf
 #        the certificate is self signed.
 sudo systemctl reload apache2
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div7')">4. Auto http--&gt;https redirect
-</a> <div id="Div7" style="margin-left:10%;"><pre><code># 4.1. http://srv1.x11.xyz automatically redirects to https://srv1.x11.xyz
+<p> <a href="javascript:myFunction('Div6')">4. Auto http--&gt;https redirect
+</a> <div id="Div6" style="margin-left:10%;"><pre><code># 4.1. http://srv1.x11.xyz automatically redirects to https://srv1.x11.xyz
 #    First we need to enable rewrite mode
 sudo a2enmod rewrite.load
 # 4.2. Modify conf file of the site to redirect (last 3 lines to be added)
@@ -164,8 +164,8 @@ sudo nano /etc/apache2/sites-available/000-virtual-hosts.conf
 # 4.3. Restart apache
 sudo systemctl restart apache2
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div8')">5. Enable PHP on Apache2
-</a> <div id="Div8" style="margin-left:10%;"><pre><code># 5.1. Install php and apache php mod
+<p> <a href="javascript:myFunction('Div7')">5. Enable PHP on Apache2
+</a> <div id="Div7" style="margin-left:10%;"><pre><code># 5.1. Install php and apache php mod
 sudo apt install php libapache2-mod-php
 # 5.2. If you have mysql - mariadb, you can install php
 #    extensions for them too
@@ -181,8 +181,8 @@ phpinfo();
 #  Test your page 
 http://srv1.x11.xyz/info.php
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div9')">6. Some Sample Apache Confs
-</a> <div id="Div9" style="margin-left:10%;"><pre><code># 6.1. 3 different sites on 1 server in 1 conf file
+<p> <a href="javascript:myFunction('Div8')">6. Some Sample Apache Confs
+</a> <div id="Div8" style="margin-left:10%;"><pre><code># 6.1. 3 different sites on 1 server in 1 conf file
 #_____________________________________________________________________
 &lt;VirtualHost *:80&gt;
     ServerAdmin webmaster@x11.xyz	
@@ -297,8 +297,8 @@ a2enmod rewrite
     CustomLog ${APACHE_LOG_DIR}/srv1-access.log combined
 &lt;/VirtualHost&gt;
 </code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div10')">7. Free SSL Certificates
-</a> <div id="Div10" style="margin-left:10%;"><pre><code># You can use free, autorenewing SSL certificates from Letsencrypt.org 
+<p> <a href="javascript:myFunction('Div9')">7. Free SSL Certificates
+</a> <div id="Div9" style="margin-left:10%;"><pre><code># You can use free, autorenewing SSL certificates from Letsencrypt.org 
 #   with Certbot tool from EFF. Check it out at my CertbotOnUbuntu Tutorial.
 </code> </pre> </div> </p>
 </code> </pre> </div> </p>
@@ -314,7 +314,7 @@ function myFunction(divid) {
 var i;
 var str;
 
-for (i=1; i<11; i++) {
+for (i=1; i<10; i++) {
     str = "Div" + i.toString();
     myFunction(str);
 }

@@ -22,10 +22,11 @@ ApacheOnUbuntu: Apache 2 Tutorial on Ubuntu 22.04
 Link:https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
 # srv1.x11.xyz, srv2.x11.xyz and srv3.x11.xyz all have the ip of my server
 
-#---0. Update Software Repositories
-sudo apt update
 
 #---1. Apache Installation
+# 1.0. Update Repositories
+sudo apt update
+#
 # 1.1. Install
 sudo apt install apache2 --yes
 #

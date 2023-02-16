@@ -53,6 +53,8 @@ apt remove apache2
 apt search apache2
 # 1.1.6. Clean Unused Packages
 apt autoremove
+# 1.1.7. Show Package Info
+apt show apache2
 # 
 # 1.2. Network Configuration
 # 1.2.1. Get the name of the network adapter
@@ -189,7 +191,9 @@ sudo nano /var/www/html/test.php
 # 2.1. Package Management
 # Commands require root or sudo.
 # 2.1.1. Update Cache
-# Not available and not necessary (as much as i know).
+dnf check-update   
+# It is always called when installing or updating packages
+# So it is not necessary
 # 2.1.2. Upgrade Packages
 dnf upgrade
 # 2.1.3. Install a Package
@@ -200,6 +204,8 @@ dnf remove httpd
 dnf search httpd
 # 2.1.6. Clean Unused Packages
 dnf autoremove
+# 2.1.7. Show Package Info
+dnf info httpd
 # 
 # 2.2. Network Configuration
 # 2.2.1. Get the name of the network adapter
@@ -260,6 +266,8 @@ zypper remove apache2
 zypper search apache2
 # 3.1.6. Clean Unused Packages
 # Not available as much as I know.
+# 3.1.7. Show Package Info
+zypper info apache2
 # 
 # 3.2. Network Configuration
 # OpenSuse has a configuration utility, you can configure a lot of thing including
@@ -331,9 +339,11 @@ apk add apache2
 # 4.1.4. Remove a Package
 apt del apache2
 # 4.1.5. Search a Package
-apt search apache2
+apk search apache2
 # 4.1.6. Clean Unused Packages
 # Not available as much as I know.
+# 4.1.7. Show Package Info
+apk info apache2
 # 
 # 4.2. Network Configuration
 # 4.2.1. Get the name of the network adapter

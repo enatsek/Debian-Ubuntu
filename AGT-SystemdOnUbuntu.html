@@ -41,8 +41,8 @@
 <a href="https://www.redhat.com/sysadmin/cgroups-part-one" target="_blank">https://www.redhat.com/sysadmin/cgroups-part-one</a>
 <a href="https://en.wikipedia.org/wiki/Systemd" target="_blank">https://en.wikipedia.org/wiki/Systemd</a>
 <a href="https://en.wikipedia.org/wiki/D-Bus" target="_blank">https://en.wikipedia.org/wiki/D-Bus</a>
-<a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/chap-managing_services_with_systemd" target="_blank">https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/chap-managing_services_with_systemd</a>
-<a href="https://www.howtogeek.com/675569/why-linuxs-systemd-is-still-divisive-after-all-these-years/" target="_blank">https://www.howtogeek.com/675569/why-linuxs-systemd-is-still-divisive-after-all-these-years/</a>
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/chap-managing_services_with_systemd
+https://www.howtogeek.com/675569/why-linuxs-systemd-is-still-divisive-after-all-these-years/
 <a href="https://systemd.io/" target="_blank">https://systemd.io/</a>
 Book:ISBN: 979-10-91414-20-3 The Debian Administrator’s Handbook by Raphaël Hertzog and Roland Mas
 Book:ISBN 978-1-80181-164-4 Linux Service Management Made Easy with systemd by Donald A. Tevault
@@ -184,6 +184,8 @@ WantedBy=multi-user.target
 # Condition: This unit starts if the conditions are met. If conditions are not met,
 #    this unit is skipped.
 # Assert: Similar to condition. But if conditions are not met, a failure is caused.
+# ConditionPathExists: Unit starts if this path exists. Start the path with ! to
+#    negate.
 #
 # 1.4.2. Install Section Directives (Applies to all unit types)
 # WantedBy: Similar to Wants directive of the Unit section. Mostly used with 
@@ -212,6 +214,12 @@ WantedBy=multi-user.target
 # BusName: For dbus type, name to acquire as D-Bus name.
 # NotifyAccess: Takes none, main, exec or none values. Controls which service 
 #    status messages are notified. 
+# Environment: Environment values to set.
+# EnvironmentFile: Read a list of environment values from this file. (-) sign
+#    before the file name means, ignore if the file is not found.
+# Killmode: How to stop the service. process means only to kill the main process,
+#    mixed means to kill the main process and the others, none means just run
+#    ExecStop.
 # ExecStart: Command to start the service. If starts with -, ignore failure.
 # ExecStartPre: Additional commands to run before the main process. 
 # ExecStartPost: Additional commands to run after the main process.
@@ -221,12 +229,14 @@ WantedBy=multi-user.target
 # RestartSec: Amount of time to wait before restart.
 # Restart: Circumstances to automatically restart the service. Could be: always,
 #    on-success, on-failure, on-abnormal, on-abort, on-watchdog etc.
+# RestartPreventExitStatus: Prevents the service from automatically restarting 
+#    if the given exit code is received.
+# RuntimeDirectory: Directory to run the service (under /run).
+# RuntimeDirectoryMode: Permissions of the runtime directory (Default 0755).
 # TimeoutSec: Amount of time to wait before starting or stopping the service 
 #    before marking as failed (or killing it).
-# TimeoutStartSec: Amount of time to wait before starting service before marking 
-#    as failed (or killing it).
-# TimeoutStopSec: Amount of time to wait before starting service before marking 
-#    as failed (or killing it).
+# TimeoutStartSec: Amount of time to wait before starting service before marking #    as failed (or killing it).
+# TimeoutStopSec: Amount of time to wait before starting service before marking #    as failed (or killing it).
 #
 # 1.4.3. Socket Section Directives (Applies to Socket unit types)
 # ListenStream: Address to listen on for a TCP stream.
@@ -528,6 +538,8 @@ sudo journalctl --vacuum-time=1years
 #
 # systemd-boot: UEFI boot manager. Supports basic boot manager configuration. 
 #     Integrates with systemctl command. Has the command bootctl.
+# systemd-cat: Add a record to the systemd log with a pipeline.
+echo "Test" | systemd-cat -p info
 # systemd-localed: Manages system locale settings. Has the command localectl.
 # systemd-logind: Manages user logins. Keeps track of users and sessions. Handles
 #     device access management for users.
@@ -547,6 +559,59 @@ sudo journalctl --vacuum-time=1years
 #     and directories.
 # systemd-udevd: Manages physical devices.
 </code> </pre> </div> </p>
+<p> <a href="javascript:myFunction('Div8')">6. Creating a Service
+</a> <div id="Div8" style="margin-left:10%;"><pre><code># We will create a very simple service. Our service will ping an IP address in 
+#    every 10 minutes. It will create an info log if the ping is OK, otherwise
+#    it will create and error log.
+# The application will be a shell script, the script will be put into 
+     /usr/local/bin, a unit file will be created, enabled, started and tested.
+# 6.1. Create Shell Script
+nano ipcheck.sh
+# Fill as below
+#_______________________________________________________________________________
+#!/bin/bash
+echo "ipcheck.service: Start. $(date)" | systemd-cat -p info
+while true ; do
+  ping -q -w 1 192.168.0.231 &gt; /dev/null
+  if &lsqb; $? = 0 &rsqb; ; then
+     echo "ipcheck.service: Ping to IP is OK. $(date)" | systemd-cat -p info
+  else
+     echo "ipcheck.service: Error cannot ping IP. $(date)" | systemd-cat -p err
+  fi
+  sleep 600
+done
+#_______________________________________________________________________________
+#
+# 6.2. Copy it into /usr/local/bin
+# Make it executable
+chmod +x ipcheck.sh
+# Copy
+sudo cp ipcheck.sh /usr/local/bin
+#
+# 6.3. Create Unit File
+sudo systemctl edit --force --full ipcheck.service
+# The command will open a nano editor
+# Fill it as below, save and exit
+#__________________________________________________________________
+&lsqb;Unit&rsqb;
+Description=IPCheck Demo Service
+Wants=network.target
+After=syslog.target network-online.target84
+&lsqb;Service&rsqb;
+ExecStart=/usr/local/bin/ipcheck.sh
+Restart=on-failure
+RestartSec=20
+KillMode=process
+&lsqb;Install&rsqb;
+WantedBy=multi-user.target
+#__________________________________________________________________
+#
+# 6.4. Enable and Start The Service
+sudo systemctl enable ipcheck.service
+sudo systemctl start ipcheck.service
+# 6.5. Test it
+journalctl -n 20
+</code> </pre> </div> </p>
 </code> </pre> </div> </p>
 <br /><br /><br /><script>
 function myFunction(divid) {
@@ -560,7 +625,7 @@ function myFunction(divid) {
 var i;
 var str;
 
-for (i=1; i<8; i++) {
+for (i=1; i<9; i++) {
     str = "Div" + i.toString();
     myFunction(str);
 }

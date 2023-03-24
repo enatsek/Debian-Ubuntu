@@ -49,3 +49,5 @@ AGT-OtherLinuxesOnUbuntu: Basic management of Debian, Red Hat, OpenSuse, and Alp
 AGT-NginxOnUbuntu: Installing and configuring Nginx on Ubuntu server. With sample configuration and SSL support.
 
 AGT-SystemdOnUbuntu: Basic systemd tutorial.
+
+AGT-DebPackagingOnUbuntu: A basic tutorial about creating and using .deb packages.

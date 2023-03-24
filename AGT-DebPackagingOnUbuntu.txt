@@ -1,6 +1,6 @@
 DebPackagingOnUbuntu: Creating and Using .deb Packages On Ubuntu
 
-#---Copyright (C) 2020 - 2023 Exforge exforge@x386.org
+#---Copyright (C) 2023 Exforge exforge@x386.org
 # This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or

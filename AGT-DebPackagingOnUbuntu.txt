@@ -1,34 +1,37 @@
 DebPackagingOnUbuntu: Creating and Using .deb Packages On Ubuntu
 
 #---Copyright (C) 2023 Exforge exforge@x386.org
-# This document is free text: you can redistribute it and/or modify
+# - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version.
-# This document is distributed in the hope that it will be useful,
+#
+# - This document is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
+#
+# - You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #--- 0. Specs
-# 0.0. Abstract
-# This tutorial deals with creating a .deb package. A .deb package is a compressed
-#   collection of files for installing a software. Mainly used by Debian GNU/Linux 
-#   (and Ubuntu of course). As an Ubuntu (or Debian) user, we normally use apt command
-#   to install programs (or services), but in the background .deb files are used.
-# Our aim is to create and use a .deb package. Creating a new Debian package is another
-#   thing, actually a superset of this operation. It is a subject of another tutorial.
-# This tutorial is a simple one, it does not cover every details. Its aim is to help 
-#   you create a simple package.
+#-- 0.0. Abstract
+# - This tutorial deals with creating a .deb package. A .deb package is a compressed
+# collection of files for installing a software. Mainly used by Debian GNU/Linux 
+# (and Ubuntu of course). As an Ubuntu (or Debian) user, we normally use apt command
+# to install programs (or services), but in the background .deb files are used.
+# - Our aim is to create and use a .deb package. Creating a new Debian package is 
+# another thing, actually a superset of this operation. It is a subject of another
+# tutorial.
+# - This tutorial is a simple one, it does not cover every details. Its aim is to
+# help you create a simple package.
 #
-# 0.1. Configuration
-# Workstation: Ubuntu 22.04 LTS
-# Test Servers: Ubuntu 22.04 LTS, Ubuntu 20.04 LTS, Ubuntu 18.04 LTS, Debian 9,
-#   Debian 10, Debian 11, Debian 12 (Testing - Sid)
+#-- 0.1. Configuration
+# - Workstation: Ubuntu 22.04 LTS
+# - Test Servers: Ubuntu 22.04 LTS, Ubuntu 20.04 LTS, Ubuntu 18.04 LTS, Debian 9,
+# Debian 10, Debian 11, Debian 12 (Testing - Sid)
 #
-# 0.2. Sources
+#-- 0.2. Sources
 Link:https://www.debian.org/doc/debian-policy/
 Link:https://www.debian.org/doc/manuals/maint-guide/dother.en.html
 Link:https://tldp.org/HOWTO/html_single/Debian-Binary-Package-Building-HOWTO/
@@ -36,39 +39,37 @@ Link:https://github.com/rsm-gh/build-deb/blob/master/DEBIAN_BASICS.md
 
 
 #---1. Basic Information
-# 1.1. Package Types:
-# .deb packages may be source or binary packages. As their names imply, they contain
-#   source or executable binaries (or scripts). 
-# As Debian Policy Manual states; A Debian source package contains the source material
-#   used to construct one or more binary packages. 
-# At this tutorial, we are going to concentrate on binary packages.
+#-- 1.1. Package Types:
+# - .deb packages may be source or binary packages. As their names imply, they 
+# contain source or executable binaries (or scripts). 
+# - As Debian Policy Manual states; A Debian source package contains the source 
+# material used to construct one or more binary packages. 
+# - At this tutorial, we are going to concentrate on binary packages.
 # 
-# 1.2. Package Structure
-# A .deb package has the following naming format and contains 3 files.
-#   packagename_version-revision_architecture.deb
-#   apache2_2.4.52-1debian4.4_amd64.deb
+#-- 1.2. Package Structure
+# - A .deb package has the following naming format and contains 3 files.
+# packagename_version-revision_architecture.deb
+# apache2_2.4.52-1debian4.4_amd64.deb
 # 
 # 1.2.1. debian-binary : .deb package version information. Mostly just contains 2.0.
 #
 # 1.2.2. data.tar.zst : An archive of compressed files in directories. When the .deb 
-#   file is installed, the files will be copied to the directories where they are.
-#   The  extension may be a different one if another compression type is used.
+# file is installed, the files will be copied to the directories where they are.
+# The  extension may be a different one if another compression type is used.
 #
 # 1.2.3. control.tar.zst: An archive of compressed files. The extension may be a 
-#   different one if another compression type is used. The most used files are:
-#   control: Metadata for the package, like package name, version, etc.
-#   conffiles: A list of configuration files. These files are not
-#     overwritten when the package is upgraded. 
-#   preinst: Scripts to run before unpacking the package, like stopping
-#     the services before upgrading.
-#   postinst: Scripts to run after unpacking the package, like starting
-#     the installing services.
-#   prerm: Scripts to run before removing the package, like stopping
-#     the services.
-#   postrm: Scripts to run after removing the package, like removing 
-#     created files.
+# different one if another compression type is used. The most used files are:
+# - control: Metadata for the package, like package name, version, etc.
+# - conffiles: A list of configuration files. These files are not overwritten when 
+# the package is upgraded. 
+# - preinst: Scripts to run before unpacking the package, like stopping the services
+# before upgrading.
+# - postinst: Scripts to run after unpacking the package, like starting the installed
+# services.
+# - prerm: Scripts to run before removing the package, like stopping the services.
+# - postrm: Scripts to run after removing the package, like removing created files.
 #
-# 1.3. .deb Package Manipulation
+#-- 1.3. .deb Package Manipulation
 # .deb packages can be installed with apt command too. 
 # install a package:
 sudo apt install ./<package>
@@ -81,59 +82,60 @@ sudo apt purge <appname>
 sudo apt purge test
 
 #---2. Package Control Files
-# Control files exist in control.tar.zst archive. Some of the files are listed in 
-#   1.2.3. A (nearly) full list is below with brief descriptions, though some 
-#     important ones have detailed descriptions.
+# - Control files exist in control.tar.zst archive. Some of the files are listed in 
+# 1.2.3. A (nearly) full list is below with brief descriptions, though some 
+# important ones have detailed descriptions.
 #
-# 2.1. control
-# This file contains the values that package managers use. It has fields and values 
-#   for the fields.
-# Most of the fields have single line values, but some may have multi line values.
-#   When entering multi line fields, the lines other than the first one must start
-#   with a space or a tab.
-# The fields of a binary package are:
+#-- 2.1. control
+# - This file contains the values that package managers use. It has fields and values 
+# for the fields.
+# - Most of the fields have single line values, but some may have multi line values.
+# When entering multi line fields, the lines other than the first one must start
+# with a space or a tab.
+# - The fields of a binary package are:
 # 
-# Package : Mandatory field. Name of the package. Can contain alphanumeric characters 
-#   and *,- and . (period). Ex: openssh-server
-# Source : Source package name. Ex: openssh
-# Version : Mandatory field. Version number. Format is: epoch:upstream_ver-debian_ver. 
-#   epoch can be omitted. Ex: 1:8.9p1-3
-# Section : Recommended field. Software category. For a Debian package, there are many
-#   software categories like admin, database, httpd, java, etc. 
-# Priority : Recommended field. Could be one of the followings:
-#   required: Necessary for the proper functioning of the system. 
-#   important: Packages that are expected to be in every Linux system.
-#   standard: Packages that are installed by default. Standard packages must not 
-#     conflict with each other.
-#   optional: All others. Most of the packages fall into this category. Optional 
-#     packages may conflict with each other.
-# Architecture : Mandatory field. Architecture that the package is prepared for. 
-#   Examples: amd64, arm64, i386, powerpc, sparc, all
-# Essential: If set to yes, the package management software would refuse to remove 
-#   this package. Normally you should set it as no, or skip this field.
-# Depends: The packages that this package depends absolutely. This package is not
-#   configured unless all the depended packages are configured. 
-# Pre-Depends: Not advised to use. Like Depends, but depended package should be 
-#   configured before unpacking the package.
-# Recommends: Declares a strong but not absolute dependancy.
-# Suggests: Declares that this package would be more useful with the listed packages.
-# Enhances: Opposite of Suggests. Declares that listed packages would be more useful
-#   with this package.
-# Breaks: This package breaks the listed packages. They must be unconfigured before 
-#   this package can be installed.
-# Conflicts: Similar but stronger than Breaks. They must be unpacked before this 
-#   package can be installed.
-# Installed-Size: An estimate of the total amount of disk space required to install 
-#   the package.
-# Maintainer : Mandatory field. Name and email of the maintainer. Ex: Exforge 
-#   <exforge@x386.org>
-# Description : Mandatory field. Description of the package. The first line is the 
-#   short description, the others are the long version. 
-# Homepage: The url of the website of the package.
-# Built-Using: The list of packages that this package depended at build time, but no 
-#   more.
-# Also there might be some user defined fields. Ubuntu adds a field named "Original
-#   Maintainer" to keep Debian Maintainers info while giving theirs.
+# - Package : Mandatory field. Name of the package. Can contain alphanumeric 
+# characters and *,- and . (period). Ex: openssh-server
+# - Source : Source package name. Ex: openssh
+# - Version : Mandatory field. Version number. Format is: epoch:upstream_ver-debian_ver. 
+# epoch can be omitted. Ex: 1:8.9p1-3
+# - Section : Recommended field. Software category. For a Debian package, there are
+# many software categories like admin, database, httpd, java, etc. 
+# - Priority : Recommended field. Could be one of the followings:
+# required: Necessary for the proper functioning of the system. 
+# important: Packages that are expected to be in every Linux system.
+# standard: Packages that are installed by default. Standard packages must not 
+# conflict with each other.
+# optional: All others. Most of the packages fall into this category. Optional 
+# packages may conflict with each other.
+# - Architecture : Mandatory field. Architecture that the package is prepared for. 
+# Examples: amd64, arm64, i386, powerpc, sparc, all
+# - Essential: If set to yes, the package management software would refuse to remove 
+# this package. Normally you should set it as no, or skip this field.
+# - Depends: The packages that this package depends absolutely. This package is not
+# configured unless all the depended packages are configured. 
+# - Pre-Depends: Not advised to use. Like Depends, but depended package should be 
+# configured before unpacking the package.
+# - Recommends: Declares a strong but not absolute dependancy.
+# - Suggests: Declares that this package would be more useful with the listed
+# packages.
+# - Enhances: Opposite of Suggests. Declares that listed packages would be more
+# useful with this package.
+# - Breaks: This package breaks the listed packages. They must be unconfigured before 
+# this package can be installed.
+# - Conflicts: Similar but stronger than Breaks. They must be unpacked before this 
+# package can be installed.
+# - Installed-Size: An estimate of the total amount of disk space required to install 
+# the package.
+# - Maintainer : Mandatory field. Name and email of the maintainer. Ex: Exforge 
+# <exforge@x386.org>
+# - Description : Mandatory field. Description of the package. The first line is the 
+# short description, the others are the long version. 
+# - Homepage: The url of the website of the package.
+# - Built-Using: The list of packages that this package depended at build time, but 
+# no more.
+# - Also there might be some user defined fields. Ubuntu adds a field named "Original
+# Maintainer" to keep Debian Maintainers info while giving theirs.
 #
 # Contents of Ubuntu 22.04 LTS' apache2 package control file:
 #__________________________________________________________________________________
@@ -204,10 +206,10 @@ Description: secure shell (SSH) server, for secure access from remote machines
  purposes.
 #__________________________________________________________________________________
 #
-# 2.2. conffiles
-# This file contains the list of configuration files of the package. The files listed
-#   here will be considered as conf files. If the user has changed any of the conf 
-#   files listed here, she/he will be warned by the system.
+#-- 2.2. conffiles
+# - This file contains the list of configuration files of the package. The files 
+# listed here will be considered as conf files. If the user has changed any of the
+# conf files listed here, she/he will be warned by the system.
 #
 # Contents of Ubuntu 22.04 LTS' openssh package conffiles file:
 #__________________________________________________________________________________
@@ -218,19 +220,19 @@ Description: secure shell (SSH) server, for secure access from remote machines
 /etc/ufw/applications.d/openssh-server
 #__________________________________________________________________________________
 # 
-# 2.3. preinst
-# This is the script (or program, but script is recommended) to run before unpacking
-#   the package. 
+#-- 2.3. preinst
+# - This is the script (or program, but script is recommended) to run before
+# unpacking the package. 
 # The script can be called in the following ways:
-#   new-preinst install : Before the package is installed.
-#   new-preinst install old-version new-version : Before a removed package is 
-#     upgraded.
-#   new-preinst upgrade old-version new-version : Before the package is upgraded.
-#   old-preinst abort-upgrade new-version : If postrm fails during upgrade or fails on 
-#     failed upgrade.
+# - new-preinst install : Before the package is installed.
+# - new-preinst install old-version new-version : Before a removed package is 
+# upgraded.
+# - new-preinst upgrade old-version new-version : Before the package is upgraded.
+# -  old-preinst abort-upgrade new-version : If postrm fails during upgrade or fails
+# on failed upgrade.
 #
-# This script must be idempotent, that is there mustn't be any problems if it runs 
-#   more than 1 time. 
+# - This script must be idempotent, that is there mustn't be any problems if it runs 
+# more than 1 time. 
 # This script must start with #! 
 # Also this script must return 0 for success and nonzero for error conditions.
 # 
@@ -238,17 +240,13 @@ Description: secure shell (SSH) server, for secure access from remote machines
 #__________________________________________________________________________________
 case "$1" in
     upgrade|install)
-
 	if dpkg --compare-versions "$2" lt-nl "2.4.23-3~" ; then
 		list_fixup_conffiles | replace_broken_conffiles
 	fi
-
     ;;
-
     abort-upgrade)
 		list_fixup_conffiles | revert_broken_conffiles
     ;;
-
     *)
 	echo "preinst called with unknown argument \`$1'" >&2
 	exit 1
@@ -256,21 +254,21 @@ case "$1" in
 esac
 #__________________________________________________________________________________
 #
-# 2.4. postinst
-# This is the script (or program, but script is recommended) to run after unpacking
-#   the package. 
+#-- 2.4. postinst
+# - This is the script (or program, but script is recommended) to run after unpacking
+# the package. 
 # The script can be called in the following ways:
-#   postinst configure old-version: After the package was installed.
-#   old-postinst abort-upgrade new-version : If prerm fails during upgrade or fails on
-#     failed-upgrade.
-#   old-postinst abort-remove: If prerm fails during remove.
-#   postinst abort-deconfigure in-favour new-package new-version [ removing old-package old-version ]:
-#     If prerm fails during deconfigure in-favour of a package.
-#   postinst abort-remove: If prerm fails during remove in-favour for replacement due 
-#     to conflict.
+# - postinst configure old-version: After the package was installed.
+# - old-postinst abort-upgrade new-version : If prerm fails during upgrade or fails 
+# on failed-upgrade.
+# - old-postinst abort-remove: If prerm fails during remove.
+# - postinst abort-deconfigure in-favour new-package new-version [ removing old-
+# package old-version ]: If prerm fails during deconfigure in-favour of a package.
+# - postinst abort-remove: If prerm fails during remove in-favour for replacement due 
+# to conflict.
 #
-# This script must be idempotent, that is there mustn't be any problems if it runs 
-#   more than 1 time. 
+# - This script must be idempotent, that is there mustn't be any problems if it runs 
+# more than 1 time. 
 # This script must start with #! 
 # Also this script must return 0 for success and nonzero for error conditions.
 # 
@@ -283,6 +281,8 @@ is_fresh_install()
 	fi
 	return 1
 }
+#__________________________________________________________________________________
+#
 #__________________________________________________________________________________
 case "$1" in
 	configure)
@@ -304,20 +304,20 @@ case "$1" in
 esac
 #__________________________________________________________________________________
 #
-# 2.5. prerm
-# This is the script (or program, but script is recommended) to run before removing
-#   the package. 
+#-- 2.5. prerm
+# - This is the script (or program, but script is recommended) to run before removing
+# the package. 
 # The script can be called in the following ways:
-#   prerm remove: Before the package is removed.
-#   old-prerm upgrade new-version: Before an upgrade.
-#   new-prerm failed-upgrade old-version new-version: If the above upgrade fails.
-#   prerm deconfigure in-favour new-package new-version: Before package is 
-#     deconfigured while dependency is replaced due to conflict.
-#   prerm remove in-favour new-package new-version: Before the package is replaced due 
-#     to conflict.
+# - prerm remove: Before the package is removed.
+# - old-prerm upgrade new-version: Before an upgrade.
+# - new-prerm failed-upgrade old-version new-version: If the above upgrade fails.
+# - prerm deconfigure in-favour new-package new-version: Before package is 
+# deconfigured while dependency is replaced due to conflict.
+# - prerm remove in-favour new-package new-version: Before the package is replaced 
+# due to conflict.
 #
-# This script must be idempotent, that is there mustn't be any problems if it runs 
-#   more than 1 time. 
+# - This script must be idempotent, that is there mustn't be any problems if it runs 
+# more than 1 time. 
 # This script must start with #! 
 # Also this script must return 0 for success and nonzero for error conditions.
 # 
@@ -334,24 +334,24 @@ elif [ -x "/etc/init.d/mariadb" ]; then
 fi
 #__________________________________________________________________________________
 #
-# 2.6. postrm
-# This is the script (or program, but script is recommended) to run after removing
-#   the package. 
+#-- 2.6. postrm
+# - This is the script (or program, but script is recommended) to run after removing
+# the package. 
 # The script can be called in the following ways:
-#   postrm remove: After the package was removed.
-#   postrm purge: After the package was purged.
-#   old-postrm upgrade new-version: After the package was upgraded.
-#   new-postrm failed-upgrade old-version new-version: If the above upgrade call 
-#     fails.
-#   postrm disappear overwriter-package overwriter-version: After all of the package
-#     files have been replaced.
-#   new-postrm abort-install: If preinst fails during install.
-#   new-postrm abort-install old-version new-version: If preinst fails during install 
-#     for an upgrade of a removed package.
-#   new-postrm abort-upgrade old-version new-version: If preinst fails during upgrade.
+# - postrm remove: After the package was removed.
+# - postrm purge: After the package was purged.
+# - old-postrm upgrade new-version: After the package was upgraded.
+# - new-postrm failed-upgrade old-version new-version: If the above upgrade call 
+# fails.
+# - postrm disappear overwriter-package overwriter-version: After all of the package
+# files have been replaced.
+# - new-postrm abort-install: If preinst fails during install.
+# - new-postrm abort-install old-version new-version: If preinst fails during install 
+# for an upgrade of a removed package.
+# new-postrm abort-upgrade old-version new-version: If preinst fails during upgrade.
 #
-# This script must be idempotent, that is there mustn't be any problems if it runs 
-#   more than 1 time. 
+# - This script must be idempotent, that is there mustn't be any problems if it runs 
+# more than 1 time. 
 # This script must start with #! 
 # Also this script must return 0 for success and nonzero for error conditions.
 # 
@@ -362,7 +362,6 @@ if [ "$1" = "remove" ]; then
 		deb-systemd-helper mask 'ssh.service' >/dev/null || true
 	fi
 fi
-
 if [ "$1" = "purge" ]; then
 	if [ -x "/usr/bin/deb-systemd-helper" ]; then
 		deb-systemd-helper purge 'ssh.service' >/dev/null || true
@@ -371,10 +370,10 @@ if [ "$1" = "purge" ]; then
 fi
 #__________________________________________________________________________________
 #
-# 2.7. config
-# config is an additional script that runs before preinst, before any predependencies 
-#   are satisfied. This script can be used for any information that should be prompted 
-#   to the user.
+#-- 2.7. config
+# - config is an additional script that runs before preinst, before any 
+# predependencies are satisfied. This script can be used for any information that
+# should be prompted to the user.
 # Contents of Ubuntu 22.04 LTS' mariadb-server package prerm file:
 #__________________________________________________________________________________
 #!/bin/bash
@@ -389,7 +388,7 @@ if test -n "`which ypwhich 2>/dev/null`"  &&  ypwhich >/dev/null 2>&1; then
 fi
 #__________________________________________________________________________________
 #
-# 2.8. templates
+#-- 2.8. templates
 # This file contains templates for user prompting. 
 #
 # An excerpt from Ubuntu 22.04 LTS' openssh-server package templates file:
@@ -403,7 +402,7 @@ Description: Allow password authentication?
  a stronger authentication method, such as public keys.
 #__________________________________________________________________________________
 #
-# 2.9. md5sums
+#-- 2.9. md5sums
 # This file contains md5 hashes of files of the package.
 #
 # Content Ubuntu 22.04 LTS' openssh-server package md5sums file:
@@ -423,15 +422,15 @@ ac7abad4e73226affab0c56e47cf8b68  usr/share/man/man8/sshd.8.gz
 cb02155c6c0d5678ef2e827ebb983a3d  usr/share/openssh/sshd_config.md5sum
 #__________________________________________________________________________________
 #
-# 2.10. triggers
+#-- 2.10. triggers
 # A package declares its relationship to some triggers by including a triggers file.
 # There are following trigger directives:
-#   interest <trigger>: The package is interested in the trigger.
-#   interest-await <trigger>: Puts the triggering package in awaited state.
-#   interest-noawait <trigger>: Does not put the triggering package in awaited state.
-#   activate <trigger>: Any change in this package activates the trigger
-#   activate-await <trigger>: Only puts the package in awaited state.
-#   activate-noawait <trigger>: Never puts the package in awaited state.
+# - interest <trigger>: The package is interested in the trigger.
+# - interest-await <trigger>: Puts the triggering package in awaited state.
+# - interest-noawait <trigger>: Does not put the triggering package in awaited state.
+# - activate <trigger>: Any change in this package activates the trigger
+# - activate-await <trigger>: Only puts the package in awaited state.
+# - activate-noawait <trigger>: Never puts the package in awaited state.
 #
 # Content Ubuntu 22.04 LTS' mariadb-server package triggers file:
 #__________________________________________________________________________________
@@ -439,7 +438,7 @@ interest-noawait /etc/mysql
 interest-noawait /etc/systemd/system/mariadb.service.d
 #__________________________________________________________________________________
 #
-# 2.11. symbols and shlibs
+#-- 2.11. symbols and shlibs
 # This files contain information about used shared libraries.
 #
 https://man7.org/linux/man-pages/man5/deb-symbols.5.html
@@ -452,10 +451,10 @@ libslapi-2.5 0 libslapi-2.5-0
 
 
 #---3. Package Data Files
-# 3.1. Basics
-# Data files exist in data.tar.zst archive. The archive contains the files in their
-#   corresponding directories. Every file in this archive is unpacked to its 
-#   corresponding directory.
+#-- 3.1. Basics
+# - Data files exist in data.tar.zst archive. The archive contains the files in their
+# corresponding directories. Every file in this archive is unpacked to its 
+# corresponding directory.
 # 
 # Files in Ubuntu 22.04 LTS' openssh-server package:
 #___________________________________________________________________________________
@@ -506,15 +505,15 @@ libslapi-2.5 0 libslapi-2.5-0
             └── sshd_config.md5sum
 #___________________________________________________________________________________
 #
-# 3.2. File Locations
-# Data files consists binaries, static files, dynamic files, configurations, etc. 
+#-- 3.2. File Locations
+# - Data files consists binaries, static files, dynamic files, configurations, etc. 
 # Every file must be placed on an appropriate place. Some examples:
-#   Architecture-independent, application-specific files --> /usr/share
-#   User specific configuration files --> ~/.packagename. File or directory.
-#   Configuration files --> /etc/packagename
-#   Systemd unit files --> /lib/systemd/system
-#   Log files --> /var/log/packagename
-#   Cron jobs --> Regarding the time period, one of the following:
+# - Architecture-independent, application-specific files --> /usr/share
+# - User specific configuration files --> ~/.packagename. File or directory.
+# - Configuration files --> /etc/packagename
+# - Systemd unit files --> /lib/systemd/system
+# - Log files --> /var/log/packagename
+# - Cron jobs --> Regarding the time period, one of the following:
 #     /etc/cron.hourly /etc/cron.daily /etc/cron.weekly /etc/cron.monthly
 #     If the time period is different: /etc/cron.d
 
@@ -643,16 +642,19 @@ libslapi-2.5 0 libslapi-2.5-0
 
 
 #---6. .deb Package Preparation Checklist
-# 6.1. Create File and Folder Structure for the Package
+#-- 6.1. Create File and Folder Structure for the Package
 # A minimal set would include the following:
+#________________________________________________________
 ProgramName-Version/
 ProgramName-Version/DEBIAN
 ProgramName-Version/DEBIAN/control
 ProgramName-Version/usr/
 ProgramName-Version/usr/bin/
 ProgramName-Version/usr/bin/ProgramName
+#________________________________________________________
 #
 # You may also need following files/folder:
+#________________________________________________________
 ProgramName-Version/DEBIAN/control
 ProgramName-Version/DEBIAN/preinst
 ProgramName-Version/DEBIAN/postinst
@@ -663,17 +665,18 @@ ProgramName-Version/etc/ProgramName.conf
 ProgramName-Version/etc/ProgramName/
 ProgramName-Version/usr/share/applications/ProgramName.desktop
 ProgramName-Version/usr/share/ProgramName/ProgramFiles
+#________________________________________________________
 #
-# 6.2. Copy Files
-# You need to copy program executable, control file, script files and other files to
-#   their appropriate locations. 
+#-- 6.2. Copy Files
+# - You need to copy program executable, control file, script files and other files 
+# to their appropriate locations. 
 #
-# /usr/share/ProgramName/ is used if you have more than 1 files for the program. 
-# You can use /etc or /etc/ProgramName folders if you have 1 or more configuration 
-#   files respectively. 
-# You can use /usr/share/applications/ folder for creating desktop launchers.
+# - /usr/share/ProgramName/ is used if you have more than 1 files for the program. 
+# - You can use /etc or /etc/ProgramName folders if you have 1 or more configuration 
+# files respectively. 
+# - You can use /usr/share/applications/ folder for creating desktop launchers.
 #
-# 6.3. Preparing and Building The Package
+#-- 6.3. Preparing and Building The Package
 # When all files are ready, you have to set permissions of the executable files
 # 
 chmod a+x ProgramName-Version/..
@@ -685,14 +688,14 @@ dpkg-deb -Z xz --build --root-owner-group ProgramName-Version
 
 
 #---7. A Very Simple Package
-# Now, we are going to create a very simple package, namely "distro". Our package is
-#   a python script which displays the Unix distro name and the version information.
-# The package will only have the executable script and the control file. No 
-#   configuration file or maintenance scripts are needed.
+# - Now, we are going to create a very simple package, namely "distro". Our package 
+# is a python script which displays the Unix distro name and the version information.
+# - The package will only have the executable script and the control file. No 
+# configuration file or maintenance scripts are needed.
 #
-# 7.1. Create Folder Structure
-# We are going to create a packages folder at our home folder. All the packages will 
-#   reside on this folder with their own folders.
+#-- 7.1. Create Folder Structure
+# - We are going to create a packages folder at our home folder. All the packages 
+# will reside on this folder with their own folders.
 mkdir ~/packages
 # Remember a package has this format for its name: 
 #   packagename_version-revision_architecture.deb
@@ -702,7 +705,7 @@ mkdir -p ~/packages/distro_1.0.0-1_all/usr/bin
 # DEBIAN folder for control file
 mkdir ~/packages/distro_1.0.0-1_all/DEBIAN
 #
-# 7.2. Executable File
+#-- 7.2. Executable File
 # Copy, or in our case, fill the executable file:
 nano ~/packages/distro_1.0.0-1_all/usr/bin/distro
 # Fill as below:
@@ -729,10 +732,10 @@ distro, version = distro_version()
 print(distro, version)
 #___________________________________________________________________________________
 #
-#make it executable
+# make it executable
 chmod +x ~/packages/distro_1.0.0-1_all/usr/bin/distro
 #
-# 7.3. control File
+#-- 7.3. control File
 # Copy, or in our case, fill the control file:
 nano ~/packages/distro_1.0.0-1_all/DEBIAN/control
 # Fill as below:
@@ -748,46 +751,47 @@ Description: Prints Linux Distribution and Name
   it does on other OSs.
 #___________________________________________________________________________________
 #
-# 7.4. Build the package
+#-- 7.4. Build the package
 cd ~/packages
 dpkg-deb -Z xz --build --root-owner-group distro_1.0.0-1_all 
 #
 # Your package distro_1.0.0-1_all.deb is in your ~/packages folder.
 #
-# A note: dpkg-deb normally use zst compression, but we override it with -Z xz flag
-#   for xz compression. Because, the packages made in Ubuntu 22.04 with zst 
-#   compression does not work on Debian distributions.
+# - A note: dpkg-deb normally use zst compression, but we override it with -Z xz flag
+# for xz compression. Because, the packages made in Ubuntu 22.04 with zst 
+# compression does not work on Debian distributions.
 
 
 
 
 #---8. A Bit More Complicated Package
-# Our next package named as watchbox is a bit more complicated.
-# It is a python script too, but it is aimed to run as a service.
-# Our package must install it as a systemd service, enable and start it after the 
-#   installation. Also the service must be stopped before removing or upgrading the 
-#   package. 
-# As control files, beside the control file we will have conffiles, postinst, and 
-#   prerm.
-# As data files, we will have the script itself, configuration file, and the service 
-#   unit file.
+# - Our next package named as watchbox is a bit more complicated.
+# - It is a python script too, but it is aimed to run as a service.
+# - Our package must install it as a systemd service, enable and start it after the 
+# installation. Also the service must be stopped before removing or upgrading the 
+# package. 
+# - As control files, beside the control file we will have conffiles, postinst, and 
+# prerm.
+# - As data files, we will have the script itself, configuration file, and the 
+# service unit file.
 #
-# 8.0. About Watchbox
-# Watchbox is a service demonstration program, which allow periodic checks for network
-#   connectivity for hosts, web pages, files, or services.
-# It has an application named watchbox, configuration file named watchbox.conf, and a 
-#   systemd service unit file named watchbox.service.
+#-- 8.0. About Watchbox
+# - Watchbox is a service demonstration program, which allow periodic checks for 
+# network connectivity for hosts, web pages, files, or services.
+# - It has an application named watchbox, configuration file named watchbox.conf, and 
+# a systemd service unit file named watchbox.service.
 # For more details, please see:
 Link:https://github.com/enatsek/watchbox
 #
-# 8.1. Copy Watchbox Files to a Temporary Place
+#-- 8.1. Copy Watchbox Files to a Temporary Place
 # Get watchbox files from github
 wget https://raw.githubusercontent.com/enatsek/watchbox/main/watchbox -P /tmp
 wget https://raw.githubusercontent.com/enatsek/watchbox/main/watchbox.conf -P /tmp
 wget https://raw.githubusercontent.com/enatsek/watchbox/main/watchbox.service -P /tmp
 #
-# 8.1. Folder Structure
+#-- 8.1. Folder Structure
 # Again we will use the folder ~/packages
+#_________________________________________________________________
 ~/packages/
 ~/packages/watchbox_0.9-1_all/
 ~/packages/watchbox_0.9-1_all/DEBIAN/
@@ -804,21 +808,22 @@ wget https://raw.githubusercontent.com/enatsek/watchbox/main/watchbox.service -P
 ~/packages/watchbox_0.9-1_all/usr/
 ~/packages/watchbox_0.9-1_all/usr/bin/
 ~/packages/watchbox_0.9-1_all/usr/bin/watchbox
+#_________________________________________________________________
 #
-# 8.2. Create Folder Structure
+#-- 8.2. Create Folder Structure
 mkdir -p ~/packages/watchbox_0.9-1_all/DEBIAN/
 mkdir -p ~/packages/watchbox_0.9-1_all/etc
 mkdir -p ~/packages/watchbox_0.9-1_all/lib/systemd/system/
 mkdir -p ~/packages/watchbox_0.9-1_all/usr/bin/
 #
-# 8.3. Copy Watchbox Files to Their Places
+#-- 8.3. Copy Watchbox Files to Their Places
 cp /tmp/watchbox.conf ~/packages/watchbox_0.9-1_all/etc/
 cp /tmp/watchbox.service ~/packages/watchbox_0.9-1_all/lib/systemd/system/
 cp /tmp/watchbox -p ~/packages/watchbox_0.9-1_all/usr/bin/
 # Make it executable too:
 chmod +x ~/packages/watchbox_0.9-1_all/usr/bin/watchbox
 #
-# 8.4. Create Control Files and Maintenance Scripts
+#-- 8.4. Create Control Files and Maintenance Scripts
 # control file (package metadata)
 nano ~/packages/watchbox_0.9-1_all/DEBIAN/control
 # Fill as below
@@ -869,7 +874,7 @@ systemctl stop watchbox
 # Make it executable
 chmod +x ~/packages/watchbox_0.9-1_all/DEBIAN/prerm
 #
-# 8.5. Build the Package
+#-- 8.5. Build the Package
 cd ~/packages
 dpkg-deb -Z xz --build --root-owner-group watchbox_0.9-1_all 
 #

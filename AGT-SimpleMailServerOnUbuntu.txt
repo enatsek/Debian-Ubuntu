@@ -1,15 +1,17 @@
 SimpleMailServerOnUbuntu: Mail Server with SMTP and IMAP on Ubuntu 22.04
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org
-# This document is free text: you can redistribute it and/or modify
+# - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version.
-# This document is distributed in the hope that it will be useful,
+#
+# - This document is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
+#
+# - You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #---Specs
@@ -29,82 +31,123 @@ Link:https://www.server-world.info/en/note?os=Ubuntu_18.04&p=mail&f=1
 
 
 #---1. Install and Configure Postfix
-# 1.1. Install Postfix and SASL (Simple Auth. & Security Layer)
+#-- 1.1. Install Postfix and SASL (Simple Auth. & Security Layer)
 sudo apt -y install postfix sasl2-bin 
-# Select No configuration at the install question, we will configure
-#    it manually
+# - Select No configuration at the install question, we will configure it manually.
 #
-# 1.2. Create a standart config file for postfix
+#-- 1.2. Create a standart config file for postfix
 sudo cp /usr/share/postfix/main.cf.dist /etc/postfix/main.cf
 #
-# 1.3. Edit postfix config file as described
+#-- 1.3. Edit postfix config file as described
 sudo nano /etc/postfix/main.cf 
 #
 # around line 78: uncomment
+#___________________________________________________
 mail_owner = postfix
-#
+#___________________________________________________#
 # around line 94: uncomment and change hostname
+#___________________________________________________
 myhostname = mail.x11.xyz
+#___________________________________________________
 #
 # around line 102: uncomment and change domainname
+#___________________________________________________
 mydomain = x11.xyz
+#___________________________________________________
 #
 # around line 123: uncomment
+#___________________________________________________
 myorigin = $mydomain
+#___________________________________________________
 #
 # around line 137: uncomment
+#___________________________________________________
 inet_interfaces = all
+#___________________________________________________
 #
 # around line 185: uncomment
+#___________________________________________________
 mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+#___________________________________________________
 #
 # around line 228: uncomment
+#___________________________________________________
 local_recipient_maps = unix:passwd.byname $alias_maps
+#___________________________________________________
 #
 # around line 270: uncomment
+#___________________________________________________
 mynetworks_style = subnet
+#___________________________________________________
 #
 # around line 287: add your local network
+#___________________________________________________
 mynetworks = 127.0.0.0/8, 10.0.0.0/24
+#___________________________________________________
 #
 # around line 407: uncomment
+#___________________________________________________
 alias_maps = hash:/etc/aliases
+#___________________________________________________
 #
 # around line 418: uncomment
+#___________________________________________________
 alias_database = hash:/etc/aliases
+#___________________________________________________
 #
 # around line 440: uncomment
+#___________________________________________________
 home_mailbox = Maildir/
+#___________________________________________________
 #
 # around line 576: change the line as below (remove "$mail_name (Ubuntu)
 #smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
+#___________________________________________________
 smtpd_banner = $myhostname ESMTP
+#___________________________________________________
 #
 # around line 650: add
+#___________________________________________________
 sendmail_path = /usr/sbin/postfix
+#___________________________________________________
 #
 # around line 655: add
+#___________________________________________________
 newaliases_path = /usr/bin/newaliases
+#___________________________________________________
 #
 # around line 660: add
+#___________________________________________________
 mailq_path = /usr/bin/mailq
+#___________________________________________________
 #
 # around line 666: add
+#___________________________________________________
 setgid_group = postdrop
+#___________________________________________________
 #
 # around line 670: comment out
+#___________________________________________________
 #html_directory =
+#___________________________________________________
 #
 # around line 674: comment out
+#___________________________________________________
 #manpage_directory =
+#___________________________________________________
 #
 # around line 679: comment out
+#___________________________________________________
 #sample_directory =
+#___________________________________________________
 #
 # around line 683: comment out
+#___________________________________________________
 #readme_directory =
+#___________________________________________________
 #
 # add to the end: 
+#___________________________________________________
 # limit email size to 10MB
 message_size_limit = 10485760
 # limit mailbox size to 1GB
@@ -116,79 +159,94 @@ smtpd_sasl_auth_enable = yes
 smtpd_sasl_security_options = noanonymous
 smtpd_sasl_local_domain = $myhostname
 smtpd_recipient_restrictions = permit_mynetworks, permit_auth_destination, permit_sasl_authenticated, reject
+#___________________________________________________
 #
-# 1.4. Activate Aliases (Will be explained at 5.2.) 
+#-- 1.4. Activate Aliases (Will be explained at 5.2.) 
 sudo newaliases
-# 1.5. Restart Postfix
+#
+#-- 1.5. Restart Postfix
 sudo systemctl restart postfix 
 
 
 #---2. Install and Configure Dovecot
-# 2.1. Install Dovecot core, pop3 and imap deamons
+#-- 2.1. Install Dovecot core, pop3 and imap deamons
 sudo apt -y install dovecot-core dovecot-pop3d dovecot-imapd 
 #
-# 2.2. Dovecot main config
+#-- 2.2. Dovecot main config
 sudo nano /etc/dovecot/dovecot.conf
 # around line 30: uncomment
+#___________________________________________________
 listen = *, ::
+#___________________________________________________
 #
-# 2.3. Dovecot auth config
+#-- 2.3. Dovecot auth config
 sudo nano /etc/dovecot/conf.d/10-auth.conf
 # around line 10: uncomment and change ( allow plain text auth )
+#___________________________________________________
 disable_plaintext_auth = no
+#___________________________________________________
 #
 # around line 100: add
+#___________________________________________________
 auth_mechanisms = plain login
+#___________________________________________________
 #
-# 2.4. Dovecot mail config
+#-- 2.4. Dovecot mail config
 sudo nano /etc/dovecot/conf.d/10-mail.conf
 # around line 30: change to Maildir
+#___________________________________________________
 mail_location = maildir:~/Maildir
+#___________________________________________________
 #
-# 2.5. Dovecot master config
+#-- 2.5. Dovecot master config
 sudo nano /etc/dovecot/conf.d/10-master.conf
 # around line 107-109: uncomment and add
+#___________________________________________________
 # Postfix smtp-auth
 unix_listener /var/spool/postfix/private/auth {
     mode = 0666
     user = postfix
     group = postfix
 }
+#___________________________________________________
 #
-# 2.6. Restart Dovecot
+#-- 2.6. Restart Dovecot
 sudo systemctl restart dovecot 
 
 #---Break Time
-# At this point we have a very basic mail config, all our linux users at 
-#   mail.x11.xyz have mail addresses. They can access smtp at port 25 and imap 
-#   at port 143. But unfortunately there is no encryption. 
-# At the next step we will add SSL encrytpion and that will change our smtp 
-#   port to 587.
+# - At this point we have a very basic mail config, all our linux users at 
+# mail.x11.xyz have mail addresses. They can access smtp at port 25 and imap 
+# at port 143. But unfortunately there is no encryption. 
+# - At the next step we will add SSL encrytpion and that will change our smtp 
+# port to 587.
 #
 # We will use Certbot tool of Let's Encrytp to have a free certificate
 
 
 #---3. Add SSL/TLS to Postfix and Dovecot
-# 3.1. Install Certbot to get TLS certificates
+#-- 3.1. Install Certbot to get TLS certificates
 sudo apt -y install certbot
-# 3.2. Run certbot to get certificates. Enter an email address and
-#   accept TOS
+#
+#-- 3.2. Run certbot to get certificates. Enter an email address and accept TOS.
 sudo certbot certonly --standalone -d mail.x11.xyz
 # Certificates are installed to /etc/letsencrypt/live/mail.x11.xyz/
 #
-# 3.3. Add certificates to Postfix main config
+#-- 3.3. Add certificates to Postfix main config
 sudo nano /etc/postfix/main.cf 
-#   Add to the end
+# Add to the end
+#___________________________________________________
 smtpd_use_tls = yes
 smtp_tls_mandatory_protocols = !SSLv2, !SSLv3
 smtpd_tls_mandatory_protocols = !SSLv2, !SSLv3
 smtpd_tls_cert_file = /etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
 smtpd_tls_key_file = /etc/letsencrypt/live/mail.x11.xyz/privkey.pem
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+#___________________________________________________
 #
-# 3.4. Postfix master config
+#-- 3.4. Postfix master config
 sudo nano /etc/postfix/master.cf
 #  Around line 19-23 uncomment like below
+#___________________________________________________
 submission inet n       -       y       -       -       smtpd
   -o syslog_name=postfix/submission
 #  -o smtpd_tls_security_level=encrypt
@@ -198,15 +256,18 @@ submission inet n       -       y       -       -       smtpd
 smtps     inet  n       -       y       -       -       smtpd
   -o syslog_name=postfix/smtps
   -o smtpd_tls_wrappermode=yes
+#___________________________________________________
 #
-# 3.5. Add certificates to Dovecot config
+#-- 3.5. Add certificates to Dovecot config
 sudo nano /etc/dovecot/conf.d/10-ssl.conf
 # Around line 12,13: Specify certificates (change as below)
 #   Remember to change domain names to yours:  
+#___________________________________________________
 ssl_cert = </etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
 ssl_key = </etc/letsencrypt/live/mail.x11.xyz/privkey.pem
+#___________________________________________________
 #
-# 3.6. Restart Postfix and Dovecot
+#-- 3.6. Restart Postfix and Dovecot
 sudo systemctl restart postfix dovecot 
 
 #---4. Client Mail Settings
@@ -228,30 +289,31 @@ sudo systemctl restart postfix dovecot
 Link:https://imgur.com/a/RVIAy3o
 
 #---5. Account Management
-# 5.1. All Linux users already have mail accounts with their login name and passwords.
-#   To add a new mail user, you need to add a user to your server
+#-- 5.1. All Linux users already have mail accounts with their login name and
+# passwords.
+# To add a new mail user, you need to add a user to your server
 sudo useradd -d /home/exforge -m exforge
 #   And you need to give her a password too
 sudo passwd exforge
 #
-# 5.2. If you want to use aliases, say postmaster and abuse for user exforge.
-#   First create Linux users
+#-- 5.2. If you want to use aliases, say postmaster and abuse for user exforge.
+# First create Linux users
 sudo useradd -d /home/postmaster -m postmaster
 sudo useradd -d /home/abuse -m abuse
 sudo passwd postmaster
 sudo passwd abuse
-#   Add them to /etc/aliases file
+# Add them to /etc/aliases file
 sudo nano /etc/aliases
 #_______________________________________
 # See man 5 aliases for format
-postmaster:    exforge
-abuse:     exforge
+postmaster: exforge
+abuse: exforge
 #_______________________________________
 #
-#   Activate aliases
+# Activate aliases
 sudo newaliases
 # 
-# 5.3. Restart Postfix and Dovecot
+#-- 5.3. Restart Postfix and Dovecot
 sudo systemctl restart postfix dovecot
 
 

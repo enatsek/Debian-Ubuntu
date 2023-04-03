@@ -1,80 +1,79 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"> </head> <body><H1>PHPMyAdmin on Ubuntu 20.04 for MariaDB
-</H1><p> <a href="javascript:myFunction('Div1')">!!! Deprecation Notice !!!
-</a> <div id="Div1" style="margin-left:10%;"><pre><code># !!!!!!!!  This tutorial is no longer maintained. !!!!!!!! 
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>PHPMyAdmin on Ubuntu 20.04 for MariaDB
+</H1><p> <H4><a href="javascript:myFunction('Div1')">!!! Deprecation Notice !!!
+</a> </H4><div id="Div1" style="margin-left:1%;"><pre ># !!!!!!!!  This tutorial is no longer maintained. !!!!!!!! 
 # I prefer using Adminer instead of PHPMyAdmin. Please refer to 
 #   AdminerOnUbuntu tutorial if you'd like.
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div2')">Copyright (C) 2020 Exforge exforge@x386.xyz
-</a> <div id="Div2" style="margin-left:10%;"><pre><code># This document is free text: you can redistribute it and/or modify
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div2')">Copyright (C) 2020 Exforge exforge@x386.xyz
+</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version.
-# This document is distributed in the hope that it will be useful,
+# - This document is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
+# - You should have received a copy of the GNU General Public License
 # along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div3')">Specs
-</a> <div id="Div3" style="margin-left:10%;"><pre><code># PHPMyAdmin is a powerful web based management tool for Mysql and Mariadb.
-# You have to install it on the server which has the DB installed.
-# It is installed as an Apache conf and after installing, you can reach
-#   PHPMyAdmin with /phpmyadmin directory through all the apache sites on the 
-#   server
-# On my config I wanted to bind PHPMyAdmin to only one site config on the server 
-#   side and restrict it with only 1 client IP (might be more) to reach.
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div3')">Specs
+</a> </H4><div id="Div3" style="margin-left:1%;"><pre ># - PHPMyAdmin is a powerful web based management tool for Mysql and Mariadb.
+# - You have to install it on the server which has the DB installed.
+# - It is installed as an Apache conf and after installing, you can reach
+# PHPMyAdmin with /phpmyadmin directory through all the apache sites on the 
+# server
+# - On my config I wanted to bind PHPMyAdmin to only one site config on the server 
+# side and restrict it with only 1 client IP (might be more) to reach.
 #
 # My Hostname: test.x11.xyz
 # Lamp is already installed (See LampOnUbuntu Tutorial)
 # My Client IP address: 195.174.209.24
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div4')">1. Revert mariadb root to unix_socket
-</a> <div id="Div4" style="margin-left:10%;"><pre><code># On LAMP installation, we changed the MariaDB root user plugin to mysql
-#   native.
-# Unfortunately PHPMyAdmin gives an error on installation with this setting.
-#   So we'll revert it back to unix socket momentarily
-mariadb -u root -p
-#   On MariaDB shell:
-UPDATE mysql.user SET plugin = 'unix_socket' WHERE USER='root';
-FLUSH PRIVILEGES;
-exit;
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div5')">2. Install and configure phpmyadmin
-</a> <div id="Div5" style="margin-left:10%;"><pre><code>sudo apt install phpmyadmin 
-# First Screen: Make sure apache2 is selected, there must be an * on its box
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div4')">1. Revert mariadb root to unix_socket
+</a> </H4><div id="Div4" style="margin-left:1%;"><pre ># - On LAMP installation, we changed the MariaDB root user plugin to mysql
+# native.
+# - Unfortunately PHPMyAdmin gives an error on installation with this setting.
+# So we'll revert it back to unix socket momentarily
+<code><span style="Color:DodgerBlue">mariadb -u root -p
+</span></code># On MariaDB shell:
+<code><span style="Color:DodgerBlue">UPDATE mysql.user SET plugin = 'unix_socket' WHERE USER='root';
+</span></code><code><span style="Color:DodgerBlue">FLUSH PRIVILEGES;
+</span></code><code><span style="Color:DodgerBlue">exit;
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div5')">2. Install and configure phpmyadmin
+</a> </H4><div id="Div5" style="margin-left:1%;"><pre ><code><span style="Color:DodgerBlue">sudo apt install phpmyadmin 
+</span></code># First Screen: Make sure apache2 is selected, there must be an * on its box
 #    (press space to select, tab to go OK, press enter) 
 # Second screen: Select Yes and give a good password for phpmyadmin user
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div6')">3. Revert mariadb root to native again
-</a> <div id="Div6" style="margin-left:10%;"><pre><code>#  We will restore Maria root user plugin to mysql native. As it was before.
-sudo mariadb
-#   On MariaDB shell:
-UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE USER='root';
-FLUSH PRIVILEGES;
-exit;
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div7')">4. Disable phpmyadmin apache mod.
-</a> <div id="Div7" style="margin-left:10%;"><pre><code># We'll configure it later in a more secure way
-sudo a2disconf phpmyadmin
-sudo systemctl reload apache2
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div8')">5. Create test.x11.xyz.conf 
-</a> <div id="Div8" style="margin-left:10%;"><pre><code># 5.1. Make a home for the new site
-sudo mkdir /var/www/test.x11.xyz
-#
-# 5.2. Edit phpmyadmin to allow only our IPs
-#   Make a backup first (always)
-sudo cp /etc/phpmyadmin/apache.conf /etc/phpmyadmin/apache.conf.original
-sudo nano /etc/phpmyadmin/apache.conf
-# Just after the line
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div6')">3. Revert mariadb root to native again
+</a> </H4><div id="Div6" style="margin-left:1%;"><pre ># We will restore Maria root user plugin to mysql native. As it was before.
+<code><span style="Color:DodgerBlue">sudo mariadb
+</span></code># On MariaDB shell:
+<code><span style="Color:DodgerBlue">UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE USER='root';
+</span></code><code><span style="Color:DodgerBlue">FLUSH PRIVILEGES;
+</span></code><code><span style="Color:DodgerBlue">exit;
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div7')">4. Disable phpmyadmin apache mod.
+</a> </H4><div id="Div7" style="margin-left:1%;"><pre ># We'll configure it later in a more secure way
+<code><span style="Color:DodgerBlue">sudo a2disconf phpmyadmin
+</span></code><code><span style="Color:DodgerBlue">sudo systemctl reload apache2
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div8')">5. Create test.x11.xyz.conf 
+</a> </H4><div id="Div8" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 5.1. Make a home for the new site
+</B></span><code><span style="Color:DodgerBlue">sudo mkdir /var/www/test.x11.xyz
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.2. Edit phpmyadmin to allow only our IPs
+</B></span># Make a backup first (always)
+<code><span style="Color:DodgerBlue">sudo cp /etc/phpmyadmin/apache.conf /etc/phpmyadmin/apache.conf.original
+</span></code><code><span style="Color:DodgerBlue">sudo nano /etc/phpmyadmin/apache.conf
+</span></code># Just after the line
 #   &lt;Directory /usr/share/phpmyadmin&gt;
 # Add your IP as the following format, remember indenting
 #    You can add more than 1 IP if required
-    Require ip 195.174.209.24
-# The beginning of the file will be like below:
-#______________________________________________________________
-Alias /phpmyadmin /usr/share/phpmyadmin
+<code><span style="Color:MediumSeaGreen">    Require ip 195.174.209.24
+</span></code># The beginning of the file will be like below:
+<code><span style="Color:MediumSeaGreen">Alias /phpmyadmin /usr/share/phpmyadmin
 &lt;Directory /usr/share/phpmyadmin&gt;
     Require ip 195.174.209.24
     Options SymLinksIfOwnerMatch
@@ -85,15 +84,13 @@ Alias /phpmyadmin /usr/share/phpmyadmin
         php_admin_value open_basedir /usr/share/phpmyadmin/:/etc/phpmyadmin/:/v&gt;
     &lt;/IfModule&gt;
 &lt;/Directory&gt;
-#______________________________________________________________
-#
-# 5.2. Create a site config to reach PHPMyAdmin
-# If you want to use your own conf file, just add the line starting with
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.2. Create a site config to reach PHPMyAdmin
+</B></span># - If you want to use your own conf file, just add the line starting with
 #  Include
-#      as in the following conf
-sudo nano /etc/apache2/sites-available/test.x11.xyz.conf
-#_________________________________________________________________________
-&lt;VirtualHost *:80&gt;
+# as in the following conf
+<code><span style="Color:DodgerBlue">sudo nano /etc/apache2/sites-available/test.x11.xyz.conf
+</span></code><code><span style="Color:MediumSeaGreen">&lt;VirtualHost *:80&gt;
     Include /etc/apache2/conf-available/phpmyadmin.conf
     ServerAdmin webmaster@x11.xyz	
     ServerName test.x11.xyz
@@ -101,58 +98,63 @@ sudo nano /etc/apache2/sites-available/test.x11.xyz.conf
     ErrorLog ${APACHE_LOG_DIR}/test-error.log
     CustomLog ${APACHE_LOG_DIR}/test-access.log combined
 &lt;/VirtualHost&gt;
-#_________________________________________________________________________
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.3. Enable new site
+</B></span><code><span style="Color:DodgerBlue">sudo a2ensite test.x11.xyz.conf
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.4. Reload Apache
+</B></span><code><span style="Color:DodgerBlue">sudo systemctl reload apache2
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.5. Enable https for new site
+</B></span># Refer to CertbotOnUbuntu tutorial
 #
-# 5.3. Enable new site
-sudo a2ensite test.x11.xyz.conf
-#
-# 5.4. Reload Apache
-sudo systemctl reload apache2
-#
-# 5.5. Enable https for new site
-# Refer to CertbotOnUbuntu tutorial
-#
-# 5.6. To use PHPMyAdmin on SSL site, you need to add a line to the SSL config
-#   file created by Certbot, which must be test.karasite.com-le-ssl.conf
-sudo nano /etc/apache2/sites-available/test.karasite.com-le-ssl.conf
-#   After line &lt;VirtualHost *:443&gt; add the following line: (remember indenting)
-	Include /etc/apache2/conf-available/phpmyadmin.conf
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div9')">6. PHPMyAdmin is ready
-</a> <div id="Div9" style="margin-left:10%;"><pre><code>https://test.x11.xyz/phpmyadmin
-# You can use username: phpmyadmin and the password you gave at 2.
+<B><span style="Font-Family:Verdana">#-- 5.6. SSL
+</B></span># - To use PHPMyAdmin on SSL site, you need to add a line to the SSL config
+# file created by Certbot, which must be test.karasite.com-le-ssl.conf
+<code><span style="Color:DodgerBlue">sudo nano /etc/apache2/sites-available/test.karasite.com-le-ssl.conf
+</span></code># After line &lt;VirtualHost *:443&gt; add the following line: (remember indenting)
+<code><span style="Color:MediumSeaGreen">	Include /etc/apache2/conf-available/phpmyadmin.conf
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div9')">6. PHPMyAdmin is ready
+</a> </H4><div id="Div9" style="margin-left:1%;"><pre ><code><span style="Color:DodgerBlue">https://test.x11.xyz/phpmyadmin
+</span></code># You can use username: phpmyadmin and the password you gave at 2.
 # For a full administrative operation on the database you can use root user
 #   of maridab or create a new user for web administration.
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div10')">7. Troubleshooting
-</a> <div id="Div10" style="margin-left:10%;"><pre><code># Taken from: DevAnswers:
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div10')">7. Troubleshooting
+</a> </H4><div id="Div10" style="margin-left:1%;"><pre ># Taken from: DevAnswers:
 <a href="https://devanswers.co/problem-php-7-2-phpmyadmin-warning-in-librariessql-count/" target="_blank">https://devanswers.co/problem-php-7-2-phpmyadmin-warning-in-librariessql-count/</a>
-# 7.1. Problem with phpMyAdmin and PHP 7.2: 
-#   “Warning in ./libraries/sql.lib.php#613 count(): 
+<B><span style="Font-Family:Verdana">#-- 7.1. Problem with phpMyAdmin and PHP 7.2: 
+</B></span>#   “Warning in ./libraries/sql.lib.php#613 count(): 
 #        Parameter must be an array or an object that implements Countable”
 #   This bug is an incompatability issue between PHP7.2 and PHPMyAdmin version in Ubuntu 18.04
 #   The easiest solution is to correct the line on sql.lib.php ourselves.
+#
 # 7.1.1. Backup sql.lib.php
-sudo cp /usr/share/phpmyadmin/libraries/sql.lib.php /usr/share/phpmyadmin/libraries/sql.lib.php.original
+<code><span style="Color:DodgerBlue">sudo cp /usr/share/phpmyadmin/libraries/sql.lib.php /usr/share/phpmyadmin/libraries/sql.lib.php.original
+</span></code>#
 # 7.1.2. Modify sql.lib.php
-sudo nano /usr/share/phpmyadmin/libraries/sql.lib.php
-#   Find: (count($analyzed_sql_results&lsqb;'select_expr'&rsqb; == 1)
+<code><span style="Color:DodgerBlue">sudo nano /usr/share/phpmyadmin/libraries/sql.lib.php
+</span></code>#   Find: (count($analyzed_sql_results&lsqb;'select_expr'&rsqb; == 1)
 #   Change to:  ((count($analyzed_sql_results&lsqb;'select_expr'&rsqb;) == 1)
 #
-# 7.2. Problem with phpMyAdmin and PHP 7.2: (at import and export tabs)
-#   "Warning in ./libraries/plugin_interface.lib.php#551
+<B><span style="Font-Family:Verdana">#-- 7.2. Problem with phpMyAdmin and PHP 7.2: (at import and export tabs)
+</B></span>#   "Warning in ./libraries/plugin_interface.lib.php#551
 #        count(): Parameter must be an array or an object that implements Countable
-#   Again, this bug is an incompatability issue between PHP7.2 and PHPMyAdmin version in Ubuntu 18.04
-#   The easiest solution is to correct the line on plugin_interface.lib.php ourselves.
+# - Again, this bug is an incompatability issue between PHP7.2 and PHPMyAdmin version 
+# in Ubuntu 18.04
+# The easiest solution is to correct the line on plugin_interface.lib.php ourselves.
+#
 # 7.2.1. Backup plugin_interface.lib.php
-sudo cp /usr/share/phpmyadmin/libraries/plugin_interface.lib.php /usr/share/phpmyadmin/libraries/plugin_interface.lib.php.original
+<code><span style="Color:DodgerBlue">sudo cp /usr/share/phpmyadmin/libraries/plugin_interface.lib.php /usr/share/phpmyadmin/libraries/plugin_interface.lib.php.original
+</span></code>#
 # 7.2.2. Modify plugin_interface.lib.php
-sudo nano /usr/share/phpmyadmin/libraries/plugin_interface.lib.php
-#   Find: if (! is_null($options) &amp;&amp; count($options) &gt; 0) {
+<code><span style="Color:DodgerBlue">sudo nano /usr/share/phpmyadmin/libraries/plugin_interface.lib.php
+</span></code>#   Find: if (! is_null($options) &amp;&amp; count($options) &gt; 0) {
 #   If you cannot find it Find: if ($options != null &amp;&amp; count($options) &gt; 0) {
 #   Change to: if (! is_null($options) &amp;&amp; count((array)$options) &gt; 0) {
-</code> </pre> </div> </p>
-</code> </pre> </div> </p>
+</pre> </div> </p>
+</pre> </div> </p>
 <br /><br /><br /><script>
 function myFunction(divid) {
   var x = document.getElementById(divid);

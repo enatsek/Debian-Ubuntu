@@ -2,36 +2,40 @@ AnsibleOnUbuntu - Ansible Tutorial for Ubuntu Linux
 
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org
-# This document is free text: you can redistribute it and/or modify
+# - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version.
-# This document is distributed in the hope that it will be useful,
+#
+# - This document is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
+#
+# - You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #---0. Specs
-# 0.0. Servers managed from a workstation
-#   This tutorial aims to bring you to a moderate level using Ansible. (Almost) All 
-#      examples are tested and verified as working. There might be slight mistakes 
-#      and you can think of them as small challenges. 
-#   This tutorial is about using Ansible on Ubuntu (and Debian) servers, but I 
-#      believe you can apply most of the examples to other servers like Alma Linux.
-#   I am not an expert of Ansible. Actually I prepared this tutorial while I was 
-#     learning it. 
+#-- 0.0. Servers managed from a workstation
+# - This tutorial aims to bring you to a moderate level using Ansible. (Almost) All 
+# examples are tested and verified as working. There might be slight mistakes 
+# and you can think of them as small challenges. 
+# - This tutorial is about using Ansible on Ubuntu (and Debian) servers, but I 
+# believe you can apply most of the examples to other servers like Alma Linux.
+# - I am not an expert of Ansible. Actually I prepared this tutorial while I was 
+# learning it. 
 #
-# 0.1. Workstation: wrk -> Ubuntu 22.04 LTS Desktop
-# 0.2. Servers:
-#        Local Virtual Servers:
-#          srv1, srv2, srv3    -> Ubuntu 22.04 LTS Server
-#          ubuntu20            -> Ubuntu 20.04 LTS Server
-#          debian11            -> Debian 11 Server
+#-- 0.1. Workstation: 
+# wrk -> Ubuntu 22.04 LTS Desktop
+#
+#-- 0.2. Servers:
+# - Local Virtual Servers:
+# srv1, srv2, srv3    -> Ubuntu 22.04 LTS Server
+# ubuntu20            -> Ubuntu 20.04 LTS Server
+# debian11            -> Debian 11 Server
 #        
-# 0.3. Resources:
+#-- 0.3. Resources:
 # Book: 978-1-4842-1660-6 Ansible From Beginner to Pro by Michael Heap
 # Book: 978-1-78899-756-0 Mastering Ubuntu Server Second Edition by Jay LaCroix
 Link:https://docs.ansible.com/ansible/
@@ -41,53 +45,53 @@ Link:https://www.golinuxcloud.com/ansible-tutorial/
 
 
 #---1. Installation and Main Configuration
-# 1.1. Install ansible on workstation
+#-- 1.1. Install ansible on workstation
 sudo apt update
 sudo apt install ansible --yes
 #
-# 1.2. Create ansible user on all the servers and on the workstation
+#-- 1.2. Create ansible user on all the servers and on the workstation
 # !!!Run on workstation and on all servers!!!
-#  Create user ansible and give it a password 
+# Create user ansible and give it a password 
 sudo useradd -d /home/ansible -m ansible -s /bin/bash
 sudo passwd ansible
-#  add it to the sudo group
+# add it to the sudo group
 sudo usermod -aG sudo ansible
-#  make sure it is added
+# make sure it is added
 getent group sudo
 #
-# 1.3. Copy workstation's ansible user's ssh key to servers
+#-- 1.3. Copy workstation's ansible user's ssh key to servers
 # !!!Run only on workstation!!!
-#   Change to ansible user
+# Change to ansible user
 sudo su ansible
 # Create SSH keys, leave passfield empty
 ssh-keygen
-# Copy ansible users SSH key to the servers
+# Copy ansible user's SSH key to the servers
 ssh-copy-id -i ~/.ssh/id_rsa.pub srv1
 ssh-copy-id -i ~/.ssh/id_rsa.pub srv2
 ssh-copy-id -i ~/.ssh/id_rsa.pub srv3
 ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu20
 ssh-copy-id -i ~/.ssh/id_rsa.pub debian11
-#  Now we can ssh to servers with ansible user without password
+# Now we can ssh to servers with ansible user without password
 #
-# 1.4. On all servers, configure ansible user to sudo without password
+#-- 1.4. On all servers, configure ansible user to sudo without password
 # !!!Run on all servers!!!
-#    create /etc/sudoers.d/ansible file
+# create /etc/sudoers.d/ansible file
 sudo nano /etc/sudoers.d/ansible
-#  put the following line on it
+#  put the following line in it
 #__________________
 ansible ALL=(ALL) NOPASSWD: ALL
 #__________________
-#  make the file owned by root
+# make the file owned by root
 sudo chown root:root /etc/sudoers.d/ansible
-#   change the permissions of file 
+# change the permissions of file 
 sudo chmod 440 /etc/sudoers.d/ansible
 # All the preliminary work is completed
-# From now on all commands will be run on workstation
+# From now on, all commands will be run on workstation
 
 
 
 #---2. Configuration
-# 2.1. Configuration File
+#-- 2.1. Configuration File
 # Ansible looks for the configuration file in the following order:
 #  - File specified by the ANSIBLE_CONFIG environment variable
 #  - ./ansible.cfg (ansible.cfg in the current directory)
@@ -112,13 +116,13 @@ forks = 5
 # There are numerous thing to be configured, you may check them
 #   at file /etc/ansible/ansible.cfg
 #
-# 2.2. Making a home for Ansible files
+#-- 2.2. Making a home for Ansible files
 # I prefer placing all ansible files on /home/ansible/ansible
 mkdir /home/ansible/ansible
 # And a subdirectory for playbook (explained later)
 mkdir /home/ansible/ansible/playbooks
 #
-# 2.3. Inventory File
+#-- 2.3. Inventory File
 # Create a clean inventory file
 touch /home/ansible/.hosts
 # Change ownership and permissions for ansible user
@@ -140,7 +144,7 @@ ubuntu20
 #________________________
 # As in our sample, you can group hosts
 #
-# 2.4. A simple test
+#-- 2.4. A simple test
 # Ping all our servers
 ansible all -m ping
 #   with full verbose
@@ -149,26 +153,28 @@ ansible all -m ping -vvvv
 
 
 #---3. More on Inventory
-# 3.1. it is possible to use a different inventory for each ansible or ansible-playbook
-#   command:
+#-- 3.1. Command based inventory
+# - It is possible to use a different inventory for each ansible or ansible-playbook
+# command:
 ansible all –i /path/to/inventory –m ping
 #
-# 3.2. to use a different ssh port
+#-- 3.2. to use a different ssh port
 host1.example.com:50822
 #
-# 3.3. Using ranges in host file names
+#-- 3.3. Using ranges in host file names
 host[1:3].example.com
 host[a:d][a:z].example.com
 #
-# 3.4. Using options for user name, ssh port, ssh private key
+#-- 3.4. Using options for user name, ssh port, ssh private key
 alpha.example.com ansible_user=bob ansible_port=50022
 bravo.example.com ansible_user=mary ansible_ssh_private_key_file=/path/to/mary.key
 frontend.example.com ansible_port=50022
 yellow.example.com ansible_host=192.168.33.10
 #
-# 3.5. If you want to use more than 1 inventory file you can put all your 
-#   inventories in a directory and specify the directory as the inventory file. 
-#   Below is a simple example.
+#-- 3.5. Using more than 1 inventory
+# - If you want to use more than 1 inventory file you can put all your 
+# inventories in a directory and specify the directory as the inventory file. 
+# Below is a simple example.
 sudo su ansible
 mkdir /home/ansible/ansible/inventory
 nano /home/ansible/ansible/inventory/inventory1
@@ -181,9 +187,10 @@ srv3
 #__________________________________
 ansible all -i /home/ansible/ansible/inventory -m ping
 #
-# 3.6. If you want to use a dynamic host file, you can use a program which outputs 
-#   the inventory in Json format. Then you can give your program as inventory file. 
-#   Below is a very simple example.
+#-- 3.6. Dynamic Inventory
+# - If you want to use a dynamic host file, you can use a program which outputs 
+# the inventory in Json format. Then you can give your program as inventory file. 
+# Below is a very simple example.
 sudo su ansible
 nano /home/ansible/ansible/inventory.py
 #______________________________________
@@ -193,14 +200,14 @@ print('{"srv": {"hosts" : ["srv1", "srv2", "srv3"]}}')
 chmod +x /home/ansible/ansible/inventory.py
 ansible all -i /home/ansible/ansible/inventory.py -m ping
 #
-# 3.7. Needless to say; you can combine dynamic and static inventories, by 
-#   combining methods in 3.5. and 3.6.
+# - Needless to say; you can combine dynamic and static inventories, by 
+# combining methods in 3.5. and 3.6.
 #
-# 3.8. Groups of Groups
-# You can create master groups to include other groups. Master groups require
-#   children keyword.
-# In my inventory, if I want to combine all ubuntu servers I would modify my 
-#   inventory file as follows:
+# 3.7. Groups of Groups
+# - You can create master groups to include other groups. Master groups require
+# children keyword.
+# - In my inventory, if I want to combine all ubuntu servers I would modify my 
+# inventory file as follows:
 #________________________
 [ubuntu2204]
 srv1
@@ -218,11 +225,12 @@ ubuntu2204
 ubuntu2004
 #________________________
 #
-# 3.9. Inventory Variables
-# You can define variables in inventory file. They might be host or group based.
-#   For group based variables; var keyword is used. 
-# Below, using my inventory file, I created a variable named role for a group and 
-#   a host. 
+# 3.8. Inventory Variables
+# - You can define variables in inventory file. They might be host or group based.
+# For group based variables; var keyword is used. 
+# - Below, using my inventory file, I created a variable named role for a group and 
+# a host. 
+#________________________
 [ubuntu2204]
 srv1
 srv2
@@ -238,31 +246,32 @@ ubuntu20
 [ubuntu22.04:vars]
 role="dbserver"
 #________________________
-# That way, using ansible, you can install apache to servers with webserver role and
-#   install mariadb to servers with role dbserver.
+# - That way, using ansible, you can install apache to servers with webserver role 
+# and install mariadb to servers with role dbserver.
 
 
 
 #---4. Ansible Ad Hoc Commands
-# You can run Ansible commands in 2 ways, 1 is direct (adhoc), 2 through playbooks. 
-#   In the next section we will work on our first playbook. 
-# Ad hoc commands might be suitable for one time tasks. For recurring tasks it 
-#   would be better to use playbooks.
-# 4.1. Ping host(s)
+# - You can run Ansible commands in 2 ways, 1 is direct (adhoc), 2 through playbooks. 
+# In the next section we will work on our first playbook. 
+# - Ad hoc commands might be suitable for one time tasks. For recurring tasks it 
+# would be better to use playbooks.
+#
+#-- 4.1. Ping host(s)
 # Actually we ran our 1st command at 2.4. Ping all hosts in default inventory.
 ansible all -m ping
 # We can specify another inventory
 ansible all -i /home/ansible/ansible/inventory.py -m ping
 ansible all -i /home/ansible/ansible/inventory -m ping
 #
-# 4.2. Run a shell command on hosts
+#-- 4.2. Run a shell command on hosts
 ansible all -m shell -a "ls -al"
 # -m can be ommitted
 ansible srv1 -a "ls -al"
 # List of open ports on the servers
 ansible all -m shell -a 'netstat -plntu' --become
 #
-# 4.3. File and Directory Operations
+#-- 4.3. File and Directory Operations
 # Copy a file to servers
 ansible all -m copy -a "src=/tmp/testfile dest=/tmp/testfile"
 # Create a directory on server
@@ -272,7 +281,7 @@ ansible all -m file -a "dest=/tmp/testfile state=absent"
 # Copy a file from server
 ansible srv1 -m fetch -a "src=/var/log/dmesg dest=/home/ansible/backup flat=yes"
 #
-# 4.4. Reboot Servers
+#-- 4.4. Reboot Servers
 # Reboot all servers  (Does not reboot because of the permissions)
 ansible all -a "/sbin/reboot"
 # Reboot all servers with sudo privilege
@@ -282,13 +291,13 @@ ansible all -a "/sbin/reboot" -f 10 --become
 # Reboot all servers with sudo privilege, manually enter sudo password
 ansible all -a "/sbin/reboot" --become --ask-become-pass
 #
-# 4.5. User Management
+#-- 4.5. User Management
 # Add a user
 ansible srv1 -m ansible.builtin.user -a "name=foo" --become
 # Remove a user
 ansible srv1 -m ansible.builtin.user -a "name=foo state=absent" --become
 #
-# 4.6. Package Management (apt)
+#-- 4.6. Package Management (apt)
 # Add a ppa repository
 ansible srv1 -m apt_repository -a "repo=ppa:ondrej/php state=present" --become 
 # Remove a ppa repository
@@ -308,7 +317,7 @@ ansible srv1 -m apt -a "name=apache2 state=absent purge=yes" --become
 # Remove apache, remove all configuration about it, and also remove all unused packages
 ansible srv1 -m apt -a "name=apache2 state=absent purge=yes autoremove=yes" --become
 #
-# 4.7. Service Management
+#-- 4.7. Service Management
 # Start and Enable Apache service
 ansible srv1 -m service -a "name=apache2 state=started enabled=yes" --become
 # Stop Apache service
@@ -319,10 +328,10 @@ ansible srv1 -m service -a "name=apache2 state=restarted" --become
 
 
 #---5. A Simple Playbook to Install Apache
-# Playbooks are files in YAML format. They contain commands
-#   to run by Ansible.
-# Our playbook will install apache, and prepare a sample 
-#   homepage containing the host name
+# - Playbooks are files in YAML format. They contain commands to run by Ansible.
+# - Our playbook will install apache, and prepare a sample homepage containing 
+# the host name
+#
 # 5.1. Create directories
 sudo su ansible
 mkdir /home/ansible/ansible/playbooks/apache
@@ -389,6 +398,7 @@ nano /home/ansible/ansible/playbooks/apache/templates/index.html.j2
     service: name=apache2 state=restarted
 # Restart apache, systemctl restart apache2
 #_____________________________________________________
+#
 # Variables in /home/ansible/playbooks/apache/templates/index.html.j2
 # {{ ansible_hostname }} : hostname as ansible gathers
 # {{ inventory_hostname }} : hostname as in inventory file
@@ -399,20 +409,19 @@ ansible-playbook apache.yml
 ./apache.yml
 
 
-
 #---6. A More Complex Playbook to Install LAMP
-# 6.0. Necessary Steps
-# Cache Update (sudo apt update)
-# Install Apache (sudo apt install apache2)
-# Install Mariadb (sudo apt install mariadb-server)
-# Install PHP (sudo apt install php libapache2-mod-php php-mysql)
+#-- 6.0. Necessary Steps
+# - Cache Update (sudo apt update)
+# - Install Apache (sudo apt install apache2)
+# - Install Mariadb (sudo apt install mariadb-server)
+# - Install PHP (sudo apt install php libapache2-mod-php php-mysql)
 #
-# 6.1. Create Directories
+#-- 6.1. Create Directories
 sudo su ansible
 mkdir /home/ansible/ansible/playbooks/lamp
 cd /home/ansible/ansible/playbooks/lamp
 #
-# 6.2. Create ansible playbook
+#-- 6.2. Create ansible playbook
 nano /home/ansible/ansible/playbooks/lamp/lamp.yml
 #_______________________________________________________________________
 #!/usr/bin/env ansible-playbook
@@ -472,29 +481,41 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
     apk:
       name: apache2
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Install apache, don't do anything if already installed
     apk:
       name: apache2
       state: present
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Install apache, upgrade to latest if already installed
     apk:
       name: apache2
       state: latest
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Update repositories and install apache
     apk:
       name: apache2
       update_cache: yes
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Remove apache
     apk:
       name: apache2
       state: absent
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Install more than 1 packages
     apk:
       name: apache2, php
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Update cache and update apache to latest
     apk:
@@ -502,9 +523,13 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       state: latest
       update_cache: yes
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Update all packages to their latest version
     apk:
       upgrade: yes
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Update cache
     apk:
@@ -521,25 +546,35 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
     apt:
       name: apache2
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Install apache, don't do anything if already installed
     apt:
       name: apache2
       state: present
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Install apache, upgrade to latest if already installed
     apt:
       name: apache2
       state: latest
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Update repositories and install apache
     apt:
       name: apache2
       update_cache: yes
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Remove apache
     apt:
       name: apache2
       state: absent
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Install more than 1 packages
     apt:
@@ -547,11 +582,15 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       - apache2
       - php
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Update cache and update apache to latest
     apt:
       name: apache2
       state: latest
       update_cache: yes
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Install latest php, ignore "install-recommends"
     apt:
@@ -559,27 +598,39 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       state: latest
       install_recommends: no
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Update all packages to their latest version
     apt:
       name: "*"
       state: latest
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Upgrade the OS (apt-get dist-upgrade)
     apt:
       upgrade: dist
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Update cache (apt-get update)
     apt:
       update_cache: yes
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Update cache if the last update is more than 1 hour
     apt:
       update_cache: yes
       cache_valid_time: 3600
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Remove unused packages
     apt:
       autoclean: yes
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Remove unused dependencies
     apt:
@@ -608,11 +659,15 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
         <p>Update time: {{ ansible_date_time.date }}
         {{ ansible_date_time.time }} </p>
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Remove previously added block
     blockinfile:
       path: /var/www/html/index.html
       marker: "<!-- {mark} MANAGED by ANSIBLE BLOCK -->"
       block: ""
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Add mappings to /etc/hosts file, make a backup of file
     blockinfile:
@@ -637,13 +692,19 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
     command: free
     register: freevals
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Run a command if a path does not exist
     command: /usr/sbin/reboot now creates=/etc/flag
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Run a command if a path does not exist
     command:
       cmd: /usr/sbin/reboot now
       creates: /etc/flag
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Run a command if a path does not exist
     command:
@@ -667,6 +728,8 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       mode: '0644'
       backup: yes
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Copy a file with specified owner and permissions
     copy:
       src: /home/ansible/main.cf
@@ -675,6 +738,8 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       group: root
       mode: u=rw,g=r,o=r
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Copy a file with specified owner and permissions
     copy:
       src: /home/ansible/main.cf
@@ -682,6 +747,8 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       owner: root
       group: root
       mode: u+rw,g-wx,o-rwx
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Copy a file with specified owner and permissions, backup the file
     copy:
@@ -692,11 +759,15 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       mode: '0644'
       backup: yes
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Copy a file on the server to another location
     copy:
       src: /etc/apache2/apache2.conf
       dest: /etc/apache2/apache2.conf.backup
       remote_src: yes
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Copy an inline text to a file
     copy:
@@ -713,9 +784,13 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
     debug:
       var: hostvars[inventory_hostname]
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Display a message
     debug:
       msg: Working fine so far
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Print return information from a previous task part 1
     shell: /usr/bin/date
@@ -723,6 +798,8 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
   - name: Print return information from a previous task part 2
     debug:
       var: result.stdout_lines
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Print multi lines of information from variables part1
     shell: whoami
@@ -754,6 +831,8 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
   - name: Display Result
     debug:
       var: DBUsers.stdout_lines
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Generic question with multiple different responses
     expect:
@@ -788,6 +867,8 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       dest: /tmp/conf
     # File will be copied to /tmp/conf/hostname/etc/apache2/apache.conf
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Fetch server file, directly to the specified directory
     fetch:
       src: /etc/apache2/apache2.conf
@@ -795,6 +876,8 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
     # File will be copied to /tmp/conf/apache.conf
     # Consecutive files will be overwritten
       flat: yes
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Fetch server file, directly to the specified directory
 #   directly to the specified directory for every server
@@ -816,6 +899,8 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       group: ansible
       mode: '0644'
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Create a symbolic link of a file, change ownership of the original file
     file:
       src: /tmp/test.conf
@@ -824,17 +909,23 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       group: ansible
       state: link
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Create a hard link
     file:
       src: /tmp/test.conf
       dest: /home/ansible/test.conf
       state: hard
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Touch a file and set permissions
     file:
       path: /tmp/test.conf
       state: touch
       mode: u=rw,g=r,o=r
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Touch a file, but preserve its times. 
 #  so there is no change if it was touched before
@@ -844,11 +935,15 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       modification_time: preserve
       access_time: preserve
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Create a directory, do nothing if it already exists
     file:
       path: /tmp/test
       state: directory
       mode: '0755'
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Update modification and access time of a file to now
     file:
@@ -856,6 +951,8 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       state: file
       modification_time: now
       access_time: now
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Change ownership of a directory recursively 
     file:
@@ -865,10 +962,14 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       owner: www-data
       group: www-data
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Delete a file
     file:
       path: /tmp/test.conf
       state: absent
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Remove a directory recursively
     file:
@@ -887,6 +988,8 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       dest: /tmp/wordpress.tar.gz
       mode: '0440'
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Download file with md5 checksum
     get_url:
       url: https://wordpress.org/latest.tar.gz
@@ -904,11 +1007,15 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       name: admins
       state: present
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Create a group named admins gid 1250
     group:
       name: admins
       state: present
       gid: 1250
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Delete admins group
     group:
@@ -929,11 +1036,15 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       regexp: '^192\.168\.0\.201'
       line: 192.168.0.201 srv1.x386.xyz
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Remove previously added line in /etc/hosts
     lineinfile:
       path: /etc/hosts
       regexp: '^192\.168\.0\.201'
       state: absent
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Create a file if it does not exist and add a line
     lineinfile:
@@ -951,16 +1062,24 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
     pause:
       minutes: 5
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Pause for 30 seconds
     pause:
       seconds: 30
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Pause until prompted
     pause:
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Pause until prompted with message
     pause:
       prompt : "Press enter to continue"
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Pause to get password
     pause:
@@ -977,9 +1096,13 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
   - name: Reboot and connect again
     reboot:
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Reboot and wait up to 1 hour for connecting again
     reboot:
       reboot_timeout: 3600
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Display a message to users, wait 5 minutes and reboot
     reboot:
@@ -1000,6 +1123,8 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       replace: '\1.com\2'
     # \1 = (.*)   \2 = (\s+)
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Do the same, but start after and expression and end before another
     replace:
       path: /etc/hosts
@@ -1009,6 +1134,8 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
     # Starts with anything, then comes .org and one or more whitespace
       replace: '\1.com\2'
     # \1 = (.*)   \2 = (\s+)
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Comment every line containing TEST, backup the original file
     replace:
@@ -1028,24 +1155,34 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
   - name: Run a script 
     script: /home/ansible/ansible/backup.sh
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Run a script
     script:
       cmd: /home/ansible/ansible/backup.sh
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Run a script only if a file does not exist on the server
     script: /home/ansible/ansible/backup.sh
     args:
       creates: /tmp/backup.txt
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Run a script only if a file exists on the server
     script: /home/ansible/ansible/backup.sh
     args:
       removes: /tmp/backup.txt
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Run a script using bash
     script: /home/ansible/ansible/backup.sh
     args:
       executable: /bin/bash
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Run a python script
     script: /home/ansible/ansible/backup.py
@@ -1063,20 +1200,28 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       name: apache2
       state: started
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Stop apache if started
     service:
       name: apache2
       state: stopped
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Restart apache
     service:
       name: apache2
       state: restarted
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Reload apache
     service:
       name: apache2
       state: reloaded
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Enable apache service, do not touch the state
     service:
@@ -1093,19 +1238,27 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
   - name: Execute command on remote shell; stdout to a file
     shell: backup.sh >> backup.log
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Execute command on remote shell; stdout to a file
     shell: 
       cmd: backup.sh >> backup.log
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Change to a directory before executing a command
     shell: backup.sh >> backup.log
     args:
       chdir: /tmp/
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: command only if a file does not exist
     shell: backup.sh >> backup.log
     args:
       creates: backup.log
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Change to a directory before executing a command, disable warning
     shell: backup.sh >> backup.log
@@ -1124,11 +1277,15 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       state: directory
       suffix: tempdir
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Create a temporary file with suffix and save its name to a variable
     tempfile:
       state: file
       suffix: temp
     register: tempfilename
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Use the variable created above to remove the file
     file:
@@ -1154,6 +1311,8 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       group: www-data
       mode: '0660'
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Create an html file from a template
     template:
       src: /home/ansible/ansible/playbooks/apache/templates/index.html.j2
@@ -1174,11 +1333,15 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       src: /home/ansible/test.tar.xz
       dest: /tmp
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Unarchive a file on the server
     unarchive:
       src: /home/ansible/test.zip
       dest: /tmp
       remote_src: yes
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Download and unpack wordpress
     unarchive:
@@ -1199,6 +1362,8 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       comment: main user
       group: exforge
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Add user exforge with a primary group with the same name,
 #   with a specific uid. group must exist.
     user:
@@ -1207,12 +1372,16 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       uid: 1111
       group: exforge
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Add user exforge with bash shell, append the user to www-data and postfix group
     user:
       name: exforge
       shell: /bin/bash
       groups: www-data,postfix
       append: yes
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Add vmail user with a specific home dir
     user:
@@ -1222,10 +1391,14 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       group: vmail
       home: /var/mail
 #______________________________________________________________
+#
+#______________________________________________________________
   - name: Remove user exforge
     user:
       name: exforge
       state: absent
+#______________________________________________________________
+#
 #______________________________________________________________
   - name: Remove user exforge, remove directories too
     user:
@@ -1237,69 +1410,68 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
 
 
 
-
 #---8. Roles
-# 8.0. Introduction
+#-- 8.0. Introduction
 # Playbooks can be splitted into roles. That way, we can create reusable code.
 # The lamp example at 7. will be rewritten using 4 roles:
 #   Cache Update
 #   Install Apache
 #   Install MariaDB
 #   Install PHP and dependencies
-# 8.1. Role Structure
-# Roles are created with ansible-galaxy init command. Naming convention for roles 
-#   is as identifier.role. I use exforge as my identifier, you can use anything you 
-#   want. For a role to install apache, my rolename would be exforge.apache: 
+#
+#-- 8.1. Role Structure
+# - Roles are created with ansible-galaxy init command. Naming convention for roles 
+# is as identifier.role. I use exforge as my identifier, you can use anything you 
+# want. For a role to install apache, my rolename would be exforge.apache: 
 ansible-galaxy init exforge.apache
-# A directory with role.name is created under the current directory with
-#   the following structure:
+# - A directory with role.name is created under the current directory with
+# the following structure:
 #
-# README.md  (file)
-# defaults  (directory)
+# README.md             (file)
+# defaults              (directory)
 #    defaults/main.yml  (file)
-# files  (directory)
-# handlers  (directory)
-#    handlers/main.yml (file)
-# meta  (directory)
-#    meta/main.yml (file)
-# tasks  (directory)
-#    tasks/main.yml (file)
-# templates  (directory)
-# tests  (directory)
-#    tests/inventory  (directory)
-#    tests/test.yml (file)
-# vars  (directory)
-#    vars/main.yml  (file)
+# files                 (directory)
+# handlers              (directory)
+#    handlers/main.yml  (file)
+# meta                  (directory)
+#    meta/main.yml      (file)
+# tasks                 (directory)
+#    tasks/main.yml     (file)
+# templates             (directory)
+# tests                 (directory)
+#    tests/inventory    (directory)
+#    tests/test.yml     (file)
+# vars                  (directory)
+#    vars/main.yml      (file)
 #
-# All of the directories and files are optional.
-# README.md file is used for documentation. Expected to contain the purpose
-#   of the role and any other important information.
-# defaults/main.yml is used as a configuration file to define default variables in
-#   the role. Variables in vars/main.yml overrides variables defined here.
-# files directory is used to place static files. Files used in roles without any
-#   manipulation can be stored here.
-# handlers/main.yml is used to define handlers (like starting, stopping or 
-#   restarting services). 
-# meta/main.yml is used to contain metadata for the role. Metadata can be used
-#   if you want to publish your role to Ansible Galaxy.
-# tasks/main.yml is the main file of the role. Expected to contain role actions. 
-#   Actions here will be executed when your role runs.
-# templates directory is used to place template (dynamic) files. The files here can 
-#   contain variables to interpolate them before using on target systems.
-# test directory is used to create test playbooks to consume the role. Mostly used 
-#   to test roles with a system like Jenkins or Travis.
-# vars/main.yml is similar to defaults/main.yml with an exception. Variables 
-#   defined here overrides the variables defined at fact gathering section. 
-#   Variables defined here also overrides the variables defined in defaults/
-#   main.yml.
-# Note: The new version of Ansible, does not create templates and files 
-#   directories, but they still exist in the documentation. I am not sure if it 
-#   is a bug or something else. In any way, I create this directories when I need 
-#   them.
+# - All of the directories and files are optional.
+# - README.md file is used for documentation. Expected to contain the purpose
+# of the role and any other important information.
+# - defaults/main.yml is used as a configuration file to define default variables in
+# the role. Variables in vars/main.yml overrides variables defined here.
+# - files directory is used to place static files. Files used in roles without any
+# manipulation can be stored here.
+# - handlers/main.yml is used to define handlers (like starting, stopping or 
+# restarting services). 
+# - meta/main.yml is used to contain metadata for the role. Metadata can be used
+# if you want to publish your role to Ansible Galaxy.
+# - tasks/main.yml is the main file of the role. Expected to contain role actions. 
+# Actions here will be executed when your role runs.
+# - templates directory is used to place template (dynamic) files. The files here can 
+# contain variables to interpolate them before using on target systems.
+# - test directory is used to create test playbooks to consume the role. Mostly used 
+# to test roles with a system like Jenkins or Travis.
+# - vars/main.yml is similar to defaults/main.yml with an exception. Variables 
+# defined here overrides the variables defined at fact gathering section. 
+# Variables defined here also overrides the variables defined in defaults/main.yml.
+# - Note: The new version of Ansible, does not create templates and files 
+# directories, but they still exist in the documentation. I am not sure if it 
+# is a bug or something else. In any way, I create this directories when I need 
+# them.
 #
-# 8.2. Preparing LAMP Roles
-# We will have 4 roles for LAMP installation. Namely; aptcache, apache, mariadb and
-#   php.
+#-- 8.2. Preparing LAMP Roles
+# - We will have 4 roles for LAMP installation. Namely; aptcache, apache, mariadb and
+# php.
 # Create a directory for the roles and init the roles:
 mkdir -p /home/ansible/ansible/playbooks/roles
 cd /home/ansible/ansible/playbooks/roles
@@ -1308,7 +1480,7 @@ ansible-galaxy init exforge.apache
 ansible-galaxy init exforge.mariadb
 ansible-galaxy init exforge.php
 #
-# 8.3. Create the new playbook with the roles
+#-- 8.3. Create the new playbook with the roles
 nano /home/ansible/ansible/playbooks/lamp.yml
 #_______________________________________
 #!/usr/bin/env ansible-playbook
@@ -1325,7 +1497,7 @@ nano /home/ansible/ansible/playbooks/lamp.yml
 # Make it executable
 chmod +x /home/ansible/ansible/playbooks/lamp.yml
 #
-# 8.4. aptcache role
+#-- 8.4. aptcache role
 nano /home/ansible/ansible/playbooks/roles/exforge.aptcache/tasks/main.yml
 #_______________________________________
 ---
@@ -1336,7 +1508,7 @@ nano /home/ansible/ansible/playbooks/roles/exforge.aptcache/tasks/main.yml
     cache_valid_time: 3600
 #_______________________________________
 #
-# 8.5. apache role
+#-- 8.5. apache role
 nano /home/ansible/ansible/playbooks/roles/exforge.apache/tasks/main.yml
 #_______________________________________
 ---
@@ -1347,7 +1519,7 @@ nano /home/ansible/ansible/playbooks/roles/exforge.apache/tasks/main.yml
     state: present
 #_______________________________________
 #
-# 8.6. mariadb role
+#-- 8.6. mariadb role
 nano /home/ansible/ansible/playbooks/roles/exforge.mariadb/tasks/main.yml
 #_______________________________________
 ---
@@ -1358,7 +1530,7 @@ nano /home/ansible/ansible/playbooks/roles/exforge.mariadb/tasks/main.yml
     state: present
 #_______________________________________
 #
-# 8.7. php role
+#-- 8.7. php role
 nano /home/ansible/ansible/playbooks/roles/exforge.php/tasks/main.yml
 #_______________________________________
 - name: Install PHP and dependencies
@@ -1371,13 +1543,13 @@ nano /home/ansible/ansible/playbooks/roles/exforge.php/tasks/main.yml
     - php-mysql
 #_______________________________________
 #
-# 8.8. Running the new playbook
+#-- 8.8. Running the new playbook
 cd /home/ansible/ansible/playbooks
 ansible-playbook lamp.yml
 
 
 #---9.Ansible Facts and Magic Variables
-# 9.1. Ansible Facts
+#-- 9.1. Ansible Facts
 # 9.1.1. Getting Facts
 # Get all facts for test201 server
 ansible srv1 -m setup
@@ -1447,44 +1619,45 @@ srv1 | SUCCESS => {
 #
 # 9.1.2. Accessing Ansible Facts
 # You can use any value from the facts as a variable. Some examples:
-# Model of first disk
-{{ ansible_facts['devices']['xvda']['model'] }}
-# System hostname
-{{ ansible_facts['nodename'] }}
-# Using another system's fact
-{{ hostvars['asdf.example.com']['ansible_facts']['os_family'] }}
+# Model of first disk:   {{ ansible_facts['devices']['xvda']['model'] }}
+# System hostname :     {{ ansible_facts['nodename'] }}
+# Using another system's fact: 
+# {{ hostvars['asdf.example.com']['ansible_facts']['os_family'] }}
+#
 # 9.1.3. Important Ansible Facts
 # Date and time
-ansible_date_time.date -->  "2020-11-11"
-ansible_date_time.time -->  "08:44:06"
+# ansible_date_time.date -->  "2020-11-11"
+# ansible_date_time.time -->  "08:44:06"
 # OS
-ansible_os_family      -->  "Debian" for Debian and Ubuntu, "RedHat" for CentOS
-ansible_distribution   -->  "Ubuntu" for Ubuntu, "Debian" for Debian, "CentOS" for CentOS
-ansible_hostname       -->  "test201"
-ansible_distribution_version --> "20.04"
+# ansible_os_family      -->  "Debian" for Debian and Ubuntu, "RedHat" for CentOS
+# ansible_distribution   -->  "Ubuntu" for Ubuntu, "Debian" for Debian, "CentOS" for CentOS
+# ansible_hostname       -->  "test201"
+# ansible_distribution_version --> "20.04"
 #
-# 9.2. Ansible Magic Variables
-inventory_hostname: Hostname as in inventory
-inventory_hostname_short: Hostname as in inventory short format
-ansible_play_hosts: list of all hosts still active in the current play.
-ansible_play_batch: list of hostnames that are in scope for the current ‘batch’ of the play.
-ansible_playbook_python: Path to the python executable used to invoke the Ansible command line tool.
-inventory_dir: Pathname of the directory holding Ansible’s inventory 
-inventory_file: Pathname and the filename pointing to the Ansible’s inventory host file.
-playbook_dir: Playbook base directory.
-role_path: current role’s pathname and only works inside a role.
-ansible_check_mode: Boolean, set to True if you run Ansible with --check.
-
+#-- 9.2. Ansible Magic Variables
+# - inventory_hostname: Hostname as in inventory
+# - inventory_hostname_short: Hostname as in inventory short format
+# - ansible_play_hosts: list of all hosts still active in the current play.
+# - ansible_play_batch: list of hostnames that are in scope for the current ‘batch’ 
+# of the play.
+# - ansible_playbook_python: Path to the python executable used to invoke the Ansible 
+# command line tool.
+# - inventory_dir: Pathname of the directory holding Ansible’s inventory 
+# - inventory_file: Pathname and the filename pointing to the Ansible’s inventory
+# host file.
+# - playbook_dir: Playbook base directory.
+# - role_path: current role’s pathname and only works inside a role.
+# - ansible_check_mode: Boolean, set to True if you run Ansible with --check.
 
 
 
 #---10. Distinguishing Linux Distribution
-# Debian and Ubuntu name Apache Server as apache2 and use apt package manager. 
-#   Alpine also names Apache Server as apache2 and uses apk package manager. RHEL 
-#   (and Alma) names it as httpd and use dnf package manager. 
-# Our example role will distinguish the distribution and call appropriate tasks.
+# - Debian and Ubuntu name Apache Server as apache2 and use apt package manager. 
+# Alpine also names Apache Server as apache2 and uses apk package manager. RHEL 
+# (and Alma) names it as httpd and use dnf package manager. 
+# - Our example role will distinguish the distribution and call appropriate tasks.
 #
-# 10.1. A Playbook to install Apache on Ubuntu (and Debian) and Alma (and Redhat)
+#-- 10.1. A Playbook to install Apache on Ubuntu (and Debian) and Alma (and Redhat)
 nano /home/ansible/ansible/playbooks/apache.yml
 #______________________________________________________
 #!/usr/bin/env ansible-playbook
@@ -1508,20 +1681,20 @@ nano /home/ansible/ansible/playbooks/apache.yml
     when: ansible_os_family == "Alpine"
 #______________________________________________________
 #
-# 10.2. Other OS Families
+#-- 10.2. Other OS Families
 # Some of the other possible ansible_os_family options are:
-#   "Debian" for Linux Mint, Neon, KDE Neon, Raspbian
-#   "RedHat" for Centos, Fedora, Scientific, CloudLinux, PSBM, OracleLinux, Amazon
-#   "AlmaLinux" for Alma
-#   "Suse" for Suse, OpenSuSe, SLES, SLED
-#   "Gentoo" for Gentoo
-#   "Archlinux" for ArchLinux, Manjaro
-#   "Mandrake" for Mandrake, Mandriva
-#   "Solaris"  for Solaris, Nexenta, OnmiOS, OpenIndiana, SmartOS
-#   "Slackware" for Slackware
-#   "Darwin" for MacOSX
+# - "Debian" for Linux Mint, Neon, KDE Neon, Raspbian
+# - "RedHat" for Centos, Fedora, Scientific, CloudLinux, PSBM, OracleLinux, Amazon
+# - "AlmaLinux" for Alma
+# - "Suse" for Suse, OpenSuSe, SLES, SLED
+# - "Gentoo" for Gentoo
+# - "Archlinux" for ArchLinux, Manjaro
+# - "Mandrake" for Mandrake, Mandriva
+# - "Solaris"  for Solaris, Nexenta, OnmiOS, OpenIndiana, SmartOS
+# - "Slackware" for Slackware
+# - "Darwin" for MacOSX
 #
-# 10.3. A Role to install Apache on Ubuntu (Debian), Alma (Redhat), and Alpine
+#-- 10.3. A Role to install Apache on Ubuntu (Debian), Alma (Redhat), and Alpine
 cd /home/ansible/ansible/playbooks/roles
 ansible-galaxy init exforge.apacheDRA
 nano  /home/ansible/ansible/playbooks/roles/exforge.apacheDRA/tasks/main.yml
@@ -1572,26 +1745,26 @@ nano  /home/ansible/ansible/playbooks/apacheDRA.yml
 cd /home/ansible/ansible/playbooks
 ansible-playbook apacheDRA.yml
 #
-# 10.1.4. Exercise
+# 10.4. Exercise
 # Redesign apacheDRA role, using package module.
 
 
 #---11. Role Variables
-# You can set role variables when you consume a role in a playbook. The variables
-#   are defined in the roles and can be set values at the playbook.
-# Our example will install apache (if it is not installed), create a configuration
-#   with the given site name and create a default page with the given parameters.
-# After creating the role, default variables will be defined in defaults/main.yml 
-#   dir, apache conf file and html templates will be created at templates/ dir, and 
-#   role tasks will be coded at tasks/main.yml. After all, we will create a 
-#   playbook, set all variables there and run the role.
+# - You can set role variables when you consume a role in a playbook. The variables
+# are defined in the roles and can be set values at the playbook.
+# - Our example will install apache (if it is not installed), create a configuration
+# with the given site name and create a default page with the given parameters.
+# - After creating the role, default variables will be defined in defaults/main.yml 
+# dir, apache conf file and html templates will be created at templates/ dir, and 
+# role tasks will be coded at tasks/main.yml. After all, we will create a 
+# playbook, set all variables there and run the role.
 #
-# 11.1. Create the role apachesite
+#-- 11.1. Create the role apachesite
 cd /home/ansible/ansible/playbooks/roles
 ansible-galaxy init exforge.apachesite
 mkdir /home/ansible/ansible/playbooks/roles/exforge.apachesite/templates
 # 
-# 11.2. Define Variables
+#-- 11.2. Define Variables
 nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/defaults/main.yml
 #____________________________________________________
 ---
@@ -1603,7 +1776,7 @@ html_header: Welcome to {{ ansible_hostname }}
 html_text: This page is created by Ansible
 #____________________________________________________
 #
-# 11.3. Create Apache conf file and index.html file templates
+#-- 11.3. Create Apache conf file and index.html file templates
 nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/templates/apache.conf.j2
 #____________________________________________________
 <VirtualHost *:80>
@@ -1628,7 +1801,7 @@ nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/templates/index.ht
 </html>
 #____________________________________________________
 #
-# 11.4. Create Tasks
+#-- 11.4. Create Tasks
 nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/tasks/main.yml
 #____________________________________________________
 ---
@@ -1679,7 +1852,7 @@ nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/tasks/main.yml
     state: reloaded
 #____________________________________________________
 #
-# 11.5. Create a playbook and consume the role
+#-- 11.5. Create a playbook and consume the role
 nano /home/ansible/ansible/playbooks/apachesite.yml
 #____________________________________________________
 #!/usr/bin/env ansible-playbook
@@ -1698,15 +1871,14 @@ nano /home/ansible/ansible/playbooks/apachesite.yml
 # Run the playbook
 cd /home/ansible/ansible/playbooks
 ansible-playbook apachesite.yml
-#____________________________________________________
 
 
 
 #---12. Variable Filters
-# There are a number of filters available for the variables used in templates, 
-#   playbooks and roles.
+# - There are a number of filters available for the variables used in templates, 
+# playbooks and roles.
 #
-# 12.1. Syntax Filters
+#-- 12.1. Syntax Filters
 # Allows case manipulation: lowercase, uppercase, capital case, title case
 # my_message: We are the world
 # {{ my_message | lower }}  --> we are the world
@@ -1714,32 +1886,31 @@ ansible-playbook apachesite.yml
 # {{ my_message | capitalize }}  --> We are the world
 # {{ my_message | title }}  --> We Are The World
 #
-# 12.2. Default Filter
-# Using an undefined variable causes an error, to avoid that situation default filter
-#   can be used.
+#-- 12.2. Default Filter
+# - Using an undefined variable causes an error, to avoid that situation default
+# filter can be used.
 # {{ my_message | default('No message') }}
 #
-# 12.3. List Filters
-# List definition is similar to Python:
-#   num_list: [1,2,3,4,5,6,7,8,9,0]
+#-- 12.3. List Filters
+# List definition is similar to Python: num_list: [1,2,3,4,5,6,7,8,9,0]
 # Some of the list filters are: max, min and random
 # {{ num_list | max }}  --> 9
 # {{ num_list | min }}  --> 0
 # {{ num_list | random }}  --> a random one
 #
-# 12.4. Pathname Filters
+#-- 12.4. Pathname Filters
 # First, let's define a variable containing a path
 #   path: "/etc/apache2/apache2.conf"
 # Two of the most important filters are; dirname and basename
 # {{ path | dirname }}   --> /etc/apache2
 # {{ path | basename }}  --> apache2.conf
 #
-# 12.5. Date and Time Filters
+#-- 12.5. Date and Time Filters
 # {{ '%d-%m-%Y' | strftime }}  --> Current date
 # {{ '%H:%M:%S' | strftime }}  --> Current time
 # {{ '%d-%m-%Y %H:%M:%S' | strftime }}  --> Current date and time
 #
-# 12.6. Math Filters
+#-- 12.6. Math Filters
 # {{ num | log }}     --> log of num on base e
 # {{ num | log(10) }} --> log of num on base 10
 # {{ num | pow(2) }}  --> square of num
@@ -1748,12 +1919,12 @@ ansible-playbook apachesite.yml
 # {{ num | abs }}     --> absolute of num
 # {{ num | round }}   --> round of num
 #
-# 12.7. Encryption Filters
+#-- 12.7. Encryption Filters
 # {{ my_message | hash('sha1') }}  --> sha1 hash of variable
 # {{ my_message | hash('md5') }}   --> md5 hash of variable
 # {{ my_message | checksum }}     --> checksum of variable
 #
-# 12.8. An Example Playbook to Cover all the Filters Here
+#-- 12.8. An Example Playbook to Cover all the Filters Here
 nano /home/ansible/ansible/playbooks/filters.yml
 #_____________________________________________________
 #!/usr/bin/env ansible-playbook
@@ -1806,17 +1977,16 @@ nano /home/ansible/ansible/playbooks/filters.yml
 #_____________________________________________________        
 
 
-###
 
 
 #---13. Handlers
-# If you want a task to run when something is changed, you can use handlers. For
-#   example, a task tries to change a conf file for apache, and you need to reload
-#   or restart apache if the file is changed. That is when you use handlers.
-# You might remember, there is a folder for handlers for the roles. That is where 
-#   you are expected to put your handlers. 
+# - If you want a task to run when something is changed, you can use handlers. For
+# example, a task tries to change a conf file for apache, and you need to reload
+# or restart apache if the file is changed. That is when you use handlers.
+# - You might remember, there is a folder for handlers for the roles. That is where 
+# you are expected to put your handlers. 
 #
-# 13.1. A Simple Example
+#-- 13.1. A Simple Example
 # Our example playbook will install apache and reload it if it is installed. 
 nano /home/ansible/ansible/playbooks/simple_handler.yml
 #_____________________________________________________
@@ -1835,8 +2005,8 @@ nano /home/ansible/ansible/playbooks/simple_handler.yml
     service:
       name: apache2
       state: restarted
-#
-# 13.2. Handlers in Roles
+#_____________________________________________________
+#-- 13.2. Handlers in Roles
 # Let's change the role in apachesite in 11. so that it includes handlers.
 # First change tasks in tasks folder:
 nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/tasks/main.yml
@@ -1889,8 +2059,9 @@ nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/tasks/main.yml
     group: www-data
   notify: reload_apache
 #____________________________________________________
-# Handlers run after the play is finished, so if a handler called twice (or more), 
-#   it will run only once.
+#
+# - Handlers run after the play is finished, so if a handler is called twice (or 
+# more), it will run only once.
 #
 # Add handlers
 nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/handlers/main.yml
@@ -1913,7 +2084,8 @@ ansible-playbook apachesite.yml
 #---14. Error Recovery (Block and rescue)
 # Ansible has an exception handling (error recovery) mechanism similar to Python's
 #   try-except-finally block.
-# 14.1. Block-Rescue-Always usage
+#
+#-- 14.1. Block-Rescue-Always usage
 # A very simple example playbook would be:
 nano /home/ansible/ansible/playbooks/blocktest.yml
 #_______________________________________________
@@ -1948,24 +2120,24 @@ nano /home/ansible/ansible/playbooks/blocktest.yml
           msg: "Job finished"
 #_______________________________________________
 #
-# 14.2. Explanations
-# Tasks in the block (Tasks 1, 2, 3 and 4 in our example) run sequentially. 
-# If an error occurs in any task (Task 3 in our example), execution stops and 
-#   the control goes to rescue task. Then the tasks in rescue block (Rescue Task in 
-#   our example) run. Then the tasks in always block (Always task in our example) 
-#   run.
-# If there is no error in tasks, rescue block is skipped and the tasks in always 
-#   block (Always task in our example) run.
+#-- 14.2. Explanations
+# - Tasks in the block (Tasks 1, 2, 3 and 4 in our example) run sequentially. 
+# - If an error occurs in any task (Task 3 in our example), execution stops and 
+# the control goes to rescue task. Then the tasks in rescue block (Rescue Task in 
+# our example) run. Then the tasks in always block (Always task in our example) 
+# run.
+# - If there is no error in tasks, rescue block is skipped and the tasks in always 
+# block (Always task in our example) run.
 #
-# Error recovery is a very important subject in all kinds of programming. I believe 
-#   you should use it as much as possible to prevent an unexpected termination of
-#   programs (playbooks for ansible).
+# - Error recovery is a very important subject in all kinds of programming. I believe 
+# you should use it as much as possible to prevent an unexpected termination of
+# programs (playbooks for ansible).
 
 
 
 #---15. Skipped Content
-# I skipped the following subjects just because I think I won't use them. I believe
-#   most of you won't use them ever. 
+# - I skipped the following subjects just because I think I won't use them. I believe
+# most of you won't use them ever. 
 #
 # Ansible vault
 # Ansible pull

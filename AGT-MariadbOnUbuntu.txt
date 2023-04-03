@@ -2,39 +2,42 @@ MariadbOnUbuntu: MariaDB Tutorial on Ubuntu 22.04
 
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org
-# This document is free text: you can redistribute it and/or modify
+# - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version.
-# This document is distributed in the hope that it will be useful,
+#
+# - This document is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
+#
+# - You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #---Specs
-# Mariadb 2 Installation, configuration, simple user and DB management
-#   on Ubuntu 22.04 (and 20.04) Server
-# Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix
-#   This book hes introduced me to Ubuntu Server and I have to thank him for this
-#   excellent book:
+# - Mariadb Installation, configuration, simple user and DB management on Ubuntu 
+# 22.04 (and 20.04) Server.
+# - Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix. This book has
+# introduced me to Ubuntu Server and I have to thank him for this excellent book:
 Link:https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
-# Almost (if not all) everything on this tutorial can be applied to Mysql.
-# Mariadb is a fork or Mysql, and I prefer using it, besides a lot of other 
+# - Almost (if not all) everything on this tutorial can be applied to Mysql.
+# - Mariadb is a fork or Mysql, and I prefer using it, besides a lot of other 
 # reasons, I just don't like Or*cle
 # !!! Do not ever install Mariadb and Mysql on the same server !!! 
 
-#---0. Update Software Repositories
-sudo apt update
 
 #---1. Installation and Securing
-# 1.1. Install MariaDB
+#-- 1.0. Update repositories
+sudo apt update
+#
+#-- 1.1. Install MariaDB
 sudo apt install mariadb-server
-# 1.2. Check if installation is OK
+#
+#-- 1.2. Check if installation is OK
 systemctl status mariadb
 #
-# 1.3. Secure MariaDB
+#-- 1.3. Secure MariaDB
 #   The following command makes some fine tunes regarding Mariadb security.
 sudo mysql_secure_installation
 #   You will be asked some questions.
@@ -44,7 +47,7 @@ sudo mysql_secure_installation
 #     account is already protected, so you can answer n.
 #   For the next questions you can select default answers.
 #
-# 1.4. Enter Mariadb shell
+#-- 1.4. Enter Mariadb shell
 # EXIT; to exit
 sudo mariadb
 
@@ -53,100 +56,103 @@ sudo mariadb
 #---2. Basic User Management
 # !!! All commands must be run on Mariadb shell !!!
 sudo mariadb
-# 2.1. For administrating the db, it is best to create an admin user
-#     on mariadb shell. admin can only login from localhost
-#    Remember to change password to a good one.
+#-- 2.1. Admin User
+# - For administrating the db, it is best to create an admin user on mariadb 
+# shell. admin can only login from localhost
+# Remember to change password to a good one.
 CREATE USER 'admin'@'localhost' IDENTIFIED BY 'password';
 FLUSH PRIVILEGES;
-# 2.2. To let admin login from anywhere use:
+#
+#-- 2.2. To let admin login from anywhere use:
 CREATE USER 'admin'@'%' IDENTIFIED BY 'password';
 FLUSH PRIVILEGES;
 #
-# 2.3. Give admin full access DB server. Can do anything but grant
+#-- 2.3. Give admin full access DB server. 
+# Can do anything but grant
 GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';
 #
-# 2.4. Following command makes a full admin, with grant permissions
+#-- 2.4. Following command makes a full admin, with grant permissions
 GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 #
-# 2.5. Create a readonly user for DB
+#-- 2.5. Create a readonly user for DB
 GRANT SELECT ON *.* TO 'readonlyuser'@'localhost' IDENTIFIED BY 'password';
 #
-# 2.6. List database users
+#-- 2.6. List database users
 SELECT HOST, USER, PASSWORD FROM mysql.user;
 #
-# 2.7. Grant a user readonly access for one database
+#-- 2.7. Grant a user readonly access for one database
 GRANT SELECT ON mysampledb.* TO 'appuser'@'localhost' IDENTIFIED BY 'password';
 #
-# 2.8. Grant a user full access for a database
+#-- 2.8. Grant a user full access for a database
 GRANT ALL ON mysampledb.* TO 'appuser'@'localhost' IDENTIFIED BY 'password';
 #
-# 2.9. Show the grants for a particular user:
+#-- 2.9. Show the grants for a particular user:
 SHOW GRANTS FOR 'appuser'@'localhost';
 #
-# 2.10. Remove a user
+#-- 2.10. Remove a user
 DELETE FROM mysql.user WHERE user='myuser' AND host='localhost';
 
 
 #---3. Database Manipulation
 # !!! All commands must be run on Mariadb shell !!!
-# 3.1. Create a database
+#-- 3.1. Create a database
 CREATE DATABASE mysampledb;
 #
-# 3.2. List databases
+#-- 3.2. List databases
 SHOW DATABASES;
 #
-# 3.3. Enter the workspace of  a database
+#-- 3.3. Enter the workspace of a database
 USE mysampledb;
 #
-# 3.4. Create a table
+#-- 3.4. Create a table
 CREATE TABLE Employees (Name char(15), Age int(3), Occupation char(15));
 #
-# 3.5. List columns of a table
+#-- 3.5. List columns of a table
 SHOW COLUMNS IN Employees;
 #
-# 3.6. Insert a row into a table
+#-- 3.6. Insert a row into a table
 INSERT INTO Employees VALUES ('Joe Smith', '26', 'Ninja');
 #
-# 3.7. List contents of a table
+#-- 3.7. List contents of a table
 SELECT * FROM Employees;
 #
-# 3.8. Remove an entry from a database
+#-- 3.8. Remove an entry from a database
 DELETE FROM Employees WHERE Name = 'Joe Smith';
 #
-# 3.9. Drop a table
+#-- 3.9. Drop a table
 DROP TABLE Employees;
 #
-# 3.10. Drop an entire database:
+#-- 3.10. Drop an entire database:
 DROP DATABASE mysampledb;
 
 
 #---4. Backup and Restore
-# 4.1. Backup a database
+#-- 4.1. Backup a database
 sudo mysqldump --databases mysampledb > mysampledb.sql
 #
-# 4.2. Restore it
+#-- 4.2. Restore it
 sudo mariadb < mysampledb.sql
 
 
 #---5. Master-Slave Replication Configuration
-# 5.1. Specs and Preliminary Tasks
-#   Master Server: 192.168.0.231  Ubuntu 22.04 Server
-#   Slave Server:  192.168.0.232  Ubuntu 22.04 Server
-#   Replication User: 'replicate'@'192.168.0.232'
-#   Rep. User Password: Pass1234 
-#   Database instance to replicate: mysampledb
+#-- 5.1. Specs and Preliminary Tasks
+# Master Server        : 192.168.0.231  Ubuntu 22.04 Server
+# Slave Server         :  192.168.0.232  Ubuntu 22.04 Server
+# Replication User     : 'replicate'@'192.168.0.232'
+# Rep. User Password   : Pass1234 
+# Database instance to replicate: mysampledb
 #
-#   Install mariadb on both servers, 
-#   Apply steps in 1 on both servers
-#   Apply step 3.1 to 3.7 on master server
+# - Install mariadb on both servers, 
+# - Apply steps in 1 on both servers
+# - Apply step 3.1 to 3.7 on master server
 #
-#   !!! Please Remember: !!! 
-#      Replication doesn't mean that you don't have to backup.
-#      If you delete something accidentally, it is automatically deleted at slave too
-#      So if you are running a production server, backup (at least) daily and weekly
+#  !! Please Remember: !!! 
+#  - Replication doesn't mean that you don't have to backup. If you delete something 
+#  accidentally, it is automatically deleted at slave too. So if you are running a
+#  production server, backup (at least) daily and weekly.
 #
-# 5.2. Master Server Configuration
+#-- 5.2. Master Server Configuration
 # 5.2.1. Configure master for bin log
 sudo nano /etc/mysql/conf.d/mysql.cnf
 # Change as below:
@@ -157,6 +163,7 @@ log-bin
 binlog-do-db=mysampledb
 server-id=1
 #__________________
+#
 # 5.2.2. Change bind address to outside
 sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
 # Change following line (Around line 28)
@@ -167,6 +174,7 @@ bind-address = 127.0.0.1
 #_______________________
 bind-address = 0.0.0.0
 #_______________________
+#
 # 5.2.3. Create replication user
 # Run following command on master mariadb shell
 GRANT REPLICATION SLAVE ON *.* to 'replicate'@'192.168.0.232' identified by 'Pass1234';
@@ -175,14 +183,14 @@ GRANT REPLICATION SLAVE ON *.* to 'replicate'@'192.168.0.232' identified by 'Pas
 sudo systemctl restart mariadb
 #
 # 5.2.5. Lock Master server for initial full replication
-#   Run on Master server Mariadb shell
+# Run on Master server Mariadb shell
 FLUSH TABLES WITH READ LOCK;
 #
 # 5.2.6. Backup the database at master server
 sudo mysqldump --databases mysampledb > mysampledb.sql
 # Move backup file to the slave server for restoring later
 #
-# 5.3. Slave Server Config
+#-- 5.3. Slave Server Config
 # 5.3.1. Restore database backed up at master
 sudo mariadb < mysampledb.sql
 #
@@ -193,7 +201,7 @@ sudo nano /etc/mysql/conf.d/mysql.cnf
 [mysqld]
 server-id=2
 #__________________
-#  For more than 1 slaves, give different server-id numbers
+# For more than 1 slaves, give different server-id numbers
 #
 # 5.3.3. Restart slave mariadb
 sudo systemctl restart mariadb
@@ -205,10 +213,12 @@ SHOW SLAVE STATUS;
 # If Slave_IO_State is empty run (on mariadb shell)
 START SLAVE;
 #
-# 5.4. Unlock Master Mariadb
-#   Run on master mariadb shell
+#-- 5.4. Unlock Master Mariadb
+# Run on master mariadb shell
 UNLOCK TABLES;
-# 5.5. All set. You can try manipulating the DB on master, changes will be 
-#   applied on slave in a few seconds.
+#
+#-- 5.5. All set. 
+# - You can try manipulating the DB on master, changes will be applied on slave in a
+# few seconds.
 
 

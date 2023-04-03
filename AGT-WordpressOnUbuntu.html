@@ -1,35 +1,37 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"> </head> <body><H1>WordpressOnUbuntu: Install Wordpress  On Ubuntu 22.04
-</H1><p> <a href="javascript:myFunction('Div1')">Copyright (C) 2020 - 2023 Exforge exforge@x386.org
-</a> <div id="Div1" style="margin-left:10%;"><pre><code># This document is free text: you can redistribute it and/or modify
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>WordpressOnUbuntu: Install Wordpress  On Ubuntu 22.04
+</H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2020 - 2023 Exforge exforge@x386.org
+</a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version.
-# This document is distributed in the hope that it will be useful,
+#
+# - This document is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
+#
+# - You should have received a copy of the GNU General Public License
 # along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div2')">Specs
-</a> <div id="Div2" style="margin-left:10%;"><pre><code># Based on Brian Boucheron's Tutorial on
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div2')">Specs
+</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># Based on Brian Boucheron's Tutorial on
 <a href="https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lamp-on-ubuntu-18-04" target="_blank">https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lamp-on-ubuntu-18-04</a>
 # My Server Name: www.x11.xyz  Ubuntu 22.04 Server (or 20.04 Server)
 # Wordpress Mariadb Database Name: wordpress
 # Wordpress Mariadb Database User: wordpressuser
 # Password of wordpressuser: pAsswOrd1234
 # Wordpress website location: /var/www/wordpress
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div3')">0. Install LAMP Stack (See LampOnUbuntu)
-</a> <div id="Div3" style="margin-left:10%;"><pre><code>#   Refer to LampOnUbuntu Tutorial
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div4')">1. Configure a Website (If you haven&#x27;t done already)
-</a> <div id="Div4" style="margin-left:10%;"><pre><code># 1.1. Make room for our website
-sudo mkdir /var/www/wordpress
-# 1.1. Create a configuration file for our web server
-sudo nano /etc/apache2/sites-available/x11.xyz.conf
-#____________________________________________________________________
-&lt;VirtualHost *:80&gt;
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div3')">0. Install LAMP Stack (See LampOnUbuntu)
+</a> </H4><div id="Div3" style="margin-left:1%;"><pre ># Refer to LampOnUbuntu Tutorial
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div4')">1. Configure a Website (If you haven&#x27;t done already)
+</a> </H4><div id="Div4" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 1.1. Make room for our website
+</B></span><code><span style="Color:DodgerBlue">sudo mkdir /var/www/wordpress
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 1.2. Create a configuration file for our web server
+</B></span><code><span style="Color:DodgerBlue">sudo nano /etc/apache2/sites-available/x11.xyz.conf
+</span></code><code><span style="Color:MediumSeaGreen">&lt;VirtualHost *:80&gt;
         ServerAdmin postmaster@x11.xyz
         ServerName www.x11.xyz
         ServerAlias x11.xyz
@@ -37,76 +39,82 @@ sudo nano /etc/apache2/sites-available/x11.xyz.conf
         ErrorLog ${APACHE_LOG_DIR}/x11.xyz-error.log
         CustomLog ${APACHE_LOG_DIR}/x11.xyz-access.log combined
 &lt;/VirtualHost&gt;
-#____________________________________________________________________
-# 1.2. Enable website
-sudo a2ensite x11.xyz.conf
-# 1.3. Reload apache
-sudo systemctl reload apache2
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div5')">2. Create a MariaDB DB User for Wordpress
-</a> <div id="Div5" style="margin-left:10%;"><pre><code># 2.1. Login to MariaDB
-sudo mariadb
-# 2.2. Create a database named as wordpress, create a user named as wordpressuser
-#      and give the user necessarry permissions for the database.
-CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-CREATE USER 'wordpressuser'@'localhost' IDENTIFIED BY 'pAsswOrd1234';
-GRANT ALL ON wordpress.* TO 'wordpressuser'@'localhost';
-FLUSH PRIVILEGES;
-EXIT;
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div6')">3. Install Additional PHP Extensions
-</a> <div id="Div6" style="margin-left:10%;"><pre><code>sudo apt update
-sudo apt install php-curl php-gd php-mbstring php-xml php-xmlrpc php-soap php-intl php-zip
-#   Restart apache
-sudo systemctl restart apache2
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div7')"> 4. Adjust Apache for Wordpress
-</a> <div id="Div7" style="margin-left:10%;"><pre><code># 4.1. Enable wordpress' .htaccess files
-#      by editing our site config, adding folders to override
-sudo nano /etc/apache2/sites-available/x11.xyz.conf
-#   Add following lines to just after DocumentRoot line
-#____________________________________
-        &lt;Directory /var/www/wordpress/&gt;
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 1.3. Enable website
+</B></span><code><span style="Color:DodgerBlue">sudo a2ensite x11.xyz.conf
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 1.4. Reload apache
+</B></span><code><span style="Color:DodgerBlue">sudo systemctl reload apache2
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div5')">2. Create a MariaDB DB User for Wordpress
+</a> </H4><div id="Div5" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 2.1. Login to MariaDB
+</B></span><code><span style="Color:DodgerBlue">sudo mariadb
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.2. Create Database
+</B></span># Create a database named as wordpress, create a user named as wordpressuser
+# and give the user necessarry permissions for the database.
+<code><span style="Color:DodgerBlue">CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+</span></code><code><span style="Color:DodgerBlue">CREATE USER 'wordpressuser'@'localhost' IDENTIFIED BY 'pAsswOrd1234';
+</span></code><code><span style="Color:DodgerBlue">GRANT ALL ON wordpress.* TO 'wordpressuser'@'localhost';
+</span></code><code><span style="Color:DodgerBlue">FLUSH PRIVILEGES;
+</span></code><code><span style="Color:DodgerBlue">EXIT;
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div6')">3. Install Additional PHP Extensions
+</a> </H4><div id="Div6" style="margin-left:1%;"><pre ><code><span style="Color:DodgerBlue">sudo apt update
+</span></code><code><span style="Color:DodgerBlue">sudo apt install php-curl php-gd php-mbstring php-xml php-xmlrpc php-soap php-intl php-zip
+</span></code># Restart apache
+<code><span style="Color:DodgerBlue">sudo systemctl restart apache2
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div7')"> 4. Adjust Apache for Wordpress
+</a> </H4><div id="Div7" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 4.1. Enable wordpress' .htaccess files
+</B></span># Edit our site config, adding folders to override
+<code><span style="Color:DodgerBlue">sudo nano /etc/apache2/sites-available/x11.xyz.conf
+</span></code>#   Add following lines to just after DocumentRoot line
+<code><span style="Color:MediumSeaGreen">        &lt;Directory /var/www/wordpress/&gt;
             AllowOverride All
         &lt;/Directory&gt;
-#____________________________________
-# 4.2. Enable Apache Rewrite module 
-sudo a2enmod rewrite
-# 4.3. (Optional) Check Status of Apache Configs
-sudo apache2ctl configtest
-# 4.4. Restart Apache
-sudo systemctl restart apache2
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div8')"> 5. Download Wordpress
-</a> <div id="Div8" style="margin-left:10%;"><pre><code>#    Wordpress can be installed by apt install, but 
-#      we prefer to download the latest version from the original source
-# 5.1. Go to temp directory, download wordpress, extract it
-cd /tmp
-curl -O https://wordpress.org/latest.tar.gz
-tar xzvf latest.tar.gz
-# 5.2. Before copying to its home we need to make some additions
-#   Create a dummy .htaccess file
-touch /tmp/wordpress/.htaccess
-#   Copy sample config file to real config file
-cp /tmp/wordpress/wp-config-sample.php /tmp/wordpress/wp-config.php
-# 5.3. Copy wordpress files to their location
-sudo cp -a /tmp/wordpress/. /var/www/wordpress
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div9')"> 6. Configure Wordpress Directory
-</a> <div id="Div9" style="margin-left:10%;"><pre><code># 6.1. Set ownerships and permissions
-#     Owned by www-data:www-data
-sudo chown -R www-data:www-data /var/www/wordpress
-#     All files 640, all dirs 750
-sudo find /var/www/wordpress/ -type d -exec chmod 750 {} \;
-sudo find /var/www/wordpress/ -type f -exec chmod 640 {} \;
-# 6.2. Setup wordpress config file
-# 6.2.1. Generate secure phrases
-#    WP requires some secure phrases for security, we will create them now
-curl -s https://api.wordpress.org/secret-key/1.1/salt/
-#    The output of this program will be something like following:
-#    Copy them into a text file
-#______________________________________________________________________________________________
-define('AUTH_KEY',         'O`tLoX^0&lsqb;pT24ty&lt;YOByEP#}wBtd|7M!9^-az.W_v{`;+!*PX_9/A#^#}SL@I_wD');
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 4.2. Enable Apache Rewrite module 
+</B></span><code><span style="Color:DodgerBlue">sudo a2enmod rewrite
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 4.3. (Optional) Check Status of Apache Configs
+</B></span><code><span style="Color:DodgerBlue">sudo apache2ctl configtest
+</span></code><B><span style="Font-Family:Verdana">#-- 4.4. Restart Apache
+</B></span><code><span style="Color:DodgerBlue">sudo systemctl restart apache2
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div8')"> 5. Download Wordpress
+</a> </H4><div id="Div8" style="margin-left:1%;"><pre ># - Wordpress can be installed by apt install, but we prefer to download the latest 
+# version from the original source
+#
+<B><span style="Font-Family:Verdana">#-- 5.1. Go to temp directory, download wordpress, extract it
+</B></span><code><span style="Color:DodgerBlue">cd /tmp
+</span></code><code><span style="Color:DodgerBlue">curl -O https://wordpress.org/latest.tar.gz
+</span></code><code><span style="Color:DodgerBlue">tar xzvf latest.tar.gz
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.2. Before copying to its home we need to make some additions
+</B></span># Create a dummy .htaccess file
+<code><span style="Color:DodgerBlue">touch /tmp/wordpress/.htaccess
+</span></code># Copy sample config file to real config file
+<code><span style="Color:DodgerBlue">cp /tmp/wordpress/wp-config-sample.php /tmp/wordpress/wp-config.php
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.3. Copy wordpress files to their location
+</B></span><code><span style="Color:DodgerBlue">sudo cp -a /tmp/wordpress/. /var/www/wordpress
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div9')"> 6. Configure Wordpress Directory
+</a> </H4><div id="Div9" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 6.1. Set ownerships and permissions
+</B></span># Owned by www-data:www-data
+<code><span style="Color:DodgerBlue">sudo chown -R www-data:www-data /var/www/wordpress
+</span></code>#     All files 640, all dirs 750
+<code><span style="Color:DodgerBlue">sudo find /var/www/wordpress/ -type d -exec chmod 750 {} \;
+</span></code><code><span style="Color:DodgerBlue">sudo find /var/www/wordpress/ -type f -exec chmod 640 {} \;
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 6.2. Setup wordpress config file
+</B></span># 6.2.1. Generate secure phrases
+# WP requires some secure phrases for security, we will create them now
+<code><span style="Color:DodgerBlue">curl -s https://api.wordpress.org/secret-key/1.1/salt/
+</span></code># The output of this program will be something like following:
+# Temporarily copy them into a text file, we'll use it later
+<code><span style="Color:MediumSeaGreen">define('AUTH_KEY',         'O`tLoX^0&lsqb;pT24ty&lt;YOByEP#}wBtd|7M!9^-az.W_v{`;+!*PX_9/A#^#}SL@I_wD');
 define('SECURE_AUTH_KEY',  '-U&rsqb;7Eu_Bbh!tA/5lk3.eDRzGrY&lt;%i,:cn*yBOiE^*zZHK&amp;RTbHmv&rsqb;^+&lsqb;&lsqb;1v49=bq');
 define('LOGGED_IN_KEY',    'VHYd-&rsqb;&gt;SDIsT_^-;&gt;_0DBV:2}&gt;u^wI;&rsqb;T&gt;IqXr}++h1sRjQM%U^I0ijVwAi? (yB');
 define('NONCE_KEY',        'lui4^EuI3U-m8m!IUI%&gt;;+)r&lsqb;dJW`w2pl@g4JU==(,ipCi|EC)+vo,&amp;2rAR Dm+-');
@@ -114,13 +122,12 @@ define('AUTH_SALT',        'W,&gt;S!kG,KCPZ/`Y7;(hpL,1-M2lanZz(3)kdds-{;t9D(X&am
 define('SECURE_AUTH_SALT', 'f*q%x{M6#GQ|L{U|!UoI~`8(71};e}Xm;4#e^J/b&amp;DC&lt;DO=Xv6$caAC&lt;2q4gs}^0');
 define('LOGGED_IN_SALT',   '=HN;=E:zl1-X:5w:MTw3LHV^?VP})Z}&amp;T*P!zvAG|R=S&gt;6;~Xz|rh@S#MrSH2FA)');
 define('NONCE_SALT',       '`d)&gt;*Ae)9g&lt;Aaa1eQ*9HlqY-|__kE5,Nte2UAMJO3ro=9T#y=,|-/^D(&amp;+XQ:,la');
-#______________________________________________________________________________________________
+</span></code>#
 # 6.2.2. Add phrases to WP config file
-sudo nano /var/www/wordpress/wp-config.php
-#    Browse to the section with the following lines, replace them with the
-#    text you copied. (Around line 49)
-#___________________________________________________________     
-define( 'AUTH_KEY',         'put your unique phrase here' );
+<code><span style="Color:DodgerBlue">sudo nano /var/www/wordpress/wp-config.php
+</span></code># - Browse to the section with the following lines, replace them with the text you 
+# copied. (Around line 49)
+<code><span style="Color:MediumSeaGreen">define( 'AUTH_KEY',         'put your unique phrase here' );
 define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );
 define( 'LOGGED_IN_KEY',    'put your unique phrase here' );
 define( 'NONCE_KEY',        'put your unique phrase here' );
@@ -128,11 +135,9 @@ define( 'AUTH_SALT',        'put your unique phrase here' );
 define( 'SECURE_AUTH_SALT', 'put your unique phrase here' );
 define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
 define( 'NONCE_SALT',       'put your unique phrase here' );
-#___________________________________________________________
-#
-#   While in the same file, browse up to the section with the following lines:
-#______________________________________________________________
-/** The name of the database for WordPress */
+</span></code>#
+# While in the same file, browse up to the section with the following lines:
+<code><span style="Color:MediumSeaGreen">/** The name of the database for WordPress */
 define( 'DB_NAME', 'database_name_here' );
 /** MySQL database username */
 define( 'DB_USER', 'username_here' );
@@ -144,24 +149,21 @@ define( 'DB_HOST', 'localhost' );
 define( 'DB_CHARSET', 'utf8' );
 /** The Database Collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
-#______________________________________________________________
-#
-#   Change as specified:
+</span></code>#
+# - Change as specified:
 # database_name_here : wordpress
 # username_here : wordpressuser
 # password : pAsswOrd1234
 #
-#  Add following line:
-#_____________________________
-define('FS_METHOD', 'direct');
-#_____________________________
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div10')"> 7. Wordpress is ready, open in your browser
-</a> <div id="Div10" style="margin-left:10%;"><pre><code>http://www.x11.xyz
-# Of course it would be a good idea to add SSL to your site, refer to
-#   CertbotOnUbuntu tutorial.
-</code> </pre> </div> </p>
-</code> </pre> </div> </p>
+# Add following line:
+<code><span style="Color:MediumSeaGreen">define('FS_METHOD', 'direct');
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div10')"> 7. Wordpress is ready, open in your browser
+</a> </H4><div id="Div10" style="margin-left:1%;"><pre ><code><span style="Color:DodgerBlue">http://www.x11.xyz
+</span></code># - Of course it would be a good idea to add SSL to your site, refer to 
+# CertbotOnUbuntu tutorial.
+</pre> </div> </p>
+</pre> </div> </p>
 <br /><br /><br /><script>
 function myFunction(divid) {
   var x = document.getElementById(divid);

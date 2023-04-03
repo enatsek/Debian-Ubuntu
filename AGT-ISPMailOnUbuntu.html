@@ -1,366 +1,341 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"> </head> <body><H1>ISPmail Tutorial for Ubuntu 22.04 Server
-</H1><p> <a href="javascript:myFunction('Div1')">Copyright (C) 2021 - 2023 Exforge exforge@x386.org
-</a> <div id="Div1" style="margin-left:10%;"><pre><code># This document is free text: you can redistribute it and/or modify
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>ISPmail Tutorial for Ubuntu 22.04 Server
+</H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2021 - 2023 Exforge exforge@x386.org
+</a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version.
-# This document is distributed in the hope that it will be useful,
+#
+# - This document is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
+#
+# - You should have received a copy of the GNU General Public License
 # along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div2')">0. Specs
-</a> <div id="Div2" style="margin-left:10%;"><pre><code># Fully functional mail server with all open source components. 
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div2')">0. Specs
+</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># Fully functional mail server with all open source components. 
 #
 # Very highly based on ISPmail tutorials of Christoph Haas
 <a href="https://workaround.org/ispmail" target="_blank">https://workaround.org/ispmail</a>
 # with some additions from ISP Mail Tutorial (Caramel Edition) of Alexey Abel
 <a href="https://123qwe.com/" target="_blank">https://123qwe.com/</a>
 #
-# Please consider, all the hard work is done by Christoph Haas, I am just an
+# - Please consider, all the hard work is done by Christoph Haas, I am just an
 #   implementer.
 #
-# To guarantee everything works, you need to implement the tutorial on a freshly
+# - To guarantee everything works, you need to implement the tutorial on a freshly
 #   installed Ubuntu 22.04 version. It is tested on freshly installed Ubuntu 22.04 
 #   system. But of course you are free to use it as you wish.
 #
 #
 # Ubuntu 22.04 LTS  	(Debian Buster Originally)
-# Postfix		SMTP
-# rspamd		spam check
-# Dovecot		POP3 &amp; IMAP
-# Roundcube		Webmail
-# MariaDB		DB Engine
+# Postfix               SMTP
+# rspamd                spam check
+# Dovecot               POP3 &amp; IMAP
+# Roundcube             Webmail
+# MariaDB               DB Engine
 #
-# 'mailadmin'@'localhost':
-#       MariaDB admin user for mail database with pw: "Password12"
-#       This user will be used to administrate database
-# 'mailserver'@'127.0.0.1':
-#       MariaDB normal user for mail database with pw: "Password34"
-#       This user will be used by Postfix and Dovecot
+# - 'mailadmin'@'localhost':
+# MariaDB admin user for mail database with pw: "Password12"
+# This user will be used to administrate database
+#
+# - 'mailserver'@'127.0.0.1':
+# MariaDB normal user for mail database with pw: "Password34"
+# This user will be used by Postfix and Dovecot
 # !!! Do not forget to change the passwords with strong ones !!!
 # 
-# # Hostname:		mail.x11.xyz
-# Domains:		x11.xyz u11.xyz v11.xyz
-# There must be an A record for mail.x11.xyz with the IP of your 
-#    server. 
+# Hostname:     mail.x11.xyz
+# Domains:      x11.xyz u11.xyz v11.xyz
+# There must be an A record for mail.x11.xyz with the IP of your server. 
 # 
 # Replace with your server and domains with those names.
-# It would be wise to choose your main mail domain and name your server
-#   as mail.domain.com
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div3')">1.Preliminary Tasks
-</a> <div id="Div3" style="margin-left:10%;"><pre><code># I am sure (almost) everything is possible with sudo, but for this tutorial only
-#   I prefer becoming root and processing that way. It is just because the original
+# - It would be wise to choose your main mail domain and name your server like
+# mail.domain.com
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div3')">1.Preliminary Tasks
+</a> </H4><div id="Div3" style="margin-left:1%;"><pre ># - I am sure (almost) everything is possible with sudo, but for this tutorial only
+# I prefer becoming root and processing that way. It is just because the original
 # document uses root.
-# 1.1. Become root
-sudo -i
-# 1.2. Update and Upgrade
-apt update
-apt upgrade
 #
-# 1.3. Install packages
-# MariaDB server
-apt -y install mariadb-server
-# Postfix - Select Internet Site and mail.x11.xyz (your hostname)
-apt -y install postfix postfix-mysql
-# Apache and PHP
-apt -y install apache2 php
-# rspamd
-apt -y install rspamd
-# Certbot, for ssl certificates
-apt -y install certbot
-# Dovecot
-apt -y install dovecot-mysql dovecot-pop3d dovecot-imapd dovecot-managesieved dovecot-lmtpd
-# Adminer, a replacement of phpmyadmin, for managing DB
-apt -y install adminer
-# default set of certificates of common certificate authorities.
+<B><span style="Font-Family:Verdana">#-- 1.1. Become root
+</B></span><code><span style="Color:DodgerBlue">sudo -i
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 1.2. Update and Upgrade
+</B></span><code><span style="Color:DodgerBlue">apt update
+</span></code><code><span style="Color:DodgerBlue">apt upgrade
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 1.3. Install packages
+</B></span># MariaDB server
+<code><span style="Color:DodgerBlue">apt -y install mariadb-server
+</span></code># Postfix - Select Internet Site and mail.x11.xyz (your hostname)
+<code><span style="Color:DodgerBlue">apt -y install postfix postfix-mysql
+</span></code># Apache and PHP
+<code><span style="Color:DodgerBlue">apt -y install apache2 php
+</span></code># rspamd
+<code><span style="Color:DodgerBlue">apt -y install rspamd
+</span></code># Certbot, for ssl certificates
+<code><span style="Color:DodgerBlue">apt -y install certbot
+</span></code># Dovecot
+<code><span style="Color:DodgerBlue">apt -y install dovecot-mysql dovecot-pop3d dovecot-imapd dovecot-managesieved dovecot-lmtpd
+</span></code># Adminer, a replacement of phpmyadmin, for managing DB
+<code><span style="Color:DodgerBlue">apt -y install adminer
+</span></code># default set of certificates of common certificate authorities.
 #   Don't mind if already installed.
-apt -y install ca-certificates
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div4')">2.Configuring Apache Server and Certificates
-</a> <div id="Div4" style="margin-left:10%;"><pre><code># 2.1. Create a home for mail.x11.xyz and change owner
-mkdir /var/www/mail.x11.xyz
-chown www-data:www-data /var/www/mail.x11.xyz
-#
-# 2.2. Remove apache default confs if you don't already use it
-rm /etc/apache2/sites-enabled/*
-#
-# 2.3. Create conf file for mail.x11.xyz
-nano /etc/apache2/sites-available/mail.x11.xyz-http.conf 
-#____________________________________________
-&lt;VirtualHost *:80&gt;
+<code><span style="Color:DodgerBlue">apt -y install ca-certificates
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div4')">2.Configuring Apache Server and Certificates
+</a> </H4><div id="Div4" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 2.1. Create a home for mail.x11.xyz and change owner
+</B></span><code><span style="Color:DodgerBlue">mkdir /var/www/mail.x11.xyz
+</span></code><code><span style="Color:DodgerBlue">chown www-data:www-data /var/www/mail.x11.xyz
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.2. Remove apache default confs if you don't already use it
+</B></span><code><span style="Color:DodgerBlue">rm /etc/apache2/sites-enabled/*
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.3. Create conf file for mail.x11.xyz
+</B></span><code><span style="Color:DodgerBlue">nano /etc/apache2/sites-available/mail.x11.xyz-http.conf 
+</span></code><code><span style="Color:MediumSeaGreen">&lt;VirtualHost *:80&gt;
   ServerName mail.x11.xyz
   DocumentRoot /var/www/mail.x11.xyz
 &lt;/VirtualHost&gt;
-#____________________________________________
-#
-# 2.4. Enable our new conf
-a2ensite mail.x11.xyz-http.conf
-#
-# 2.5. Reload apache to make the config active
-systemctl reload apache2
-#
-# 2.6. Create a test file to check web server
-echo "Just a test" &gt; /var/www/mail.x11.xyz/test
-#
-# 2.7. For a test, on your browser, go to the following adres
-http://mail.x11.xyz/test
-# If you see Just a test, then everything is fine up to now
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.4. Enable our new conf
+</B></span><code><span style="Color:DodgerBlue">a2ensite mail.x11.xyz-http.conf
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.5. Reload apache to make the config active
+</B></span><code><span style="Color:DodgerBlue">systemctl reload apache2
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.6. Create a test file to check web server
+</B></span><code><span style="Color:DodgerBlue">echo "Just a test" &gt; /var/www/mail.x11.xyz/test
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.7. For a test, on your browser, go to the following adres
+</B></span><code><span style="Color:DodgerBlue">http://mail.x11.xyz/test
+</span></code># If you see Just a test, then everything is fine up to now
 # Now we need to get our ssl certificates
 #
-# 2.8. Get SSL Certificates form letsencrypt.org using certbot
-certbot certonly --webroot --webroot-path /var/www/mail.x11.xyz -d mail.x11.xyz
-#   You will be asked to give your email, don't hesitate giving it. You must 
-#      agree their Terms of Service with A. Then you'll be asked to share your
-#      email with EFF (Organization that owns LetsEncrytp, I advise you to say Y
+<B><span style="Font-Family:Verdana">#-- 2.8. Get SSL Certificates form letsencrypt.org using certbot
+</B></span><code><span style="Color:DodgerBlue">certbot certonly --webroot --webroot-path /var/www/mail.x11.xyz -d mail.x11.xyz
+</span></code># - You will be asked to give your email, don't hesitate giving it. You must 
+# agree their Terms of Service with A. Then you'll be asked to share your email 
+# with EFF (Organization that owns LetsEncrytp, I advise you to say Y
 #
-#   If everything goes well there will be 4 files on 
-#       /etc/letsencrypt/archive/mail.x11.xyz
+# - If everything goes well there will be 4 files on : 
+# /etc/letsencrypt/archive/mail.x11.xyz
 #   cert.pem : the certificate file
 #   chain.pem : the chaining or intermediate certificate
 #   fullchain.pem : cert.pem and chain.pem combined
 #   privkey.pem : Your site's private key. Keep it secret (I mean it)
-#   There might be some numbers at the names of the file. Do not mind them.
+# There might be some numbers at the names of the file. Do not mind them.
 # Certificates will expire in 3 months but certbot will renew them automatically
 #
-# 2.9. Adding https to our site
-#   Create a conf for https site and enable it
-nano /etc/apache2/sites-available/mail.x11.xyz-https.conf
-#_________________________________________________________________________
-&lt;VirtualHost *:443&gt;
+<B><span style="Font-Family:Verdana">#-- 2.9. Adding https to our site
+</B></span>#   Create a conf for https site and enable it
+<code><span style="Color:DodgerBlue">nano /etc/apache2/sites-available/mail.x11.xyz-https.conf
+</span></code><code><span style="Color:MediumSeaGreen">&lt;VirtualHost *:443&gt;
  ServerName mail.x11.xyz
  DocumentRoot /var/www/mail.x11.xyz
  SSLEngine on
  SSLCertificateFile /etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
  SSLCertificateKeyFile /etc/letsencrypt/live/mail.x11.xyz/privkey.pem
 &lt;/VirtualHost&gt;
-#_________________________________________________________________________     
-#
-#   Enable ssl module and the new conf, restart apache2
-a2enmod ssl
-a2ensite mail.x11.xyz-https
-systemctl restart apache2
-#
-# 2.10. Redirect http to https
-#   We want http://mail.x11.xyz to redirect https://mail.x11.xyz
-#      unless letsencrypt checking /well-known/acme-challenge directory
-#   Add redirect lines to just before the end of the http conf (before
-#     &lt;/VirtualHost&gt;
-nano /etc/apache2/sites-available/mail.x11.xyz-http.conf
-#_______________________________________________________
-  RewriteEngine On
+</span></code>#
+# Enable ssl module and the new conf, restart apache2
+<code><span style="Color:DodgerBlue">a2enmod ssl
+</span></code><code><span style="Color:DodgerBlue">a2ensite mail.x11.xyz-https
+</span></code><code><span style="Color:DodgerBlue">systemctl restart apache2
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.10. Redirect http to https
+</B></span># - We want http://mail.x11.xyz to redirect https://mail.x11.xyz unless letsencrypt 
+# checking /well-known/acme-challenge directory
+# Add redirect lines to just before the end of the http conf before &lt;/VirtualHost&gt;
+<code><span style="Color:DodgerBlue">nano /etc/apache2/sites-available/mail.x11.xyz-http.conf
+</span></code><code><span style="Color:MediumSeaGreen">  RewriteEngine On
   RewriteCond %{REQUEST_URI} !.well-known/acme-challenge
   RewriteRule ^(.*)$ https://%{SERVER_NAME}$1 &lsqb;R=301,L&rsqb;
-#_______________________________________________________
-#
-#   Enable rewrite mode and restart apache
-a2enmod rewrite
-systemctl restart apache2
-#
-# 2.11. Automatic Ceritificate Renewal
-# Certbot automatically renews the certificates, if any error happens
-#    we will be warned by an email. But there is a small issue; when the 
-#    certificate renewed postfix, dovecot and apache services on our server
-#    must be restarted. Therefore we will add an post-hook to certbot to do it.
-# Create a file on the place certbot looks for running
-nano /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
-#___________________________________________________________________________
-#!/bin/bash
+</span></code>#
+# Enable rewrite mode and restart apache
+<code><span style="Color:DodgerBlue">a2enmod rewrite
+</span></code><code><span style="Color:DodgerBlue">systemctl restart apache2
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.11. Automatic Ceritificate Renewal
+</B></span># - Certbot automatically renews the certificates, if any error happens we will be
+# warned by an email. But there is a small issue; when the certificate renews; 
+# postfix, dovecot and apache services on our server must be restarted. Therefore 
+# we will add an post-hook to certbot to do it.
+# - Create a file on the place certbot looks for running
+<code><span style="Color:DodgerBlue">nano /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
+</span></code><code><span style="Color:MediumSeaGreen">#!/bin/bash
 systemctl reload apache2
 systemctl reload postfix
 systemctl reload dovecot
-#___________________________________________________________________________
-#Make it executable
-chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div5')">3. Preparing The Database
-</a> <div id="Div5" style="margin-left:10%;"><pre><code># 3.1. Setting up Adminer
-#   Adminer will be our Mariadb Management tool
-#   It will be added to our web site. Can be added just after &lt;VirtualHost&gt;
-nano /etc/apache2/sites-available/mail.x11.xyz-https.conf
-#___________________________________________
- Alias /adminer /usr/share/adminer/adminer
-#___________________________________________
-# Reload apache
-systemctl restart apache2
-# You can see its login screen at:
-https://mail.x11.xyz/adminer
-# But it is not ready yet
+</span></code>#Make it executable
+<code><span style="Color:DodgerBlue">chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div5')">3. Preparing The Database
+</a> </H4><div id="Div5" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 3.1. Setting up Adminer
+</B></span># - Adminer will be our Mariadb Management tool
+# -  It will be added to our web site. Can be added just after &lt;VirtualHost&gt;
+<code><span style="Color:DodgerBlue">nano /etc/apache2/sites-available/mail.x11.xyz-https.conf
+</span></code><code><span style="Color:MediumSeaGreen"> Alias /adminer /usr/share/adminer/adminer
+</span></code># Reload apache
+<code><span style="Color:DodgerBlue">systemctl restart apache2
+</span></code># You can see its login screen at:
+<code><span style="Color:DodgerBlue">https://mail.x11.xyz/adminer
+</span></code># But it is not ready yet
 #
-# 3.2. Create DB and DB Users
-#   Enter Mariadb shell  (you can use exit to return to unix shell)
-mariadb
-#   Create the database
-CREATE DATABASE mailserver;
-#   Create Database Users (Remember to change the passwords)
-grant all on mailserver.* to 'mailadmin'@'localhost' identified by 'Password12';
-grant select on mailserver.* to 'mailserver'@'127.0.0.1' identified by 'Password34';
-# Now you can login to adminer with mailadmin user
+<B><span style="Font-Family:Verdana">#-- 3.2. Create DB and DB Users
+</B></span># Enter Mariadb shell  (you can use exit to return to linux shell)
+<code><span style="Color:DodgerBlue">mariadb
+</span></code># Create the database
+<code><span style="Color:DodgerBlue">CREATE DATABASE mailserver;
+</span></code># Create Database Users (Remember to change the passwords)
+<code><span style="Color:DodgerBlue">grant all on mailserver.* to 'mailadmin'@'localhost' identified by 'Password12';
+</span></code><code><span style="Color:DodgerBlue">grant select on mailserver.* to 'mailserver'@'127.0.0.1' identified by 'Password34';
+</span></code># Now you can login to adminer with mailadmin user
 #
-# 3.3. Creating DB Tables
-# There will be 3 tables in our DB:
-#   virtual_domains: Domains we host
-#   virtual_users: mail users for domains
-#   virtual_aliases: alias definition for users
+<B><span style="Font-Family:Verdana">#-- 3.3. Creating DB Tables
+</B></span># - There will be 3 tables in our DB:
+# virtual_domains : Domains we host
+# virtual_users   : mail users for domains
+# virtual_aliases : alias definitions for users
+#
 # 3 create table commands must be run on Mariadb shell:
-#   First connect to our DB
-USE mailserver;
-#   virtual_domains:
-CREATE TABLE IF NOT EXISTS `virtual_domains` (
- `id` int(11) NOT NULL auto_increment,
- `name` varchar(50) NOT NULL,
- PRIMARY KEY (`id`)
- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-#   virtual_users:
-CREATE TABLE IF NOT EXISTS `virtual_users` (
- `id` int(11) NOT NULL auto_increment,
- `domain_id` int(11) NOT NULL,
- `email` varchar(100) NOT NULL,
- `password` varchar(150) NOT NULL,
- `quota` bigint(11) NOT NULL DEFAULT 0,
- PRIMARY KEY (`id`),
- UNIQUE KEY `email` (`email`),
- FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE
- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-#   virtual_aliases:
-CREATE TABLE IF NOT EXISTS `virtual_aliases` (
- `id` int(11) NOT NULL auto_increment,
- `domain_id` int(11) NOT NULL,
- `source` varchar(100) NOT NULL,
- `destination` varchar(100) NOT NULL,
- PRIMARY KEY (`id`),
- FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE
- ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div6')">4. Postfix - MariaDB Integration
-</a> <div id="Div6" style="margin-left:10%;"><pre><code># 4.1. Connect Domains
-#   Create a config file and fill it, remember changing password
-nano /etc/postfix/mysql-virtual-mailbox-domains.cf
-#_______________________________________________________
-user = mailserver
+# First connect to our DB
+<code><span style="Color:DodgerBlue">USE mailserver;
+</span></code># virtual_domains:
+<code><span style="Color:DodgerBlue">CREATE TABLE IF NOT EXISTS `virtual_domains` (
+</span></code><code><span style="Color:DodgerBlue"> `id` int(11) NOT NULL auto_increment,
+</span></code><code><span style="Color:DodgerBlue"> `name` varchar(50) NOT NULL,
+</span></code><code><span style="Color:DodgerBlue"> PRIMARY KEY (`id`)
+</span></code><code><span style="Color:DodgerBlue"> ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+</span></code># virtual_users:
+<code><span style="Color:DodgerBlue">CREATE TABLE IF NOT EXISTS `virtual_users` (
+</span></code><code><span style="Color:DodgerBlue"> `id` int(11) NOT NULL auto_increment,
+</span></code><code><span style="Color:DodgerBlue"> `domain_id` int(11) NOT NULL,
+</span></code><code><span style="Color:DodgerBlue"> `email` varchar(100) NOT NULL,
+</span></code><code><span style="Color:DodgerBlue"> `password` varchar(150) NOT NULL,
+</span></code><code><span style="Color:DodgerBlue"> `quota` bigint(11) NOT NULL DEFAULT 0,
+</span></code><code><span style="Color:DodgerBlue"> PRIMARY KEY (`id`),
+</span></code><code><span style="Color:DodgerBlue"> UNIQUE KEY `email` (`email`),
+</span></code><code><span style="Color:DodgerBlue"> FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE
+</span></code><code><span style="Color:DodgerBlue"> ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+</span></code># virtual_aliases:
+<code><span style="Color:DodgerBlue">CREATE TABLE IF NOT EXISTS `virtual_aliases` (
+</span></code><code><span style="Color:DodgerBlue"> `id` int(11) NOT NULL auto_increment,
+</span></code><code><span style="Color:DodgerBlue"> `domain_id` int(11) NOT NULL,
+</span></code><code><span style="Color:DodgerBlue"> `source` varchar(100) NOT NULL,
+</span></code><code><span style="Color:DodgerBlue"> `destination` varchar(100) NOT NULL,
+</span></code><code><span style="Color:DodgerBlue"> PRIMARY KEY (`id`),
+</span></code><code><span style="Color:DodgerBlue"> FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE
+</span></code><code><span style="Color:DodgerBlue"> ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div6')">4. Postfix - MariaDB Integration
+</a> </H4><div id="Div6" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 4.1. Connect Domains
+</B></span># Create a config file and fill it, remember changing password
+<code><span style="Color:DodgerBlue">nano /etc/postfix/mysql-virtual-mailbox-domains.cf
+</span></code><code><span style="Color:MediumSeaGreen">user = mailserver
 password = Password34
 hosts = 127.0.0.1
 dbname = mailserver
 query = SELECT 1 FROM virtual_domains WHERE name='%s'
-#_______________________________________________________
-#   Add this mapping to postfix
-postconf virtual_mailbox_domains=mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf
-#
-# 4.2. Connect Virtual Mailboxes
-#   Create a config file and fill it, remember changing password
-nano /etc/postfix/mysql-virtual-mailbox-maps.cf
-#_______________________________________________________
-user = mailserver
+</span></code># Add this mapping to postfix
+<code><span style="Color:DodgerBlue">postconf virtual_mailbox_domains=mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 4.2. Connect Virtual Mailboxes
+</B></span># Create a config file and fill it, remember changing password
+<code><span style="Color:DodgerBlue">nano /etc/postfix/mysql-virtual-mailbox-maps.cf
+</span></code><code><span style="Color:MediumSeaGreen">user = mailserver
 password = Password34
 hosts = 127.0.0.1
 dbname = mailserver
 query = SELECT 1 FROM virtual_users WHERE email='%s'
-#_______________________________________________________
-#   Add this mapping to postfix
-postconf virtual_mailbox_maps=mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf
-#
-# 4.3. Connect Virtual Aliases
-#   Create a config file and fill it
-nano /etc/postfix/mysql-virtual-alias-maps.cf
-#_______________________________________________________
-user = mailserver
+</span></code># Add this mapping to postfix
+<code><span style="Color:DodgerBlue">postconf virtual_mailbox_maps=mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 4.3. Connect Virtual Aliases
+</B></span># Create a config file and fill it
+<code><span style="Color:DodgerBlue">nano /etc/postfix/mysql-virtual-alias-maps.cf
+</span></code><code><span style="Color:MediumSeaGreen">user = mailserver
 password = Password34
 hosts = 127.0.0.1
 dbname = mailserver
 query = SELECT destination FROM virtual_aliases WHERE source='%s'
-#_______________________________________________________
-#   Add this mapping to postfix
-postconf virtual_alias_maps=mysql:/etc/postfix/mysql-virtual-alias-maps.cf
-#
-# 4.4. Catch-all Aliases
-#   Create a config file and fill it
-nano /etc/postfix/mysql-email2email.cf
-#_______________________________________________________
-user = mailserver
+</span></code># Add this mapping to postfix
+<code><span style="Color:DodgerBlue">postconf virtual_alias_maps=mysql:/etc/postfix/mysql-virtual-alias-maps.cf
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 4.4. Catch-all Aliases
+</B></span># Create a config file and fill it
+<code><span style="Color:DodgerBlue">nano /etc/postfix/mysql-email2email.cf
+</span></code><code><span style="Color:MediumSeaGreen">user = mailserver
 password = Password34
 hosts = 127.0.0.1
 dbname = mailserver
 query = SELECT email FROM virtual_users WHERE email='%s'
-#_______________________________________________________
-#   Add this mapping to postfix
-postconf virtual_alias_maps=mysql:/etc/postfix/mysql-virtual-alias-maps.cf,mysql:/etc/postfix/mysql-email2email.cf
+</span></code># Add this mapping to postfix
+<code><span style="Color:DodgerBlue">postconf virtual_alias_maps=mysql:/etc/postfix/mysql-virtual-alias-maps.cf,mysql:/etc/postfix/mysql-email2email.cf
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 4.5. Fix Permissions on Files
+</B></span><code><span style="Color:DodgerBlue">chgrp postfix /etc/postfix/mysql-*.cf
+</span></code><code><span style="Color:DodgerBlue">chmod u=rw,g=r,o= /etc/postfix/mysql-*.cf
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div7')">5. Dovecot Setup
+</a> </H4><div id="Div7" style="margin-left:1%;"><pre ># - Dovecot will:
+# Get emails from Postfix
+# Execute user filters to move emails to different folders
+# Allow users to fetch mail using POP3 or IMAP
 #
-# 4.5. Fix Permissions on Files
-chgrp postfix /etc/postfix/mysql-*.cf
-chmod u=rw,g=r,o= /etc/postfix/mysql-*.cf
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div7')">5. Dovecot Setup
-</a> <div id="Div7" style="margin-left:10%;"><pre><code># Dovecot will:
-#   Get emails from Postfix
-#   Execute user filters to move emails to different folders
-#   Allow users to fetch mail using POP3 or IMAP
-# 5.1. Create a user and a group named vmail, make /var/vmail its home
-groupadd -g 5000 vmail
-useradd -g vmail -u 5000 vmail -d /var/vmail -m
-#   If in any case /var/vmail already exists, change its owner
-chown -R vmail:vmail /var/vmail
-#
-# 5.2. Authentication Configuration
-nano /etc/dovecot/conf.d/10-auth.conf
-# Around line 100, change as below
-auth_mechanisms = plain login 
-# At the end of the file
+<B><span style="Font-Family:Verdana">#-- 5.1. Create a user and a group named vmail, make /var/vmail its home
+</B></span><code><span style="Color:DodgerBlue">groupadd -g 5000 vmail
+</span></code><code><span style="Color:DodgerBlue">useradd -g vmail -u 5000 vmail -d /var/vmail -m
+</span></code># If in any case /var/vmail already exists, change its owner
+<code><span style="Color:DodgerBlue">chown -R vmail:vmail /var/vmail
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.2. Authentication Configuration
+</B></span><code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/10-auth.conf
+</span></code># Around line 100, change as below
+<code><span style="Color:MediumSeaGreen">auth_mechanisms = plain login 
+</span></code># At the end of the file
 #    Comment line: !include auth-system.conf.ext
 #    Uncomment line: #!include auth-sql.conf.ext
 # Final state will be like following:
-#_______________________________________________________
-#!include auth-system.conf.ext
+<code><span style="Color:MediumSeaGreen">#!include auth-system.conf.ext
 !include auth-sql.conf.ext
 #!include auth-ldap.conf.ext
 #!include auth-passwdfile.conf.ext
 #!include auth-checkpassword.conf.ext
 #!include auth-vpopmail.conf.ext
 #!include auth-static.conf.ext
-#_______________________________________________________
-#
-# 5.3. Mail Configuration
-nano /etc/dovecot/conf.d/10-mail.conf
-# Around line 30, change the line as below:
-#______________________________________
-mail_location = maildir:~/Maildir
-#______________________________________
-# Around line 218, uncomment and change as below
-#______________________________________
-mail_plugins = quota
-#______________________________________
-#
-# 5.4. Master Configuration
-nano /etc/dovecot/conf.d/10-master.conf
-# Around lines 106-109, uncomment and change like follows:
-#_____________________________________________________
-# Postfix smtp-auth
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.3. Mail Configuration
+</B></span><code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/10-mail.conf
+</span></code># Around line 30, change the line as below:
+<code><span style="Color:MediumSeaGreen">mail_location = maildir:~/Maildir
+</span></code># Around line 218, uncomment and change as below
+<code><span style="Color:MediumSeaGreen">mail_plugins = quota
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.4. Master Configuration
+</B></span><code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/10-master.conf
+</span></code># Around lines 106-109, uncomment and change like follows:
+<code><span style="Color:MediumSeaGreen"># Postfix smtp-auth
   unix_listener /var/spool/postfix/private/auth {
     mode = 0660
     user = postfix
     group = postfix
   }
-#_____________________________________________________
-#
-# 5.5. SSL Configuration
-nano /etc/dovecot/conf.d/10-ssl.conf
-# Around line 6 change as below:
-#___________________
-ssl = required
-#___________________
-# Around line 12-13 change as following: 
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.5. SSL Configuration
+</B></span><code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/10-ssl.conf
+</span></code># Around line 6 change as below:
+<code><span style="Color:MediumSeaGreen">ssl = required
+</span></code># Around line 12-13 change as following: 
 #    (remember to change to your domain)
-#__________________________________________________________________
-ssl_cert = &lt;/etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
+<code><span style="Color:MediumSeaGreen">ssl_cert = &lt;/etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
 ssl_key = &lt;/etc/letsencrypt/live/mail.x11.xyz/privkey.pem
-#__________________________________________________________________
-#
-# 5.6. SQL Configuration
-nano /etc/dovecot/dovecot-sql.conf.ext
-# Add to the end of the file: (Remember to enter your own password)
-driver = mysql
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.6. SQL Configuration
+</B></span><code><span style="Color:DodgerBlue">nano /etc/dovecot/dovecot-sql.conf.ext
+</span></code># Add to the end of the file: (Remember to enter your own password)
+<code><span style="Color:MediumSeaGreen">driver = mysql
 connect = host=127.0.0.1 dbname=mailserver user=mailserver password=Password34
 user_query = SELECT email as user, \
   concat('*:bytes=', quota) AS quota_rule, \
@@ -369,77 +344,70 @@ user_query = SELECT email as user, \
   FROM virtual_users WHERE email='%u'
 password_query = SELECT password FROM virtual_users WHERE email='%u'
 iterate_query = SELECT email AS user FROM virtual_users
-#
-# 5.7. Secure SQL config file
-#  This file has some sensitive information, we have to secure it
-chown root:root /etc/dovecot/dovecot-sql.conf.ext
-chmod go= /etc/dovecot/dovecot-sql.conf.ext
-#
-# 5.8. Restart Dovecot
-systemctl restart dovecot
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div8')">6. Postfix - Dovecot Connection
-</a> <div id="Div8" style="margin-left:10%;"><pre><code># 6.1. Connect Dovecot to Postfix using LMTP
-nano /etc/dovecot/conf.d/10-master.conf
-# Around lines 54-57, change like below
-service lmtp {
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.7. Secure SQL config file
+</B></span>#  This file has some sensitive information, we have to secure it
+<code><span style="Color:DodgerBlue">chown root:root /etc/dovecot/dovecot-sql.conf.ext
+</span></code><code><span style="Color:DodgerBlue">chmod go= /etc/dovecot/dovecot-sql.conf.ext
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.8. Restart Dovecot
+</B></span><code><span style="Color:DodgerBlue">systemctl restart dovecot
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div8')">6. Postfix - Dovecot Connection
+</a> </H4><div id="Div8" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 6.1. Connect Dovecot to Postfix using LMTP
+</B></span><code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/10-master.conf
+</span></code># Around lines 54-57, change like below
+<code><span style="Color:MediumSeaGreen">service lmtp {
   unix_listener /var/spool/postfix/private/dovecot-lmtp {
     group = postfix
     mode = 0600
     user = postfix
   }
 }
-#
-# 6.2. Enable LMTP at Postfix too
-postconf virtual_transport=lmtp:unix:private/dovecot-lmtp
-#
-# 6.3. Enable Server Side Mail Rules (Sieves)
-nano /etc/dovecot/conf.d/20-lmtp.conf
-# Around the end uncomment and change as below:
-#______________________________________
-mail_plugins = $mail_plugins sieve
-#______________________________________
-#
-# 6.4. Restart Dovecot and Postfix
-systemctl restart dovecot postfix
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div9')">7. Mail Quotas
-</a> <div id="Div9" style="margin-left:10%;"><pre><code># Dovecot needs to keep track of user quotas and Postfix needs to reject 
-#   email if the user's mailbox exceed her quota.
-# 7.1. Setting Dovecot Quota Policy
-nano /etc/dovecot/conf.d/90-quota.conf
-# Select one amongst several plugin {…} sections, and make it look like below:
-#______________________________________________________
-plugin {
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 6.2. Enable LMTP at Postfix too
+</B></span><code><span style="Color:DodgerBlue">postconf virtual_transport=lmtp:unix:private/dovecot-lmtp
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 6.3. Enable Server Side Mail Rules (Sieves)
+</B></span><code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/20-lmtp.conf
+</span></code># Around the end uncomment and change as below:
+<code><span style="Color:MediumSeaGreen">mail_plugins = $mail_plugins sieve
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 6.4. Restart Dovecot and Postfix
+</B></span><code><span style="Color:DodgerBlue">systemctl restart dovecot postfix
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div9')">7. Mail Quotas
+</a> </H4><div id="Div9" style="margin-left:1%;"><pre ># - Dovecot needs to keep track of user quotas and Postfix needs to reject 
+# email if the user's mailbox exceed her quota.
+<B><span style="Font-Family:Verdana">#-- 7.1. Setting Dovecot Quota Policy
+</B></span><code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/90-quota.conf
+</span></code># Select one amongst several plugin {…} sections, and make it look like below:
+<code><span style="Color:MediumSeaGreen">plugin {
   quota = maildir:User quota
   quota_status_success = DUNNO
   quota_status_nouser = DUNNO
   quota_status_overquota = "452 4.2.2 Mailbox is full and cannot receive any more emails"
 }
-#______________________________________________________
-# Add a new section (preferably at the end) like below:
-#______________________________________________________
-service quota-status {
+</span></code># Add a new section (preferably at the end) like below:
+<code><span style="Color:MediumSeaGreen">service quota-status {
   executable = /usr/lib/dovecot/quota-status -p postfix
   unix_listener /var/spool/postfix/private/quota-status {
     user = postfix
   }
 }
-#______________________________________________________
-# Restart Dovecot
-systemctl restart dovecot
-#
-# 7.2. Postfix must know when quota exceeds
-#   Add to postfix conf by running the below command
-postconf "smtpd_recipient_restrictions = \
-     reject_unauth_destination \
-     check_policy_service unix:private/quota-status"
-#
-# 7.3. Automatic Quota Warning emails
-nano /etc/dovecot/conf.d/90-quota.conf
-#   Add following sections
-#_______________________________________________________________
-plugin {
+</span></code># Restart Dovecot
+<code><span style="Color:DodgerBlue">systemctl restart dovecot
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 7.2. Postfix must know when quota exceeds
+</B></span># Add to postfix conf by running the below command
+<code><span style="Color:DodgerBlue">postconf "smtpd_recipient_restrictions = \
+</span></code><code><span style="Color:DodgerBlue">     reject_unauth_destination \
+</span></code><code><span style="Color:DodgerBlue">     check_policy_service unix:private/quota-status"
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 7.3. Automatic Quota Warning emails
+</B></span><code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/90-quota.conf
+</span></code># Add following sections
+<code><span style="Color:MediumSeaGreen">plugin {
    quota_warning = storage=95%% quota-warning 95 %u
    quota_warning2 = storage=80%% quota-warning 80 %u
    quota_warning3 = -storage=100%% quota-warning below %u
@@ -451,14 +419,12 @@ service quota-warning {
      mode = 0660
    }
 }
-#_______________________________________________________________
-#   /usr/local/bin/quota-warning.sh is referred here, we have to create it
+</span></code># /usr/local/bin/quota-warning.sh is referred here, we have to create it
 #
-# 7.4. Configure Sending quota warning emails
-#   Create a shell file and fill it, remember changing from email
-nano /usr/local/bin/quota-warning.sh
-#___________________________________________________________________________
-#!/bin/sh
+<B><span style="Font-Family:Verdana">#-- 7.4. Configure Sending quota warning emails
+</B></span># Create a shell file and fill it, remember changing the from email
+<code><span style="Color:DodgerBlue">nano /usr/local/bin/quota-warning.sh
+</span></code><code><span style="Color:MediumSeaGreen">#!/bin/sh
 PERCENT=$1
 USER=$2
 cat &lt;&lt; EOF | /usr/lib/dovecot/dovecot-lda -d $USER -o "plugin/quota=maildir:User quota:noenforcing"
@@ -468,62 +434,50 @@ Your mailbox can only store a limited amount of emails.
 Currently it is $PERCENT% full. If you reach 100% then
 new emails cannot be stored. Thanks for your understanding.
 EOF
-#___________________________________________________________________________
-#   Make the shell file executable
-chmod +x /usr/local/bin/quota-warning.sh
+</span></code># Make the shell file executable
+<code><span style="Color:DodgerBlue">chmod +x /usr/local/bin/quota-warning.sh
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 7.5. Recalculate quota
+</B></span># - If you manually remove from a user's Maildir, quota calculations are mixed up.
+# To force Dovecot to recalculate users quota run:
+<code><span style="Color:DodgerBlue">doveadm quota recalc -u user@example.org
+</span></code><B><span style="Font-Family:Verdana">#-- 7.6. Restart Dovecot and Postfix
+</B></span><code><span style="Color:DodgerBlue">systemctl restart dovecot postfix
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div10')">8. Roundcube as Webmail
+</a> </H4><div id="Div10" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 8.1. Install Roundcube
+</B></span><code><span style="Color:DodgerBlue">apt -y install roundcube roundcube-plugins roundcube-plugins-extra roundcube-mysql
+</span></code># - Answer yes to first question and give an empty password. If it asks for database,
+# select mysql.
 #
-# 7.5. Recalculate quota
-#   If you manually remove from a user's Maildir, quota calculations are mixep
-#     up. To force Dovecot to recalculate users quota run:
-doveadm quota recalc -u user@example.org
-# 7.6. Restart Dovecot and Postfix
-systemctl restart dovecot postfix
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div10')">8. Roundcube as Webmail
-</a> <div id="Div10" style="margin-left:10%;"><pre><code># 8.1. Install Roundcube
-apt -y install roundcube roundcube-plugins roundcube-plugins-extra roundcube-mysql
-# Answer yes to first question and give an empty password. If it asks for database,
-#   select mysql.
-#
-# 8.2. Configure Apache for Roundcube
-nano /etc/apache2/sites-available/mail.x11.xyz-https.conf
-#  Change DocumentRoot line as below:
-#_________________________________________
- DocumentRoot /var/lib/roundcube/public_html
-#_________________________________________
-# Add following line just after the &lt;VirtualHost&gt; line
-#_________________________________________
- Include /etc/roundcube/apache.conf
-#_________________________________________
-# Restart Apache
-systemctl restart apache2
-#
-# 8.3. Configure Roundcube
-nano /etc/roundcube/config.inc.php
-#  Around line 36 change as below
-#____________________________________________________-
-$config&lsqb;'default_host'&rsqb; = 'tls://mail.x11.xyz';
-#____________________________________________________-
-#  Around lines 50 &amp; 53  change as below
-#____________________________________________________-
-$config&lsqb;'smtp_server'&rsqb; = 'tls://mail.x11.xyz';
+<B><span style="Font-Family:Verdana">#-- 8.2. Configure Apache for Roundcube
+</B></span><code><span style="Color:DodgerBlue">nano /etc/apache2/sites-available/mail.x11.xyz-https.conf
+</span></code># Change DocumentRoot line as below:
+<code><span style="Color:MediumSeaGreen"> DocumentRoot /var/lib/roundcube/public_html
+</span></code># Add following line just after the &lt;VirtualHost&gt; line
+<code><span style="Color:MediumSeaGreen"> Include /etc/roundcube/apache.conf
+</span></code># Restart Apache
+<code><span style="Color:DodgerBlue">systemctl restart apache2
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 8.3. Configure Roundcube
+</B></span><code><span style="Color:DodgerBlue">nano /etc/roundcube/config.inc.php
+</span></code># Around line 36 change as below
+<code><span style="Color:MediumSeaGreen">$config&lsqb;'default_host'&rsqb; = 'tls://mail.x11.xyz';
+</span></code># Around lines 50 &amp; 53  change as below
+<code><span style="Color:MediumSeaGreen">$config&lsqb;'smtp_server'&rsqb; = 'tls://mail.x11.xyz';
 $config&lsqb;'smtp_port'&rsqb; = 587;
-#____________________________________________________-
-#  Around lines 79-80 change as below
-#____________________________________________________-
-$config&lsqb;'plugins'&rsqb; = array(
+</span></code># Around lines 79-80 change as below
+<code><span style="Color:MediumSeaGreen">$config&lsqb;'plugins'&rsqb; = array(
      'managesieve',
      'password',
  );
-#____________________________________________________-
-#
-# 8.4. Configure Password Plugin
-#   This plugin will let the user change her password
-nano /etc/roundcube/plugins/password/config.inc.php
-#  Clear the $config=array(); line fill it as below just before ?&gt;
-#    At the line 1 before the end, remember to enter your mailadmin password
-#__________________________________________________________
-$config&lsqb;'password_driver'&rsqb; = 'sql';
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 8.4. Configure Password Plugin
+</B></span># This plugin will let the user change her password
+<code><span style="Color:DodgerBlue">nano /etc/roundcube/plugins/password/config.inc.php
+</span></code># Clear the $config=array(); line fill it as below just before ?&gt;
+# At the line 1 before the end, remember to enter your mailadmin password
+<code><span style="Color:MediumSeaGreen">$config&lsqb;'password_driver'&rsqb; = 'sql';
 $config&lsqb;'password_minimum_length'&rsqb; = 12;
 $config&lsqb;'password_force_save'&rsqb; = true;
 $config&lsqb;'password_algorithm'&rsqb; = 'dovecot';
@@ -532,38 +486,35 @@ $config&lsqb;'password_dovecotpw_method'&rsqb; = 'BLF-CRYPT';
 $config&lsqb;'password_dovecotpw_with_method'&rsqb; = true;
 $config&lsqb;'password_db_dsn'&rsqb; = 'mysql://mailadmin:Password12@localhost/mailserver';
 $config&lsqb;'password_query'&rsqb; = "UPDATE virtual_users SET password=%D WHERE email=%u";
-#__________________________________________________________
-#
-# 8.5. Configure Sieve (Mail Rules) Plugin
-#  Mail rules will be handled by Roundcube, so config is easy
-nano /etc/roundcube/plugins/managesieve/config.inc.php
-#  Clear the $config=array(); line fill it as below just before ?&gt;
-#_________________________________________
-$config&lsqb;'managesieve_host'&rsqb; = 'localhost';
-#_________________________________________
-#
-# 8.6. Restart Dovecot
-systemctl restart dovecot
-# Just a quick reminder: When you login to webmail, you have to use your full email
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div11')">9. Configure Postfix to Send Mail
-</a> <div id="Div11" style="margin-left:10%;"><pre><code># 9.1. Configure Postfix to use Dovecot authentication
-postconf smtpd_sasl_type=dovecot
-postconf smtpd_sasl_path=private/auth
-postconf smtpd_sasl_auth_enable=yes
-#
-# 9.2. Enable encryption (Remember to change to your domain)
-postconf smtpd_tls_security_level=may
-postconf smtpd_tls_auth_only=yes
-postconf smtpd_tls_cert_file=/etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
-postconf smtpd_tls_key_file=/etc/letsencrypt/live/mail.x11.xyz/privkey.pem
-postconf smtp_tls_security_level=may
-#
-# 9.3. Enable Postfix for port 587 smtp for end users 
-nano /etc/postfix/master.cf
-# Around lines 19-30 change as below (remove comments)
-#______________________________________________________________________
-submission inet n       -       y       -       -       smtpd
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 8.5. Configure Sieve (Mail Rules) Plugin
+</B></span># Mail rules will be handled by Roundcube, so config is easy
+<code><span style="Color:DodgerBlue">nano /etc/roundcube/plugins/managesieve/config.inc.php
+</span></code># Clear the $config=array(); line fill it as below just before ?&gt;
+<code><span style="Color:MediumSeaGreen">$config&lsqb;'managesieve_host'&rsqb; = 'localhost';
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 8.6. Restart Dovecot
+</B></span><code><span style="Color:DodgerBlue">systemctl restart dovecot
+</span></code># - Just a quick reminder: When you login to webmail, you have to use your full email
+# address. 
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div11')">9. Configure Postfix to Send Mail
+</a> </H4><div id="Div11" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 9.1. Configure Postfix to use Dovecot authentication
+</B></span><code><span style="Color:DodgerBlue">postconf smtpd_sasl_type=dovecot
+</span></code><code><span style="Color:DodgerBlue">postconf smtpd_sasl_path=private/auth
+</span></code><code><span style="Color:DodgerBlue">postconf smtpd_sasl_auth_enable=yes
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 9.2. Enable encryption (Remember to change to your domain)
+</B></span><code><span style="Color:DodgerBlue">postconf smtpd_tls_security_level=may
+</span></code><code><span style="Color:DodgerBlue">postconf smtpd_tls_auth_only=yes
+</span></code><code><span style="Color:DodgerBlue">postconf smtpd_tls_cert_file=/etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
+</span></code><code><span style="Color:DodgerBlue">postconf smtpd_tls_key_file=/etc/letsencrypt/live/mail.x11.xyz/privkey.pem
+</span></code><code><span style="Color:DodgerBlue">postconf smtp_tls_security_level=may
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 9.3. Enable Postfix for port 587 smtp for end users 
+</B></span><code><span style="Color:DodgerBlue">nano /etc/postfix/master.cf
+</span></code># Around lines 19-30 change as below (remove comments)
+<code><span style="Color:MediumSeaGreen">submission inet n       -       y       -       -       smtpd
  -o syslog_name=postfix/submission
  -o smtpd_tls_security_level=encrypt
  -o smtpd_sasl_auth_enable=yes
@@ -575,83 +526,69 @@ submission inet n       -       y       -       -       smtpd
  -o smtpd_recipient_restrictions=
  -o smtpd_relay_restrictions=permit_sasl_authenticated,reject
  -o milter_macro_daemon_name=ORIGINATING
-#______________________________________________________________________
-#
-# 9.4. Protect against forged sender addresses
-postconf smtpd_sender_login_maps=mysql:/etc/postfix/mysql-email2email.cf
-#
-# 9.5. Restart Postfix
-systemctl restart postfix
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div12')">10. Handling Spam with rspamd
-</a> <div id="Div12" style="margin-left:10%;"><pre><code># 10.1. Configuring postfix to use rspamd
-postconf smtpd_milters=inet:127.0.0.1:11332
-postconf non_smtpd_milters=inet:127.0.0.1:11332
-postconf milter_mail_macros="i {mail_addr} {client_addr} {client_name} {auth_authen}"
-#
-# 10.2. Adding rspamd headers to emails
-# Create a new conf file
-nano /etc/rspamd/override.d/milter_headers.conf
-# And put the below line in it
-#____________________________
-extended_spam_headers = true;
-#____________________________
-# Restart rspamd
-systemctl restart rspamd
-#
-# 10.3. Sending spam mails to Junk folder
-nano /etc/dovecot/conf.d/90-sieve.conf
-# Around line 83 add a new line with indent
-#_____________________________________
-  sieve_after = /etc/dovecot/sieve-after
-#_____________________________________
-# Make the directory to put the rule
-mkdir /etc/dovecot/sieve-after
-# Add a new file and fill it like below
-nano /etc/dovecot/sieve-after/spam-to-folder.sieve
-#_________________________________________
-require &lsqb;"fileinto","mailbox"&rsqb;;
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 9.4. Protect against forged sender addresses
+</B></span><code><span style="Color:DodgerBlue">postconf smtpd_sender_login_maps=mysql:/etc/postfix/mysql-email2email.cf
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 9.5. Restart Postfix
+</B></span><code><span style="Color:DodgerBlue">systemctl restart postfix
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div12')">10. Handling Spam with rspamd
+</a> </H4><div id="Div12" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 10.1. Configuring postfix to use rspamd
+</B></span><code><span style="Color:DodgerBlue">postconf smtpd_milters=inet:127.0.0.1:11332
+</span></code><code><span style="Color:DodgerBlue">postconf non_smtpd_milters=inet:127.0.0.1:11332
+</span></code><code><span style="Color:DodgerBlue">postconf milter_mail_macros="i {mail_addr} {client_addr} {client_name} {auth_authen}"
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 10.2. Adding rspamd headers to emails
+</B></span># Create a new conf file
+<code><span style="Color:DodgerBlue">nano /etc/rspamd/override.d/milter_headers.conf
+</span></code># And put the line below in it
+<code><span style="Color:MediumSeaGreen">extended_spam_headers = true;
+</span></code># Restart rspamd
+<code><span style="Color:DodgerBlue">systemctl restart rspamd
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 10.3. Sending spam mails to Junk folder
+</B></span><code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/90-sieve.conf
+</span></code># Around line 83 add a new line with indent
+<code><span style="Color:MediumSeaGreen">  sieve_after = /etc/dovecot/sieve-after
+</span></code># Make the directory to put the rule
+<code><span style="Color:DodgerBlue">mkdir /etc/dovecot/sieve-after
+</span></code># Add a new file and fill it like below
+<code><span style="Color:DodgerBlue">nano /etc/dovecot/sieve-after/spam-to-folder.sieve
+</span></code><code><span style="Color:MediumSeaGreen">require &lsqb;"fileinto","mailbox"&rsqb;;
 if header :contains "X-Spam" "Yes" {
  fileinto :create "Junk";
  stop;
 }
-#_________________________________________
-# Compile the file to make Dovecot use it
-sievec /etc/dovecot/sieve-after/spam-to-folder.sieve
-# Restart dovecot and rspamd
-systemctl restart dovecot rspamd
-# 
-# 10.4. Spam Detection Training
-# To use autolearning feature of rspamd
+</span></code># Compile the file to make Dovecot use it
+<code><span style="Color:DodgerBlue">sievec /etc/dovecot/sieve-after/spam-to-folder.sieve
+</span></code># Restart dovecot and rspamd
+<code><span style="Color:DodgerBlue">systemctl restart dovecot rspamd
+</span></code># 
+<B><span style="Font-Family:Verdana">#-- 10.4. Spam Detection Training
+</B></span># To use autolearning feature of rspamd
 #  create a new conf file
-nano /etc/rspamd/override.d/classifier-bayes.conf
-#  put the next line in it
-#___________________________
-autolearn = true;
-#___________________________
-# 
+<code><span style="Color:DodgerBlue">nano /etc/rspamd/override.d/classifier-bayes.conf
+</span></code>#  put the next line in it
+<code><span style="Color:MediumSeaGreen">autolearn = true;
+</span></code># 
 # To enable per user training
 #  create a new conf file
-nano /etc/rspamd/local.d/classifier-bayes.conf 
-#  put the next line in it
-#___________________________
-users_enabled = true;
-#___________________________
-#
-# 10.5 Spam learning from user actions
-# When users move an email to junk folder, rspamd will learn from it
+<code><span style="Color:DodgerBlue">nano /etc/rspamd/local.d/classifier-bayes.conf 
+</span></code>#  put the next line in it
+<code><span style="Color:MediumSeaGreen">users_enabled = true;
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 10.5 Spam learning from user actions
+</B></span># When users move an email to junk folder, rspamd will learn from it
 # Edit conf file to enable IMAPSieve
-nano /etc/dovecot/conf.d/20-imap.conf
-# Find the line with mail_plugins around line 94, uncomment and change it as below
-#_____________________________________________________
-mail_plugins = $mail_plugins imap_sieve
-#_____________________________________________________
-#
+<code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/20-imap.conf
+</span></code># Find the line with mail_plugins around line 94, uncomment and change it as below
+<code><span style="Color:MediumSeaGreen">mail_plugins = $mail_plugins imap_sieve
+</span></code>#
 # Edit Dovecot Sieve conf
-nano /etc/dovecot/conf.d/90-sieve.conf
-# Put the following lines just before the end of the file, remember indenting
-#_____________________________________________________
-  # From elsewhere to Junk folder
+<code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/90-sieve.conf
+</span></code># Put the following lines just before the end of the file, remember indenting
+<code><span style="Color:MediumSeaGreen">  # From elsewhere to Junk folder
   imapsieve_mailbox1_name = Junk
   imapsieve_mailbox1_causes = COPY
   imapsieve_mailbox1_before = file:/etc/dovecot/sieve/learn-spam.sieve
@@ -663,61 +600,51 @@ nano /etc/dovecot/conf.d/90-sieve.conf
   sieve_pipe_bin_dir = /etc/dovecot/sieve
   sieve_global_extensions = +vnd.dovecot.pipe
   sieve_plugins = sieve_imapsieve sieve_extprograms
-#_____________________________________________________
-#
+</span></code>#
 # Restart Dovecot
-systemctl restart dovecot
-# Now we need to create Sieve scripts for Dovecot
+<code><span style="Color:DodgerBlue">systemctl restart dovecot
+</span></code># Now we need to create Sieve scripts for Dovecot
 # Create a new directory for our files
-mkdir /etc/dovecot/sieve
-# Create learn spam sieve file
-nano /etc/dovecot/sieve/learn-spam.sieve
-# Fill it as below
-#_____________________________________________________
-require &lsqb;"vnd.dovecot.pipe", "copy", "imapsieve"&rsqb;;
+<code><span style="Color:DodgerBlue">mkdir /etc/dovecot/sieve
+</span></code># Create learn spam sieve file
+<code><span style="Color:DodgerBlue">nano /etc/dovecot/sieve/learn-spam.sieve
+</span></code># Fill it as below
+<code><span style="Color:MediumSeaGreen">require &lsqb;"vnd.dovecot.pipe", "copy", "imapsieve"&rsqb;;
 pipe :copy "rspamd-learn-spam.sh";
-#_____________________________________________________
-# Create learn ham (nospam) sieve file
-nano /etc/dovecot/sieve/learn-ham.sieve
-# Fill it as below
-#_____________________________________________________
-require &lsqb;"vnd.dovecot.pipe", "copy", "imapsieve", "variables"&rsqb;;
+</span></code># Create learn ham (nospam) sieve file
+<code><span style="Color:DodgerBlue">nano /etc/dovecot/sieve/learn-ham.sieve
+</span></code># Fill it as below
+<code><span style="Color:MediumSeaGreen">require &lsqb;"vnd.dovecot.pipe", "copy", "imapsieve", "variables"&rsqb;;
 if string "${mailbox}" "Trash" {
   stop;
 }
 pipe :copy "rspamd-learn-ham.sh";
-#_____________________________________________________
-#
+</span></code>#
 # Compile both scripts, compiled files will have svbin extension
-sievec /etc/dovecot/sieve/learn-spam.sieve
-sievec /etc/dovecot/sieve/learn-ham.sieve
-# Fix permissions for these files
-chmod u=rw,go= /etc/dovecot/sieve/learn-{spam,ham}.{sieve,svbin}
-chown vmail.vmail /etc/dovecot/sieve/learn-{spam,ham}.{sieve,svbin}
-# Create shell scripts for spam and ham learning
+<code><span style="Color:DodgerBlue">sievec /etc/dovecot/sieve/learn-spam.sieve
+</span></code><code><span style="Color:DodgerBlue">sievec /etc/dovecot/sieve/learn-ham.sieve
+</span></code># Fix permissions for these files
+<code><span style="Color:DodgerBlue">chmod u=rw,go= /etc/dovecot/sieve/learn-{spam,ham}.{sieve,svbin}
+</span></code><code><span style="Color:DodgerBlue">chown vmail.vmail /etc/dovecot/sieve/learn-{spam,ham}.{sieve,svbin}
+</span></code># Create shell scripts for spam and ham learning
 # Create spam learning script
-nano /etc/dovecot/sieve/rspamd-learn-spam.sh
-# And fill it as below
-#_____________________________________________________
-#!/bin/sh
+<code><span style="Color:DodgerBlue">nano /etc/dovecot/sieve/rspamd-learn-spam.sh
+</span></code># And fill it as below
+<code><span style="Color:MediumSeaGreen">#!/bin/sh
 exec /usr/bin/rspamc learn_spam
-#_____________________________________________________
-# Create ham learning script
-nano /etc/dovecot/sieve/rspamd-learn-ham.sh
-# And fill it as below
-#_____________________________________________________
-#!/bin/sh
+</span></code># Create ham learning script
+<code><span style="Color:DodgerBlue">nano /etc/dovecot/sieve/rspamd-learn-ham.sh
+</span></code># And fill it as below
+<code><span style="Color:MediumSeaGreen">#!/bin/sh
 exec /usr/bin/rspamc learn_ham
-#_____________________________________________________
-# Fix their permissions
-chmod u=rwx,go= /etc/dovecot/sieve/rspamd-learn-{spam,ham}.sh
-chown vmail.vmail /etc/dovecot/sieve/rspamd-learn-{spam,ham}.sh
-#
-# 10.6. Configure Dovecot to autodelete Junk and Trash folders after 30 days
-nano /etc/dovecot/conf.d/15-mailboxes.conf 
-# Add just 1 line before the end
-#___________________________
-  mailbox Junk {
+</span></code># Fix their permissions
+<code><span style="Color:DodgerBlue">chmod u=rwx,go= /etc/dovecot/sieve/rspamd-learn-{spam,ham}.sh
+</span></code><code><span style="Color:DodgerBlue">chown vmail.vmail /etc/dovecot/sieve/rspamd-learn-{spam,ham}.sh
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 10.6. Configure Dovecot to autodelete Junk and Trash folders after 30 days
+</B></span><code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/15-mailboxes.conf 
+</span></code># Add just 1 line before the end
+<code><span style="Color:MediumSeaGreen">  mailbox Junk {
     special_use = \Junk
     auto = subscribe
     autoexpunge = 30d
@@ -727,359 +654,349 @@ nano /etc/dovecot/conf.d/15-mailboxes.conf
     auto = subscribe
     autoexpunge = 30d
   }
-#___________________________
-# Restart dovecot and rspamd
-systemctl restart dovecot rspamd
-#
-# 10.7. Rspamd Web Interface
-# rspamd comes with a web interface, it can be reached from localhost only
-#  from port 11334.
+</span></code># Restart dovecot and rspamd
+<code><span style="Color:DodgerBlue">systemctl restart dovecot rspamd
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 10.7. Rspamd Web Interface
+</B></span># - rspamd comes with a web interface, it can be reached from localhost only from 
+# port 11334.
 # By using http proxy modules of Apache, we can reach it from outside
 # Enable Apache modules HTTP proxy and rewrite
-a2enmod proxy_http
-a2enmod rewrite
-# Add to our website conf file for enabling rpamd web interface
-nano /etc/apache2/sites-available/mail.x11.xyz-https.conf 
-# Add somewhere between VirtualHost tags
-#_______________________________________________________________
- &lt;Location /rspamd&gt;
+<code><span style="Color:DodgerBlue">a2enmod proxy_http
+</span></code><code><span style="Color:DodgerBlue">a2enmod rewrite
+</span></code># Add to our website conf file for enabling rpamd web interface
+<code><span style="Color:DodgerBlue">nano /etc/apache2/sites-available/mail.x11.xyz-https.conf 
+</span></code># Add somewhere between VirtualHost tags
+<code><span style="Color:MediumSeaGreen"> &lt;Location /rspamd&gt;
    Require all granted   
  &lt;/Location&gt;
  RewriteEngine On
  RewriteRule ^/rspamd$ /rspamd/ &lsqb;R,L&rsqb;
  RewriteRule ^/rspamd/(.*) http://localhost:11334/$1 &lsqb;P,L&rsqb;
-#_______________________________________________________________
-# Restart apache2
-systemctl restart apache2
-# Now we can reach it from the following address:
-https://mail.x11.xyz/rspamd
-# But the interface is password protected, we need to give a password to it
+</span></code># Restart apache2
+<code><span style="Color:DodgerBlue">systemctl restart apache2
+</span></code># Now we can reach it from the following address:
+<code><span style="Color:DodgerBlue">https://mail.x11.xyz/rspamd
+</span></code># But the interface is password protected, we need to give a password to it
 #  and we'll save the password in a hashed format
 #
 # Determine a password
 # Create the password hash with the following command:
-rspamadm pw
-# Write your password at Enter passphrase: prompt
+<code><span style="Color:DodgerBlue">rspamadm pw
+</span></code># Write your password at Enter passphrase: prompt
 # The command's output will be your hashed password
 # Now we need to put this hashed password in a config file
 # Create the config file
-nano /etc/rspamd/local.d/worker-controller.inc
-# Fill it as in below, put the hashed pw between double quotes
-#_______________________________________________________________
-password = "$2$icoahes75e7g9wxapnrbmqnpuzjoq7z…"
-#_______________________________________________________________
-# Restart rspamd and apache2
-systemctl restart rspamd apache2
-#
-# 10.8. Privacy Warning
-# Rspamd uses so called fuzzy feeds for spam detection, that is it contacts its 
-#   server with your data.
-# Rspamd is not completely free, if 1 of the 2 following conditions are  met, 
-#   you need a license
+<code><span style="Color:DodgerBlue">nano /etc/rspamd/local.d/worker-controller.inc
+</span></code># Fill it as in below, put the hashed pw between double quotes
+<code><span style="Color:MediumSeaGreen">password = "$2$icoahes75e7g9wxapnrbmqnpuzjoq7z…"
+</span></code># Restart rspamd and apache2
+<code><span style="Color:DodgerBlue">systemctl restart rspamd apache2
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 10.8. Privacy Warning
+</B></span># - Rspamd uses so called fuzzy feeds for spam detection, that is it contacts its 
+# server with your data.
+# - Rspamd is not completely free, if 1 of the 2 following conditions are met, 
+# you need a license
 # 1. Using commercial data
 # 2. More than 500.000 spam scans a day
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div13')">Break Time
-</a> <div id="Div13" style="margin-left:10%;"><pre><code># I skipped the sections about malware protection. I believe it is not necessary
-#   for my installations. If you'd like to enable it, please refer to the 
-#   original document: 
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div13')">Break Time
+</a> </H4><div id="Div13" style="margin-left:1%;"><pre ># - I skipped the sections about malware protection. I believe it is not necessary
+# for my installations. If you'd like to enable it, please refer to the original
+# document: 
 <a href="https://workaround.org/ispmail/buster/blocking-malware/" target="_blank">https://workaround.org/ispmail/buster/blocking-malware/</a>
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div14')">11. Adding DNS Records
-</a> <div id="Div14" style="margin-left:10%;"><pre><code># Assuming your host already has a DNS A Record; for every domain 
-#   to be hosted, you need to create MX records pointing to
-#   your hostname.
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div14')">11. Adding DNS Records
+</a> </H4><div id="Div14" style="margin-left:1%;"><pre ># - Assuming your host already has a DNS A Record; for every domain to be hosted, 
+# you need to create MX records pointing to your hostname.
 #
-# In my case, my hostname is mail.x11.xyz, x11.xyz, u11.xyz and
-#   v11.xyz will be hosted. So for all domains there must be an MX
-#   record pointing to mail.x11.xyz with a small priority number (say 10)
-# We also need spf and dmarc DNS entries to ensure no other mail servers can 
-#   send emails using our domain names.
+# - In my case, my hostname is mail.x11.xyz, x11.xyz, u11.xyz and  v11.xyz will be 
+# hosted. So for all domains there must be an MX record pointing to mail.x11.xyz 
+# with a small priority number (say 10)
+# - We also need spf and dmarc DNS entries to ensure no other mail servers can 
+# send emails using our domain names.
 #
-# In my configuration, mail.x11.xyz is the mail server and it hosts 3 domains:
-#   x11.xyz, u11.xyz and v11.xyz.
+# - In my configuration, mail.x11.xyz is the mail server and it hosts 3 domains:
+# x11.xyz, u11.xyz and v11.xyz.
 # My DNS servers will have following records
 #
 # DNS Server for x11.xyz
-# A Record --&gt; 195.181.240.41 mail.x11.xyz
-# MX Record --&gt; @ 10 mail.x11.xyz
+# A Record   --&gt; 195.181.240.41 mail.x11.xyz
+# MX Record  --&gt; @ 10 mail.x11.xyz
 # TXT Record --&gt; @ v=spf1 mx -all
 # TXT Record --&gt; _dmarc v=DMARC1; aspf=s; adkim=s; pct=100; p=reject; rua=mailto:postmaster@x11.xyz
 #
 # DNS Server for u11.xyz
-# MX Record --&gt; @ 10 mail.x11.xyz
+# MX Record  --&gt; @ 10 mail.x11.xyz
 # TXT Record --&gt; @ v=spf1 mx -all
 # TXT Record --&gt; _dmarc v=DMARC1; aspf=s; adkim=s; pct=100; p=reject; rua=mailto:postmaster@x11.xyz
 #
 # DNS Server for v11.xyz
-# MX Record --&gt; @ 10 mail.x11.xyz
+# MX Record  --&gt; @ 10 mail.x11.xyz
 # TXT Record --&gt; @ v=spf1 mx -all
 # TXT Record --&gt; _dmarc v=DMARC1; aspf=s; adkim=s; pct=100; p=reject; rua=mailto:postmaster@x11.xyz
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div15')">12. Preventing Spoofing with DKIM
-</a> <div id="Div15" style="margin-left:10%;"><pre><code># With DKIM, we can sign our emails with a certificate and the other mail
-#   servers can make sure that the emails coming from us are legitimate.
-# We need to create keypairs (private and public) for all the domains we
-#   host, put private keys to rspamd and public keys to DNS records. 
-# When we create a keypair, we use a selector (or a sequence number) to
-#   add a date record to it. In this case, when we create another keypair
-#   later, we can distinguish them and older mails wouldn't be invalidated.
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div15')">12. Preventing Spoofing with DKIM
+</a> </H4><div id="Div15" style="margin-left:1%;"><pre ># - With DKIM, we can sign our emails with a certificate and the other mail    
+# servers can make sure that the emails coming from us are legitimate.
+# - We need to create keypairs (private and public) for all the domains we host, 
+# put private keys to rspamd and public keys to DNS records. 
+# - When we create a keypair, we use a selector (or a sequence number) to add a 
+# date record to it. In this case, when we create another keypair later, we can
+# distinguish them and older mails wouldn't be invalidated.
 #
-# 12.1. Create a home for our DKIM keypairs and fix permissions
-mkdir /var/lib/rspamd/dkim
-chown _rspamd:_rspamd /var/lib/rspamd/dkim
-#
-# 12.2. Enable DKIM maps in rspamd
-# Create a new rspamd conf file for dkim maps
-nano /etc/rspamd/local.d/dkim_signing.conf
-# Put the below lines in it
-#______________________________________________________
-path = "/var/lib/rspamd/dkim/$domain.$selector.key";
+<B><span style="Font-Family:Verdana">#-- 12.1. Create a home for our DKIM keypairs and fix permissions
+</B></span><code><span style="Color:DodgerBlue">mkdir /var/lib/rspamd/dkim
+</span></code><code><span style="Color:DodgerBlue">chown _rspamd:_rspamd /var/lib/rspamd/dkim
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 12.2. Enable DKIM maps in rspamd
+</B></span># Create a new rspamd conf file for dkim maps
+<code><span style="Color:DodgerBlue">nano /etc/rspamd/local.d/dkim_signing.conf
+</span></code># Put the below lines in it
+<code><span style="Color:MediumSeaGreen">path = "/var/lib/rspamd/dkim/$domain.$selector.key";
 selector_map = "/etc/rspamd/dkim_selectors.map";
-#______________________________________________________
-# We will put our maps in this /etc/rspamd/dkim_selectors.map file later
+</span></code># We will put our maps in this /etc/rspamd/dkim_selectors.map file later
 #
-# 12.3. Create keypairs for all the domains we host
-# This step must be followed for all the domains we host. I'll do this
-#   for x11.xyz, u11.xyz and v11.tk 
+<B><span style="Font-Family:Verdana">#-- 12.3. Create keypairs for all the domains we host
+</B></span># - This step must be followed for all the domains we host. I'll do this for x11.xyz, 
+# u11.xyz and v11.xyz 
 # Save the outputs of all commands somewhere.
 # Create keypair (-s option is for the selector)
-rspamadm dkim_keygen -d x11.xyz -s 20230105 -k /var/lib/rspamd/dkim/x11.xyz.20230105.key
-rspamadm dkim_keygen -d u11.xyz -s 20230105 -k /var/lib/rspamd/dkim/u11.xyz.20230105.key
-rspamadm dkim_keygen -d v11.xyz -s 20230105 -k /var/lib/rspamd/dkim/v11.xyz.20230105.key
-#
-# The output will be used for DNS records. If you have your own DNS server, you can put
-#   it as it is to the DNS server. But if you use cloudfare or a similar
-#   service like me, you can use their web interface to insert your record
-#   considering below comments:
-# Create a new TXT record with a hostname 20230105._domainkey and put the value
-#   in the record as in the example below. That is starting from v=DKIM1; 
-#   removing all double quotes and paranthesis.
+<code><span style="Color:DodgerBlue">rspamadm dkim_keygen -d x11.xyz -s 20230105 -k /var/lib/rspamd/dkim/x11.xyz.20230105.key
+</span></code><code><span style="Color:DodgerBlue">rspamadm dkim_keygen -d u11.xyz -s 20230105 -k /var/lib/rspamd/dkim/u11.xyz.20230105.key
+</span></code><code><span style="Color:DodgerBlue">rspamadm dkim_keygen -d v11.xyz -s 20230105 -k /var/lib/rspamd/dkim/v11.xyz.20230105.key
+</span></code>#
+# - The output will be used for DNS records. If you have your own DNS server, you can 
+# put it as it is to the DNS server. But if you use cloudfare or a similar service 
+# like me, you can use their web interface to insert your record  considering below 
+# comments:
+# - Create a new TXT record with a hostname 20230105._domainkey and put the value
+# in the record as in the example below. That is starting from v=DKIM1; removing all 
+# double quotes and paranthesis.
 # v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBA....
 #
-# 12.4. Enable DKIM maps
-# Create and edit dkim map file we defined at 13.2.
-nano /etc/rspamd/dkim_selectors.map
-# Fill it as below, remember to change to your domains and selectors.
+<B><span style="Font-Family:Verdana">#-- 12.4. Enable DKIM maps
+</B></span># Create and edit dkim map file we defined at 13.2.
+<code><span style="Color:DodgerBlue">nano /etc/rspamd/dkim_selectors.map
+</span></code># Fill it as below, remember to change to your domains and selectors.
 #  If you have more than 2 domains, add them too
-x11.xyz 20230105
-u11.xyz 20230105
-v11.xyz 20230105
-# Fix file permissions
-chown _rspamd /var/lib/rspamd/dkim/*
-chmod u=r,go= /var/lib/rspamd/dkim/*
-#
+<code><span style="Color:DodgerBlue">x11.xyz 20230105
+</span></code><code><span style="Color:DodgerBlue">u11.xyz 20230105
+</span></code><code><span style="Color:DodgerBlue">v11.xyz 20230105
+</span></code># Fix file permissions
+<code><span style="Color:DodgerBlue">chown _rspamd /var/lib/rspamd/dkim/*
+</span></code><code><span style="Color:DodgerBlue">chmod u=r,go= /var/lib/rspamd/dkim/*
+</span></code>#
 # Reload rspamd
-systemctl reload rspamd
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div16')">13. User, Alias, and Domain Management - Through Database
-</a> <div id="Div16" style="margin-left:10%;"><pre><code># There are 2 ways to manage your ISP Mail; 
-#    The Hard Way: Through the Database; or
-#    The Easy Way: Using a web interface for it
-# We will start with the hard way
-#    Remember we installed Mariadb and created a database on it named mailserver.
-# I'll use Mariadb shell, but you may prefer to use Adminer interface we 
-#    installed at 3.1.
+<code><span style="Color:DodgerBlue">systemctl reload rspamd
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div16')">13. User, Alias, and Domain Management - Through Database
+</a> </H4><div id="Div16" style="margin-left:1%;"><pre ># - There are 2 ways to manage your ISP Mail; 
+# The Hard Way: Through the Database; or
+# The Easy Way: Using a web interface for it
+#
+# We will start with the hard way.
+# Remember we installed Mariadb and created a database on it named mailserver.
+# - I'll use Mariadb shell, but you may prefer to use Adminer interface we 
+# installed at 3.1.
 #
 # All commands run in mariadb shell, unless stated otherwise (bash shell)
-# 13.1. Connect to Mariadb
-# Start Mariadb (bash shell)
-mariadb
-# Select our database
-use mailserver
-#
-# 13.2. Create Domains
-# My primary domain: x11.xyz
-INSERT INTO virtual_domains (name) VALUES ('x11.xyz');
-# My second domain: u11.xyz
-INSERT INTO virtual_domains (name) VALUES ('u11.xyz');
-# My third domain: v11.xyz
-INSERT INTO virtual_domains (name) VALUES ('v11.xyz');
-# Another domain to test deleting it
-INSERT INTO virtual_domains (name) VALUES ('example.org');
-#
-# 13.3. Delete Domains
-# When you delete a domain, all users and aliases of this domain are
-#   deleted too. But mailboxes stay on disk at /var/vmail/...
-#   You have to delete them too.
+<B><span style="Font-Family:Verdana">#-- 13.1. Connect to Mariadb
+</B></span># Start Mariadb (bash shell)
+<code><span style="Color:DodgerBlue">mariadb
+</span></code># Select our database
+<code><span style="Color:DodgerBlue">use mailserver
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 13.2. Create Domains
+</B></span># My primary domain: x11.xyz
+<code><span style="Color:DodgerBlue">INSERT INTO virtual_domains (name) VALUES ('x11.xyz');
+</span></code># My second domain: u11.xyz
+<code><span style="Color:DodgerBlue">INSERT INTO virtual_domains (name) VALUES ('u11.xyz');
+</span></code># My third domain: v11.xyz
+<code><span style="Color:DodgerBlue">INSERT INTO virtual_domains (name) VALUES ('v11.xyz');
+</span></code># Another domain to test deleting it
+<code><span style="Color:DodgerBlue">INSERT INTO virtual_domains (name) VALUES ('example.org');
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 13.3. Delete Domains
+</B></span># - When you delete a domain, all users and aliases of this domain are deleted too. 
+# But mailboxes stay on disk at /var/vmail/...
+# You have to delete them too.
 # Delete our test domain
-DELETE FROM virtual_domains where name='example.org';
-#
-# 13.4. Create a Mail User
-# You can create a mail user after creating its mail domain.
-# To create a mail user, you have to give it a password, and encrypt that
-#   password, using dovecot's password tool.
+<code><span style="Color:DodgerBlue">DELETE FROM virtual_domains where name='example.org';
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 13.4. Create a Mail User
+</B></span># - You can create a mail user after creating its mail domain.
+# - To create a mail user, you have to give it a password, and encrypt that
+# password, using dovecot's password tool.
 # For user exforge@x11.xyz
 # Encrytp user's password (bash shell)
-dovecot pw -s BLF-CRYPT
-# Enter the given password twice, output will be the encrypted password
+<code><span style="Color:DodgerBlue">dovecot pw -s BLF-CRYPT
+</span></code># Enter the given password twice, output will be the encrypted password
 # Create user exforge@x11.xyz
-INSERT INTO virtual_users (domain_id, email, password) 
-VALUES ((SELECT id FROM virtual_domains WHERE name='x11.xyz'), 'exforge@x11.xyz','{BLF-CRYPT}$2y$05$.We…');
-#
+<code><span style="Color:DodgerBlue">INSERT INTO virtual_users (domain_id, email, password) 
+</span></code><code><span style="Color:DodgerBlue">VALUES ((SELECT id FROM virtual_domains WHERE name='x11.xyz'), 'exforge@x11.xyz','{BLF-CRYPT}$2y$05$.We…');
+</span></code>#
 # For user johndoe@karasite.xyz
 # Encrytp user's password (bash shell)
-dovecot pw -s BLF-CRYPT
-# Enter the given password twice, output will be the encrypted password
+<code><span style="Color:DodgerBlue">dovecot pw -s BLF-CRYPT
+</span></code># Enter the given password twice, output will be the encrypted password
 # Create user johndoe@x11.xyz
-INSERT INTO virtual_users (domain_id, email, password) 
-VALUES ((SELECT id FROM virtual_domains WHERE name='x11.xyz'), 'johndoe@x11.xyz','{BLF-CRYPT}$2y$05$.We…');
-#
+<code><span style="Color:DodgerBlue">INSERT INTO virtual_users (domain_id, email, password) 
+</span></code><code><span style="Color:DodgerBlue">VALUES ((SELECT id FROM virtual_domains WHERE name='x11.xyz'), 'johndoe@x11.xyz','{BLF-CRYPT}$2y$05$.We…');
+</span></code>#
 # For user exforge@u11.xyz
 # Encrytp user's password (bash shell)
-dovecot pw -s BLF-CRYPT 
-# Enter the given password twice, output will be the encrypted password
+<code><span style="Color:DodgerBlue">dovecot pw -s BLF-CRYPT 
+</span></code># Enter the given password twice, output will be the encrypted password
 # Create user exforge@u11.xyz
-INSERT INTO virtual_users (domain_id, email, password) 
-VALUES ((SELECT id FROM virtual_domains WHERE name='u11.xyz'), 'exforge@u11.xyz','{BLF-CRYPT}$2y$05$.We…');
-#
-# 13.5. Change (Reset) a User's Password
-# Again we need to encrypt the new password
+<code><span style="Color:DodgerBlue">INSERT INTO virtual_users (domain_id, email, password) 
+</span></code><code><span style="Color:DodgerBlue">VALUES ((SELECT id FROM virtual_domains WHERE name='u11.xyz'), 'exforge@u11.xyz','{BLF-CRYPT}$2y$05$.We…');
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 13.5. Change (Reset) a User's Password
+</B></span># Again we need to encrypt the new password
 # Encrytp password (bash shell)
-dovecot pw -s BLF-CRYPT 
-# Change password of johndoe@x11.xyz
-UPDATE virtual_users SET password='{BLF-CRYPT}$2y$05$.We…' 
-WHERE email='johndoe@x11.xyz';
-#
-# 13.6. Delete a Mail User
-# Delete johndoe@x11.xyz, remember mail files will stay in /var/vmail/..
-DELETE FROM virtual_users WHERE email='johndoe@x11.xyz';
-#
-# 13.7. Create a Mail Forwarding (Alias)
-# Create aliases postmaster@x11.xyz, webmaster@x11.xyz, 
-#   abuse@x11.xyz, and test@x11.xyz. Forward them to exforge@x11.xyz
+<code><span style="Color:DodgerBlue">dovecot pw -s BLF-CRYPT 
+</span></code># Change password of johndoe@x11.xyz
+<code><span style="Color:DodgerBlue">UPDATE virtual_users SET password='{BLF-CRYPT}$2y$05$.We…' 
+</span></code><code><span style="Color:DodgerBlue">WHERE email='johndoe@x11.xyz';
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 13.6. Delete a Mail User
+</B></span># Delete johndoe@x11.xyz, remember mail files will stay in /var/vmail/..
+<code><span style="Color:DodgerBlue">DELETE FROM virtual_users WHERE email='johndoe@x11.xyz';
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 13.7. Create a Mail Forwarding (Alias)
+</B></span># Create aliases postmaster@x11.xyz, webmaster@x11.xyz, abuse@x11.xyz, and 
+# test@x11.xyz. Forward them to exforge@x11.xyz
 #
 # postmaster@x11.xyz
-INSERT INTO virtual_aliases (domain_id, source, destination) VALUES 
-( (SELECT id FROM virtual_domains WHERE name='x11.xyz'),
- 'postmaster@x11.xyz', 'exforge@x11.xyz');
-# webmaster@x11.xyz
-INSERT INTO virtual_aliases (domain_id, source, destination) VALUES 
-( (SELECT id FROM virtual_domains WHERE name='x11.xyz'),
- 'webmaster@x11.xyz', 'exforge@x11.xyz');
-# abuse@x11.xyz
-INSERT INTO virtual_aliases (domain_id, source, destination) VALUES 
-( (SELECT id FROM virtual_domains WHERE name='x11.xyz'),
- 'abuse@x11.xyz', 'exforge@x11.xyz');
-# test@x11.xyz
-INSERT INTO virtual_aliases (domain_id, source, destination) VALUES 
-( (SELECT id FROM virtual_domains WHERE name='x11.xyz'),
- 'test@x11.xyz', 'exforge@x11.xyz');
-#
+<code><span style="Color:DodgerBlue">INSERT INTO virtual_aliases (domain_id, source, destination) VALUES 
+</span></code><code><span style="Color:DodgerBlue">( (SELECT id FROM virtual_domains WHERE name='x11.xyz'),
+</span></code><code><span style="Color:DodgerBlue"> 'postmaster@x11.xyz', 'exforge@x11.xyz');
+</span></code># webmaster@x11.xyz
+<code><span style="Color:DodgerBlue">INSERT INTO virtual_aliases (domain_id, source, destination) VALUES 
+</span></code><code><span style="Color:DodgerBlue">( (SELECT id FROM virtual_domains WHERE name='x11.xyz'),
+</span></code><code><span style="Color:DodgerBlue"> 'webmaster@x11.xyz', 'exforge@x11.xyz');
+</span></code># abuse@x11.xyz
+<code><span style="Color:DodgerBlue">INSERT INTO virtual_aliases (domain_id, source, destination) VALUES 
+</span></code><code><span style="Color:DodgerBlue">( (SELECT id FROM virtual_domains WHERE name='x11.xyz'),
+</span></code><code><span style="Color:DodgerBlue"> 'abuse@x11.xyz', 'exforge@x11.xyz');
+</span></code># test@x11.xyz
+<code><span style="Color:DodgerBlue">INSERT INTO virtual_aliases (domain_id, source, destination) VALUES 
+</span></code><code><span style="Color:DodgerBlue">( (SELECT id FROM virtual_domains WHERE name='x11.xyz'),
+</span></code><code><span style="Color:DodgerBlue"> 'test@x11.xyz', 'exforge@x11.xyz');
+</span></code>#
 # Create an alias of postmaster@u11.xyz and forward it to exforge@x11.xyz
-INSERT INTO virtual_aliases (domain_id, source, destination) VALUES 
-( (SELECT id FROM virtual_domains WHERE name='u11.xyz'),
- 'postmaster@u11.xyz', 'exforge@x11.xyz');
-#
+<code><span style="Color:DodgerBlue">INSERT INTO virtual_aliases (domain_id, source, destination) VALUES 
+</span></code><code><span style="Color:DodgerBlue">( (SELECT id FROM virtual_domains WHERE name='u11.xyz'),
+</span></code><code><span style="Color:DodgerBlue"> 'postmaster@u11.xyz', 'exforge@x11.xyz');
+</span></code>#
 # Create an alias of abuse@u11.xyz and forward it to my gmail
-INSERT INTO virtual_aliases (domain_id, source, destination) VALUES 
-( (SELECT id FROM virtual_domains WHERE name='u11.xyz'),
- 'abuse@u11.xyz', 'exforge12@gmail.com');
-#
-# 13.8. Delete a Mail Forwarding
-# Delete abuse@u11.xyz forwarding
-DELETE FROM virtual_aliases WHERE source='abuse@u11.xyz';
-# Delete test@x11.xyz forwarding
-DELETE FROM virtual_aliases WHERE source='test@x11.xyz';
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div17')">14. User, Alias, and Domain Management - Through Web Interface
-</a> <div id="Div17" style="margin-left:10%;"><pre><code># There are some software written to manage ISPmail.
+<code><span style="Color:DodgerBlue">INSERT INTO virtual_aliases (domain_id, source, destination) VALUES 
+</span></code><code><span style="Color:DodgerBlue">( (SELECT id FROM virtual_domains WHERE name='u11.xyz'),
+</span></code><code><span style="Color:DodgerBlue"> 'abuse@u11.xyz', 'exforge12@gmail.com');
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 13.8. Delete a Mail Forwarding
+</B></span># Delete abuse@u11.xyz forwarding
+<code><span style="Color:DodgerBlue">DELETE FROM virtual_aliases WHERE source='abuse@u11.xyz';
+</span></code># Delete test@x11.xyz forwarding
+<code><span style="Color:DodgerBlue">DELETE FROM virtual_aliases WHERE source='test@x11.xyz';
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div17')">14. User, Alias, and Domain Management - Through Web Interface
+</a> </H4><div id="Div17" style="margin-left:1%;"><pre ># There are some software written to manage ISPmail.
 # The one I choose is; Tomas Kelemen's fork of Ole Jungclaussen's ISPmailadmin.
 # Ole Jungclaussen's ISPmailadmin site:
 <a href="https://ima.jungclaussen.com/" target="_blank">https://ima.jungclaussen.com/</a>
 # Tomas Kelemen's fork:
 <a href="https://gitlab.com/ToKe79/ispmailadmin.git" target="_blank">https://gitlab.com/ToKe79/ispmailadmin.git</a>
 # 
-# 14.1. Database Configuration
-# We need to add a new user (ispmailadmin) to the database.
+<B><span style="Font-Family:Verdana">#-- 14.1. Database Configuration
+</B></span># We need to add a new user (ispmailadmin) to the database.
 # Enter mariadb
-mariadb
-# Connect to the database (on mariadb shell)
-use mailserver;
-# Add ispmailadmin user, remember to change the password (on mariadb shell)
-GRANT SELECT, UPDATE, INSERT, DELETE on mailserver.* 
-TO 'ispmailadmin'@'127.0.0.1' IDENTIFIED BY 'Password56';
-# Activate the user's rights (on mariadb shell)
-FLUSH PRIVILEGES;
-# Exit to Linux shell (on mariadb shell)
-exit
-#
-# 14.2. Install ISPmailadmin
-# Create a home for it
-mkdir /var/www/ispmailadmin
-# Install git, we are going to need it to download ISPmailadmin
-apt update
-apt -y install git
-# Download ISPispmailadmin
-git clone  -b master https://gitlab.com/ToKe79/ispmailadmin.git /var/www/ispmailadmin
-#
-# 14.3. Configure ISPmailadmin
-# We will make an Admin only config, that means only admin will be able to
-#   use ISP Mail Admin
-cd /var/www/ispmailadmin/cfg
-cp config.sample.inc.php config.inc.php
-nano config.inc.php
-# Change the file as described below:
-#__________________________________________________________________________________
-# Line 20: 'db_user' --&gt; 'ispmailadmin'
+<code><span style="Color:DodgerBlue">mariadb
+</span></code># Connect to the database (on mariadb shell)
+<code><span style="Color:DodgerBlue">use mailserver;
+</span></code># Add ispmailadmin user, remember to change the password (on mariadb shell)
+<code><span style="Color:DodgerBlue">GRANT SELECT, UPDATE, INSERT, DELETE on mailserver.* 
+</span></code><code><span style="Color:DodgerBlue">TO 'ispmailadmin'@'127.0.0.1' IDENTIFIED BY 'Password56';
+</span></code># Activate the user's rights (on mariadb shell)
+<code><span style="Color:DodgerBlue">FLUSH PRIVILEGES;
+</span></code># Exit to Linux shell (on mariadb shell)
+<code><span style="Color:DodgerBlue">exit
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 14.2. Install ISPmailadmin
+</B></span># Create a home for it
+<code><span style="Color:DodgerBlue">mkdir /var/www/ispmailadmin
+</span></code># Install git, we are going to need it to download ISPmailadmin
+<code><span style="Color:DodgerBlue">apt update
+</span></code><code><span style="Color:DodgerBlue">apt -y install git
+</span></code># Download ISPispmailadmin
+<code><span style="Color:DodgerBlue">git clone  -b master https://gitlab.com/ToKe79/ispmailadmin.git /var/www/ispmailadmin
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 14.3. Configure ISPmailadmin
+</B></span># - We will make an Admin only config, that means only admin will be able to
+# use ISP Mail Admin
+<code><span style="Color:DodgerBlue">cd /var/www/ispmailadmin/cfg
+</span></code><code><span style="Color:DodgerBlue">cp config.sample.inc.php config.inc.php
+</span></code><code><span style="Color:DodgerBlue">nano config.inc.php
+</span></code># Change the file as described below:
+<code><span style="Color:MediumSeaGreen"># Line 20: 'db_user' --&gt; 'ispmailadmin'
 # Line 21: 'db_pass' --&gt; 'Password56'  (Your password)
 # Line 29: uncomment line, that is remove // and the space (Enable single admin)
 # Line 33: "admin_user' --&gt; 'yourchoiceofadminusername' (Choose a name)
 # Line 34: "admin_user' --&gt; 'Password78' (Choose a good password)
 # Line 40: uncomment line, that is remove // and the space (Enable BCRYPT Hashes)
 # Line 48: uncomment line, that is remove // and the space (Enable Quotas)
-#__________________________________________________________________________________
-#
-# 14.4. Config Webserver to Include ISPmailserver
-nano /etc/apache2/sites-available/mail.x11.xyz-https.conf
-# Just after the Alias /adminer line
-#_____________________________________________
- Alias /admin /var/www/ispmailadmin
-#_____________________________________________
-#
-# 14.5. Last Security Settings
-# Secure /var/www and set appropriate ownerships
-chown -R www-data:www-data /var/www/
-chmod -R 770 /var/www/
-# Reload apache
-systemctl reload apache2
-#
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 14.4. Config Webserver to Include ISPmailserver
+</B></span><code><span style="Color:DodgerBlue">nano /etc/apache2/sites-available/mail.x11.xyz-https.conf
+</span></code># Just after the Alias /adminer line
+<code><span style="Color:MediumSeaGreen"> Alias /admin /var/www/ispmailadmin
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 14.5. Last Security Settings
+</B></span># Secure /var/www and set appropriate ownerships
+<code><span style="Color:DodgerBlue">chown -R www-data:www-data /var/www/
+</span></code><code><span style="Color:DodgerBlue">chmod -R 770 /var/www/
+</span></code># Reload apache
+<code><span style="Color:DodgerBlue">systemctl reload apache2
+</span></code>#
 # Now we can Connect to ISPMailAdmin
-https://mail.x11.xyz/admin/
-# You can config domains, users and aliases through the web interface.
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div18')">15. Accessing Your Mail
-</a> <div id="Div18" style="margin-left:10%;"><pre><code># 15.1. Through Web Interface
-# Obviously you can access your mail through webmail for x11.xyz, u11.xyz, and v11.xyz
-#   at the following address:
-https://mail.x11.xyz
-# You should use your email address in exforge@x11.xyz or exforge@u11.xyz format for 
+<code><span style="Color:DodgerBlue">https://mail.x11.xyz/admin/
+</span></code># You can config domains, users and aliases through the web interface.
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div18')">15. Accessing Your Mail
+</a> </H4><div id="Div18" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 15.1. Through Web Interface
+</B></span># - Obviously you can access your mail through webmail for x11.xyz, u11.xyz, and 
+# v11.xyz at the following address:
+<code><span style="Color:DodgerBlue">https://mail.x11.xyz
+</span></code># You should use your email address in exforge@x11.xyz or exforge@u11.xyz format for 
 #   username and you email password as password.
 # 
-# 15.2. Through Mail Client
-# Some people (take me as an example) prefers using a mail client (like Thunderbird) 
-#   instead of a web mail interface. 
-# Also you may prefer using Thunderbird on your main computer and use webmail when you
-#   are away. 
-# For exforge@x11.xyz, exforge@u11.xyz, and exforge@v11.xyz accounts, configuration 
-#   screens are given below.
+<B><span style="Font-Family:Verdana">#-- 15.2. Through Mail Client
+</B></span># - Some people (myself as an example) prefers using a mail client (like Thunderbird) 
+# instead of a web mail interface. 
+# - Also you may prefer using Thunderbird on your main computer and use webmail when 
+# you are away. 
+# - For exforge@x11.xyz, exforge@u11.xyz, and exforge@v11.xyz accounts, configuration 
+# screens are given below.
 <a href="https://imgur.com/a/uGt7EdV" target="_blank">https://imgur.com/a/uGt7EdV</a>
 #
-# 15.3. Mail Client Autoconfig
-# When you try to "Add mail account" on Thunderbird, a pop-up displays with the header
-#   "Set Up Your Existing Email Address". After entering your name, email address and 
-#   password, it tries to configure automatically. Sometimes it can, sometimes it can't.
-#   There is no magic there; if a domain has a mail autoconfig file, its mail accounts
-#   can be automatically configured.
-# Because we have 3 domains, we need 3 autoconfig files. Where to host the autoconfig
-#   files and the content of the autoconfig files are explained by examples below.
+<B><span style="Font-Family:Verdana">#-- 15.3. Mail Client Autoconfig
+</B></span># - When you try to "Add mail account" on Thunderbird, a pop-up displays with the
+# header "Set Up Your Existing Email Address". After entering your name, email 
+# address and password, it tries to configure automatically. Sometimes it can,
+# sometimes it can't.
+# - There is no magic there; if a domain has a mail autoconfig file, its mail 
+# accounts can be automatically configured.
+# - Because we have 3 domains, we need 3 autoconfig files. Where to host the 
+# autoconfig files and the content of the autoconfig files are explained by examples 
+# below.
 #
 # For x11.xyz
 # File must be hosted at the below address (http is ok too) :
-https://x11.xyz/.well-known/autoconfig/mail/config-v1.1.xml
-# Contents of the file:
-#_______________________________________________________
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<code><span style="Color:DodgerBlue">https://x11.xyz/.well-known/autoconfig/mail/config-v1.1.xml
+</span></code># Contents of the file:
+<code><span style="Color:MediumSeaGreen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;clientConfig version="1.1"&gt;
   &lt;emailProvider id="x11.xyz"&gt;
     &lt;domain&gt;x11.xyz&lt;/domain&gt;
@@ -1108,14 +1025,12 @@ https://x11.xyz/.well-known/autoconfig/mail/config-v1.1.xml
     &lt;/outgoingServer&gt;
   &lt;/emailProvider&gt;
 &lt;/clientConfig&gt;
-#_______________________________________________________
-#
+</span></code>#
 # For u11.xyz
 # File must be hosted at the below address (http is ok too) :
-https://u11.xyz/.well-known/autoconfig/mail/config-v1.1.xml
-# Contents of the file:
-#_______________________________________________________
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<code><span style="Color:DodgerBlue">https://u11.xyz/.well-known/autoconfig/mail/config-v1.1.xml
+</span></code># Contents of the file:
+<code><span style="Color:MediumSeaGreen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;clientConfig version="1.1"&gt;
   &lt;emailProvider id="u11.xyz"&gt;
     &lt;domain&gt;u11.xyz&lt;/domain&gt;
@@ -1144,14 +1059,12 @@ https://u11.xyz/.well-known/autoconfig/mail/config-v1.1.xml
     &lt;/outgoingServer&gt;
   &lt;/emailProvider&gt;
 &lt;/clientConfig&gt;
-#_______________________________________________________
-#
+</span></code>#
 # For v11.xyz
 # File must be hosted at the below address (http is ok too) :
-https://v11.xyz/.well-known/autoconfig/mail/config-v1.1.xml
-# Contents of the file:
-#_______________________________________________________
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<code><span style="Color:DodgerBlue">https://v11.xyz/.well-known/autoconfig/mail/config-v1.1.xml
+</span></code># Contents of the file:
+<code><span style="Color:MediumSeaGreen">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;clientConfig version="1.1"&gt;
   &lt;emailProvider id="x11.xyz"&gt;
     &lt;domain&gt;v11.xyz&lt;/domain&gt;
@@ -1180,58 +1093,57 @@ https://v11.xyz/.well-known/autoconfig/mail/config-v1.1.xml
     &lt;/outgoingServer&gt;
   &lt;/emailProvider&gt;
 &lt;/clientConfig&gt;
-#_______________________________________________________
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div19')">16. ISPMailInstall
-</a> <div id="Div19" style="margin-left:10%;"><pre><code># The best is saved for the last. 
-# There is a Python3 program that implements all of the tasks in this document. That 
-#   is you can download it and run it to have a working mail server with as many
-#   domains as you want. 
-# The program carries out all the necessary tasks (including SSL certificates) except
-#   DNS configuration and hosting mail server autoconfig files. Description for them
-#   will be given to you by the program as text files. 
-# The program has a web site and github page as below:
-<a href="https://karasite.xyz" target="_blank">https://karasite.xyz</a>
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div19')">16. ISPMailInstall
+</a> </H4><div id="Div19" style="margin-left:1%;"><pre ># - The best is saved for the last. 
+# - There is a Python3 program that implements all of the tasks in this document. 
+# - That is you can download it and run it to have a working mail server with as many
+# domains as you want. 
+# - The program carries out all the necessary tasks (including SSL certificates) 
+# except DNS configuration and hosting mail server autoconfig files. Description for 
+# them will be given to you by the program as text files. 
+# - The program has a web site and github page as below:
+<a href="https://ispmailinstall.x386.org/" target="_blank">https://ispmailinstall.x386.org/</a>
 <a href="https://github.com/enatsek/ISPMailInstall" target="_blank">https://github.com/enatsek/ISPMailInstall</a>
 # Now let's see how to install it.
 #
-# 16.1. Install git
-apt update
-apt -y install git
+<B><span style="Font-Family:Verdana">#-- 16.1. Install git
+</B></span><code><span style="Color:DodgerBlue">apt update
+</span></code><code><span style="Color:DodgerBlue">apt -y install git
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 16.2. Download ISPMailInstall
+</B></span><code><span style="Color:DodgerBlue">git clone https://github.com/enatsek/ISPMailInstall.git /tmp/ispmailinstall
+</span></code># The program is copied to /tmp/ispmailinstall
 #
-# 16.2. Download ISPMailInstall
-git clone https://github.com/enatsek/ISPMailInstall.git /tmp/ispmailinstall
-# The program is copied to /tmp/ispmailinstall
-#
-# 16.3. Set Program Configurations
-# Go to program directory
-cd /tmp/ispmailinstall
-# There is a file ispmail.conf as a configuration file there. It is very well
-#   documented. You can set parameters as hostname, domains to hosts, and necessary 
-#   passwords. It can generate passwords too. 
+<B><span style="Font-Family:Verdana">#-- 16.3. Set Program Configurations
+</B></span># Go to program directory
+<code><span style="Color:DodgerBlue">cd /tmp/ispmailinstall
+</span></code># - There is a file ispmail.conf as a configuration file there. It is very well
+# documented. You can set parameters as hostname, domains to hosts, and necessary 
+# passwords. It can generate passwords too. 
 # Set all the parameters as you wish. 
-nano ispmail.conf
-#
-# 16.4. Run the Program
-python3 ./ispmail.py
-# Check log files if everything is OK. Use created text files to set DNS records and
-#   mail autocofigurations as you wish, and everything is ready.
-# ispmail.log --&gt; All commands and their output
-# ispmail.error.log --&gt; Errors (if any)
-# *.*.dns.config --&gt; DNS configurations for the domains
+<code><span style="Color:DodgerBlue">nano ispmail.conf
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 16.4. Run the Program
+</B></span><code><span style="Color:DodgerBlue">python3 ./ispmail.py
+</span></code># - Check log files if everything is OK. Use created text files to set DNS records 
+# and mail autocofigurations as you wish, and everything is ready.
+# ispmail.log         --&gt; All commands and their output
+# ispmail.error.log   --&gt; Errors (if any)
+# *.*.dns.config      --&gt; DNS configurations for the domains
 # *.* config-v1.1.xml --&gt; Mail autoconfig files for the domains
 # 
-# 16.5. Access
-# Webmail:
-https://mail.x11.xyz
-#
+<B><span style="Font-Family:Verdana">#-- 16.5. Access
+</B></span># Webmail:
+<code><span style="Color:DodgerBlue">https://mail.x11.xyz
+</span></code>#
 # Database Administration
-https://mail.x11.xyz/adminer
-#
+<code><span style="Color:DodgerBlue">https://mail.x11.xyz/adminer
+</span></code>#
 # ISP Mail Administration
-https://mail.x11.xyz/admin
-</code> </pre> </div> </p>
-</code> </pre> </div> </p>
+<code><span style="Color:DodgerBlue">https://mail.x11.xyz/admin
+</span></code></pre> </div> </p>
+</pre> </div> </p>
 <br /><br /><br /><script>
 function myFunction(divid) {
   var x = document.getElementById(divid);

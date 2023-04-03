@@ -7,15 +7,17 @@ Apache Fine Tunes on Ubuntu 20.04
 
 
 #---Copyright (C) 2020 Exforge exforge@x386.org
-# This document is free text: you can redistribute it and/or modify
+# - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version.
-# This document is distributed in the hope that it will be useful,
+#
+# - This document is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
+#
+# - You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
@@ -24,7 +26,7 @@ Apache Fine Tunes on Ubuntu 20.04
 Link:https://123qwe.com/
 
 #---1. Special DNS Records:
-# 1.1. Certificate Authorities
+#-- 1.1. Certificate Authorities
 # 1.1.1. Letsencrypt may issue normal certificates 
 @ CAA 0 issue "letsencrypt.org"
 # 1.1.2. Wildcard domains are not allowed by anyone
@@ -32,15 +34,15 @@ Link:https://123qwe.com/
 # 1.1.3. Violations can be reported to postmaster@karasite.com
 CAA 0 iodef "mailto:postmaster@x11.xyz"
 #
-# 1.2. SPF Policy for Email Server
-# 1.2.1. All my emails come from the servers with MX record 
-#   in my domain. Reject all others.
+#-- 1.2. SPF Policy for Email Server
+# 1.2.1. Domains to Accept Emails From
+# All my emails come from the servers with MX record in my domain. Reject all others.
 # Add as a txt record for x11.xyz (replace with your domain)
 @ TXT "v=spf1 mx -all"
 #
-# 1.3. DMARC Policy for Email Server
-# Dmarc Version 1, reject non complied mail, report to postmaster, strict dkim
-#   and spf policy, filter 100% of the messages.
+#-- 1.3. DMARC Policy for Email Server
+# - Dmarc Version 1, reject non complied mail, report to postmaster, strict dkim
+# and spf policy, filter 100% of the messages.
 # Add as a txt record for _dmarc.x11.xyz (replace with your domain)
 _dmarc "v=DMARC1; p=reject; rua=mailto:postmaster@x11.xyz; adkim=s; aspf=s; pct=100;"
 
@@ -49,9 +51,9 @@ _dmarc "v=DMARC1; p=reject; rua=mailto:postmaster@x11.xyz; adkim=s; aspf=s; pct=
 #---2. Apache More Secure Configuration
 Link:https://ssl-config.mozilla.org/ 
 #   is a good place to start
-# 2.1. More Secure HTTPS redirect
-#   Contents of the conf file
-#      rewrite mod must be enabled
+#-- 2.1. More Secure HTTPS redirect
+# Contents of the conf file, rewrite mod must be enabled
+#______________________________________________________________
 <VirtualHost *:80>
     ServerName www.x11.xyz
     # Force redirect to HTTPS
@@ -60,10 +62,11 @@ Link:https://ssl-config.mozilla.org/
     RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301]
     ErrorLog ${APACHE_LOG_DIR}/www.x11.xyz-error.log
 </VirtualHost>
+#______________________________________________________________
 #
-# 2.2. More Secure HTTPS conf
-#   Contents of the conf file
-#       headers and ssl mods must be enabled
+#-- 2.2. More Secure HTTPS conf
+#   Contents of the conf file, headers and ssl mods must be enabled
+#______________________________________________________________
 <VirtualHost *:443>
     ServerName my.server.com
     DocumentRoot /var/www/www.x11.xyz
@@ -76,8 +79,9 @@ Link:https://ssl-config.mozilla.org/
     Header always set Strict-Transport-Security "max-age=63072000"
     ErrorLog  ${APACHE_LOG_DIR}/my.server.com.port443-error.log
 </VirtualHost>
+#______________________________________________________________
 #
-# 2.3. More Secure TLS Configuration
+#-- 2.3. More Secure TLS Configuration
 #   A more secure Apache conf may be created to apply security
 #     to all hosted sites
 sudo nano /etc/apache2/conf-available/ssl-stricter-options.conf
@@ -94,29 +98,28 @@ SSLStaplingCache "shmcb:logs/ssl_stapling(32768)"
 # Enable new conf
 sudo a2enconf ssl-stricter-options
 #
-# 2.4. Enable all mentioned mods
+#-- 2.4. Enable all mentioned mods
 sudo a2enmod rewrite ssl headers
 
 #---3. Disabling All Apache Access Logs
-#   You may consider respecting your user's privacy by not keeping any
-#     access logs on Apache Servers. I'd like to follow Alexey Abel's
-#     approach.
-#   We start by  not configuring any access or custom logs on apache confs, 
-#     but Apache itself catches all access logs at orher-vhosts-access-log.conf
-#     So we have to disable it.
+# - You may consider respecting your user's privacy by not keeping any access logs 
+# on Apache Servers. I'd like to follow Alexey Abel's approach.
+# - We start by  not configuring any access or custom logs on apache confs, but
+# Apache itself catches all access logs at orher-vhosts-access-log.conf file. So 
+# we have to disable it.
 sudo a2disconf other-vhosts-access-log
 
 
 #---4. Certbot Post Hooks
-# For HTTPS we use letsencrypt's certificates, Certbot automates the renewal 
-#   process of the certificates. It is a good thing, because letsencrypt 
-#   certificates last only 2 months. 
-# I use the certificates mostly for Apache, Postfix and Dovecot. When Certbot
-#   renews a certificate, Apache, Postfix or Dovecot don't know about it. They 
-#   might keep using the old certificates. Therefore it is a good idea to
-#   restart these services when a certificate is renewed.
-# Christoph Haas and Alexey Abel use 2 different methods for that purpose.
-#   Both is documented here, choose whichever you want.
+# - For HTTPS we use letsencrypt's certificates, Certbot automates the renewal 
+# process of the certificates. It is a good thing, because letsencrypt certificates
+# last only 2 months. 
+# - I use the certificates mostly for Apache, Postfix and Dovecot. When Certbot
+# renews a certificate, Apache, Postfix or Dovecot don't know about it. They might
+# keep using the old certificates. Therefore it is a good idea to restart these
+# services when a certificate is renewed.
+# - Christoph Haas and Alexey Abel use 2 different methods for that purpose.
+#  Both is documented here, choose whichever you want.
 #
 # 4.1. Christoph's Method:
 # Add a line to certbot ini file
@@ -126,8 +129,8 @@ post-hook = systemctl restart postfix ; systemctl restart dovecot ; systemctl re
 #___________________________________________________________________________
 #
 # 4.2. Alexey's Method:
-# Certbot runs all scripts in the  /etc/letsencrypt/renewal-hooks/deploy
-#   directory after a successfull renewal. We'll put there a scipt.
+# - Certbot runs all scripts in the  /etc/letsencrypt/renewal-hooks/deploy
+# directory after a successfull renewal. We'll put there a scipt.
 sudo nano /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
 #__________________________________________
 #!/bin/bash

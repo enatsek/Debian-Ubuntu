@@ -2,52 +2,54 @@
 
 I am a learner of Ubuntu. These are the tutorials I prepared with the help of internet sources and books. I credited the sources that helped me on each document.
 
-There are txt and html versions of each document.
+There are txt and html versions of each document. In the html version, commands and codes are in colors for easy navigation.
 
-AGT-ApacheOnUbuntu: Installing and configuring Apache 2 on Ubuntu server. With sample configuration and SSL support.
+---
 
-AGT-CertbotOnUbuntu: Using certbot tool of eff.org to automatize obtaining and renewing letsencrytp.org SSL certificates on Apache 2 and Ubuntu Server.
+- AGT-ApacheOnUbuntu: Installing and configuring Apache 2 on Ubuntu server. With sample configuration and SSL support.
 
-AGT-LampOnUbuntu: Installation of Lamp stack on Ubuntu server. My choice of DB is Mariadb.
+- AGT-CertbotOnUbuntu: Using certbot tool of eff.org to automatize obtaining and renewing letsencrytp.org SSL certificates on Apache 2 and Ubuntu Server.
 
-AGT-MariadbOnUbuntu: Mariadb installation and basic configuration on Ubuntu. Includes some user management and master-slave replication.
+- AGT-LampOnUbuntu: Installation of Lamp stack on Ubuntu server. My choice of DB is Mariadb.
 
-AGT-SimpleMailServerOnUbuntu: People who like the things at their simplest form (just like me) would prefer this tutorial instead of ISPMail. Install postfix, dovecot, a few modifications on the configs and it is ready.
+- AGT-MariadbOnUbuntu: Mariadb installation and basic configuration on Ubuntu. Includes some user management and master-slave replication.
 
-AGT-WordpressOnUbuntu: Installing and activating Wordpress on Ubuntu Server.
+- AGT-SimpleMailServerOnUbuntu: People who like the things at their simplest form (just like me) would prefer this tutorial instead of ISPMail. Install postfix, dovecot, a few modifications on the configs and it is ready.
 
-AGT-PHPMyAdminOnUbuntu: A somehow more secure PHPMyAdmin installation on Ubuntu Server for MySQL and MariaDB. !!! Deprecated, refer to AGT-AdminerOnUbuntu.
+- AGT-WordpressOnUbuntu: Installing and activating Wordpress on Ubuntu Server.
 
-AGT-DNSOnUbuntu: Installing and configuring Master and Slave DNS Servers on Ubuntu Server.
+- AGT-PHPMyAdminOnUbuntu: A somehow more secure PHPMyAdmin installation on Ubuntu Server for MySQL and MariaDB. !!! Deprecated, refer to AGT-AdminerOnUbuntu.
 
-AGT-ApacheFineTunesOnUbuntu: Some DNS and Apache tips (fine tunes).
+- AGT-DNSOnUbuntu: Installing and configuring Master and Slave DNS Servers on Ubuntu Server.
 
-AGT-KeepalivedOnUbuntu: Clustering with keepalived on Ubuntu Server.
+- AGT-ApacheFineTunesOnUbuntu: Some DNS and Apache tips (fine tunes).
 
-AGT-UserAndGroupAdminOnUbuntu: User and Group administration on Ubuntu Server (and desktops).
+- AGT-KeepalivedOnUbuntu: Clustering with keepalived on Ubuntu Server.
 
-AGT-AnsibleOnUbuntu: Ansible tutorial based on Ubuntu workstation and servers.
+- AGT-UserAndGroupAdminOnUbuntu: User and Group administration on Ubuntu Server (and desktops).
 
-AGT-KVMOnUbuntu1: KVM Virtualization tutorial (beginner) on Ubuntu Server. 
+- AGT-AnsibleOnUbuntu: Ansible tutorial based on Ubuntu workstation and servers.
 
-AGT-KVMOnUbuntu2: KVM Virtualization tutorial (networking) on Ubuntu Server. 
+- AGT-KVMOnUbuntu1: KVM Virtualization tutorial (beginner) on Ubuntu Server. 
 
-AGT-ISPMailOnUbuntu: A step by step Ubuntu tutorial for Christoph Haas' ISPMail Tutorials.
+- AGT-KVMOnUbuntu2: KVM Virtualization tutorial (networking) on Ubuntu Server. 
 
-AGT-ADOnUbuntu1: Simple Active Directory, with 1 domain, 2 DCs and 1 Fileserver with Ubuntu Servers.
+- AGT-ISPMailOnUbuntu: A step by step Ubuntu tutorial for Christoph Haas' ISPMail Tutorials.
 
-AGT-MariadbClusterOnUbuntu: MariaDB master-master replication with Galera Cluster tutorial on Ubuntu Servers.
+- AGT-ADOnUbuntu1: Simple Active Directory, with 1 domain, 2 DCs and 1 Fileserver with Ubuntu Servers.
 
-AGT-HAProxyOnUbuntu: HAProxy High Availability Load Balancing with Letsencrypt free certificates HTTPS support and keepalived.
+- AGT-MariadbClusterOnUbuntu: MariaDB master-master replication with Galera Cluster tutorial on Ubuntu Servers.
+
+- AGT-HAProxyOnUbuntu: HAProxy High Availability Load Balancing with Letsencrypt free certificates HTTPS support and keepalived.
  
-AGT-AdminerOnUbuntu: Adminer, a replacement for PHPMyAdmin. Web based Database Management.
+- AGT-AdminerOnUbuntu: Adminer, a replacement for PHPMyAdmin. Web based Database Management.
 
-AGT-PostgresqlOnUbuntu: Postgresql installation and basic configuration on Ubuntu. Includes some user management, cluster management, backup and restore.
+- AGT-PostgresqlOnUbuntu: Postgresql installation and basic configuration on Ubuntu. Includes some user management, cluster management, backup and restore.
 
-AGT-OtherLinuxesOnUbuntu: Basic management of Debian, Red Hat, OpenSuse, and Alpine distributions.
+- AGT-OtherLinuxesOnUbuntu: Basic management of Debian, Red Hat, OpenSuse, and Alpine distributions.
 
-AGT-NginxOnUbuntu: Installing and configuring Nginx on Ubuntu server. With sample configuration and SSL support.
+- AGT-NginxOnUbuntu: Installing and configuring Nginx on Ubuntu server. With sample configuration and SSL support.
 
-AGT-SystemdOnUbuntu: Basic systemd tutorial.
+- AGT-SystemdOnUbuntu: Basic systemd tutorial.
 
-AGT-DebPackagingOnUbuntu: A basic tutorial about creating and using .deb packages.
+- AGT-DebPackagingOnUbuntu: A basic tutorial about creating and using .deb packages.

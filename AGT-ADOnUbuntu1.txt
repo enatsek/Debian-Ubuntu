@@ -2,11 +2,12 @@ ADOnUbuntu1:  Simple Active Directory Configuration on Ubuntu 22.04 Server with 
 
 
 #---Copyright (C) 2021 - 2023 Exforge exforge@x386.org
-# This document is free text: you can redistribute it and/or modify
+# - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version.
-# This document is distributed in the hope that it will be useful,
+#
+# - This document is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
@@ -14,17 +15,17 @@ ADOnUbuntu1:  Simple Active Directory Configuration on Ubuntu 22.04 Server with 
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #---0.Specs
-# 0.1. Definition
-# Single Domain Active Directory infrastructure with Ubuntu Servers with
-#   2 Domain Controllers and a file server.
-# Windows workstations can join to AD.
-# No license costs except Windows workstation licences.
-# Based on the valuable documents at:
+#-- 0.1. Definition
+# - Single Domain Active Directory infrastructure with Ubuntu Servers with
+# 2 Domain Controllers and a file server.
+# - Windows workstations can join to AD.
+# - No license costs except Windows workstation licences.
+# - Based on the valuable documents at:
 Link:https://www.server-world.info/en/note?os=Ubuntu_18.04&p=samba&f=4
-# Relies on Samba software:
+# - Relies on Samba software:
 Link:https://www.samba.org/
 #
-# 0.2. Configuration
+#-- 0.2. Configuration
 # Domain Name: X11.XYZ
 # Domain Netbios Name: X11
 # First DC:    srv1.x11.xyz 192.168.0.231 (Ubuntu Server 22.04)
@@ -32,35 +33,36 @@ Link:https://www.samba.org/
 # File Server: srvf.x11.xyz 192.168.0.233 (Ubuntu Server 22.04)
 # Windows workstations can connect to the domain
 # 
-# 0.3. Phases
+#-- 0.3. Phases
 # 0.3.1. Add First DC (srv1.x11.xyz)
 # 0.3.2. Add Additional DC (srv2.x11.xyz)
 # 0.3.3. AD User Management
 # 0.3.4. Add a Linux File Server to the Domain (srvf.x11.xyz)
 # 0.3.5. Add a Windows Computer to the Domain
 #
-# 0.4. Preliminary Tasks
-# There are some important matters to consider. Not complying them can cause
-#   some problems.
+#-- 0.4. Preliminary Tasks
+# - There are some important matters to consider. Not complying them can cause
+# some problems.
+#
 # 0.4.1. Choosing Domain Name and Realm
-# Actually Realm is in the domain name format and Domain Name is a single word
-#   (actually Netbios Name of your domain).
-# If your company's internet domain name is example.com, then you can choose your
-#   Realm and Domain Name as following:
+# - Actually Realm is in the domain name format and Domain Name is a single word
+# (actually Netbios Name of your domain).
+# - If your company's internet domain name is example.com, then you can choose your
+# Realm and Domain Name as following:
 # Realm:	EXAMPLE.COM
 # Domain Name:	EXAMPLE
-# Whenever you use them, they must be UPPERCASE. Don't ask me why, that is 
-#   something about Micros*ft's bad design.
+# - Whenever you use them, they must be UPPERCASE. Don't ask me why, that is 
+# something about Micros*ft's bad design.
 #
 # 0.4.2. IP Address and Host Name for Domain Controllers and Domain Members
-# Domain Controllers and Domain Members should have static IP addresses. There 
-#   might be some ways to use DHCP but I don't know how and actually I don't see 
-#   any reason to use DHCP for Domain Controllers.
-# Hostname must be in the format of name.example.com (lowercase this time) and due
-#   to an imcompatability with Samba and Ubuntu (Actually all Debian based Linuxes)
-#   you have to erase the line starting with 127.0.1.1 (not 127.0.0.1) from your
-#   /etc/hosts file and add the IP and hostname (short and long formats) in your 
-#   /etc/hosts file as in below.
+# - Domain Controllers and Domain Members should have static IP addresses. There 
+# might be some ways to use DHCP but I don't know how and actually I don't see 
+# any reason to use DHCP for Domain Controllers.
+# - Hostname must be in the format of name.example.com (lowercase this time) and due
+# to an imcompatability with Samba and Ubuntu (Actually all Debian based Linuxes)
+# you have to erase the line starting with 127.0.1.1 (not 127.0.0.1) from your
+# /etc/hosts file and add the IP and hostname (short and long formats) in your 
+# /etc/hosts file as in below.
 #
 #____________________________________________
 127.0.0.1	localhost
@@ -68,28 +70,29 @@ Link:https://www.samba.org/
 #____________________________________________
 # 
 # 0.4.3. Mixed Environment
-# You should have at least 2 DCs (Domain Controllers), you can use 1 Wind*ws and
-#   1 Linux to benefit from Micros*ft's AD Management programs. But actually it is 
-#   not necessary. I'd advice installing all DCs as Linux and use any Wind*ws 
-#   workstation to manage AD. You can install RSAT Management Tools to a Wind*ws
-#   workstation and use AD Manager programs (including DNS and WINS server) from
-#   there.
+# - You should have at least 2 DCs (Domain Controllers), you can use 1 Wind*ws and
+# 1 Linux to benefit from Micros*ft's AD Management programs. But actually it is 
+# not necessary. I'd advice installing all DCs as Linux and use any Wind*ws 
+# workstation to manage AD. You can install RSAT Management Tools to a Wind*ws
+# workstation and use AD Manager programs (including DNS and WINS server) from
+# there.
 #
 # 0.4.4. Default Values 
-# Remember to replace all the occurences of X11, x11, X11.XYZ, and x11.xyz with
-#   yours, regarding the cases. 
+# - Remember to replace all the occurences of X11, x11, X11.XYZ, and x11.xyz with
+# yours, regarding the cases. 
 
 
 #--- 1. Add First Domain Controller
-# 1.0. Specs
-#   Domain Name:	X11
-#   Realm: 		X11.XYZ	
-#   Hostname:		srv1.x11.xyz
-#   IP:		192.168.0.231
-# 1.1. Install required packages
+#-- 1.0. Specs
+# Domain Name:  X11
+# Realm:        X11.XYZ	
+# Hostname:     srv1.x11.xyz
+# IP:           192.168.0.231
+#
+#-- 1.1. Install required packages
 sudo apt update
 sudo apt -y install samba krb5-config winbind smbclient 
-#  Answers to parameter questions:
+# Answers to parameter questions:
 ## Default Kerberos version 5 realm:
 # In Capital Letters
 #  X11.XYZ
@@ -98,12 +101,12 @@ sudo apt -y install samba krb5-config winbind smbclient
 ## Administrative server for your Kerberos realm:
 #  srv1.x11.xyz
 #
-# 1.2. Configure Samba AD DC
+#-- 1.2. Configure Samba AD DC
 # 1.2.1. Backup original samba configuration
 sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.original 
 # 1.2.2. Run Samba Config
 sudo samba-tool domain provision
-#  Answers to parameter questions:
+# Answers to parameter questions:
 ## Realm:
 #  X11.XYZ
 ## Domain: 
@@ -136,22 +139,24 @@ nameserver 127.0.0.1
 sudo systemctl start samba-ad-dc
 sudo systemctl enable samba-ad-dc 
 #
-# 1.3. Domain is OK
+#--1.3. Domain is OK
 # 1.3.1. Check domain level
 sudo samba-tool domain level show
+#
 # 1.3.2. Create a domain user
 sudo samba-tool user create exforge
 
 
 #--- 2. Add Additional DC
-# 2.0. Specs
-#   Domain Name:	X11
-#   Realm: 		X11.xyz	
-#   Hostname:		srv2.x11.xyz
-#   IP:		192.168.0.232
-#   Org. DC Hostname:	srv1.x11.xyz
-#   Org. DC IP:	192.168.0.231
-# 2.1. Get domain administrator's kerberos ticket
+#--2.0. Specs
+# Domain Name:      X11
+# Realm:            X11.xyz	
+# Hostname:         srv2.x11.xyz
+# IP:               192.168.0.232
+# Org. DC Hostname: srv1.x11.xyz
+# Org. DC IP:       192.168.0.231
+#
+#--2.1. Get domain administrator's kerberos ticket
 # 2.1.1. Install kerberos and edit conf
 sudo apt -y install krb5-user
 # Pass all the questions with enter
@@ -182,12 +187,14 @@ nameserver 192.168.0.231
 sudo kinit administrator
 sudo klist
 #
-# 2.2. Add This DC to Existing AD
+#--2.2. Add This DC to Existing AD
 # 2.2.1. Add necessary packages 
 sudo apt -y install samba winbind smbclient 
+#
 # 2.2.2. Rename and remove default samba config, create a new one
 sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.org 
 sudo samba-tool domain join X11.XYZ DC -U "srv1\administrator" --dns-backend=SAMBA_INTERNAL 
+#
 # 2.2.3. Close and disable unnecessary services and enable samba
 sudo systemctl stop smbd nmbd winbind
 sudo systemctl disable smbd nmbd winbind
@@ -197,62 +204,64 @@ sudo systemctl enable samba-ad-dc
 #
 # 2.2.4. Verify Authentication to localhost
 sudo smbclient //127.0.0.1/netlogon -U Administrator -c 'ls'
+#
 # 2.2.5. Verify replication status with AD
 sudo samba-tool drs showrepl
-#   Following warning is not important, you can ignore it:
+# Following warning is not important, you can ignore it:
 #       Warning: No NC replicated for Connection!
 
 
 #--- 3. AD User Management
-# You can run on any DC
-# 3.1. Display domain users list.
+# - You can run on any DC
+#-- 3.1. Display domain users list.
 sudo samba-tool user list
 # 
-# 3.2. Add a domain user.
+#-- 3.2. Add a domain user.
 sudo samba-tool user create ubuntu
 # 
-# 3.3. Delete a domain user.
+#-- 3.3. Delete a domain user.
 sudo samba-tool user delete ubuntu
 # 
-# 3.4. Reset password for a user.
+#-- 3.4. Reset password for a user.
 sudo samba-tool user setpassword ubuntu
 # 
-# 3.5. Set expiry for a user.
+#-- 3.5. Set expiration for a user.
 sudo samba-tool user setexpiry ubuntu --days=7
 # 
-# 3.6. Disable/Enable user account.
+#-- 3.6. Disable/Enable user account.
 sudo samba-tool user disable ubuntu
 sudo samba-tool user enable ubuntu
 # 
-# 3.7. Display domain groups list.
+#-- 3.7. Display domain groups list.
 sudo samba-tool group list
 # 
-# 3.8. Display members in a group.
+#-- 3.8. Display members in a group.
 sudo samba-tool group listmembers "Domain Users"
 # 
-# 3.9. Add a domain group.
+#-- 3.9. Add a domain group.
 sudo samba-tool group add ServerWorld
 # 
-# 3.10. Delete a domain group.
+#-- 3.10. Delete a domain group.
 sudo samba-tool group delete ServerWorld
 # 
-# 3.11. Add/remove a member from a domain group.
+#-- 3.11. Add/remove a member from a domain group.
 sudo samba-tool group addmembers ServerWorld ubuntu
 sudo samba-tool group removemembers ServerWorld ubuntu
 
 
 #---4. Add Linux File Server to the Domain (Ubuntu 22.04 Server)
-# 4.0. Specs
-#   Domain Name:	X11
-#   Realm: 		X11.XYZ	
-#   Hostname:		srvf.x11.xyz
-#   IP:		192.168.0.233
-#   Org. DC Hostname:	srv1.x11.xyz
-#   Org. DC IP:	192.168.0.231
-# 4.1. Install necessary packages
+#-- 4.0. Specs
+# Domain Name:      X11
+# Realm:            X11.XYZ	
+# Hostname:         srvf.x11.xyz
+# IP:               192.168.0.233
+# Org. DC Hostname: srv1.x11.xyz
+# Org. DC IP:       192.168.0.231
+#
+#-- 4.1. Install necessary packages
 sudo apt update
 sudo apt -y install winbind libpam-winbind libnss-winbind krb5-config samba-dsdb-modules samba-vfs-modules 
-#  Answers to parameter questions:
+# - Answers to parameter questions:
 ## Default Kerberos version 5 realm:
 #  X11.XYZ
 ## Kerberos servers for your realm:
@@ -260,10 +269,10 @@ sudo apt -y install winbind libpam-winbind libnss-winbind krb5-config samba-dsdb
 ## Administrative server for your Kerberos realm:
 #  srv1.x11.xyz
 #
-# 4.2. Configure Winbind
+#-- 4.2. Configure Winbind
 # 4.2.1. Samba config
 sudo nano /etc/samba/smb.conf 
-#   Change/add following lines under [global] stanza
+# Change/add following lines under [global] stanza
 #___________________________________________
    workgroup = X11
    realm = X11.XYZ
@@ -280,7 +289,7 @@ sudo nano /etc/samba/smb.conf
 #
 # 4.2.2. nsswitch config
 sudo nano /etc/nsswitch.conf
-#   Change/add following lines
+# Change/add following lines
 #___________________________________________
 passwd:     compat systemd winbind
 group:     compat systemd winbind
@@ -294,7 +303,7 @@ session optional        pam_mkhomedir.so skel=/etc/skel umask=077
 #___________________________________________
 #
 # 4.2.4. Change DNS to AD
-#   You have to change your DNS server to first DC and second DC
+# You have to change your DNS server to first DC and second DC
 sudo nano /etc/netplan/01-netcfg.yaml 
 # If that file is not there, use the existing file instead
 #   Change as below
@@ -306,25 +315,27 @@ sudo nano /etc/netplan/01-netcfg.yaml
 # 4.2.5. Restart network settings
 sudo netplan apply
 #
-# 4.3. Join AD
+#-- 4.3. Join AD
 # 4.3.1. Add this server to AD 
 sudo net ads join -U Administrator
 # Restart winbind
 sudo systemctl restart winbind
+#
 # 4.3.2. Show Domain Users
 sudo wbinfo -u
 #
-# 4.4. Config File Server
+#-- 4.4. Config File Server
 # 4.4.0. Specs
-#   There will be 4 shares: 
-#     /srv/share1: Test1 AD Group full access
-#     /srv/share2: Test2 AD Group full access
-#     /srv/share3: Domain Users AD Group read only access
-#     /srv/share4: Domain Admins AD Group full access
-#   I assume that these folders are created on srvf (this server)
+# - There will be 4 shares: 
+# /srv/share1: Test1 AD Group full access
+# /srv/share2: Test2 AD Group full access
+# /srv/share3: Domain Users AD Group read only access
+# /srv/share4: Domain Admins AD Group full access
+# - I assume that these folders are created on srvf (this server)
 #
 # 4.4.1. Install Samba
 sudo apt -y install samba
+#
 # 4.4.2. Configure samba for AD file server
 sudo nano /etc/samba/smb.conf
 #   Add following lines under [global]  stanza
@@ -389,16 +400,16 @@ sudo nano /etc/samba/smb.conf
    valid users = @"X11+Domain Admins"  
    admin users = @"X11+Domain Admins"  
 #___________________________________________________________________
+#
 # 4.4.3. Restart Samba
 sudo systemctl restart smbd
 
 #---5. Add Windows Computers to the Domain 
-# 5.1. Change Windows computer's DNS setting to first DC
-#    and proceed as usual
-# 5.2. AD (including the DNS server on DC) could be managed through windows 
-#    workstation after installing RSAT management.
-# 5.3. You can connect to the file server using \\srvf\share1 (share2,3,4)
-#    notation from your workstation.
+# - Change Windows computer's DNS setting to first DC and proceed as usual
+# - AD (including the DNS server on DC) could be managed through windows 
+# workstation after installing RSAT management.
+# - You can connect to the file server using \\srvf\share1 (share2,3,4)
+# notation from your workstation.
 
 
 

@@ -1,53 +1,54 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"> </head> <body><H1>Apache Fine Tunes on Ubuntu 20.04
-</H1><p> <a href="javascript:myFunction('Div1')">!!! Deprecation Notice !!!
-</a> <div id="Div1" style="margin-left:10%;"><pre><code># !!!!!!!!  This tutorial is no longer maintained. !!!!!!!! 
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>Apache Fine Tunes on Ubuntu 20.04
+</H1><p> <H4><a href="javascript:myFunction('Div1')">!!! Deprecation Notice !!!
+</a> </H4><div id="Div1" style="margin-left:1%;"><pre ># !!!!!!!!  This tutorial is no longer maintained. !!!!!!!! 
 # I'm planning to write a comprehensive Apache Web Server tutorial 
 #   in the (hopefully) near future.
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div2')">Copyright (C) 2020 Exforge exforge@x386.org
-</a> <div id="Div2" style="margin-left:10%;"><pre><code># This document is free text: you can redistribute it and/or modify
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div2')">Copyright (C) 2020 Exforge exforge@x386.org
+</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version.
-# This document is distributed in the hope that it will be useful,
+#
+# - This document is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# You should have received a copy of the GNU General Public License
+#
+# - You should have received a copy of the GNU General Public License
 # along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div3')">Specs
-</a> <div id="Div3" style="margin-left:10%;"><pre><code># Based on Alexey Abel's ISP Mail Tutorial Caramel Edition
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div3')">Specs
+</a> </H4><div id="Div3" style="margin-left:1%;"><pre ># Based on Alexey Abel's ISP Mail Tutorial Caramel Edition
 <a href="https://123qwe.com/" target="_blank">https://123qwe.com/</a>
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div4')">1. Special DNS Records:
-</a> <div id="Div4" style="margin-left:10%;"><pre><code># 1.1. Certificate Authorities
-# 1.1.1. Letsencrypt may issue normal certificates 
-@ CAA 0 issue "letsencrypt.org"
-# 1.1.2. Wildcard domains are not allowed by anyone
-@ CAA 0 issuewild ";"
-# 1.1.3. Violations can be reported to postmaster@karasite.com
-CAA 0 iodef "mailto:postmaster@x11.xyz"
-#
-# 1.2. SPF Policy for Email Server
-# 1.2.1. All my emails come from the servers with MX record 
-#   in my domain. Reject all others.
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div4')">1. Special DNS Records:
+</a> </H4><div id="Div4" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 1.1. Certificate Authorities
+</B></span># 1.1.1. Letsencrypt may issue normal certificates 
+<code><span style="Color:DodgerBlue">@ CAA 0 issue "letsencrypt.org"
+</span></code># 1.1.2. Wildcard domains are not allowed by anyone
+<code><span style="Color:DodgerBlue">@ CAA 0 issuewild ";"
+</span></code># 1.1.3. Violations can be reported to postmaster@karasite.com
+<code><span style="Color:DodgerBlue">CAA 0 iodef "mailto:postmaster@x11.xyz"
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 1.2. SPF Policy for Email Server
+</B></span># 1.2.1. Domains to Accept Emails From
+# All my emails come from the servers with MX record in my domain. Reject all others.
 # Add as a txt record for x11.xyz (replace with your domain)
-@ TXT "v=spf1 mx -all"
-#
-# 1.3. DMARC Policy for Email Server
-# Dmarc Version 1, reject non complied mail, report to postmaster, strict dkim
-#   and spf policy, filter 100% of the messages.
+<code><span style="Color:DodgerBlue">@ TXT "v=spf1 mx -all"
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 1.3. DMARC Policy for Email Server
+</B></span># - Dmarc Version 1, reject non complied mail, report to postmaster, strict dkim
+# and spf policy, filter 100% of the messages.
 # Add as a txt record for _dmarc.x11.xyz (replace with your domain)
-_dmarc "v=DMARC1; p=reject; rua=mailto:postmaster@x11.xyz; adkim=s; aspf=s; pct=100;"
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div5')">2. Apache More Secure Configuration
-</a> <div id="Div5" style="margin-left:10%;"><pre><code><a href="https://ssl-config.mozilla.org/ " target="_blank">https://ssl-config.mozilla.org/ </a>
+<code><span style="Color:DodgerBlue">_dmarc "v=DMARC1; p=reject; rua=mailto:postmaster@x11.xyz; adkim=s; aspf=s; pct=100;"
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div5')">2. Apache More Secure Configuration
+</a> </H4><div id="Div5" style="margin-left:1%;"><pre ><a href="https://ssl-config.mozilla.org/ " target="_blank">https://ssl-config.mozilla.org/ </a>
 #   is a good place to start
-# 2.1. More Secure HTTPS redirect
-#   Contents of the conf file
-#      rewrite mod must be enabled
-&lt;VirtualHost *:80&gt;
+<B><span style="Font-Family:Verdana">#-- 2.1. More Secure HTTPS redirect
+</B></span># Contents of the conf file, rewrite mod must be enabled
+<code><span style="Color:MediumSeaGreen">&lt;VirtualHost *:80&gt;
     ServerName www.x11.xyz
     # Force redirect to HTTPS
     RewriteEngine On
@@ -55,11 +56,10 @@ _dmarc "v=DMARC1; p=reject; rua=mailto:postmaster@x11.xyz; adkim=s; aspf=s; pct=
     RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} &lsqb;R=301&rsqb;
     ErrorLog ${APACHE_LOG_DIR}/www.x11.xyz-error.log
 &lt;/VirtualHost&gt;
-#
-# 2.2. More Secure HTTPS conf
-#   Contents of the conf file
-#       headers and ssl mods must be enabled
-&lt;VirtualHost *:443&gt;
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.2. More Secure HTTPS conf
+</B></span>#   Contents of the conf file, headers and ssl mods must be enabled
+<code><span style="Color:MediumSeaGreen">&lt;VirtualHost *:443&gt;
     ServerName my.server.com
     DocumentRoot /var/www/www.x11.xyz
     SSLEngine on
@@ -71,68 +71,61 @@ _dmarc "v=DMARC1; p=reject; rua=mailto:postmaster@x11.xyz; adkim=s; aspf=s; pct=
     Header always set Strict-Transport-Security "max-age=63072000"
     ErrorLog  ${APACHE_LOG_DIR}/my.server.com.port443-error.log
 &lt;/VirtualHost&gt;
-#
-# 2.3. More Secure TLS Configuration
-#   A more secure Apache conf may be created to apply security
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.3. More Secure TLS Configuration
+</B></span>#   A more secure Apache conf may be created to apply security
 #     to all hosted sites
-sudo nano /etc/apache2/conf-available/ssl-stricter-options.conf
-#_________________________________________________________________
-# Generated by: https://ssl-config.mozilla.org/
+<code><span style="Color:DodgerBlue">sudo nano /etc/apache2/conf-available/ssl-stricter-options.conf
+</span></code><code><span style="Color:MediumSeaGreen"># Generated by: https://ssl-config.mozilla.org/
 # modern configuration, tweak to your needs
 SSLProtocol             all -SSLv3 -TLSv1 -TLSv1.1 -TLSv1.2
 SSLHonorCipherOrder     off
 SSLSessionTickets       off
 SSLUseStapling On
 SSLStaplingCache "shmcb:logs/ssl_stapling(32768)"
-#_________________________________________________________________
-#
+</span></code>#
 # Enable new conf
-sudo a2enconf ssl-stricter-options
-#
-# 2.4. Enable all mentioned mods
-sudo a2enmod rewrite ssl headers
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div6')">3. Disabling All Apache Access Logs
-</a> <div id="Div6" style="margin-left:10%;"><pre><code>#   You may consider respecting your user's privacy by not keeping any
-#     access logs on Apache Servers. I'd like to follow Alexey Abel's
-#     approach.
-#   We start by  not configuring any access or custom logs on apache confs, 
-#     but Apache itself catches all access logs at orher-vhosts-access-log.conf
-#     So we have to disable it.
-sudo a2disconf other-vhosts-access-log
-</code> </pre> </div> </p>
-<p> <a href="javascript:myFunction('Div7')">4. Certbot Post Hooks
-</a> <div id="Div7" style="margin-left:10%;"><pre><code># For HTTPS we use letsencrypt's certificates, Certbot automates the renewal 
-#   process of the certificates. It is a good thing, because letsencrypt 
-#   certificates last only 2 months. 
-# I use the certificates mostly for Apache, Postfix and Dovecot. When Certbot
-#   renews a certificate, Apache, Postfix or Dovecot don't know about it. They 
-#   might keep using the old certificates. Therefore it is a good idea to
-#   restart these services when a certificate is renewed.
-# Christoph Haas and Alexey Abel use 2 different methods for that purpose.
-#   Both is documented here, choose whichever you want.
+<code><span style="Color:DodgerBlue">sudo a2enconf ssl-stricter-options
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.4. Enable all mentioned mods
+</B></span><code><span style="Color:DodgerBlue">sudo a2enmod rewrite ssl headers
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div6')">3. Disabling All Apache Access Logs
+</a> </H4><div id="Div6" style="margin-left:1%;"><pre ># - You may consider respecting your user's privacy by not keeping any access logs 
+# on Apache Servers. I'd like to follow Alexey Abel's approach.
+# - We start by  not configuring any access or custom logs on apache confs, but
+# Apache itself catches all access logs at orher-vhosts-access-log.conf file. So 
+# we have to disable it.
+<code><span style="Color:DodgerBlue">sudo a2disconf other-vhosts-access-log
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div7')">4. Certbot Post Hooks
+</a> </H4><div id="Div7" style="margin-left:1%;"><pre ># - For HTTPS we use letsencrypt's certificates, Certbot automates the renewal 
+# process of the certificates. It is a good thing, because letsencrypt certificates
+# last only 2 months. 
+# - I use the certificates mostly for Apache, Postfix and Dovecot. When Certbot
+# renews a certificate, Apache, Postfix or Dovecot don't know about it. They might
+# keep using the old certificates. Therefore it is a good idea to restart these
+# services when a certificate is renewed.
+# - Christoph Haas and Alexey Abel use 2 different methods for that purpose.
+#  Both is documented here, choose whichever you want.
 #
 # 4.1. Christoph's Method:
 # Add a line to certbot ini file
-sudo nano /etc/letsencrypt/cli.ini
-#___________________________________________________________________________
-post-hook = systemctl restart postfix ; systemctl restart dovecot ; systemctl restart apache2
-#___________________________________________________________________________
-#
+<code><span style="Color:DodgerBlue">sudo nano /etc/letsencrypt/cli.ini
+</span></code><code><span style="Color:MediumSeaGreen">post-hook = systemctl restart postfix ; systemctl restart dovecot ; systemctl restart apache2
+</span></code>#
 # 4.2. Alexey's Method:
-# Certbot runs all scripts in the  /etc/letsencrypt/renewal-hooks/deploy
-#   directory after a successfull renewal. We'll put there a scipt.
-sudo nano /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
-#__________________________________________
-#!/bin/bash
+# - Certbot runs all scripts in the  /etc/letsencrypt/renewal-hooks/deploy
+# directory after a successfull renewal. We'll put there a scipt.
+<code><span style="Color:DodgerBlue">sudo nano /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
+</span></code><code><span style="Color:MediumSeaGreen">#!/bin/bash
 systemctl reload apache2
 systemctl reload postfix
 systemctl reload dovecot
-#__________________________________________
-# Make the script executable
-sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
-</code> </pre> </div> </p>
-</code> </pre> </div> </p>
+</span></code># Make the script executable
+<code><span style="Color:DodgerBlue">sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
+</span></code></pre> </div> </p>
+</pre> </div> </p>
 <br /><br /><br /><script>
 function myFunction(divid) {
   var x = document.getElementById(divid);

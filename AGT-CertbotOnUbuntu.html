@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>CertbotOnUbuntu: Auto Free SSL Certificates for Apache2 Tutorial on Ubuntu 22.04
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>CertbotOnUbuntu: Auto Free SSL Certificates for Apache2 Tutorial on Debian 12 and Ubuntu 22.04 
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2020 - 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,49 +13,110 @@
 # - You should have received a copy of the GNU General Public License
 # along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
 </pre> </div> </p>
-<p> <H4><a href="javascript:myFunction('Div2')">Specs
-</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># Automation of SSL and certificate renewal for Apache 2 on Ubuntu
-# Totally based on the document at:
-<a href="https://certbot.eff.org/lets-encrypt/ubuntufocal-apache" target="_blank">https://certbot.eff.org/lets-encrypt/ubuntufocal-apache</a>
-# Based on Alexey Abel's ISP Mail Tutorial Caramel Edition
-<a href="https://123qwe.com/" target="_blank">https://123qwe.com/</a>
-# - Apache Site configurations without SSL must be ready on your servers
-# Refer to ApacheOnUbuntu Tutorial
-</pre> </div> </p>
-<p> <H4><a href="javascript:myFunction('Div3')">1. Preliminary Tasks
-</a> </H4><div id="Div3" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 1.1. Snap Daemon
-</B></span># - Certbot is installed as a snap, Ubuntu 22.04 installs snap daemon (snapd) 
-# by default. If in any case it is not installed, you can install snapd by the
-# following command:
-<code><span style="Color:DodgerBlue">sudo apt install snapd
-</span></code><B><span style="Font-Family:Verdana">#-- 1.2. Remove Old Certbot Packages (If any)
-</B></span># If you've installed certbot's apt package before, remove it:
-<code><span style="Color:DodgerBlue">sudo apt remove certbot
-</span></code></pre> </div> </p>
-<p> <H4><a href="javascript:myFunction('Div4')">2. Installation and Getting SSL Certificate
-</a> </H4><div id="Div4" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 2.1. Ensure that your snapd (snap deamon) is up to date:
-</B></span><code><span style="Color:DodgerBlue">sudo snap install core; sudo snap refresh core
-</span></code>#
-<B><span style="Font-Family:Verdana">#-- 2.2. Install Certbot
-</B></span><code><span style="Color:DodgerBlue">sudo snap install --classic certbot
-</span></code>#
-<B><span style="Font-Family:Verdana">#-- 2.3. Get SSL Certificate
-</B></span><code><span style="Color:DodgerBlue">sudo certbot --apache
-</span></code># - Asks your email, don't hesitate giving it, you will be informed if any problems
-# occurs at the renewal of certificates.
+<p> <H4><a href="javascript:myFunction('Div2')">0. Specs
+</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># - Automation of SSL and certificate renewal for Apache 2 on Debian 12 
+# (also # 11) and Ubuntu 22.04 (also 20.04) servers.
+# - My server's hostname is srv1.x11.xyz. You have to change it to yours.
 #
-<B><span style="Font-Family:Verdana">#-- 2.4. Test automatic renewal
-</B></span><code><span style="Color:DodgerBlue">sudo certbot renew --dry-run
-</span></code>#
-<B><span style="Font-Family:Verdana">#-- 2.5. All set, certificates generated and installed, all apache configurations
-</B></span># are made, jobs added to crontab to renew certs.
-# Check crontab:
-<code><span style="Color:DodgerBlue">systemctl list-timers
+# Sources:
+<a href="https://certbot.eff.org/" target="_blank">https://certbot.eff.org/</a>
+<a href="https://123qwe.com/" target="_blank">https://123qwe.com/</a>
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div3')">1. Preliminary Work
+</a> </H4><div id="Div3" style="margin-left:1%;"><pre ># - My server's name is srv1.x11.xyz and I have installed Apache2 and 
+# enabled the following site configuration:
+<code><span style="Color:DodgerBlue">sudo apt update
+</span></code><code><span style="Color:DodgerBlue">sudo apt install apache2 -y
+</span></code><code><span style="Color:DodgerBlue">sudo nano /etc/apache2/sites-available/srv1.x11.xyz.conf
+</span></code><code><span style="Color:MediumSeaGreen">&lt;VirtualHost *:80&gt;
+    ServerAdmin webmaster@x11.xyz	
+    ServerName srv1.x11.xyz
+    DocumentRoot /var/www/srv1
+    ErrorLog ${APACHE_LOG_DIR}/srv1.x11.xyz-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv1.x11.xyz-access.log combined
+&lt;/VirtualHost&gt;
+</span></code><code><span style="Color:DodgerBlue">sudo a2ensite srv1.x11.xyz.conf
+</span></code><code><span style="Color:DodgerBlue">sudo systemctl reload apache2
+</span></code># - HTML files are placed to /var/www/srv1 and also some apache mods are
+# enabled to allow ssl and redirection.
+<code><span style="Color:DodgerBlue">sudo a2enmod ssl
+</span></code><code><span style="Color:DodgerBlue">sudo a2enmod rewrite
+</span></code><code><span style="Color:DodgerBlue">sudo systemctl restart apache2
 </span></code></pre> </div> </p>
-<p> <H4><a href="javascript:myFunction('Div5')">3. Certbot Renewal Hooks
-</a> </H4><div id="Div5" style="margin-left:1%;"><pre ># - When your free certificate is automatically renewed, apache needs to be 
-# restarted. Any other software using your certificate needs to be reloaded also
-# (like postfix and dovecot). 
+<p> <H4><a href="javascript:myFunction('Div4')">2. Certbot
+</a> </H4><div id="Div4" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 2.1. Install Certbot
+</B></span><code><span style="Color:DodgerBlue">sudo apt update
+</span></code><code><span style="Color:DodgerBlue">sudo apt install certbot -y
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.2. Get Certificates 
+</B></span># - Run certbot to get certificates. For authentication method question; 
+# select the option 2 (Place files ...), and enter root directory 
+# (/var/www/srv1 for my server).  Enter an email address and accept TOS.
+<code><span style="Color:DodgerBlue">sudo certbot certonly -d srv1.x11.xyz
+</span></code># Certificates are installed to /etc/letsencrypt/live/srv1.x11.xyz/
+#
+<B><span style="Font-Family:Verdana">#-- 2.3. SSL Site Configuration
+</B></span># - Create conf file for the SSL site
+<code><span style="Color:DodgerBlue">sudo nano /etc/apache2/sites-available/srv1.x11.xyz-ssl.conf
+</span></code><code><span style="Color:MediumSeaGreen">&lt;VirtualHost *:443&gt;
+ ServerName srv1.x11.xyz
+ DocumentRoot /var/www/srv1
+ ErrorLog ${APACHE_LOG_DIR}/srv1.x11.xyz-error.log
+ CustomLog ${APACHE_LOG_DIR}/srv1.x11.xyz-access.log combined
+ SSLEngine on
+ SSLCertificateFile /etc/letsencrypt/live/srv1.x11.xyz/fullchain.pem
+ SSLCertificateKeyFile /etc/letsencrypt/live/srv1.x11.xyz/privkey.pem
+&lt;/VirtualHost&gt;
+</span></code>#
+# - Enable SSL site
+<code><span style="Color:DodgerBlue">sudo a2ensite srv1.x11.xyz-ssl.conf
+</span></code>#
+# - Reload Apache2
+<code><span style="Color:DodgerBlue">sudo systemctl reload apache2
+</span></code># 
+# - Our SSL site is ready, and we can reach it by https://srv1.x11.xyz
+# But we need to do some fine tuning work, at the next section.
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div5')">3. Fine Tunings
+</a> </H4><div id="Div5" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 3.1. Redirect HTTP Site
+</B></span># - https://srv1.x11.xyz goes to SSL site but http://srv1.x11.xyz goes to
+# non-ssl site. 
+# - We need to redirect every site access to http to https, with only 1
+# exception. Certbot tries to renew the certificate in every 2 months and
+# makes a challenge access to /.well-known/acme-challenge/ folder. So we
+# need to redirect everything except this folder.
+#
+# Edit http site configuration and change as below:
+<code><span style="Color:DodgerBlue">sudo nano /etc/apache2/sites-available/srv1.x11.xyz.conf
+</span></code><code><span style="Color:MediumSeaGreen">&lt;VirtualHost *:80&gt;
+    ServerAdmin webmaster@x11.xyz	
+    ServerName srv1.x11.xyz
+    DocumentRoot /var/www/srv1
+    # Redirection BEGIN
+    # Force redirect to HTTPS unless the request is for Let's Encrypt
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !^/.well-known/acme-challenge/
+    RewriteCond %{HTTPS} off
+    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} &lsqb;R=301&rsqb;
+    # Redirection END
+    ErrorLog ${APACHE_LOG_DIR}/srv1.x11.xyz-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv1.x11.xyz-access.log combined
+&lt;/VirtualHost&gt;
+</span></code>#
+# Reload Apache
+<code><span style="Color:DodgerBlue">sudo systemctl reload apache2
+</span></code>#
+# - We can have a check if certbot renewal works correctly.
+<code><span style="Color:DodgerBlue">sudo certbot renew --dry-run
+</span></code># 
+# - Certbot adds a job to crontab for automatic renewal of the certificates.
+# We can check it:
+<code><span style="Color:DodgerBlue">systemctl list-timers
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 3.2. Certbot Renewal Hooks
+</B></span># - When your free certificate is automatically renewed, apache needs to be 
+# restarted. Any other software using your certificate needs to be reloaded
+# also (like postfix and dovecot). 
 # - Certbot runs all scripts in the  /etc/letsencrypt/renewal-hooks/deploy
 # directory after a successfull renewal. We'll put a script there.
 <code><span style="Color:DodgerBlue">sudo nano /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh

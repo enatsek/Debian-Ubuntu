@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>LampOnUbuntu: LAMP Stack On Ubuntu 22.04
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>LampOnUbuntu: LAMP Stack On Debian 12 and Ubuntu 22.04
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2020 - 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
 # along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div2')">Specs
-</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># L: Ubuntu 22.04 Sever (and 20.04)
+</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># L: Debian 12 (and 11) or Ubuntu 22.04 (and 20.04) Server
 # A: Apache 2 
 # M: MariaDB (Mysql could be another option)
 # P: PHP (Python or Perl could be other options)
@@ -33,10 +33,10 @@
 <B><span style="Font-Family:Verdana">#-- 1.2. Install MariaDB
 </B></span><code><span style="Color:DodgerBlue">sudo apt install --yes mariadb-server
 </span></code>#
-<B><span style="Font-Family:Verdana">#-- 1.3. Install PHP, Mariadb and Apache dependancies
-</B></span><code><span style="Color:DodgerBlue">sudo apt install php --yes libapache2-mod-php php-mysql
+<B><span style="Font-Family:Verdana">#-- 1.3. Install PHP, Mariadb and Apache dependencies
+</B></span><code><span style="Color:DodgerBlue">sudo apt install --yes php libapache2-mod-php php-mysql
 </span></code>#
-<B><span style="Font-Family:Verdana">#-- 1.4. Install other PHP dependancies 
+<B><span style="Font-Family:Verdana">#-- 1.4. Install other PHP dependencies 
 </B></span># Depending on the PHP code, you may need some more PHP library packages.
 # For example, Wordpress needs the following packages:
 <code><span style="Color:DodgerBlue">sudo apt install --yes php-curl php-gd php-mbstring php-xml php-xmlrpc \
@@ -53,7 +53,7 @@
 <B><span style="Font-Family:Verdana">#-- 2.1. DB Operations
 </B></span># Connect to Mariadb shell
 <code><span style="Color:DodgerBlue">sudo mariadb
-</span></code># - Create nysampledb database, connect to it, create a table, fill the table,
+</span></code># - Create mysampledb database, connect to it, create a table, fill the table,
 # create a user with the access permission to that database and the table.
 # !!! BEGIN Run on Mariadb shell. !!!
 <code><span style="Color:DodgerBlue">CREATE DATABASE mysampledb;

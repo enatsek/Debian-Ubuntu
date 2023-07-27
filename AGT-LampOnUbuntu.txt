@@ -1,4 +1,4 @@
-LampOnUbuntu: LAMP Stack On Ubuntu 22.04
+LampOnUbuntu: LAMP Stack On Debian 12 and Ubuntu 22.04
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org
 # - This document is free text: you can redistribute it and/or modify
@@ -16,7 +16,7 @@ LampOnUbuntu: LAMP Stack On Ubuntu 22.04
 
 
 #---Specs
-# L: Ubuntu 22.04 Sever (and 20.04)
+# L: Debian 12 (and 11) or Ubuntu 22.04 (and 20.04) Server
 # A: Apache 2 
 # M: MariaDB (Mysql could be another option)
 # P: PHP (Python or Perl could be other options)
@@ -35,10 +35,10 @@ sudo apt install --yes apache2
 #-- 1.2. Install MariaDB
 sudo apt install --yes mariadb-server
 #
-#-- 1.3. Install PHP, Mariadb and Apache dependancies
-sudo apt install php --yes libapache2-mod-php php-mysql
+#-- 1.3. Install PHP, Mariadb and Apache dependencies
+sudo apt install --yes php libapache2-mod-php php-mysql
 #
-#-- 1.4. Install other PHP dependancies 
+#-- 1.4. Install other PHP dependencies 
 # Depending on the PHP code, you may need some more PHP library packages.
 # For example, Wordpress needs the following packages:
 sudo apt install --yes php-curl php-gd php-mbstring php-xml php-xmlrpc \
@@ -56,7 +56,7 @@ sudo systemctl restart apache2
 #-- 2.1. DB Operations
 # Connect to Mariadb shell
 sudo mariadb
-# - Create nysampledb database, connect to it, create a table, fill the table,
+# - Create mysampledb database, connect to it, create a table, fill the table,
 # create a user with the access permission to that database and the table.
 # !!! BEGIN Run on Mariadb shell. !!!
 CREATE DATABASE mysampledb;

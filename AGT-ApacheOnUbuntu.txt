@@ -1,4 +1,4 @@
-ApacheOnUbuntu: Apache 2 Tutorial on Ubuntu 22.04
+ApacheOnUbuntu: Apache 2 Tutorial on Debian 12 & Ubuntu 22.04
 
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org
@@ -16,11 +16,11 @@ ApacheOnUbuntu: Apache 2 Tutorial on Ubuntu 22.04
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #---Specs
-# - Apache 2 Installation, configuration, sample sites, enablement of PHP, SSL etc
-# on Ubuntu 22.04 (and 20.04) Server
+# - Apache 2 Installation, configuration, sample sites, enablement of PHP,
+# SSL etc # on Ubuntu 22.04 (and 20.04) and Debian 12 (and 11) Servers
 # - Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix
-# - This book hes introduced me to Ubuntu Server and I have to thank him for this
-#  excellent book. 
+# - This book hes introduced me to Ubuntu Server and I have to thank him for 
+# this excellent book. 
 Link:https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
 # srv1.x11.xyz, srv2.x11.xyz and srv3.x11.xyz all have the ip of my server
 
@@ -90,10 +90,11 @@ apt search libapache2-mod
 #   then can be disabled by a2dismod
 #
 #-- 2.3. List of build in modules of Apache2
-apache2 -l
+sudo apache2 -l
+# Sudo is necessary for Debian
 #
 #-- 2.4. All installed and ready to be enabled modules
-a2enmod
+sudo a2enmod
 #
 #-- 2.5. Enable proxy module
 sudo a2enmod proxy
@@ -149,8 +150,8 @@ sudo nano /etc/apache2/sites-available/000-virtual-ssl.conf
 sudo a2ensite 000-virtual-ssl.conf
 #
 #-- 3.8. Reload apache - SSL Site is ready
-#    Please consider, your browser will give an error/warning message because
-#        the certificate is self signed.
+# - Please consider, your browser will give an error/warning message
+# because the certificate is self signed.
 sudo systemctl reload apache2
 
 
@@ -234,8 +235,8 @@ http://srv1.x11.xyz/info.php
 </VirtualHost>
 #_____________________________________________________________________
 #
-#-- 6.3. This server allows letsencrypt's acme challenge, otherwise redirects to
-#   https. You are going to need to enable rewrite module with:
+#-- 6.3. This server allows letsencrypt's acme challenge, otherwise
+# redirects to https. You are going to need to enable rewrite module with:
 sudo a2enmod rewrite
 #_____________________________________________________________________
 <VirtualHost *:80>

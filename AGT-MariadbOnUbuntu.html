@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>MariadbOnUbuntu: MariaDB Tutorial on Ubuntu 22.04
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>MariadbOnUbuntu: MariaDB Tutorial on Debian 12 and Ubuntu 22.04
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2020 - 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,11 +14,15 @@
 # along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div2')">Specs
-</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># - Mariadb Installation, configuration, simple user and DB management on Ubuntu 
-# 22.04 (and 20.04) Server.
-# - Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix. This book has
-# introduced me to Ubuntu Server and I have to thank him for this excellent book:
+</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># - Mariadb Installation, configuration, simple user and DB management, and 
+# Primary - Replica (Master - Slave) Replication on Debian 12 (also 11) and 
+# Ubuntu 22.04 (also 20.04) Server.
+#
+# - Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix. This 
+# book has introduced me to Ubuntu Server and I have to thank him for this 
+# excellent book:
 <a href="https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition" target="_blank">https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition</a>
+#
 # - Almost (if not all) everything on this tutorial can be applied to Mysql.
 # - Mariadb is a fork or Mysql, and I prefer using it, besides a lot of other 
 # reasons, I just don't like Or*cle
@@ -29,7 +33,7 @@
 </B></span><code><span style="Color:DodgerBlue">sudo apt update
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 1.1. Install MariaDB
-</B></span><code><span style="Color:DodgerBlue">sudo apt install mariadb-server
+</B></span><code><span style="Color:DodgerBlue">sudo apt install --yes mariadb-server
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 1.2. Check if installation is OK
 </B></span><code><span style="Color:DodgerBlue">systemctl status mariadb
@@ -40,8 +44,11 @@
 </span></code>#   You will be asked some questions.
 #     "Enter current password for root (enter for none):"
 #     There is no password yet, so press enter.
-#   The next 2 questions are about securing root account. In Ubuntu root
-#     account is already protected, so you can answer n.
+#   The next 2 questions "Switch to unix_socket authentication &lsqb;Y/n&rsqb;" and 
+#     "Change the root password? &lsqb;Y/n&rsqb;" (for Ubuntu 20.04 there is only 1 
+#     question "Set root password? &lsqb;Y/n&rsqb;" only) are about securing root 
+#     account. In Ubuntu and Debian root account is already protected, so you
+#     can answer n.
 #   For the next questions you can select default answers.
 #
 <B><span style="Font-Family:Verdana">#-- 1.4. Enter Mariadb shell
@@ -127,25 +134,42 @@
 <B><span style="Font-Family:Verdana">#-- 4.2. Restore it
 </B></span><code><span style="Color:DodgerBlue">sudo mariadb &lt; mysampledb.sql
 </span></code></pre> </div> </p>
-<p> <H4><a href="javascript:myFunction('Div7')">5. Master-Slave Replication Configuration
+<p> <H4><a href="javascript:myFunction('Div7')">5. Primary - Replica (Master-Slave) Replication Configuration
 </a> </H4><div id="Div7" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 5.1. Specs and Preliminary Tasks
-</B></span># Master Server        : 192.168.0.231  Ubuntu 22.04 Server
-# Slave Server         :  192.168.0.232  Ubuntu 22.04 Server
-# Replication User     : 'replicate'@'192.168.0.232'
+</B></span># Primary Server       : 192.168.1.253 
+# Replica Server       : 192.168.1.254 
+# Replication User     : 'replicate'@'192.168.1.254'
 # Rep. User Password   : Pass1234 
 # Database instance to replicate: mysampledb
 #
+# - As in the following link, Mariadb Knowledge Base says that; primary and
+# replica server do not need to have the same version of Mariadb, although
+# it is preferred to have the primary an older version.
+<a href="https://mariadb.com/kb/en/database-version-on-master-slave-replication/" target="_blank">https://mariadb.com/kb/en/database-version-on-master-slave-replication/</a>
+#
+# - Mariadb versions on Debian and Ubuntu Servers:
+# Ubuntu 20.04 : 10.3.38
+# Debian 11    : 10.5.19
+# Ubuntu 22.04 : 10.6.12
+# Debian 12    : 10.11.3
+#
+# - I made the tests with the following pairs.
+#  
+#   Debian 11 Primary    - Debian 12 Replica
+#   Ubuntu 20.04 Primary - Ubuntu 22.04 Replica
+#   Ubuntu 22.04 Primary - Debian 12 Replica
+#   
 # - Install mariadb on both servers, 
 # - Apply steps in 1 on both servers
-# - Apply step 3.1 to 3.7 on master server
+# - Apply step 3.1 to 3.7 on primary server
 #
 #  !! Please Remember: !!! 
-#  - Replication doesn't mean that you don't have to backup. If you delete something 
-#  accidentally, it is automatically deleted at slave too. So if you are running a
-#  production server, backup (at least) daily and weekly.
+#  - Replication doesn't mean that you don't have to backup. If you delete 
+#  something accidentally, it is automatically deleted at slave too. So if 
+#  you are running a production server, backup (at least) daily and weekly.
 #
-<B><span style="Font-Family:Verdana">#-- 5.2. Master Server Configuration
-</B></span># 5.2.1. Configure master for bin log
+<B><span style="Font-Family:Verdana">#-- 5.2. Primary Server Configuration
+</B></span># 5.2.1. Configure primary for bin log
 <code><span style="Color:DodgerBlue">sudo nano /etc/mysql/conf.d/mysql.cnf
 </span></code># Change as below:
 <code><span style="Color:MediumSeaGreen">&lsqb;mysql&rsqb;
@@ -156,54 +180,56 @@ server-id=1
 </span></code>#
 # 5.2.2. Change bind address to outside
 <code><span style="Color:DodgerBlue">sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
-</span></code># Change following line (Around line 28)
+</span></code># Change following line (Around lines 27-30)
 <code><span style="Color:MediumSeaGreen">bind-address = 127.0.0.1
 </span></code>#  to
 <code><span style="Color:MediumSeaGreen">bind-address = 0.0.0.0
 </span></code>#
 # 5.2.3. Create replication user
-# Run following command on master mariadb shell
-<code><span style="Color:DodgerBlue">GRANT REPLICATION SLAVE ON *.* to 'replicate'@'192.168.0.232' identified by 'Pass1234';
+# Run following command on primary mariadb shell
+<code><span style="Color:DodgerBlue">GRANT REPLICATION SLAVE ON *.* to 'replicate'@'192.168.1.254' identified by 'Pass1234';
+</span></code><code><span style="Color:DodgerBlue">EXIT;
 </span></code>#
-# 5.2.4. Restart master mariadb server
+# 5.2.4. Restart primary mariadb server
 <code><span style="Color:DodgerBlue">sudo systemctl restart mariadb
 </span></code>#
-# 5.2.5. Lock Master server for initial full replication
-# Run on Master server Mariadb shell
+# 5.2.5. Lock Primary server for initial full replication
+# Run on Primary server Mariadb shell
 <code><span style="Color:DodgerBlue">FLUSH TABLES WITH READ LOCK;
+</span></code><code><span style="Color:DodgerBlue">EXIT;
 </span></code>#
-# 5.2.6. Backup the database at master server
+# 5.2.6. Backup the database at primary server
 <code><span style="Color:DodgerBlue">sudo mysqldump --databases mysampledb &gt; mysampledb.sql
-</span></code># Move backup file to the slave server for restoring later
+</span></code># Move backup file to the replica server for restoring later
 #
-<B><span style="Font-Family:Verdana">#-- 5.3. Slave Server Config
-</B></span># 5.3.1. Restore database backed up at master
+<B><span style="Font-Family:Verdana">#-- 5.3. Replica Server Config
+</B></span># 5.3.1. Restore database backed up at primary
 <code><span style="Color:DodgerBlue">sudo mariadb &lt; mysampledb.sql
 </span></code>#
-# 5.3.2. Update slave server's conf file
+# 5.3.2. Update replica server's conf file
 <code><span style="Color:DodgerBlue">sudo nano /etc/mysql/conf.d/mysql.cnf
 </span></code><code><span style="Color:MediumSeaGreen">&lsqb;mysql&rsqb;
 &lsqb;mysqld&rsqb;
 server-id=2
-</span></code># For more than 1 slaves, give different server-id numbers
+</span></code># For more than 1 replicas, give different server-id numbers
 #
-# 5.3.3. Restart slave mariadb
+# 5.3.3. Restart replica mariadb
 <code><span style="Color:DodgerBlue">sudo systemctl restart mariadb
 </span></code>#
-# 5.3.4. Run the commands on slave mariadb shell
-<code><span style="Color:DodgerBlue">CHANGE MASTER TO MASTER_HOST="192.168.0.231", MASTER_USER='replicate', MASTER_PASSWORD='Pass1234';
-</span></code># Check to see if slave running (on mariadb shell)
+# 5.3.4. Run the commands on replica mariadb shell
+<code><span style="Color:DodgerBlue">CHANGE MASTER TO MASTER_HOST="192.168.1.253", MASTER_USER='replicate', MASTER_PASSWORD='Pass1234';
+</span></code># Check to see if replica is running (on mariadb shell)
 <code><span style="Color:DodgerBlue">SHOW SLAVE STATUS;
-</span></code># If Slave_IO_State is empty run (on mariadb shell)
+</span></code># If Slave_IO_State is empty, run (on mariadb shell)
 <code><span style="Color:DodgerBlue">START SLAVE;
 </span></code>#
-<B><span style="Font-Family:Verdana">#-- 5.4. Unlock Master Mariadb
+<B><span style="Font-Family:Verdana">#-- 5.4. Unlock Primary Mariadb
 </B></span># Run on master mariadb shell
 <code><span style="Color:DodgerBlue">UNLOCK TABLES;
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 5.5. All set. 
-</B></span># - You can try manipulating the DB on master, changes will be applied on slave in a
-# few seconds.
+</B></span># - You can try manipulating the DB on the primary, changes will be applied 
+# on the replica slave in a few seconds.
 </pre> </div> </p>
 </pre> </div> </p>
 <br /><br /><br /><script>

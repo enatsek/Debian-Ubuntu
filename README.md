@@ -1,19 +1,21 @@
-#Ubuntu Tutorials
+#Debian and Ubuntu Tutorials
 
-I am a learner of Ubuntu. These are the tutorials I prepared with the help of internet sources and books. I credited the sources that helped me on each document.
+I am a learner of Debian and Ubuntu. These are the tutorials I prepared with the help of internet sources and books. I credited the sources that helped me on each document.
+
+My Linux voyage started with Ubuntu. I still use Ubuntu as desktop, but for the server part, I'm moving towards Debian. I am still in between, so I use both of them. 
 
 There are txt and html versions of each document. In the html version, commands and codes are in colors for easy navigation.
 
 
 ---
 
-- AGT-ApacheOnUbuntu: Installing and configuring Apache 2 on Ubuntu server. With sample configuration and SSL support.
+- ApacheOnDebianUbuntu: Installing and configuring Apache 2 on Debian and Ubuntu servers. With sample configuration and SSL support.
 
-- AGT-CertbotOnUbuntu: Using certbot tool of eff.org to automatize obtaining and renewing letsencrytp.org SSL certificates on Apache 2 and Ubuntu Server.
+- CertbotOnDebianUbuntu: Using certbot tool of eff.org to automatize obtaining and renewing letsencrytp.org SSL certificates on Apache 2 and Debian and Ubuntu Servers.
 
-- AGT-LampOnUbuntu: Installation of Lamp stack on Ubuntu server. My choice of DB is Mariadb.
+- LampOnDebianUbuntu: Installation of Lamp stack on Debian and Ubuntu servers. My choice of DB is Mariadb.
 
-- AGT-MariadbOnUbuntu: Mariadb installation and basic configuration on Ubuntu. Includes some user management and master-slave replication.
+- MariadbOnDebianUbuntu: Mariadb installation and basic configuration on Debian and Ubuntu Servers. Includes some user management and primary-replica (master-slave) replication.
 
 - AGT-SimpleMailServerOnUbuntu: People who like the things at their simplest form (just like me) would prefer this tutorial instead of ISPMail. Install postfix, dovecot, a few modifications on the configs and it is ready.
 

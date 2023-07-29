@@ -19,9 +19,7 @@ There are txt and html versions of each document. In the html version, commands 
 
 - AGT-SimpleMailServerOnUbuntu: People who like the things at their simplest form (just like me) would prefer this tutorial instead of ISPMail. Install postfix, dovecot, a few modifications on the configs and it is ready.
 
-- AGT-WordpressOnUbuntu: Installing and activating Wordpress on Ubuntu Server.
-
-- AGT-PHPMyAdminOnUbuntu: A somehow more secure PHPMyAdmin installation on Ubuntu Server for MySQL and MariaDB. !!! Deprecated, refer to AGT-AdminerOnUbuntu.
+- WordpressOnDebianUbuntu: Installing and activating Wordpress on Ubuntu Server.
 
 - AGT-DNSOnUbuntu: Installing and configuring Master and Slave DNS Servers on Ubuntu Server.
 

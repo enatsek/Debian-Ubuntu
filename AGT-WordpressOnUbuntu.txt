@@ -1,4 +1,4 @@
-WordpressOnUbuntu: Install Wordpress  On Ubuntu 22.04
+WordpressOnUbuntu: Install Wordpress  On Debian 12 and Ubuntu 22.04
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org
 # - This document is free text: you can redistribute it and/or modify
@@ -18,14 +18,14 @@ WordpressOnUbuntu: Install Wordpress  On Ubuntu 22.04
 #---Specs
 # Based on Brian Boucheron's Tutorial on
 Link:https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lamp-on-ubuntu-18-04
-# My Server Name: www.x11.xyz  Ubuntu 22.04 Server (or 20.04 Server)
+# My Server Name: www.x11.xyz  Debian 12 (or 11) and Ubuntu 22.04 Server (or 20.04)
 # Wordpress Mariadb Database Name: wordpress
 # Wordpress Mariadb Database User: wordpressuser
 # Password of wordpressuser: pAsswOrd1234
 # Wordpress website location: /var/www/wordpress
 
-#---0. Install LAMP Stack (See LampOnUbuntu)
-# Refer to LampOnUbuntu Tutorial
+#---0. Install LAMP Stack (See LampOnDebianUbuntu)
+# Refer to LampOnDebianUbuntu Tutorial
 
 #---1. Configure a Website (If you haven't done already)
 #-- 1.1. Make room for our website
@@ -98,6 +98,8 @@ sudo systemctl restart apache2
 # version from the original source
 #
 #-- 5.1. Go to temp directory, download wordpress, extract it
+# For Debian, you may need to install curl
+sudo apt install --yes curl
 cd /tmp
 curl -O https://wordpress.org/latest.tar.gz
 tar xzvf latest.tar.gz
@@ -141,7 +143,7 @@ define('NONCE_SALT',       '`d)>*Ae)9g<Aaa1eQ*9HlqY-|__kE5,Nte2UAMJO3ro=9T#y=,|-
 # 6.2.2. Add phrases to WP config file
 sudo nano /var/www/wordpress/wp-config.php
 # - Browse to the section with the following lines, replace them with the text you 
-# copied. (Around line 49)
+# copied. (Around line 50)
 #___________________________________________________________     
 define( 'AUTH_KEY',         'put your unique phrase here' );
 define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );
@@ -182,7 +184,7 @@ define('FS_METHOD', 'direct');
 #--- 7. Wordpress is ready, open in your browser
 http://www.x11.xyz
 # - Of course it would be a good idea to add SSL to your site, refer to 
-# CertbotOnUbuntu tutorial.
+# CertbotOnDebianUbuntu tutorial.
 
 
 

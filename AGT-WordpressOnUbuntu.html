@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>WordpressOnUbuntu: Install Wordpress  On Ubuntu 22.04
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>WordpressOnUbuntu: Install Wordpress  On Debian 12 and Ubuntu 22.04
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2020 - 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,14 +16,14 @@
 <p> <H4><a href="javascript:myFunction('Div2')">Specs
 </a> </H4><div id="Div2" style="margin-left:1%;"><pre ># Based on Brian Boucheron's Tutorial on
 <a href="https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lamp-on-ubuntu-18-04" target="_blank">https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lamp-on-ubuntu-18-04</a>
-# My Server Name: www.x11.xyz  Ubuntu 22.04 Server (or 20.04 Server)
+# My Server Name: www.x11.xyz  Debian 12 (or 11) and Ubuntu 22.04 Server (or 20.04)
 # Wordpress Mariadb Database Name: wordpress
 # Wordpress Mariadb Database User: wordpressuser
 # Password of wordpressuser: pAsswOrd1234
 # Wordpress website location: /var/www/wordpress
 </pre> </div> </p>
-<p> <H4><a href="javascript:myFunction('Div3')">0. Install LAMP Stack (See LampOnUbuntu)
-</a> </H4><div id="Div3" style="margin-left:1%;"><pre ># Refer to LampOnUbuntu Tutorial
+<p> <H4><a href="javascript:myFunction('Div3')">0. Install LAMP Stack (See LampOnDebianUbuntu)
+</a> </H4><div id="Div3" style="margin-left:1%;"><pre ># Refer to LampOnDebianUbuntu Tutorial
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div4')">1. Configure a Website (If you haven&#x27;t done already)
 </a> </H4><div id="Div4" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 1.1. Make room for our website
@@ -87,7 +87,9 @@
 # version from the original source
 #
 <B><span style="Font-Family:Verdana">#-- 5.1. Go to temp directory, download wordpress, extract it
-</B></span><code><span style="Color:DodgerBlue">cd /tmp
+</B></span># For Debian, you may need to install curl
+<code><span style="Color:DodgerBlue">sudo apt install --yes curl
+</span></code><code><span style="Color:DodgerBlue">cd /tmp
 </span></code><code><span style="Color:DodgerBlue">curl -O https://wordpress.org/latest.tar.gz
 </span></code><code><span style="Color:DodgerBlue">tar xzvf latest.tar.gz
 </span></code>#
@@ -126,7 +128,7 @@ define('NONCE_SALT',       '`d)&gt;*Ae)9g&lt;Aaa1eQ*9HlqY-|__kE5,Nte2UAMJO3ro=9T
 # 6.2.2. Add phrases to WP config file
 <code><span style="Color:DodgerBlue">sudo nano /var/www/wordpress/wp-config.php
 </span></code># - Browse to the section with the following lines, replace them with the text you 
-# copied. (Around line 49)
+# copied. (Around line 50)
 <code><span style="Color:MediumSeaGreen">define( 'AUTH_KEY',         'put your unique phrase here' );
 define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );
 define( 'LOGGED_IN_KEY',    'put your unique phrase here' );
@@ -161,7 +163,7 @@ define( 'DB_COLLATE', '' );
 <p> <H4><a href="javascript:myFunction('Div10')"> 7. Wordpress is ready, open in your browser
 </a> </H4><div id="Div10" style="margin-left:1%;"><pre ><code><span style="Color:DodgerBlue">http://www.x11.xyz
 </span></code># - Of course it would be a good idea to add SSL to your site, refer to 
-# CertbotOnUbuntu tutorial.
+# CertbotOnDebianUbuntu tutorial.
 </pre> </div> </p>
 </pre> </div> </p>
 <br /><br /><br /><script>

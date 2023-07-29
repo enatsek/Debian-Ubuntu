@@ -33,16 +33,29 @@
 <B><span style="Font-Family:Verdana">#-- 1.2. Install MariaDB
 </B></span><code><span style="Color:DodgerBlue">sudo apt install --yes mariadb-server
 </span></code>#
-<B><span style="Font-Family:Verdana">#-- 1.3. Install PHP, Mariadb and Apache dependencies
+<B><span style="Font-Family:Verdana">#-- 1.3. Secure MariaDB
+</B></span>#   The following command makes some fine tunes regarding Mariadb security.
+<code><span style="Color:DodgerBlue">sudo mysql_secure_installation
+</span></code>#   You will be asked some questions.
+#     "Enter current password for root (enter for none):"
+#     There is no password yet, so press enter.
+#   The next 2 questions "Switch to unix_socket authentication &lsqb;Y/n&rsqb;" and 
+#     "Change the root password? &lsqb;Y/n&rsqb;" (for Ubuntu 20.04 there is only 1 
+#     question "Set root password? &lsqb;Y/n&rsqb;" only) are about securing root 
+#     account. In Ubuntu and Debian root account is already protected, so you
+#     can answer n.
+#   For the next questions you can select default answers.
+#
+<B><span style="Font-Family:Verdana">#-- 1.4. Install PHP, Mariadb and Apache dependencies
 </B></span><code><span style="Color:DodgerBlue">sudo apt install --yes php libapache2-mod-php php-mysql
 </span></code>#
-<B><span style="Font-Family:Verdana">#-- 1.4. Install other PHP dependencies 
+<B><span style="Font-Family:Verdana">#-- 1.5. Install other PHP dependencies 
 </B></span># Depending on the PHP code, you may need some more PHP library packages.
 # For example, Wordpress needs the following packages:
 <code><span style="Color:DodgerBlue">sudo apt install --yes php-curl php-gd php-mbstring php-xml php-xmlrpc \
 </span></code><code><span style="Color:DodgerBlue">     php-soap php-intl php-zip
 </span></code>#
-<B><span style="Font-Family:Verdana">#-- 1.5. Restart Apache
+<B><span style="Font-Family:Verdana">#-- 1.6. Restart Apache
 </B></span><code><span style="Color:DodgerBlue">sudo systemctl restart apache2
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div4')"> 2. Test LAMP Stack

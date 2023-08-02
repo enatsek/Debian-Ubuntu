@@ -1,4 +1,4 @@
-DNSOnUbuntu: Installation and Configuration of DNS Servers on Ubuntu 22.04
+DNSOnUbuntu: Installation and Configuration of DNS Servers on Debian and Ubuntu 
 
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org
@@ -17,122 +17,189 @@ DNSOnUbuntu: Installation and Configuration of DNS Servers on Ubuntu 22.04
 
 
 #---Specs
-# - Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix. This book has 
-# introduced me to Ubuntu Server and I have to thank him for this excellent book. 
-Link:https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
-#
-# - There will be 2 DNS Servers, 1 Master and 1 Slave. 
-# - For every domain on the internet, at least 2 DNS Servers are needed. So if you 
-# want to run your own DNS Server, you need at least 2 servers.
-# - If you need DNS Servers for your internal network, it might be a good idea to
-# install a spare one.
-# - I, myself prefer using www.cloudfare.com for DNS services of my domain. But you 
-# may prefer running on your servers.
+# - There will be 2 DNS Servers, 1 Primary (Master) and 1 Replica (Slave). 
+# - For every domain on the internet, at least 2 DNS Servers are needed. So if 
+# you want to run your own DNS Server, you need at least 2 servers.
+# - If you need DNS Servers for your internal network, it might be a good idea 
+# to install a spare one.
+# - I, myself prefer using www.cloudfare.com for DNS services of my domain. But 
+# you may prefer running on your servers.
 #
 # My Specs: (Change the values to your ones)
-# Both DNS Servers are Ubuntu 22.04 Server (20.04 works too)
+# Both DNS Servers can be Debian 12/11 or Ubuntu 22.04/20.04 Server
 # Domain Name:                  x11.xyz       (Change it to your domain name)
-# Master DNS Server:            ns1.x11.xyz   192.168.0.231
-# Slave DNS Server:             ns2.x11.xyz   192.168.0.232
+# Primary DNS Server:           ns1.x11.xyz   192.168.1.224
+# Replica DNS Server:           ns2.x11.xyz   192.168.1.225
 # Some sample servers to add as DNS records:
-# filesrv.x11.xyz:              192.168.0.171
-# mail.x11.xyz:                 192.168.0.172
+# filesrv.x11.xyz:              192.168.1.171
+# mail.x11.xyz:                 192.168.1.172
 # mailsrv as a canonical name for mail
 # mail as a mail server for the domain
-# Google DNS servers 8.8.8.8 8.8.4.4 are used as forwarder DNSs
+# Google DNS server 8.8.8.8 is used as forwarder DNSs
+#
+# - I tested the tutorial with Debian 11, Debian 12, Ubuntu 22.04 and Ubuntu
+# 22.04 pairs.
+#
+# Sources:
+Link:https://www.linuxtechi.com/install-configure-bind-9-dns-server-ubuntu-debian/
+Link:https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
+Link:https://bind9.readthedocs.io
 
-#---1. Master DNS Server
+#---1. Primary DNS Server
+#-- 1.0. Update Repositories
+sudo apt update
 #-- 1.1. Install bind9 (DNS Server)
-sudo apt install bind9
+sudo apt -y install bind9
 #
 #-- 1.2. Edit main config file
 sudo nano /etc/bind/named.conf.options
 # Change as below
 #_________________________________________________________
 options {
-	directory "/var/cache/bind";
-		allow-transfer { localhost; 192.168.0.232; };
-		forwarders {
-		8.8.8.8;
-		8.8.4.4;
-	};
-	dnssec-validation auto;
-	auth-nxdomain no;
-	listen-on-v6 { any; };
+   # Cache Directory
+   directory "/var/cache/bind";
+   # Allow replica to transfer zone files
+   allow-transfer { localhost; 192.168.1.225; };
+   # Allow queries from any hosts
+   allow-query { any; };
+   # Use Google DNS as forwarder
+   forwarders { 8.8.8.8; };
+   # Automatic DNS Security validation
+   dnssec-validation auto;
+   # Listen on IP4 from all interfaces
+   listen-on { any; };
+   # Allow recursions
+   recursion yes;
 };
 #___________________________
 #
-#-- 1.3. Add a local zone (that is our zone x11.xyz)
+#-- 1.3. Add a Forward and a Reverse Zone.
 sudo nano /etc/bind/named.conf.local
 #_________________________________
+# Forward zone
 zone "x11.xyz" IN {
    type master;
-   file "/etc/bind/net.x11.xyz";
+   file "/etc/bind/forward.x11.xyz";
+};
+# Reverse zone
+zone "1.168.192.in-addr.arpa" IN {
+   type master;
+   file "/etc/bind/reverse.x11.xyz";
 };
 #_________________________________
 # 
-#-- 1.4. Fill the local zone file we just defined
-sudo nano /etc/bind/net.x11.xyz
+#-- 1.4. Fill the Forward File We Just Defined
+sudo nano /etc/bind/forward.x11.xyz
 #__________________________________________
 $TTL 1D
-@ IN SOA x11.xyz hostmaster.x11.xyz (
-2022060501 ; serial
-8H ; refresh
-4H ; retry
-4W ; expire
-1D ) ; minimum
-IN A 192.168.0.231
-;
-@               IN NS     ns1
-@               IN MX 10  mail.x11.xyz
-ns1             IN A      192.168.0.231
-ns2             IN A      192.168.0.232
-filesrv         IN A      192.168.0.171
-mail            IN A      192.168.0.172
-mailsrv         IN CNAME  mail.x11.xyz
+@ IN SOA ns1.x11.xyz hostmaster.x11.xyz (
+   2022060501 ; serial
+   8H ; Refresh
+   4H ; Retry
+   4W ; Expire
+   1D ; Minimum TTL
+)
+; Name Server of the domain
+@               IN NS     ns1.
+; Mail server of the domain
+@               IN MX 10  mail.x11.xyz.
+; A Records for Hosts
+ns1             IN A      192.168.1.224
+ns2             IN A      192.168.1.225
+filesrv         IN A      192.168.1.171
+mail            IN A      192.168.1.172
+# CNAME Record
+mailsrv         IN CNAME  mail.x11.xyz.
 #__________________________________________
 
-
-
-#---2. Slave DNS Server
-#-- 2.1. Install bind9 (DNS Server)
-sudo apt install bind9
+#-- 1.5. Fill the Reverse File We Just Defined
+sudo nano /etc/bind/reverse.x11.xyz
+#__________________________________________
+$TTL 1D
+@    IN   SOA    x11.xyz hostmaster.x11.xyz (
+   2022060501 ; Serial
+   8H ; Refresh
+   4H ; Retry
+   4W ; Expire
+   1D ; Minimum TTL
+)
+;Your Name Server Info
+@    IN    NS     ns1.x11.xyz.
+ns1  IN    A      192.168.1.224
+;Reverse Lookup for Your DNS Server
+224  IN    PTR    ns1.x11.xyz.
+;PTR Records IP address to HostName
+225  IN    PTR    ns2.x11.xyz.
+171  IN    PTR    filesrv.x11.xyz.
+172  IN    PTR    mail.x11.xyz.
+#__________________________________________
 #
-#-- 2.2. Edit main config file
+# 1.6. Check Configuration Files
+sudo named-checkconf /etc/bind/named.conf.options
+sudo named-checkconf /etc/bind/named.conf.local
+sudo named-checkzone x11.xyz /etc/bind/forward.x11.xyz
+sudo named-checkzone x11.xyz /etc/bind/reverse.x11.xyz
+
+
+#---2. Replica DNS Server
+#-- 2.0. Update Repositories
+sudo apt update
+#-- 2.1. Install bind9 (DNS Server)
+sudo apt -y install bind9
+#
+#-- 2.2. Edit Main Config File
 sudo nano /etc/bind/named.conf.options
 #________________________________
 options {
-	directory "/var/cache/bind";
-		forwarders {
-		8.8.8.8;
-		8.8.4.4;
-	};
-	dnssec-validation auto;
-	auth-nxdomain no;
-	listen-on-v6 { any; };
+   # Cache Directory
+   directory "/var/cache/bind";
+   # Allow queries from any hosts
+   allow-query { any; };
+   # Use Google DNS as forwarder
+   forwarders { 8.8.8.8; };
+   # Automatic DNS Security validation
+   dnssec-validation auto;
+   # Listen on IP4 from all interfaces
+   listen-on { any; };
+   # Allow recursions
+   recursion yes;
 };
 #__________________________________
 #
-#-- 2.3. Add the local zone 
-# This zone will be replicated from the master DNS
+#-- 2.3. Add the Local Zones
+# These zones will be replicated from the Primary DNS
 sudo nano /etc/bind/named.conf.local
 #____________________________
 zone "x11.xyz" IN {
-	type slave;
-	masters { 192.168.0.231; };
-	file "/var/lib/bind/net.x11.xyz";
+   type slave;
+   masters { 192.168.1.224; };
+   file "/var/lib/bind/forward.x11.xyz";
+};
+zone "1.168.192.in-addr.arpa" IN {
+   type slave;
+   masters { 192.168.1.224; };
+   file "/var/lib/bind/reverse.x11.xyz";
 };
 #____________________________
 # This time local zone file is placed at /var/lib
 #   and it will be populated automatically
 #
-#-- 2.4. Restart DNS on both master and slave
-sudo systemctl restart bind9
+#-- 2.4. Check Configuration Files
+sudo named-checkconf /etc/bind/named.conf.options
+sudo named-checkconf /etc/bind/named.conf.local
 
-#---3. Your DNS Servers must be running now
+
+
+#---3. Final Touch
+#-- 3.1. Restart DNS on both primary and replica
+sudo systemctl restart bind9
+# - Your name servers must be working now. You can query them from any host
+# in the network with dig command:
+dig @192.168.1.224 mail.x11.xyz
+#
+#-- 3.2. Notes
 # !!! Remember !!!
-# - When you change the zone file on your master server, remember to increase
+# - When you change the zone file on your primary server, remember to increase
 # the number given before serial. 
 # - You can change DNS server settings of your computers (including DNS Servers) 
 # to the new DNS servers.
-

@@ -17,13 +17,11 @@ There are txt and html versions of each document. In the html version, commands 
 
 - MariadbOnDebianUbuntu: Mariadb installation and basic configuration on Debian and Ubuntu Servers. Includes some user management and primary-replica (master-slave) replication.
 
-- AGT-SimpleMailServerOnUbuntu: People who like the things at their simplest form (just like me) would prefer this tutorial instead of ISPMail. Install postfix, dovecot, a few modifications on the configs and it is ready.
+- SimpleMailServerOnUbuntu: People who like the things at their simplest form (just like me) would prefer this tutorial instead of ISPMail. Install postfix, dovecot, a few modifications on the configs and it is ready.
 
 - WordpressOnDebianUbuntu: Installing and activating Wordpress on Ubuntu Server.
 
 - AGT-DNSOnUbuntu: Installing and configuring Master and Slave DNS Servers on Ubuntu Server.
-
-- AGT-ApacheFineTunesOnUbuntu: Some DNS and Apache tips (fine tunes).
 
 - AGT-KeepalivedOnUbuntu: Clustering with keepalived on Ubuntu Server.
 

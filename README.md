@@ -23,7 +23,7 @@ There are txt and html versions of each document. In the html version, commands 
 
 - DNSOnDebianUbuntu: Installing and configuring Master and Slave DNS Servers on Ubuntu Server.
 
-- AGT-KeepalivedOnUbuntu: Clustering with keepalived on Ubuntu Server.
+- KeepalivedOnUbuntu: Clustering with keepalived on Ubuntu Server.
 
 - AGT-UserAndGroupAdminOnUbuntu: User and Group administration on Ubuntu Server (and desktops).
 

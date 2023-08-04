@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>SimpleMailServerOnUbuntu: Mail Server with SMTP and IMAP on Ubuntu 22.04
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>SimpleMailServerOnUbuntu: Mail Server with SMTP and IMAP on Debian and Ubuntu
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2020 - 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,13 +23,16 @@
 #
 # Hostname: mail.x11.xyz
 # Mail Domain: x11.xyz
-# Operating System: Ubuntu 22.04 LTS Server
+# Operating System: Debian 12/11 or Ubuntu 22.04/20.04 LTS Server
+# My User Name:  exforge
 #
-# An MX record must be created at the DNS Server with the value of 
-#    mail.x11.xyz
+# - An MX record must be created at the DNS Server with the value of 
+# mail.x11.xyz
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div3')">1. Install and Configure Postfix
-</a> </H4><div id="Div3" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 1.1. Install Postfix and SASL (Simple Auth. &amp; Security Layer)
+</a> </H4><div id="Div3" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 1.0. Update Repositories
+</B></span><code><span style="Color:DodgerBlue">sudo apt update
+</span></code><B><span style="Font-Family:Verdana">#-- 1.1. Install Postfix and SASL (Simple Auth. &amp; Security Layer)
 </B></span><code><span style="Color:DodgerBlue">sudo apt -y install postfix sasl2-bin 
 </span></code># - Select No configuration at the install question, we will configure it manually.
 #
@@ -39,67 +42,68 @@
 <B><span style="Font-Family:Verdana">#-- 1.3. Edit postfix config file as described
 </B></span><code><span style="Color:DodgerBlue">sudo nano /etc/postfix/main.cf 
 </span></code>#
-# around line 78: uncomment
+# around line 78-82: uncomment
 <code><span style="Color:MediumSeaGreen">mail_owner = postfix
-</span></code># around line 94: uncomment and change hostname
+</span></code># around line 94-98: uncomment and change hostname
 <code><span style="Color:MediumSeaGreen">myhostname = mail.x11.xyz
 </span></code>#
-# around line 102: uncomment and change domainname
+# around line 102-106: uncomment and change domainname
 <code><span style="Color:MediumSeaGreen">mydomain = x11.xyz
 </span></code>#
-# around line 123: uncomment
+# around line 123-127: uncomment
 <code><span style="Color:MediumSeaGreen">myorigin = $mydomain
 </span></code>#
-# around line 137: uncomment
+# around line 137-141: uncomment
 <code><span style="Color:MediumSeaGreen">inet_interfaces = all
 </span></code>#
-# around line 185: uncomment
+# around line 185-189: uncomment
 <code><span style="Color:MediumSeaGreen">mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
 </span></code>#
-# around line 228: uncomment
+# around line 228-232: uncomment
 <code><span style="Color:MediumSeaGreen">local_recipient_maps = unix:passwd.byname $alias_maps
 </span></code>#
-# around line 270: uncomment
+# around line 270-277: uncomment
 <code><span style="Color:MediumSeaGreen">mynetworks_style = subnet
 </span></code>#
-# around line 287: add your local network
+# around line 287-294: add your local network
 <code><span style="Color:MediumSeaGreen">mynetworks = 127.0.0.0/8, 10.0.0.0/24
 </span></code>#
-# around line 407: uncomment
+# around line 407-416: uncomment
 <code><span style="Color:MediumSeaGreen">alias_maps = hash:/etc/aliases
 </span></code>#
-# around line 418: uncomment
+# around line 418-427: uncomment
 <code><span style="Color:MediumSeaGreen">alias_database = hash:/etc/aliases
 </span></code>#
-# around line 440: uncomment
+# around line 440-449: uncomment
 <code><span style="Color:MediumSeaGreen">home_mailbox = Maildir/
 </span></code>#
-# around line 576: change the line as below (remove "$mail_name (Ubuntu)
+# around line 576-585: change the line as below (remove "$mail_name
+# (Ubuntu)")  (Debian/GNU) for Debian
 #smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
 <code><span style="Color:MediumSeaGreen">smtpd_banner = $myhostname ESMTP
 </span></code>#
-# around line 650: add
+# around line 650 - 659: add
 <code><span style="Color:MediumSeaGreen">sendmail_path = /usr/sbin/postfix
 </span></code>#
-# around line 655: add
+# around line 655 - 664: add
 <code><span style="Color:MediumSeaGreen">newaliases_path = /usr/bin/newaliases
 </span></code>#
-# around line 660: add
+# around line 660 - 669: add
 <code><span style="Color:MediumSeaGreen">mailq_path = /usr/bin/mailq
 </span></code>#
-# around line 666: add
+# around line 666 - 675: add
 <code><span style="Color:MediumSeaGreen">setgid_group = postdrop
 </span></code>#
-# around line 670: comment out
+# around line 670 - 679: comment out
 <code><span style="Color:MediumSeaGreen">#html_directory =
 </span></code>#
-# around line 674: comment out
+# around line 674 - 683: comment out
 <code><span style="Color:MediumSeaGreen">#manpage_directory =
 </span></code>#
-# around line 679: comment out
+# around line 679 - 688: comment out
 <code><span style="Color:MediumSeaGreen">#sample_directory =
 </span></code>#
-# around line 683: comment out
+# around line 683 - 692: comment out
 <code><span style="Color:MediumSeaGreen">#readme_directory =
 </span></code>#
 # add to the end: 
@@ -145,7 +149,7 @@ smtpd_recipient_restrictions = permit_mynetworks, permit_auth_destination, permi
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 2.5. Dovecot master config
 </B></span><code><span style="Color:DodgerBlue">sudo nano /etc/dovecot/conf.d/10-master.conf
-</span></code># around line 107-109: uncomment and add
+</span></code># around line 107: uncomment and add
 <code><span style="Color:MediumSeaGreen"># Postfix smtp-auth
 unix_listener /var/spool/postfix/private/auth {
     mode = 0666
@@ -169,8 +173,9 @@ unix_listener /var/spool/postfix/private/auth {
 </a> </H4><div id="Div6" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 3.1. Install Certbot to get TLS certificates
 </B></span><code><span style="Color:DodgerBlue">sudo apt -y install certbot
 </span></code>#
-<B><span style="Font-Family:Verdana">#-- 3.2. Run certbot to get certificates. Enter an email address and accept TOS.
-</B></span><code><span style="Color:DodgerBlue">sudo certbot certonly --standalone -d mail.x11.xyz
+<B><span style="Font-Family:Verdana">#-- 3.2. Run certbot to get certificates. 
+</B></span># Enter an email address and accept # TOS.
+<code><span style="Color:DodgerBlue">sudo certbot certonly --standalone -d mail.x11.xyz
 </span></code># Certificates are installed to /etc/letsencrypt/live/mail.x11.xyz/
 #
 <B><span style="Font-Family:Verdana">#-- 3.3. Add certificates to Postfix main config
@@ -185,26 +190,22 @@ smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 3.4. Postfix master config
 </B></span><code><span style="Color:DodgerBlue">sudo nano /etc/postfix/master.cf
-</span></code>#  Around line 19-23 uncomment like below
+</span></code>#  Around line 17 - 19 uncomment like below
 <code><span style="Color:MediumSeaGreen">submission inet n       -       y       -       -       smtpd
   -o syslog_name=postfix/submission
 #  -o smtpd_tls_security_level=encrypt
   -o smtpd_sasl_auth_enable=yes
   -o smtpd_tls_auth_only=yes
-#  Around line 33-35: uncomment like below
+</span></code># For Ubuntu 22.04, 20.04, and Debian 11
+<code><span style="Color:MediumSeaGreen">#  Around line 29-33: uncomment like below
 smtps     inet  n       -       y       -       -       smtpd
   -o syslog_name=postfix/smtps
   -o smtpd_tls_wrappermode=yes
-</span></code>#
-<B><span style="Font-Family:Verdana">#-- 3.5. Add certificates to Dovecot config
-</B></span><code><span style="Color:DodgerBlue">sudo nano /etc/dovecot/conf.d/10-ssl.conf
-</span></code># Around line 12,13: Specify certificates (change as below)
-#   Remember to change domain names to yours:  
-<code><span style="Color:MediumSeaGreen">ssl_cert = &lt;/etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
-ssl_key = &lt;/etc/letsencrypt/live/mail.x11.xyz/privkey.pem
-</span></code>#
-<B><span style="Font-Family:Verdana">#-- 3.6. Restart Postfix and Dovecot
-</B></span><code><span style="Color:DodgerBlue">sudo systemctl restart postfix dovecot 
+</span></code># For Debian 12
+<code><span style="Color:MediumSeaGreen">#  Around line 36: insert below lines
+smtps     inet  n       -       y       -       -       smtpd
+  -o syslog_name=postfix/smtps
+  -o smtpd_tls_wrappermode=yes
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div7')">4. Client Mail Settings
 </a> </H4><div id="Div7" style="margin-left:1%;"><pre ># For Linux User exforge at mail.x11.xyz
@@ -225,8 +226,8 @@ ssl_key = &lt;/etc/letsencrypt/live/mail.x11.xyz/privkey.pem
 <a href="https://imgur.com/a/RVIAy3o" target="_blank">https://imgur.com/a/RVIAy3o</a>
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div8')">5. Account Management
-</a> </H4><div id="Div8" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 5.1. All Linux users already have mail accounts with their login name and
-</B></span># passwords.
+</a> </H4><div id="Div8" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 5.1. All Linux users already have mail accounts with their login names 
+</B></span># and passwords.
 # To add a new mail user, you need to add a user to your server
 <code><span style="Color:DodgerBlue">sudo useradd -d /home/exforge -m exforge
 </span></code>#   And you need to give her a password too

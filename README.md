@@ -21,7 +21,7 @@ There are txt and html versions of each document. In the html version, commands 
 
 - WordpressOnDebianUbuntu: Installing and activating Wordpress on Ubuntu Server.
 
-- AGT-DNSOnUbuntu: Installing and configuring Master and Slave DNS Servers on Ubuntu Server.
+- DNSOnDebianUbuntu: Installing and configuring Master and Slave DNS Servers on Ubuntu Server.
 
 - AGT-KeepalivedOnUbuntu: Clustering with keepalived on Ubuntu Server.
 

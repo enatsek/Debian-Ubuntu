@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>KeepalivedOnUbuntu: keepalived Clustering on Ubuntu 22.04
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>KeepalivedOnUbuntu: keepalived Clustering on Debian and Ubuntu
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2020 - 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,31 +14,34 @@
 # along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div2')">Specs
-</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># - 2 Ubuntu 22.04 LTS Servers with IPs 192.168.0.231 and 192.168.0.232
-# - Everything works with 20.04 version too
-# - Floating IP Address: 192.168.0.230
+</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># - 2 Servers with IPs 192.168.1.211 and 192.168.1.212
+# - Servers may be Debian 11/12 or Ubuntu 20.04/22.04
+# - Floating IP Address: 192.168.1.240
 # - Floating IP address will point to first server; if first server goes off
-# for any reason, then floating IP address will point to second server. It will 
-# return to the first server again when it goes back online.
+# for any reason, then floating IP address will point to second server. It
+# will return to the first server again when it goes back online.
 # - This looks like clustering only at the network level.
-# - All the necessary services on the first server must be installed on second
-# server too. (Web server, DB server, mail server etc)
-# The servers must be in the same network.
+# - All the necessary services on the first server must be installed on 
+# the second server too. (Web server, DB server, mail server etc)
+# - The servers must be in the same network.
 #
-# - Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix. This book has
-# introduced me to Ubuntu Server and I have to thank him for this excellent book:
+# - Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix. 
 <a href="https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition" target="_blank">https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition</a>
+#
+# - I tested the tutorial with Debian 11, Debian 12, Ubuntu 22.04 and Ubuntu
+# 22.04 pairs.
 #
 # - You may establish a full cluster of LAMP stack by:
 # 1. Installing Apache on both servers
 # 2. Configuring the apache and sites equally on the both server
 # 3. Installing MariaDB on both server
-# 4. Establishing Master-Master Replication for Mariadb on 1st and 2nd servers
-#
+# 4. Establishing Master-Master Replication for Mariadb on 1st and 2nd 
+# servers
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div3')">1. Install keepalived
 </a> </H4><div id="Div3" style="margin-left:1%;"><pre ># install on both the first and the second servers
-<code><span style="Color:DodgerBlue">sudo apt install keepalived
+<code><span style="Color:DodgerBlue">sudo apt update
+</span></code><code><span style="Color:DodgerBlue">sudo apt -y install keepalived
 </span></code>#  after installation, tries to start but cannot because there is no config
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div4')">2. First Server Config
@@ -52,7 +55,7 @@
 	notify@x11.xyz
 	}
 	notification_email_from keepalived@x11.xyz
-	smtp_server 192.168.0.150
+	smtp_server 192.168.1.150
 	smtp_connect_timeout 30
 	router_id mycompany_web_prod
 }
@@ -63,7 +66,7 @@ vrrp_instance VI_1 {
 	priority 100
 	advert_int 5
 	virtual_ipaddress {
-	192.168.0.230
+	192.168.1.240
 	}
 }
 </span></code>#
@@ -101,7 +104,7 @@ vrrp_instance VI_1 {
 </a> </H4><div id="Div6" style="margin-left:1%;"><pre ># run on both servers
 <code><span style="Color:DodgerBlue">sudo systemctl start keepalived
 </span></code>#   You can check the status of you cluster
-<code><span style="Color:DodgerBlue">sudo systemctl status -l keepalived
+<code><span style="Color:DodgerBlue">systemctl status -l keepalived
 </span></code></pre> </div> </p>
 </pre> </div> </p>
 <br /><br /><br /><script>

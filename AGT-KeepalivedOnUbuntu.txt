@@ -1,4 +1,4 @@
-KeepalivedOnUbuntu: keepalived Clustering on Ubuntu 22.04
+KeepalivedOnUbuntu: keepalived Clustering on Debian and Ubuntu
 
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org
@@ -16,32 +16,36 @@ KeepalivedOnUbuntu: keepalived Clustering on Ubuntu 22.04
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #---Specs
-# - 2 Ubuntu 22.04 LTS Servers with IPs 192.168.0.231 and 192.168.0.232
-# - Everything works with 20.04 version too
-# - Floating IP Address: 192.168.0.230
+# - 2 Servers with IPs 192.168.1.211 and 192.168.1.212
+# - Servers may be Debian 11/12 or Ubuntu 20.04/22.04
+# - Floating IP Address: 192.168.1.240
 # - Floating IP address will point to first server; if first server goes off
-# for any reason, then floating IP address will point to second server. It will 
-# return to the first server again when it goes back online.
+# for any reason, then floating IP address will point to second server. It
+# will return to the first server again when it goes back online.
 # - This looks like clustering only at the network level.
-# - All the necessary services on the first server must be installed on second
-# server too. (Web server, DB server, mail server etc)
-# The servers must be in the same network.
+# - All the necessary services on the first server must be installed on 
+# the second server too. (Web server, DB server, mail server etc)
+# - The servers must be in the same network.
 #
-# - Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix. This book has
-# introduced me to Ubuntu Server and I have to thank him for this excellent book:
+# - Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix. 
 Link:https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
+#
+# - I tested the tutorial with Debian 11, Debian 12, Ubuntu 22.04 and Ubuntu
+# 22.04 pairs.
 #
 # - You may establish a full cluster of LAMP stack by:
 # 1. Installing Apache on both servers
 # 2. Configuring the apache and sites equally on the both server
 # 3. Installing MariaDB on both server
-# 4. Establishing Master-Master Replication for Mariadb on 1st and 2nd servers
-#
+# 4. Establishing Master-Master Replication for Mariadb on 1st and 2nd 
+# servers
+
 
 
 #---1. Install keepalived
 # install on both the first and the second servers
-sudo apt install keepalived
+sudo apt update
+sudo apt -y install keepalived
 #  after installation, tries to start but cannot because there is no config
 
 #---2. First Server Config
@@ -56,7 +60,7 @@ global_defs {
 	notify@x11.xyz
 	}
 	notification_email_from keepalived@x11.xyz
-	smtp_server 192.168.0.150
+	smtp_server 192.168.1.150
 	smtp_connect_timeout 30
 	router_id mycompany_web_prod
 }
@@ -67,7 +71,7 @@ vrrp_instance VI_1 {
 	priority 100
 	advert_int 5
 	virtual_ipaddress {
-	192.168.0.230
+	192.168.1.240
 	}
 }
 #________________________________________
@@ -107,7 +111,7 @@ vrrp_instance VI_1 {
 # run on both servers
 sudo systemctl start keepalived
 #   You can check the status of you cluster
-sudo systemctl status -l keepalived
+systemctl status -l keepalived
 
 
 

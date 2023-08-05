@@ -25,9 +25,9 @@ There are txt and html versions of each document. In the html version, commands 
 
 - KeepalivedOnDebianUbuntu: Clustering with keepalived on Debian and Ubuntu Server.
 
-- UserAndGroupAdminOnDebianUbuntu: User and Group administration on Ubuntu Server (and desktops).
+- UserAndGroupAdminOnDebianUbuntu: User and Group administration on Debian and Ubuntu Server (and desktops).
 
-- AGT-AnsibleOnUbuntu: Ansible tutorial based on Ubuntu workstation and servers.
+- AnsibleOnUbuntu: Ansible tutorial based on Debian/Ubuntu workstation and servers.
 
 - AGT-KVMOnUbuntu1: KVM Virtualization tutorial (beginner) on Ubuntu Server. 
 

@@ -17,15 +17,15 @@ There are txt and html versions of each document. In the html version, commands 
 
 - MariadbOnDebianUbuntu: Mariadb installation and basic configuration on Debian and Ubuntu Servers. Includes some user management and primary-replica (master-slave) replication.
 
-- SimpleMailServerOnUbuntu: People who like the things at their simplest form (just like me) would prefer this tutorial instead of ISPMail. Install postfix, dovecot, a few modifications on the configs and it is ready.
+- SimpleMailServerOnDebianUbuntu: People who like the things at their simplest form (just like me) would prefer this tutorial instead of ISPMail. Install postfix, dovecot, a few modifications on the configs and it is ready. For Debian and Ubuntu Servers.
 
-- WordpressOnDebianUbuntu: Installing and activating Wordpress on Ubuntu Server.
+- WordpressOnDebianUbuntu: Installing and activating Wordpress on Debian and Ubuntu Servers.
 
-- DNSOnDebianUbuntu: Installing and configuring Master and Slave DNS Servers on Ubuntu Server.
+- DNSOnDebianUbuntu: Installing and configuring Master and Slave DNS Servers on Debian and Ubuntu Server.
 
-- KeepalivedOnUbuntu: Clustering with keepalived on Ubuntu Server.
+- KeepalivedOnDebianUbuntu: Clustering with keepalived on Debian and Ubuntu Server.
 
-- AGT-UserAndGroupAdminOnUbuntu: User and Group administration on Ubuntu Server (and desktops).
+- UserAndGroupAdminOnDebianUbuntu: User and Group administration on Ubuntu Server (and desktops).
 
 - AGT-AnsibleOnUbuntu: Ansible tutorial based on Ubuntu workstation and servers.
 

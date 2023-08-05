@@ -15,22 +15,25 @@
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div2')">0. Specs
 </a> </H4><div id="Div2" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 0.0. Servers managed from a workstation
-</B></span># - This tutorial aims to bring you to a moderate level using Ansible. (Almost) All 
-# examples are tested and verified as working. There might be slight mistakes 
-# and you can think of them as small challenges. 
-# - This tutorial is about using Ansible on Ubuntu (and Debian) servers, but I 
-# believe you can apply most of the examples to other servers like Alma Linux.
-# - I am not an expert of Ansible. Actually I prepared this tutorial while I was 
-# learning it. 
+</B></span># - This tutorial aims to bring you to a moderate level using Ansible.
+# (Almost) All examples are tested and verified as working. There might be
+# slight mistakes and you can think of them as small challenges. 
+#
+# - This tutorial is about using Ansible on Debian and Ubuntu servers, but I 
+# believe you can apply most of the examples to other distributions.
+#
+# - I am not an expert of Ansible. Actually I prepared this tutorial while I 
+# was learning it. 
 #
 <B><span style="Font-Family:Verdana">#-- 0.1. Workstation: 
-</B></span># wrk -&gt; Ubuntu 22.04 LTS Desktop
+</B></span># wrk -&gt; Debian 12 or Ubuntu 22.04 LTS Desktop
 #
 <B><span style="Font-Family:Verdana">#-- 0.2. Servers:
 </B></span># - Local Virtual Servers:
-# srv1, srv2, srv3    -&gt; Ubuntu 22.04 LTS Server
-# ubuntu20            -&gt; Ubuntu 20.04 LTS Server
-# debian11            -&gt; Debian 11 Server
+# debian12    -&gt; Debian 12 Server
+# debian11    -&gt; Debian 11 Server
+# ubuntu22    -&gt; Ubuntu 22.04 LTS Server
+# ubuntu20    -&gt; Ubuntu 20.04 LTS Server
 #        
 <B><span style="Font-Family:Verdana">#-- 0.3. Resources:
 </B></span># Book: 978-1-4842-1660-6 Ansible From Beginner to Pro by Michael Heap
@@ -41,7 +44,8 @@
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div3')">1. Installation and Main Configuration
 </a> </H4><div id="Div3" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 1.1. Install ansible on workstation
-</B></span><code><span style="Color:DodgerBlue">sudo apt update
+</B></span># !!!Run on workstation!!!
+<code><span style="Color:DodgerBlue">sudo apt update
 </span></code><code><span style="Color:DodgerBlue">sudo apt install ansible --yes
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 1.2. Create ansible user on all the servers and on the workstation
@@ -61,11 +65,10 @@
 </span></code># Create SSH keys, leave passfield empty
 <code><span style="Color:DodgerBlue">ssh-keygen
 </span></code># Copy ansible user's SSH key to the servers
-<code><span style="Color:DodgerBlue">ssh-copy-id -i ~/.ssh/id_rsa.pub srv1
-</span></code><code><span style="Color:DodgerBlue">ssh-copy-id -i ~/.ssh/id_rsa.pub srv2
-</span></code><code><span style="Color:DodgerBlue">ssh-copy-id -i ~/.ssh/id_rsa.pub srv3
-</span></code><code><span style="Color:DodgerBlue">ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu20
+<code><span style="Color:DodgerBlue">ssh-copy-id -i ~/.ssh/id_rsa.pub debian12
 </span></code><code><span style="Color:DodgerBlue">ssh-copy-id -i ~/.ssh/id_rsa.pub debian11
+</span></code><code><span style="Color:DodgerBlue">ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu22
+</span></code><code><span style="Color:DodgerBlue">ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu20
 </span></code># Now we can ssh to servers with ansible user without password
 #
 <B><span style="Font-Family:Verdana">#-- 1.4. On all servers, configure ansible user to sudo without password
@@ -119,15 +122,11 @@ forks = 5
 </span></code><code><span style="Color:DodgerBlue">sudo chmod 600 /home/ansible/.hosts
 </span></code># Populate the file with server IPs or names
 <code><span style="Color:DodgerBlue">nano /home/ansible/.hosts
-</span></code><code><span style="Color:MediumSeaGreen">&lsqb;ubuntu2204&rsqb;
-srv1
-srv2
-srv3
-#
-&lsqb;debian&rsqb;
+</span></code><code><span style="Color:MediumSeaGreen">&lsqb;debian&rsqb;
+debian12
 debian11
-#
-&lsqb;ubuntu2004&rsqb;
+&lsqb;ubuntu&rsqb;
+ubuntu22
 ubuntu20
 </span></code># As in our sample, you can group hosts
 #
@@ -139,8 +138,8 @@ ubuntu20
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div5')">3. More on Inventory
 </a> </H4><div id="Div5" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 3.1. Command based inventory
-</B></span># - It is possible to use a different inventory for each ansible or ansible-playbook
-# command:
+</B></span># - It is possible to use a different inventory for each ansible or ansible-
+# playbook command:
 <code><span style="Color:DodgerBlue">ansible all –i /path/to/inventory –m ping
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 3.2. to use a different ssh port
@@ -163,19 +162,22 @@ ubuntu20
 <code><span style="Color:DodgerBlue">sudo su ansible
 </span></code><code><span style="Color:DodgerBlue">mkdir /home/ansible/ansible/inventory
 </span></code><code><span style="Color:DodgerBlue">nano /home/ansible/ansible/inventory/inventory1
-</span></code><code><span style="Color:MediumSeaGreen">srv1
+</span></code><code><span style="Color:MediumSeaGreen">ubuntu22
+ubuntu20
 </span></code><code><span style="Color:DodgerBlue">nano /home/ansible/ansible/inventory/inventory2
-</span></code><code><span style="Color:MediumSeaGreen">srv3
+</span></code><code><span style="Color:MediumSeaGreen">debian12
+debian10
 </span></code><code><span style="Color:DodgerBlue">ansible all -i /home/ansible/ansible/inventory -m ping
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 3.6. Dynamic Inventory
-</B></span># - If you want to use a dynamic host file, you can use a program which outputs 
-# the inventory in Json format. Then you can give your program as inventory file. 
-# Below is a very simple example.
+</B></span># - If you want to use a dynamic host file, you can use a program which 
+# outputs the inventory in Json format. Then you can give your program as 
+# inventory file. 
+# - Below is a very simple example.
 <code><span style="Color:DodgerBlue">sudo su ansible
 </span></code><code><span style="Color:DodgerBlue">nano /home/ansible/ansible/inventory.py
 </span></code><code><span style="Color:MediumSeaGreen">#!/usr/bin/env python3
-print('{"srv": {"hosts" : &lsqb;"srv1", "srv2", "srv3"&rsqb;}}')
+print('{"ubuntu": {"hosts" : &lsqb;"ubuntu22", "ubuntu20"&rsqb;}}')
 </span></code><code><span style="Color:DodgerBlue">chmod +x /home/ansible/ansible/inventory.py
 </span></code><code><span style="Color:DodgerBlue">ansible all -i /home/ansible/ansible/inventory.py -m ping
 </span></code>#
@@ -187,51 +189,44 @@ print('{"srv": {"hosts" : &lsqb;"srv1", "srv2", "srv3"&rsqb;}}')
 # children keyword.
 # - In my inventory, if I want to combine all ubuntu servers I would modify my 
 # inventory file as follows:
-<code><span style="Color:MediumSeaGreen">&lsqb;ubuntu2204&rsqb;
-srv1
-srv2
-srv3
-#
-&lsqb;debian&rsqb;
+<code><span style="Color:MediumSeaGreen">&lsqb;debian&rsqb;
+debian12
 debian11
-#
-&lsqb;ubuntu2004&rsqb;
+&lsqb;ubuntu&rsqb;
+ubuntu22
 ubuntu20
-#
-&lsqb;ubuntu:children&rsqb;
-ubuntu2204
-ubuntu2004
+&lsqb;ubuntuanddebian:children&rsqb;
+ubuntu
+debian
 </span></code>#
 # 3.8. Inventory Variables
-# - You can define variables in inventory file. They might be host or group based.
-# For group based variables; var keyword is used. 
-# - Below, using my inventory file, I created a variable named role for a group and 
-# a host. 
-<code><span style="Color:MediumSeaGreen">&lsqb;ubuntu2204&rsqb;
-srv1
-srv2
-srv3
-#
-&lsqb;debian&rsqb;
+# - You can define variables in inventory file. They might be host or group 
+# based.
+# - For group based variables; var keyword is used. 
+# - Below, using my inventory file, I created a variable named role for a 
+# group and # a host. 
+<code><span style="Color:MediumSeaGreen">&lsqb;debian&rsqb;
+debian12
 debian11
-#
-&lsqb;ubuntu2004&rsqb;
+&lsqb;ubuntu&rsqb;
+ubuntu22
 ubuntu20
-#
-#
-&lsqb;ubuntu22.04:vars&rsqb;
+&lsqb;ubuntu:vars&rsqb;
 role="dbserver"
-</span></code># - That way, using ansible, you can install apache to servers with webserver role 
-# and install mariadb to servers with role dbserver.
+</span></code>#
+# - That way, using ansible, you can install apache to servers with 
+# webserver role # and install mariadb to servers with role dbserver.
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div6')">4. Ansible Ad Hoc Commands
-</a> </H4><div id="Div6" style="margin-left:1%;"><pre ># - You can run Ansible commands in 2 ways, 1 is direct (adhoc), 2 through playbooks. 
-# In the next section we will work on our first playbook. 
-# - Ad hoc commands might be suitable for one time tasks. For recurring tasks it 
-# would be better to use playbooks.
+</a> </H4><div id="Div6" style="margin-left:1%;"><pre ># - You can run Ansible commands in 2 ways, 1 is direct (adhoc), 2 through 
+# playbooks. 
+# - In the next section we will work on our first playbook. 
+# - Ad hoc commands might be suitable for one time tasks. For recurring 
+# tasks it # would be better to use playbooks.
 #
 <B><span style="Font-Family:Verdana">#-- 4.1. Ping host(s)
-</B></span># Actually we ran our 1st command at 2.4. Ping all hosts in default inventory.
+</B></span># Actually we ran our 1st command at 2.4. Ping all hosts in default 
+# inventory.
 <code><span style="Color:DodgerBlue">ansible all -m ping
 </span></code># We can specify another inventory
 <code><span style="Color:DodgerBlue">ansible all -i /home/ansible/ansible/inventory.py -m ping
@@ -240,7 +235,7 @@ role="dbserver"
 <B><span style="Font-Family:Verdana">#-- 4.2. Run a shell command on hosts
 </B></span><code><span style="Color:DodgerBlue">ansible all -m shell -a "ls -al"
 </span></code># -m can be ommitted
-<code><span style="Color:DodgerBlue">ansible srv1 -a "ls -al"
+<code><span style="Color:DodgerBlue">ansible ubuntu22 -a "ls -al"
 </span></code># List of open ports on the servers
 <code><span style="Color:DodgerBlue">ansible all -m shell -a 'netstat -plntu' --become
 </span></code>#
@@ -252,7 +247,7 @@ role="dbserver"
 </span></code># Delete a file or directory on server
 <code><span style="Color:DodgerBlue">ansible all -m file -a "dest=/tmp/testfile state=absent"
 </span></code># Copy a file from server
-<code><span style="Color:DodgerBlue">ansible srv1 -m fetch -a "src=/var/log/dmesg dest=/home/ansible/backup flat=yes"
+<code><span style="Color:DodgerBlue">ansible ubuntu22 -m fetch -a "src=/var/log/dmesg dest=/home/ansible/backup flat=yes"
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 4.4. Reboot Servers
 </B></span># Reboot all servers  (Does not reboot because of the permissions)
@@ -266,42 +261,43 @@ role="dbserver"
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 4.5. User Management
 </B></span># Add a user
-<code><span style="Color:DodgerBlue">ansible srv1 -m ansible.builtin.user -a "name=foo" --become
+<code><span style="Color:DodgerBlue">ansible debian12 -m ansible.builtin.user -a "name=foo" --become
 </span></code># Remove a user
-<code><span style="Color:DodgerBlue">ansible srv1 -m ansible.builtin.user -a "name=foo state=absent" --become
+<code><span style="Color:DodgerBlue">ansible debian12 -m ansible.builtin.user -a "name=foo state=absent" --become
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 4.6. Package Management (apt)
 </B></span># Add a ppa repository
-<code><span style="Color:DodgerBlue">ansible srv1 -m apt_repository -a "repo=ppa:ondrej/php state=present" --become 
+<code><span style="Color:DodgerBlue">ansible debian12 -m apt_repository -a "repo=ppa:ondrej/php state=present" --become 
 </span></code># Remove a ppa repository
-<code><span style="Color:DodgerBlue">ansible srv1 -m apt_repository -a "repo=ppa:ondrej/php state=absent" --become
+<code><span style="Color:DodgerBlue">ansible debian12 -m apt_repository -a "repo=ppa:ondrej/php state=absent" --become
 </span></code># Update cache (apt update)
-<code><span style="Color:DodgerBlue">ansible srv1 -m apt -a "update_cache=yes" --become
+<code><span style="Color:DodgerBlue">ansible debian12 -m apt -a "update_cache=yes" --become
 </span></code># update cache and upgrade all modules (apt update &amp;&amp; apt upgrade)
-<code><span style="Color:DodgerBlue">ansible srv1 -m apt -a "upgrade=dist update_cache=yes" --become
+<code><span style="Color:DodgerBlue">ansible debian12 -m apt -a "upgrade=dist update_cache=yes" --become
 </span></code># Install apache (don't do anything if it is already installed)
-<code><span style="Color:DodgerBlue">ansible srv1 -m apt -a "name=apache2 state=present" --become 
+<code><span style="Color:DodgerBlue">ansible debian12 -m apt -a "name=apache2 state=present" --become 
 </span></code># Install apache, if it is already installed, update it
-<code><span style="Color:DodgerBlue">ansible srv1 -m apt -a "name=apache2 state=latest" --become
+<code><span style="Color:DodgerBlue">ansible debian12 -m apt -a "name=apache2 state=latest" --become
 </span></code># Remove apache
-<code><span style="Color:DodgerBlue">ansible srv1 -m apt -a "name=apache2 state=absent" --become
+<code><span style="Color:DodgerBlue">ansible debian12 -m apt -a "name=apache2 state=absent" --become
 </span></code># Remove apache and remove all configuration about it
-<code><span style="Color:DodgerBlue">ansible srv1 -m apt -a "name=apache2 state=absent purge=yes" --become
+<code><span style="Color:DodgerBlue">ansible debian12 -m apt -a "name=apache2 state=absent purge=yes" --become
 </span></code># Remove apache, remove all configuration about it, and also remove all unused packages
-<code><span style="Color:DodgerBlue">ansible srv1 -m apt -a "name=apache2 state=absent purge=yes autoremove=yes" --become
+<code><span style="Color:DodgerBlue">ansible debian12 -m apt -a "name=apache2 state=absent purge=yes autoremove=yes" --become
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 4.7. Service Management
 </B></span># Start and Enable Apache service
-<code><span style="Color:DodgerBlue">ansible srv1 -m service -a "name=apache2 state=started enabled=yes" --become
+<code><span style="Color:DodgerBlue">ansible debian12 -m service -a "name=apache2 state=started enabled=yes" --become
 </span></code># Stop Apache service
-<code><span style="Color:DodgerBlue">ansible srv1 -m service -a "name=apache2 state=stopped" --become
+<code><span style="Color:DodgerBlue">ansible debian12 -m service -a "name=apache2 state=stopped" --become
 </span></code># Restart Apache service
-<code><span style="Color:DodgerBlue">ansible srv1 -m service -a "name=apache2 state=restarted" --become
+<code><span style="Color:DodgerBlue">ansible debian12 -m service -a "name=apache2 state=restarted" --become
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div7')">5. A Simple Playbook to Install Apache
-</a> </H4><div id="Div7" style="margin-left:1%;"><pre ># - Playbooks are files in YAML format. They contain commands to run by Ansible.
-# - Our playbook will install apache, and prepare a sample homepage containing 
-# the host name
+</a> </H4><div id="Div7" style="margin-left:1%;"><pre ># - Playbooks are files in YAML format. They contain commands to run by 
+# Ansible.
+# - Our playbook will install apache, and prepare a sample homepage 
+# containing the host name
 #
 # 5.1. Create directories
 <code><span style="Color:DodgerBlue">sudo su ansible
@@ -314,7 +310,7 @@ role="dbserver"
 </span></code><code><span style="Color:MediumSeaGreen">#!/usr/bin/env ansible-playbook
 - name: Create webserver with apache
   become: True
-  hosts: srv1
+  hosts: debian12
   tasks:
   - name: install apache
     apt: name=apache2 update_cache=yes
@@ -341,7 +337,7 @@ role="dbserver"
 # Name of the playbook, displayed when the playbook runs
   become: True
 # Use sudo
-  hosts: srv1
+  hosts: debian12
 # Host or host group to run on
   tasks:
 # Tasks to do in this playbook
@@ -390,7 +386,7 @@ role="dbserver"
 </span></code><code><span style="Color:MediumSeaGreen">#!/usr/bin/env ansible-playbook
 - name: Install LAMP; Apache, MariaDB, PHP
   become: True
-  hosts: srv1
+  hosts: debian12
   tasks:
   - name: Update apt cache if not updated in 1 hour
     apt:
@@ -414,15 +410,17 @@ role="dbserver"
       - php-mysql
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div9')">7. (IMHO) Important Ansible Modules
-</a> </H4><div id="Div9" style="margin-left:1%;"><pre ># Well, actually all of the Ansible modules are important. I just selected some 
-#   of them considering my very humble opinion.
-# To use an example, you have to put it in a playbook or in a role and apply 
-#   necessary indentation. Ansible is like Python, indentation is very important.
+</a> </H4><div id="Div9" style="margin-left:1%;"><pre ># - Well, actually all of the Ansible modules are important. I just selected 
+# some of them considering my very humble opinion.
+# - To use an example, you have to put it in a playbook or in a role and 
+# apply necessary indentation. Ansible is like Python, indentation is very 
+# important.
+#
 # Below is a sample, using an example in a playbook
 <code><span style="Color:MediumSeaGreen">#!/usr/bin/env ansible-playbook
 - name: Tutorial tasks
   become: True
-  hosts: srv1
+  hosts: debian12
   tasks:
   - name: Start apache if not started
     service:
@@ -576,7 +574,7 @@ role="dbserver"
         {{ item.ip }} {{ item.hostname }}
       marker: "&lt;!-- {mark} {{ item.hostname }} MANAGED by ANSIBLE BLOCK --&gt;"
     loop:
-      - { hostname: srv1, ip: 192.168.0.231 }
+      - { hostname: debian12, ip: 192.168.0.231 }
       - { hostname: srv2, ip: 192.168.0.232 }
       - { hostname: srv3, ip: 192.168.0.233 }
 </span></code></pre> </div> </p>
@@ -706,8 +704,8 @@ role="dbserver"
 </a> </H4><div id="Div17" style="margin-left:1%;"><pre ># Examples:
 <code><span style="Color:MediumSeaGreen">  - name: Stop execution if hostname is something special
     fail:
-      msg: Cannot continue with hostname srv1
-    when: inventory_hostname == "srv1"
+      msg: Cannot continue with hostname debian12
+    when: inventory_hostname == "debian12"
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div18')">7.8. fetch Module: Fetch files from server to the workstation
 </a> </H4><div id="Div18" style="margin-left:1%;"><pre ># Examples:
@@ -840,7 +838,7 @@ role="dbserver"
     lineinfile:
       path: /etc/hosts
       regexp: '^192\.168\.0\.201'
-      line: 192.168.0.201 srv1.x386.xyz
+      line: 192.168.0.201 debian12.x386.xyz
 </span></code>#
 <code><span style="Color:MediumSeaGreen">  - name: Remove previously added line in /etc/hosts
     lineinfile:
@@ -851,7 +849,7 @@ role="dbserver"
 <code><span style="Color:MediumSeaGreen">  - name: Create a file if it does not exist and add a line
     lineinfile:
       path: /tmp/test
-      line: 192.168.0.201 srv1.x386.xyz
+      line: 192.168.0.201 debian12.x386.xyz
       create: yes
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div23')">7.13. pause Module: Pause execution
@@ -1105,17 +1103,18 @@ role="dbserver"
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div33')">8. Roles
 </a> </H4><div id="Div33" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 8.0. Introduction
-</B></span># Playbooks can be splitted into roles. That way, we can create reusable code.
-# The lamp example at 7. will be rewritten using 4 roles:
+</B></span># Playbooks can be splitted into roles. That way, we can create reusable 
+# code. The lamp example at 7. will be rewritten using 4 roles:
 #   Cache Update
 #   Install Apache
 #   Install MariaDB
 #   Install PHP and dependencies
 #
 <B><span style="Font-Family:Verdana">#-- 8.1. Role Structure
-</B></span># - Roles are created with ansible-galaxy init command. Naming convention for roles 
-# is as identifier.role. I use exforge as my identifier, you can use anything you 
-# want. For a role to install apache, my rolename would be exforge.apache: 
+</B></span># - Roles are created with ansible-galaxy init command. Naming convention 
+# for roles is as identifier.role. I use exforge as my identifier, you can 
+# use anything you want. For a role to install apache, my rolename would be
+# exforge.apache: 
 <code><span style="Color:DodgerBlue">ansible-galaxy init exforge.apache
 </span></code># - A directory with role.name is created under the current directory with
 # the following structure:
@@ -1138,33 +1137,37 @@ role="dbserver"
 #    vars/main.yml      (file)
 #
 # - All of the directories and files are optional.
-# - README.md file is used for documentation. Expected to contain the purpose
-# of the role and any other important information.
-# - defaults/main.yml is used as a configuration file to define default variables in
-# the role. Variables in vars/main.yml overrides variables defined here.
-# - files directory is used to place static files. Files used in roles without any
-# manipulation can be stored here.
+# - README.md file is used for documentation. Expected to contain the 
+# purpose of the role and any other important information.
+# - defaults/main.yml is used as a configuration file to define default 
+# variables in the role. Variables in vars/main.yml overrides variables 
+# defined here.
+# - files directory is used to place static files. Files used in roles 
+# without any manipulation can be stored here.
 # - handlers/main.yml is used to define handlers (like starting, stopping or 
 # restarting services). 
-# - meta/main.yml is used to contain metadata for the role. Metadata can be used
-# if you want to publish your role to Ansible Galaxy.
-# - tasks/main.yml is the main file of the role. Expected to contain role actions. 
-# Actions here will be executed when your role runs.
-# - templates directory is used to place template (dynamic) files. The files here can 
-# contain variables to interpolate them before using on target systems.
-# - test directory is used to create test playbooks to consume the role. Mostly used 
-# to test roles with a system like Jenkins or Travis.
-# - vars/main.yml is similar to defaults/main.yml with an exception. Variables 
-# defined here overrides the variables defined at fact gathering section. 
-# Variables defined here also overrides the variables defined in defaults/main.yml.
+# - meta/main.yml is used to contain metadata for the role. Metadata can be 
+# used if you want to publish your role to Ansible Galaxy.
+# - tasks/main.yml is the main file of the role. Expected to contain role 
+# actions. Actions here will be executed when your role runs.
+# - templates directory is used to place template (dynamic) files. The files 
+# here can contain variables to interpolate them before using on target 
+# systems.
+# - test directory is used to create test playbooks to consume the role. 
+# Mostly used to test roles with a system like Jenkins or Travis.
+# - vars/main.yml is similar to defaults/main.yml with an exception. 
+# Variables defined here overrides the variables defined at fact gathering 
+# section. 
+# Variables defined here also overrides the variables defined in defaults/
+# main.yml.
 # - Note: The new version of Ansible, does not create templates and files 
-# directories, but they still exist in the documentation. I am not sure if it 
-# is a bug or something else. In any way, I create this directories when I need 
-# them.
+# directories, but they still exist in the documentation. I am not sure if 
+# it is a bug or something else. In any way, I create this directories when 
+# I need them.
 #
 <B><span style="Font-Family:Verdana">#-- 8.2. Preparing LAMP Roles
-</B></span># - We will have 4 roles for LAMP installation. Namely; aptcache, apache, mariadb and
-# php.
+</B></span># - We will have 4 roles for LAMP installation. Namely; aptcache, apache, 
+# mariadb and php.
 # Create a directory for the roles and init the roles:
 <code><span style="Color:DodgerBlue">mkdir -p /home/ansible/ansible/playbooks/roles
 </span></code><code><span style="Color:DodgerBlue">cd /home/ansible/ansible/playbooks/roles
@@ -1177,7 +1180,7 @@ role="dbserver"
 </B></span><code><span style="Color:DodgerBlue">nano /home/ansible/ansible/playbooks/lamp.yml
 </span></code><code><span style="Color:MediumSeaGreen">#!/usr/bin/env ansible-playbook
 ---
-- hosts: srv1
+- hosts: debian12
   become: true
   roles:
   - exforge.aptcache
@@ -1234,9 +1237,9 @@ role="dbserver"
 </a> </H4><div id="Div34" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 9.1. Ansible Facts
 </B></span># 9.1.1. Getting Facts
 # Get all facts for test201 server
-<code><span style="Color:DodgerBlue">ansible srv1 -m setup
+<code><span style="Color:DodgerBlue">ansible debian12 -m setup
 </span></code># The output will be long, something like:
-<code><span style="Color:MediumSeaGreen">srv1 | SUCCESS =&gt; {
+<code><span style="Color:MediumSeaGreen">debian12 | SUCCESS =&gt; {
     "ansible_facts": {
         "ansible_all_ipv4_addresses": &lsqb;
             "192.168.0.111"
@@ -1330,13 +1333,16 @@ role="dbserver"
 # - ansible_check_mode: Boolean, set to True if you run Ansible with --check.
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div35')">10. Distinguishing Linux Distribution
-</a> </H4><div id="Div35" style="margin-left:1%;"><pre ># - Debian and Ubuntu name Apache Server as apache2 and use apt package manager. 
-# Alpine also names Apache Server as apache2 and uses apk package manager. RHEL 
-# (and Alma) names it as httpd and use dnf package manager. 
-# - Our example role will distinguish the distribution and call appropriate tasks.
+</a> </H4><div id="Div35" style="margin-left:1%;"><pre ># - Debian and Ubuntu name Apache Server as apache2 and use apt package 
+# manager. 
+# Alpine also names Apache Server as apache2 and uses apk package manager.
+# RHEL (and Alma) names it as httpd and use dnf package manager. 
+# - Our example role will distinguish the distribution and call appropriate 
+# tasks.
 #
-<B><span style="Font-Family:Verdana">#-- 10.1. A Playbook to install Apache on Ubuntu (and Debian) and Alma (and Redhat)
-</B></span><code><span style="Color:DodgerBlue">nano /home/ansible/ansible/playbooks/apache.yml
+<B><span style="Font-Family:Verdana">#-- 10.1. A Playbook to install Apache on Ubuntu (and Debian) and Alma (and 
+</B></span># Redhat)
+<code><span style="Color:DodgerBlue">nano /home/ansible/ansible/playbooks/apache.yml
 </span></code><code><span style="Color:MediumSeaGreen">#!/usr/bin/env ansible-playbook
 - name: Install Apache on Ubuntu (Debian), RHEL (Alma) and Alpine
   become: True
@@ -1415,14 +1421,15 @@ role="dbserver"
 # Redesign apacheDRA role, using package module.
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div36')">11. Role Variables
-</a> </H4><div id="Div36" style="margin-left:1%;"><pre ># - You can set role variables when you consume a role in a playbook. The variables
-# are defined in the roles and can be set values at the playbook.
-# - Our example will install apache (if it is not installed), create a configuration
-# with the given site name and create a default page with the given parameters.
-# - After creating the role, default variables will be defined in defaults/main.yml 
-# dir, apache conf file and html templates will be created at templates/ dir, and 
-# role tasks will be coded at tasks/main.yml. After all, we will create a 
-# playbook, set all variables there and run the role.
+</a> </H4><div id="Div36" style="margin-left:1%;"><pre ># - You can set role variables when you consume a role in a playbook. The 
+# variables are defined in the roles and can be set values at the playbook.
+# - Our example will install apache (if it is not installed), create a 
+# configuration with the given site name and create a default page with the 
+# given parameters.
+# - After creating the role, default variables will be defined in defaults/
+# main.yml dir, apache conf file and html templates will be created at 
+# templates/ dir, and role tasks will be coded at tasks/main.yml. After all, 
+# we will create a playbook, set all variables there and run the role.
 #
 <B><span style="Font-Family:Verdana">#-- 11.1. Create the role apachesite
 </B></span><code><span style="Color:DodgerBlue">cd /home/ansible/ansible/playbooks/roles
@@ -1513,13 +1520,13 @@ html_text: This page is created by Ansible
 </B></span><code><span style="Color:DodgerBlue">nano /home/ansible/ansible/playbooks/apachesite.yml
 </span></code><code><span style="Color:MediumSeaGreen">#!/usr/bin/env ansible-playbook
 ---
-- hosts: srv1
+- hosts: debian12
   become: true
   vars:
-    server_name: srv1.x386.xyz
-    server_alias: srv1
-    html_title: srv1.x386.xyz Homepage
-    html_header: This is the homepage of srv1.x386.xyz
+    server_name: debian12.x386.xyz
+    server_alias: debian12
+    html_title: debian12.x386.xyz Homepage
+    html_header: This is the homepage of debian12.x386.xyz
     html_text: This is a sample page created by Ansible    
   roles:
   - exforge.apachesite
@@ -1528,8 +1535,8 @@ html_text: This page is created by Ansible
 </span></code><code><span style="Color:DodgerBlue">ansible-playbook apachesite.yml
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div37')">12. Variable Filters
-</a> </H4><div id="Div37" style="margin-left:1%;"><pre ># - There are a number of filters available for the variables used in templates, 
-# playbooks and roles.
+</a> </H4><div id="Div37" style="margin-left:1%;"><pre ># - There are a number of filters available for the variables used in 
+# templates, playbooks and roles.
 #
 <B><span style="Font-Family:Verdana">#-- 12.1. Syntax Filters
 </B></span># Allows case manipulation: lowercase, uppercase, capital case, title case
@@ -1540,8 +1547,8 @@ html_text: This page is created by Ansible
 # {{ my_message | title }}  --&gt; We Are The World
 #
 <B><span style="Font-Family:Verdana">#-- 12.2. Default Filter
-</B></span># - Using an undefined variable causes an error, to avoid that situation default
-# filter can be used.
+</B></span># - Using an undefined variable causes an error, to avoid that situation 
+# default filter can be used.
 # {{ my_message | default('No message') }}
 #
 <B><span style="Font-Family:Verdana">#-- 12.3. List Filters
@@ -1582,7 +1589,7 @@ html_text: This page is created by Ansible
 </span></code><code><span style="Color:MediumSeaGreen">#!/usr/bin/env ansible-playbook
 - name: Demonstration of Filters
   become: True
-  hosts: srv1
+  hosts: debian12
   vars:
     my_message: "We are the world"
     num_list: &lsqb;1,2,3,4,5,6,7,8,9,0&rsqb;
@@ -1628,11 +1635,12 @@ html_text: This page is created by Ansible
         - "Round of {{ num3 }}: {{ num3 | round }}"
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div38')">13. Handlers
-</a> </H4><div id="Div38" style="margin-left:1%;"><pre ># - If you want a task to run when something is changed, you can use handlers. For
-# example, a task tries to change a conf file for apache, and you need to reload
-# or restart apache if the file is changed. That is when you use handlers.
-# - You might remember, there is a folder for handlers for the roles. That is where 
-# you are expected to put your handlers. 
+</a> </H4><div id="Div38" style="margin-left:1%;"><pre ># - If you want a task to run when something is changed, you can use 
+# handlers. For example, a task tries to change a conf file for apache, and 
+# you need to reload or restart apache if the file is changed. That is when 
+# you use handlers.
+# - You might remember, there is a folder for handlers for the roles. That 
+# is where you are expected to put your handlers. 
 #
 <B><span style="Font-Family:Verdana">#-- 13.1. A Simple Example
 </B></span># Our example playbook will install apache and reload it if it is installed. 
@@ -1640,7 +1648,7 @@ html_text: This page is created by Ansible
 </span></code><code><span style="Color:MediumSeaGreen">#!/usr/bin/env ansible-playbook
 - name: Simple handler example
   become: true
-  hosts: srv1
+  hosts: debian12
   tasks:
   - name: Install Apache
     apt:
@@ -1704,8 +1712,8 @@ html_text: This page is created by Ansible
     group: www-data
   notify: reload_apache
 </span></code>#
-# - Handlers run after the play is finished, so if a handler is called twice (or 
-# more), it will run only once.
+# - Handlers run after the play is finished, so if a handler is called twice 
+# (or more), it will run only once.
 #
 # Add handlers
 <code><span style="Color:DodgerBlue">nano /home/ansible/ansible/playbooks/roles/exforge.apachesite/handlers/main.yml
@@ -1722,8 +1730,8 @@ html_text: This page is created by Ansible
 </span></code><code><span style="Color:DodgerBlue">ansible-playbook apachesite.yml
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div39')">14. Error Recovery (Block and rescue)
-</a> </H4><div id="Div39" style="margin-left:1%;"><pre ># Ansible has an exception handling (error recovery) mechanism similar to Python's
-#   try-except-finally block.
+</a> </H4><div id="Div39" style="margin-left:1%;"><pre ># - Ansible has an exception handling (error recovery) mechanism similar to 
+# Python's try-except-finally block.
 #
 <B><span style="Font-Family:Verdana">#-- 14.1. Block-Rescue-Always usage
 </B></span># A very simple example playbook would be:
@@ -1731,7 +1739,7 @@ html_text: This page is created by Ansible
 </span></code><code><span style="Color:MediumSeaGreen">#!/usr/bin/env ansible-playbook
 - name: Demonstration block-rescue-always
   become: True
-  hosts: srv1
+  hosts: debian12
   vars:
     message1: "1. Message"
     message2: "2. Message"
@@ -1759,17 +1767,18 @@ html_text: This page is created by Ansible
           msg: "Job finished"
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 14.2. Explanations
-</B></span># - Tasks in the block (Tasks 1, 2, 3 and 4 in our example) run sequentially. 
-# - If an error occurs in any task (Task 3 in our example), execution stops and 
-# the control goes to rescue task. Then the tasks in rescue block (Rescue Task in 
-# our example) run. Then the tasks in always block (Always task in our example) 
-# run.
-# - If there is no error in tasks, rescue block is skipped and the tasks in always 
-# block (Always task in our example) run.
+</B></span># - Tasks in the block (Tasks 1, 2, 3 and 4 in our example) run 
+# sequentially. 
+# - If an error occurs in any task (Task 3 in our example), execution stops 
+# and the control goes to rescue task. Then the tasks in rescue block
+# (Rescue Task in our example) run. Then the tasks in always block (Always 
+# task in our example) run.
+# - If there are no errors in tasks, rescue block is skipped and the tasks 
+# in always block (Always task in our example) run.
 #
-# - Error recovery is a very important subject in all kinds of programming. I believe 
-# you should use it as much as possible to prevent an unexpected termination of
-# programs (playbooks for ansible).
+# - Error recovery is a very important subject in all kinds of programming. 
+# I believe you should use it as much as possible to prevent an unexpected 
+# termination of programs (playbooks for ansible).
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div40')">15. Skipped Content
 </a> </H4><div id="Div40" style="margin-left:1%;"><pre ># - I skipped the following subjects just because I think I won't use them. I believe

@@ -1,25 +1,24 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>UserAndGroupAdminOnUbuntu: User and Group Administration on Ubuntu 22.04
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>UserAndGroupAdminOnUbuntu: User and Group Administration on Debian and Ubuntu
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2020 - 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # any later version.
 #
-# This document is distributed in the hope that it will be useful,
+# - This document is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
+# - You should have received a copy of the GNU General Public License
 # along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div2')">Specs
-</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># - Aimed for Ubuntu 22.04 Servers, but works fine on Ubuntu 20.04 Server and
-# on for all Ubuntu Desktops (Ubuntu, Kubuntu, Xubuntu, Lubuntu etc) too
+</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># - Aimed for Debian 12/11 and Ubuntu 22.04/20.04 Servers, but works fine on 
+# Debian, Ubuntu and derivatives' desktops (Ubuntu, Kubuntu, Xubuntu, 
+# Lubuntu, MX, Mint etc) too
 #
-# - Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix
-# This book has introduced me to Ubuntu Server and I have to thank him for this
-# excellent book. 
+# Sources:
 <a href="https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition" target="_blank">https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition</a>
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div3')">1. User Add and Delete
@@ -53,8 +52,9 @@ username:pw:UID:GID:Name,Surname,XX:homefolder:shell
 </B></span># Contents of /etc/skel folder is distributed to created user's home directory
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div5')">3. root user
-</a> </H4><div id="Div5" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 3.1. root account is locked by default in Ubuntu
-</B></span># To give a pw to (and unlock) root
+</a> </H4><div id="Div5" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 3.1. root account is locked by default in Ubuntu. It is optional in
+</B></span># Debian.
+# To give a pw to (and unlock) root
 <code><span style="Color:DodgerBlue">sudo passwd
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 3.2. switch to root account without unlocking it
@@ -133,10 +133,7 @@ user3:password:::User3:/home/user3:/bin/bash
 <B><span style="Font-Family:Verdana">#-- 6.4. Password expiration info
 </B></span><code><span style="Color:DodgerBlue">sudo chage -l &lt;username&gt;
 </span></code>#
-<B><span style="Font-Family:Verdana">#-- 6.5. Password requirements configuration
-</B></span><code><span style="Color:DodgerBlue">sudo apt install libpam-cracklib
-</span></code><code><span style="Color:DodgerBlue">sudo nano /etc/pam.d/common-password
-</span></code></pre> </div> </p>
+</pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div9')">7. sudo Group
 </a> </H4><div id="Div9" style="margin-left:1%;"><pre ># Members of sudo group can use sudo command
 <B><span style="Font-Family:Verdana">#-- 7.1. Configuration of sudo group members

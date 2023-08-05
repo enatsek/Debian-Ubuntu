@@ -1,4 +1,4 @@
-UserAndGroupAdminOnUbuntu: User and Group Administration on Ubuntu 22.04
+UserAndGroupAdminOnUbuntu: User and Group Administration on Debian and Ubuntu
 
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org
@@ -7,21 +7,20 @@ UserAndGroupAdminOnUbuntu: User and Group Administration on Ubuntu 22.04
 # the Free Software Foundation, either version 3 of the License, or
 # any later version.
 #
-# This document is distributed in the hope that it will be useful,
+# - This document is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
+# - You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #---Specs
-# - Aimed for Ubuntu 22.04 Servers, but works fine on Ubuntu 20.04 Server and
-# on for all Ubuntu Desktops (Ubuntu, Kubuntu, Xubuntu, Lubuntu etc) too
+# - Aimed for Debian 12/11 and Ubuntu 22.04/20.04 Servers, but works fine on 
+# Debian, Ubuntu and derivatives' desktops (Ubuntu, Kubuntu, Xubuntu, 
+# Lubuntu, MX, Mint etc) too
 #
-# - Based on the book Mastering Ubuntu Server 2nd Ed. by Jay LaCroix
-# This book has introduced me to Ubuntu Server and I have to thank him for this
-# excellent book. 
+# Sources:
 Link:https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition
 
 
@@ -60,7 +59,8 @@ sudo passwd -S username
 # Contents of /etc/skel folder is distributed to created user's home directory
 
 #---3. root user
-#-- 3.1. root account is locked by default in Ubuntu
+#-- 3.1. root account is locked by default in Ubuntu. It is optional in
+# Debian.
 # To give a pw to (and unlock) root
 sudo passwd
 #
@@ -144,9 +144,8 @@ sudo passwd -u <username>
 #-- 6.4. Password expiration info
 sudo chage -l <username>
 #
-#-- 6.5. Password requirements configuration
-sudo apt install libpam-cracklib
-sudo nano /etc/pam.d/common-password
+
+
 
 #---7. sudo Group
 # Members of sudo group can use sudo command

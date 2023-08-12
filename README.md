@@ -27,9 +27,9 @@ There are txt and html versions of each document. In the html version, commands 
 
 - UserAndGroupAdminOnDebianUbuntu: User and Group administration on Debian and Ubuntu Server (and desktops).
 
-- AnsibleOnUbuntu: Ansible tutorial based on Debian/Ubuntu workstation and servers.
+- AnsibleOnDebianUbuntu: Ansible tutorial based on Debian/Ubuntu workstation and servers.
 
-- AGT-KVMOnUbuntu1: KVM Virtualization tutorial (beginner) on Ubuntu Server. 
+- KVMOnDebianUbuntu1: KVM Virtualization tutorial (beginner) on Debian and Ubuntu Server. 
 
 - AGT-KVMOnUbuntu2: KVM Virtualization tutorial (networking) on Ubuntu Server. 
 

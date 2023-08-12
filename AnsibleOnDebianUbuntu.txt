@@ -1,4 +1,4 @@
-AnsibleOnUbuntu - Ansible Tutorial for Ubuntu Linux
+AnsibleOnDebianUbuntu - Ansible Tutorial for Debian and Ubuntu Linux
 
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org
@@ -30,6 +30,9 @@ AnsibleOnUbuntu - Ansible Tutorial for Ubuntu Linux
 #
 #-- 0.1. Workstation: 
 # wrk -> Debian 12 or Ubuntu 22.04 LTS Desktop
+#
+# - Hint: You can use server editions, because Ansible does not need any
+# graphical UI.
 #
 #-- 0.2. Servers:
 # - Local Virtual Servers:
@@ -274,7 +277,7 @@ ansible all -m file -a "dest=/tmp/test mode=777 owner=ansible group=ansible stat
 # Delete a file or directory on server
 ansible all -m file -a "dest=/tmp/testfile state=absent"
 # Copy a file from server
-ansible ubuntu22 -m fetch -a "src=/var/log/dmesg dest=/home/ansible/backup flat=yes"
+ansible ubuntu22 -m fetch -a "src=/var/log/dmesg dest=/home/ansible/backup flat=yes" --become
 #
 #-- 4.4. Reboot Servers
 # Reboot all servers  (Does not reboot because of the permissions)
@@ -293,10 +296,6 @@ ansible debian12 -m ansible.builtin.user -a "name=foo" --become
 ansible debian12 -m ansible.builtin.user -a "name=foo state=absent" --become
 #
 #-- 4.6. Package Management (apt)
-# Add a ppa repository
-ansible debian12 -m apt_repository -a "repo=ppa:ondrej/php state=present" --become 
-# Remove a ppa repository
-ansible debian12 -m apt_repository -a "repo=ppa:ondrej/php state=absent" --become
 # Update cache (apt update)
 ansible debian12 -m apt -a "update_cache=yes" --become
 # update cache and upgrade all modules (apt update && apt upgrade)
@@ -446,7 +445,9 @@ nano /home/ansible/ansible/playbooks/lamp/lamp.yml
       - libapache2-mod-php
       - php-mysql
 #_______________________________________________________________________
-
+#
+# 6.3. Run the playbook
+ansible-playbook lamp.yml
 
 
 

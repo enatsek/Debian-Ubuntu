@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>AnsibleOnUbuntu - Ansible Tutorial for Ubuntu Linux
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>AnsibleOnDebianUbuntu - Ansible Tutorial for Debian and Ubuntu Linux
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2020 - 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,6 +27,9 @@
 #
 <B><span style="Font-Family:Verdana">#-- 0.1. Workstation: 
 </B></span># wrk -&gt; Debian 12 or Ubuntu 22.04 LTS Desktop
+#
+# - Hint: You can use server editions, because Ansible does not need any
+# graphical UI.
 #
 <B><span style="Font-Family:Verdana">#-- 0.2. Servers:
 </B></span># - Local Virtual Servers:
@@ -247,7 +250,7 @@ role="dbserver"
 </span></code># Delete a file or directory on server
 <code><span style="Color:DodgerBlue">ansible all -m file -a "dest=/tmp/testfile state=absent"
 </span></code># Copy a file from server
-<code><span style="Color:DodgerBlue">ansible ubuntu22 -m fetch -a "src=/var/log/dmesg dest=/home/ansible/backup flat=yes"
+<code><span style="Color:DodgerBlue">ansible ubuntu22 -m fetch -a "src=/var/log/dmesg dest=/home/ansible/backup flat=yes" --become
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 4.4. Reboot Servers
 </B></span># Reboot all servers  (Does not reboot because of the permissions)
@@ -266,11 +269,7 @@ role="dbserver"
 <code><span style="Color:DodgerBlue">ansible debian12 -m ansible.builtin.user -a "name=foo state=absent" --become
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 4.6. Package Management (apt)
-</B></span># Add a ppa repository
-<code><span style="Color:DodgerBlue">ansible debian12 -m apt_repository -a "repo=ppa:ondrej/php state=present" --become 
-</span></code># Remove a ppa repository
-<code><span style="Color:DodgerBlue">ansible debian12 -m apt_repository -a "repo=ppa:ondrej/php state=absent" --become
-</span></code># Update cache (apt update)
+</B></span># Update cache (apt update)
 <code><span style="Color:DodgerBlue">ansible debian12 -m apt -a "update_cache=yes" --become
 </span></code># update cache and upgrade all modules (apt update &amp;&amp; apt upgrade)
 <code><span style="Color:DodgerBlue">ansible debian12 -m apt -a "upgrade=dist update_cache=yes" --become
@@ -408,6 +407,9 @@ role="dbserver"
       - php
       - libapache2-mod-php
       - php-mysql
+</span></code>#
+# 6.3. Run the playbook
+<code><span style="Color:DodgerBlue">ansible-playbook lamp.yml
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div9')">7. (IMHO) Important Ansible Modules
 </a> </H4><div id="Div9" style="margin-left:1%;"><pre ># - Well, actually all of the Ansible modules are important. I just selected 

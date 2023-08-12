@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>KVM Tutorial On Ubuntu Server 22.04 (Beginner)
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>KVM Tutorial On Debian and Ubuntu Server (Beginner)
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2021 - 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,27 +15,31 @@
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div2')">0. Specs
 </a> </H4><div id="Div2" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 0.0. Definition
-</B></span># - KVM virtualization tutorial 1 on Ubuntu 22.04 LTS Server. 
-# - Our aim is to install and configure a host computer for virtual machines. 
-# - This tutorial aims to bring you (and me) to a moderate level of Virtualization
-# Administration.
+</B></span># - KVM Virtualization Tutorial 1 on Debian and Ubuntu Server. 
+# - Our aim is to install and configure a host computer for virtual 
+# machines. 
+# - This tutorial aims to bring you (and me) to a moderate level of 
+# Virtualization Administration.
 #
 <B><span style="Font-Family:Verdana">#-- 0.1. How It Works
-</B></span># - KVM (Kernel-based Virtual Machine) is a loadable kernel module which supply
-# virtualization with APIs.
-# - QEMU is a virtualizer which uses KVM API. QEMU supports other virtualization 
-# solutions too.
-# - Libvirt is a library for managing virtualization hosts. virsh command comes 
-# from Libvirt.
-# - Libguestfs is a collection of tools for accessing and managing VM images.
-# - virt-manager is a GUI for managing VMs. I use it on my workstation for simple
-# tasks.
+</B></span># - KVM (Kernel-based Virtual Machine) is a loadable kernel module which 
+# supply virtualization with APIs.
+# - QEMU is a virtualizer which uses KVM API. QEMU supports other 
+# virtualization solutions too.
+# - Libvirt is a library for managing virtualization hosts. virsh command 
+# comes from Libvirt.
+# - Libguestfs is a collection of tools for accessing and managing VM 
+# images.
+# - virt-manager is a GUI for managing VMs. I use it on my workstation for 
+# simple tasks.
 #
 <B><span style="Font-Family:Verdana">#-- 0.2. Infrastructure
-</B></span># - Server: Ubuntu 22.04 LTS Server on a 4 core CPU, 8 GB RAM no GUI 
-# IP: 192.168.0.201 Name: apple
-# - Workstation: Ubuntu 22.04 LTS
-# - Network: 192.168.0.0/24 which is supplied by my internet modem
+</B></span># - Server (Host): Debian (12/11) or Ubuntu (22.04/20.04) Server
+#   IP: 192.168.1.161 
+#   Name: elma
+#   NIC: enp3s0f0
+# - Workstation: Debian 12 or Ubuntu 22.04 LTS Desktop
+# - Network: 192.168.1.0/24 which is supplied by my internet modem
 #
 <B><span style="Font-Family:Verdana">#-- 0.3. (Very) Basic Terminology
 </B></span># Domain  : Virtual Machine (VM)
@@ -61,14 +65,22 @@
 <code><span style="Color:DodgerBlue">sudo apt update
 </span></code><code><span style="Color:DodgerBlue">sudo apt install libvirt-clients libvirt-daemon-system qemu-kvm \
 </span></code><code><span style="Color:DodgerBlue">     virtinst virt-manager virt-viewer bridge-utils --yes
+</span></code># Add your user to libvirt group:
+# (Change exforge to your user name)
+<code><span style="Color:DodgerBlue">sudo usermod -aG libvirt exforge
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 1.2. Bridge Configuration
-</B></span># - By default KVM creates a virtual bridge named virbr0. This bridge allows the VMs
-# to communicate between each other and the host. But we prefer that the VMs join 
-# to our network by getting IP address from our DHCP server. That is we will 
-# create a public filter.
+</B></span># - Bridge Configuration differs slighty for Debian and Ubuntu. So it is 
+# better to handle them in different sections.
 #
-# First we need to disable netfilter, which is enabled on bridges by default.
+# 1.2.1. Ubuntu Bridge Configuration
+# - By default KVM creates a virtual bridge named virbr0. This bridge allows 
+# the VMs to communicate between each other and the host. But we prefer that
+# the VMs join to our network by getting IP address from our network.
+# That is we will create a public filter.
+#
+# - First we need to disable netfilter, which is enabled on bridges by 
+# default.
 <code><span style="Color:DodgerBlue">sudo nano /etc/sysctl.d/bridge.conf
 </span></code>#
 # File is empty, add following lines
@@ -84,17 +96,20 @@ net.bridge.bridge-nf-call-arptables=0
 <code><span style="Color:DodgerBlue">sudo reboot
 </span></code>#
 # - Now we need to remove the bridge created by KVM
-# - With "ip link" command we see all the networks. KVM network is named as virbr0.
+# - With "ip link" command we see all the networks. KVM network is named as 
+# virbr0.
 # Delete and undefine KVM networks
-<code><span style="Color:DodgerBlue">sudo virsh net-destroy default
-</span></code><code><span style="Color:DodgerBlue">sudo virsh net-undefine default
+<code><span style="Color:DodgerBlue">virsh net-destroy default
+</span></code><code><span style="Color:DodgerBlue">virsh net-undefine default
 </span></code>#
 # If in any case an error happens, you can try the following commands:
 <code><span style="Color:DodgerBlue">sudo ip link delete virbr0 type bridge
 </span></code># Now if you run "ip link" again, you will see that virbr0 is removed.
-# - When you run "ip link", take a note of your interface name(s), it must be 
-# something like enp0s0. If you have more than 1 interface there will be more 
-# than 1 name.
+# - When you run "ip link", take a note of your interface name(s), it must 
+# be something like enp0s0. If you have more than 1 interface there will be
+# more than 1 name.
+#
+# !!! Ubuntu Bridge Configuration - BEGIN !!!
 # - Backup your network configuration file
 # - If that file does not exist, there must be another file there with yaml 
 # extension. Proceed with that file.
@@ -102,10 +117,11 @@ net.bridge.bridge-nf-call-arptables=0
 </span></code>#
 # Edit your network config file
 <code><span style="Color:DodgerBlue">sudo nano /etc/netplan/00-installer-config.yaml
-</span></code># Remove its content , fill it as below, beware of changing enp3s0f0 to your 
-#   interface name. If you have more than 1 interfaces, add them too. 
-#   Also you should add an IP address and default gateway from your local network. 
-#   Mine are 192.168.0.201 and 192.168.0.1
+</span></code># - Remove its content , fill it as below, beware of changing enp3s0f0 to 
+# your interface name. If you have more than 1 interfaces, add them too. 
+# Also you should add an IP address and default gateway from your local 
+# network. 
+# Mine are 192.168.1.161 and 192.168.1.1
 <code><span style="Color:MediumSeaGreen">network:
   ethernets:
     enp3s0f0:
@@ -115,10 +131,10 @@ net.bridge.bridge-nf-call-arptables=0
     br0:
       interfaces: &lsqb;enp3s0f0&rsqb;
       addresses:
-      - 192.168.0.201/24
+      - 192.168.1.161/24
       routes:
       - to: default
-        via: 192.168.0.1
+        via: 192.168.1.1
       mtu: 1500
       nameservers:
         addresses:
@@ -133,9 +149,65 @@ net.bridge.bridge-nf-call-arptables=0
 </span></code># Apply the changes. If you connect through ssh, you connection may break.
 #   In this case, close the terminal and reconnect.
 <code><span style="Color:DodgerBlue">sudo netplan apply
-</span></code># If you run "ip link" now, you can see our bridge br0
+</span></code># - If you run "ip link" now, you can see our bridge br0
 #
-# Add our Bridge to KVM. We have to create an XML file for the bridge definition:
+# 1.2.2. Debian Bridge Configuration
+# - But we want the VMs join to our network by getting IP address from our 
+# network.
+# - First we need to disable netfilter, which is enabled on bridges by 
+# default.
+<code><span style="Color:DodgerBlue">sudo nano /etc/sysctl.d/bridge.conf
+</span></code>#
+# File is empty, add following lines
+<code><span style="Color:MediumSeaGreen">net.bridge.bridge-nf-call-ip6tables=0
+net.bridge.bridge-nf-call-iptables=0
+net.bridge.bridge-nf-call-arptables=0
+</span></code>#
+<code><span style="Color:DodgerBlue">sudo nano /etc/udev/rules.d/99-bridge.rules
+</span></code># File is empty, add following line
+<code><span style="Color:MediumSeaGreen">ACTION=="add", SUBSYSTEM=="module", KERNEL=="br_netfilter", RUN+="/sbin/sysctl -p /etc/sysctl.d/bridge.conf"
+</span></code>#
+# A reboot is necessary
+<code><span style="Color:DodgerBlue">sudo reboot
+</span></code>#
+# Now it is time to create a Bridge configuration for the KVM
+#
+# - Backup your network configuration file
+<code><span style="Color:DodgerBlue">sudo cp /etc/network/interfaces{,.backup}
+</span></code>#
+# Edit your network config file
+<code><span style="Color:DodgerBlue">sudo nano /etc/network/interfaces
+</span></code># - Remove its content , fill it as below, beware of changing enp3s0f0 to 
+# your interface name. If you have more than 1 interfaces, add them too. 
+# Also you should add an IP address and default gateway from your local 
+# network. 
+# Mine are 192.168.1.161 and 192.168.1.1
+<code><span style="Color:MediumSeaGreen">auto lo
+iface lo inet loopback
+# The primary network interface
+auto enp3s0f0
+#make sure we don't get addresses on our raw device
+iface enp3s0f0 inet manual
+#set up bridge and give it a static ip
+auto br0
+iface br0 inet static
+        address 192.168.1.161
+        netmask 255.255.255.0
+        network 192.168.1.0
+        broadcast 192.168.1.255
+        gateway 192.168.1.1
+        bridge_ports enp3s0f0
+        bridge_stp off
+        bridge_fd 0
+        bridge_maxwait 0
+        dns-nameservers 8.8.8.8
+</span></code># Apply the changes. If you connect through ssh, you connection may break.
+#   In this case, close the terminal and reconnect.
+<code><span style="Color:DodgerBlue">sudo systemctl restart networking.service
+</span></code>#
+# 1.3. Add Our Bridge to KVM
+# - Add our Bridge to KVM. We have to create an XML file for the bridge 
+# definition:
 <code><span style="Color:DodgerBlue">nano host-bridge.xml
 </span></code><code><span style="Color:MediumSeaGreen">&lt;network&gt;
   &lt;name&gt;host-bridge&lt;/name&gt;
@@ -148,7 +220,7 @@ net.bridge.bridge-nf-call-arptables=0
 </span></code><code><span style="Color:DodgerBlue">virsh net-start host-bridge
 </span></code><code><span style="Color:DodgerBlue">virsh net-autostart host-bridge
 </span></code>#
-<B><span style="Font-Family:Verdana">#-- 1.3. Configure Directories
+<B><span style="Font-Family:Verdana">#-- 1.4. Configure Directories
 </B></span># Set places for disk images and installation isos
 # /srv/kvm for VM disk images
 # /srv/isos for installation iso images
@@ -161,58 +233,66 @@ net.bridge.bridge-nf-call-arptables=0
 </a> </H4><div id="Div4" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 2.1. Create the 1st VM
 </B></span># Now it is time to create our first vm
 # It will be Ubuntu Server 22.04 LTS with 1 GB RAM and 10 GB HDD
-# - I already copied Ubuntu server iso ubuntu-22.04.1-live-server-amd64.iso to 
-# /srv/isos
+# - I already copied Ubuntu server iso ubuntu-22.04.2-live-server-amd64.iso 
+# to /srv/isos
 #
-# - Install a VM named testkvm, through QEMU with KVM virtualization, with 1024MiB 
-# memory and 1 vcpu, prepare a qcow2 format disk of 10GiB, connect a CDROM drive 
-# to it with the specified image, use the server's network bridge br0, allow VNC
-# connections to the VM through the server, optimize it as Ubuntu 22.04 server
-# and don't try to attach a console from server.
+# - Install a VM named testkvm:
+#   through QEMU with KVM virtualization, 
+#   with 1024MiB memory and 1 vcpu, 
+#   prepare a qcow2 format disk of 10GiB, 
+#   connect a CDROM drive to it with the specified image, 
+#   use the server's network bridge br0, 
+#   allow VNC connections to the VM through the server, 
+#   optimize it as Ubuntu 22.04 server and 
+#   don't try to attach a console from server.
 <code><span style="Color:DodgerBlue">sudo virt-install --name testkvm \
 </span></code><code><span style="Color:DodgerBlue">    --connect qemu:///system  --virt-type kvm \
 </span></code><code><span style="Color:DodgerBlue">    --memory 1024 --vcpus 1 \
 </span></code><code><span style="Color:DodgerBlue">    --disk /srv/kvm/testkvm.qcow2,format=qcow2,size=10 \
-</span></code><code><span style="Color:DodgerBlue">    --cdrom /srv/isos/ubuntu-22.04.1-live-server-amd64.iso  \
+</span></code><code><span style="Color:DodgerBlue">    --cdrom /srv/isos/ubuntu-22.04.2-live-server-amd64.iso  \
 </span></code><code><span style="Color:DodgerBlue">    --network bridge=br0 \
 </span></code><code><span style="Color:DodgerBlue">    --graphics vnc,port=5901,listen=0.0.0.0 \
 </span></code><code><span style="Color:DodgerBlue">    --os-variant ubuntu22.04 \
 </span></code><code><span style="Color:DodgerBlue">    --noautoconsole
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 2.2. os-variant List
-</B></span># - There are lots of OS Variant selections. You can find yours with the following 
-# command. It helps hypervisor to optimize the system for the guest OS. It can be
-# skipped.
+</B></span># - There are lots of OS Variant selections. You can find yours with the 
+# following command. It helps hypervisor to optimize the system for the 
+# guest OS. It can be skipped.
 <code><span style="Color:DodgerBlue">sudo apt install libosinfo-bin --yes
 </span></code><code><span style="Color:DodgerBlue">osinfo-query os
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 2.3. Connecting to the VM
-</B></span># - A graphical desktop is needed to connect to the VM. You can install virt-viewer 
-# package on your Ubuntu workstation and connect to the VM.
+</B></span># - A graphical desktop is needed to connect to the VM. You can install 
+# virt-viewer package on your Debian or Ubuntu workstation and connect to 
+# the VM.
 # !!!-------- Run on your workstation BEGIN -------------!!!#
 <code><span style="Color:DodgerBlue">sudo apt update
 </span></code><code><span style="Color:DodgerBlue">sudo apt install virt-viewer --yes
-</span></code><code><span style="Color:DodgerBlue">virt-viewer --connect qemu+ssh://exforge@apple/system testkvm
+</span></code><code><span style="Color:DodgerBlue">virt-viewer --connect qemu+ssh://exforge@elma/system testkvm
 </span></code># !!!-------- Run on your workstation END ---------------!!!#
-# - Remember to replace exforge with your user name on the server and srv with your
-# server's hostname
+#
+# - Remember to replace exforge with your user name on the server and elma
+# with your server's hostname
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div5')">3. Remote Graphical Management
-</a> </H4><div id="Div5" style="margin-left:1%;"><pre ># - Our server has no graphical interface (like the most servers). If you really want
-# a graphical management, you can install virt-manager on your workstation and 
-# manage your VMs from there. 
+</a> </H4><div id="Div5" style="margin-left:1%;"><pre ># - Our server has no graphical interface (like the most servers). If you 
+# really want a graphical management, you can install virt-manager on your
+# workstation and manage your VMs from there. 
 # !!!-------- Run on your workstation BEGIN -------------!!!#
 <code><span style="Color:DodgerBlue">sudo apt update
 </span></code><code><span style="Color:DodgerBlue">sudo apt install virt-manager --yes
 </span></code><code><span style="Color:DodgerBlue">virt-manager
 </span></code># !!!-------- Run on your workstation END ---------------!!!#
+# 
 # - The application is added to Applications Menu with the name 
 # "Virtual Machine Manager"
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div6')">4. Installing VMs from Ready Images
-</a> </H4><div id="Div6" style="margin-left:1%;"><pre ># - Starting a new VM and installing OS into it is a good but time consuming way. 
-# Another way would be preparing an installed image and start it as a new VM. 
-# Most server distros supply cloud images. By adding them some necessary 
+</a> </H4><div id="Div6" style="margin-left:1%;"><pre ># - Starting a new VM and installing OS into it is a good but time consuming 
+# way. Another way would be preparing an installed image and start it as a 
+# new VM. 
+# - Most server distros supply cloud images. By adding them some necessary 
 # configurations (user and network definitions), you can use them as ready 
 # images.
 #
@@ -221,38 +301,55 @@ net.bridge.bridge-nf-call-arptables=0
 </span></code><code><span style="Color:DodgerBlue">sudo apt install cloud-image-utils --yes
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 4.1. Acquiring Cloud Images
-</B></span># A search for "ubuntu cloud image" in duckduck2 gives the following address:
+</B></span># - A search for "ubuntu cloud image" in duckduck2 gives the following 
+# address:
 <a href="https://cloud-images.ubuntu.com/" target="_blank">https://cloud-images.ubuntu.com/</a>
 # Following jammy and current, download kvm image jammy-server-cloudimg-amd64.img 
-# Put it to server's /srv/isos folder.
+# and put it to server's /srv/isos folder.
+#
+# - Similarly a search for "debian cloud images" in duckduck2 gives the
+# following address:
+<a href="https://cloud.debian.org/images/cloud/" target="_blank">https://cloud.debian.org/images/cloud/</a>
+# Following bookworm and latest, download debian-12-generic-amd64.qcow2 
+# and put it so the server's /srv/isos folder.
 #
 <B><span style="Font-Family:Verdana">#-- 4.2. Creating a New Image From the Original Image
-</B></span># - We will create a new image from the image we downloaded. The original image has a 
-# max size of 2.25 GiB, it will be increased to 20 GiB and the new image format 
-# will be qcow2, the preferred format for KVM.
+</B></span># - We will create new images from the images we downloaded. Image sizes 
+# will be increased to 20 GiB and the Ubuntu image will be converted to
+# qcow2, the preferred format for KVM.
+# Ubuntu image:
 <code><span style="Color:DodgerBlue">sudo qemu-img create -b /srv/isos/jammy-server-cloudimg-amd64.img -F qcow2 \
 </span></code><code><span style="Color:DodgerBlue">    -f qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 20G
+</span></code># Debian image:
+<code><span style="Color:DodgerBlue">sudo qemu-img create -b /srv/isos/debian-12-generic-amd64.qcow2 -F qcow2 \
+</span></code><code><span style="Color:DodgerBlue">    -f qcow2 /srv/kvm/debiansrv-cloudimg.qcow2 20G
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 4.3. Cloud-init Configuration
 </B></span># - The next step is to crate a cloud-init config file. This file contains 
-# instructions for the cloud image. There is a wide range of instructions like; 
-# creating a user, creating and filling files, adding apt repositories, running 
-# initial commands, installing  packages, reboot and poweroff after finishing, 
-# disk and configuration. See below url for details:
+# instructions for the cloud image. There is a wide range of instructions 
+# like; creating a user, creating and filling files, adding apt 
+# repositories, running initial commands, installing  packages, reboot and 
+# poweroff after finishing, disk and configuration. See below url for 
+# details:
 <a href="https://cloudinit.readthedocs.io/en/latest/reference/examples.html" target="_blank">https://cloudinit.readthedocs.io/en/latest/reference/examples.html</a>
+#
 # - Our cloud-init file will configure the following:
-# - Create a user named exforge with sudo privileges, assign its password, add it to 
-# exforge group as primary, also add it to users group, create its home directory
-# as /home/exforge, and set its shell to bash.
+#   Set hostname and Fully Qualified Domain Name, 
+#   Create a user named exforge with sudo privileges, 
+#   assign its password, 
+#   add it to exforge group as primary, 
+#   also add it to users group, 
+#   create its home directory as /home/exforge, 
+#   and set its shell to bash.
 # - To add our user's password, we need to have the hash of it.
 <code><span style="Color:DodgerBlue">sudo apt install whois --yes
 </span></code><code><span style="Color:DodgerBlue">mkpasswd --method=SHA-512 --rounds=4096
-</span></code># - Enter the user's assigned password here, it will display the hash, copy the hash, 
-# we will use it later.
+</span></code># - Enter the user's assigned password here, it will display the hash, copy 
+# the hash, we will use it later.
 #
 # Create a place for our cloud-init files. /srv/init would be fine.
 <code><span style="Color:DodgerBlue">sudo mkdir /srv/init
-</span></code># Create our cloud-init file
+</span></code># Create our ubuntu server's cloud-init file
 <code><span style="Color:DodgerBlue">sudo nano /srv/init/ubuntu-cloud-init.cfg
 </span></code><code><span style="Color:MediumSeaGreen">#cloud-config
 hostname: ubuntu22
@@ -269,11 +366,29 @@ users:
      lock_passwd: false
      passwd: $6$rounds=4096$u5D5VbBZD7NcG/8Y$sc8WH5R9YU/xx1QqjQnMzNbQJOptj33DQGJqyHHju5EzJkvGF913gPVhjw.CsL8QLX5G79C0312tAuGIhWEhf1
 packages: qemu-guest-agent
+</span></code>#
+# Create our debian server's cloud-init file
+<code><span style="Color:DodgerBlue">sudo nano /srv/init/debian-cloud-init.cfg
+</span></code><code><span style="Color:MediumSeaGreen">#cloud-config
+hostname: debian12
+fqdn: debian12.x386.org
+manage_etc_hosts: true
+groups: exforge
+users:
+   - name: exforge
+     sudo: ALL=(ALL) ALL
+     primary_group: exforge
+     groups: users
+     home: /home/exforge
+     shell: /bin/bash
+     lock_passwd: false
+     passwd: $6$rounds=4096$u5D5VbBZD7NcG/8Y$sc8WH5R9YU/xx1QqjQnMzNbQJOptj33DQGJqyHHju5EzJkvGF913gPVhjw.CsL8QLX5G79C0312tAuGIhWEhf1
+packages: qemu-guest-agent
 </span></code># Do not forget to change passwd value with your copied hash.
 #
 <B><span style="Font-Family:Verdana">#-- 4.4. Cloud-init Network Configuration
-</B></span># - If a network configuration other than DHCP is needed, a network configuration 
-# file is necessary.
+</B></span># - If a network configuration other than DHCP is needed, a network 
+# configuration file is necessary.
 # Remember to change IP addresses as needed by your VM
 <code><span style="Color:DodgerBlue">sudo nano /srv/init/ubuntu-network-init.cfg
 </span></code><code><span style="Color:MediumSeaGreen">#cloud-config
@@ -281,39 +396,85 @@ version: 2
 ethernets:
   enp1s0:
      dhcp4: false
-     addresses: &lsqb; 192.168.0.225/24 &rsqb;
-     gateway4: 192.168.0.1
+     addresses: &lsqb; 192.168.1.243/24 &rsqb;
+     gateway4: 192.168.1.1
      nameservers:
-       addresses: &lsqb; 192.168.0.1,8.8.8.8 &rsqb;
+       addresses: &lsqb; 192.168.1.1,8.8.8.8 &rsqb;
 </span></code>#
-<B><span style="Font-Family:Verdana">#-- 4.5. Creating Cloud Seed Image
-</B></span># - Now we will create an image file with our ubuntu-cloud-init.cfg and 
-# ubuntu-network-init.cfg inside.
+<code><span style="Color:DodgerBlue">sudo nano /srv/init/debian-network-init.cfg
+</span></code><code><span style="Color:MediumSeaGreen">#cloud-config
+version: 2
+ethernets:
+  enp1s0:
+     dhcp4: false
+     addresses: &lsqb; 192.168.1.244/24 &rsqb;
+     gateway4: 192.168.1.1
+     nameservers:
+       addresses: &lsqb; 192.168.1.1,8.8.8.8 &rsqb;
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 4.5. Creating Cloud Seed Images
+</B></span># - Now we will create image files cloud-init and network-init inside.
+# For Ubuntu server:
 <code><span style="Color:DodgerBlue">sudo cloud-localds --network-config /srv/init/ubuntu-network-init.cfg /srv/kvm/ubuntu22-seed.qcow2 \
 </span></code><code><span style="Color:DodgerBlue">   /srv/init/ubuntu-cloud-init.cfg
+</span></code># For Debian server:
+<code><span style="Color:DodgerBlue">sudo cloud-localds --network-config /srv/init/debian-network-init.cfg /srv/kvm/debian12-seed.qcow2 \
+</span></code><code><span style="Color:DodgerBlue">   /srv/init/debian-cloud-init.cfg
 </span></code>#
-<B><span style="Font-Family:Verdana">#-- 4.6. Start Our Image as a New VM
-</B></span><code><span style="Color:DodgerBlue">virt-install --name ubuntu22 \
+<B><span style="Font-Family:Verdana">#-- 4.6. Start Our Images as a New VMs
+</B></span># Ubuntu Server
+<code><span style="Color:DodgerBlue">virt-install --name ubuntu22 \
 </span></code><code><span style="Color:DodgerBlue">  --connect qemu:///system \
 </span></code><code><span style="Color:DodgerBlue">  --virt-type kvm --memory 2048 --vcpus 2 \
 </span></code><code><span style="Color:DodgerBlue">  --boot hd,menu=on \
 </span></code><code><span style="Color:DodgerBlue">  --disk path=/srv/kvm/ubuntu22-seed.qcow2,device=cdrom \
 </span></code><code><span style="Color:DodgerBlue">  --disk path=/srv/kvm/ubuntusrv-cloudimg.qcow2,device=disk \
-</span></code><code><span style="Color:DodgerBlue">  --graphics vnc,port=5901,listen=0.0.0.0 \
+</span></code><code><span style="Color:DodgerBlue">  --graphics vnc,port=5902,listen=0.0.0.0 \
 </span></code><code><span style="Color:DodgerBlue">  --os-variant ubuntu22.04 \
 </span></code><code><span style="Color:DodgerBlue">  --network bridge=br0 \
-</span></code><code><span style="Color:DodgerBlue">  --noautoconsole
-</span></code># - It might take a few minutes for cloud-init to finish. You can connect to your VM 
-# from your workstation.
-<code><span style="Color:DodgerBlue">virt-viewer --connect qemu+ssh://exforge@srv/system ubuntu22
+</span></code><code><span style="Color:DodgerBlue">  --noautoconsole \
+</span></code><code><span style="Color:DodgerBlue">  --install no_install=yes
+</span></code># Debian Server
+<code><span style="Color:DodgerBlue">virt-install --name debian12 \
+</span></code><code><span style="Color:DodgerBlue">  --connect qemu:///system \
+</span></code><code><span style="Color:DodgerBlue">  --virt-type kvm --memory 2048 --vcpus 2 \
+</span></code><code><span style="Color:DodgerBlue">  --boot hd,menu=on \
+</span></code><code><span style="Color:DodgerBlue">  --disk path=/srv/kvm/debian12-seed.qcow2,device=cdrom \
+</span></code><code><span style="Color:DodgerBlue">  --disk path=/srv/kvm/debiansrv-cloudimg.qcow2,device=disk \
+</span></code><code><span style="Color:DodgerBlue">  --graphics vnc,port=5903,listen=0.0.0.0 \
+</span></code><code><span style="Color:DodgerBlue">  --os-variant debian12 \
+</span></code><code><span style="Color:DodgerBlue">  --network bridge=br0 \
+</span></code><code><span style="Color:DodgerBlue">  --noautoconsole \
+</span></code><code><span style="Color:DodgerBlue">  --install no_install=yes
+</span></code>#
+# - Ironically, on Debian 12, --os-variant debian12 gives an error. In that 
+# case, try the following command:
+<code><span style="Color:DodgerBlue">virt-install --name debian12 \
+</span></code><code><span style="Color:DodgerBlue">  --connect qemu:///system \
+</span></code><code><span style="Color:DodgerBlue">  --virt-type kvm --memory 2048 --vcpus 2 \
+</span></code><code><span style="Color:DodgerBlue">  --boot hd,menu=on \
+</span></code><code><span style="Color:DodgerBlue">  --disk path=/srv/kvm/debian12-seed.qcow2,device=cdrom \
+</span></code><code><span style="Color:DodgerBlue">  --disk path=/srv/kvm/debiansrv-cloudimg.qcow2,device=disk \
+</span></code><code><span style="Color:DodgerBlue">  --graphics vnc,port=5903,listen=0.0.0.0 \
+</span></code><code><span style="Color:DodgerBlue">  --os-variant debian11 \
+</span></code><code><span style="Color:DodgerBlue">  --network bridge=br0 \
+</span></code><code><span style="Color:DodgerBlue">  --noautoconsole \
+</span></code><code><span style="Color:DodgerBlue">  --install no_install=yes
+</span></code>#
+# - It might take a few minutes for cloud-init to finish. You can connect to 
+# your VM from your workstation.
+<code><span style="Color:DodgerBlue">virt-viewer --connect qemu+ssh://exforge@elma/system ubuntu22
+</span></code><code><span style="Color:DodgerBlue">virt-viewer --connect qemu+ssh://exforge@elma/system debian12
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 4.7. Clean-up Tasks for Cloud-init
-</B></span># On your VM run:
+</B></span># On your VMs run:
 <code><span style="Color:DodgerBlue">sudo touch /etc/cloud/cloud-init.disabled
-</span></code># If the file /etc/cloud/cloud-init.disabled exists, cloud-init does not run again.
+</span></code># If the file /etc/cloud/cloud-init.disabled exists, cloud-init does not run 
+# again.
 #
 <B><span style="Font-Family:Verdana">#-- 4.8. The whole process except 4.7. can be automated by a python script. 
-</B></span># - Download latest focal current cloud image (or use an already downloaded one) 4.1.
+</B></span># - Download latest focal current cloud image (or use an already downloaded 
+# one) 4.1.
 # - A system call to run a command to create a new image 4.2.
 #   Image size (and name) can be a parameter
 # - Create password hash and init files 4.3. and 4.4. 
@@ -325,15 +486,24 @@ ethernets:
 #   Memory size, vcpu count can be parameters.
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div7')">5. virsh: Shell Based VM Management
-</a> </H4><div id="Div7" style="margin-left:1%;"><pre ># - virt-manager can only help with the basic management tasks. If you want to dive 
-# deep, you need the old-style shell.
-# - There are countless options to do with virsh command. I can only list a handfull
-# of most useful ones (IMHO) here.
+</a> </H4><div id="Div7" style="margin-left:1%;"><pre ># - virt-manager can only help with the basic management tasks. If you want 
+# to dive # deep, you need the old-style shell.
+# - There are countless options to do with virsh command. I can only list a 
+# handfull of most useful ones (IMHO) here.
 # For a complete list of virsh command usage, see the following web page:
 <a href="https://www.libvirt.org/manpages/virsh.html" target="_blank">https://www.libvirt.org/manpages/virsh.html</a>
 #
 # In all examples, NAME is the name of your VM.
 #
+<B><span style="Font-Family:Verdana">#-- 5.0. Environment Variable Set
+</B></span># - For Debian, in order to run virsh command without sudo, we need to
+# set an environment variable.
+<code><span style="Color:DodgerBlue">export LIBVIRT_DEFAULT_URI='qemu:///system'
+</span></code># - Instead of setting everytime, we can add it to the .bashrc file:
+<code><span style="Color:DodgerBlue">nano ~/.bashrc
+</span></code># Add to the end
+<code><span style="Color:MediumSeaGreen">export LIBVIRT_DEFAULT_URI='qemu:///system'
+</span></code>#
 <B><span style="Font-Family:Verdana">#-- 5.1. Info about host
 </B></span><code><span style="Color:DodgerBlue">virsh nodeinfo
 </span></code>#
@@ -377,22 +547,24 @@ ethernets:
 </span></code># Change Max memory (Activated after shutdown and start)
 <code><span style="Color:DodgerBlue">virsh setmaxmem NAME 2G --config
 </span></code>#   size could be something like 2G 1536M etc
-# Used memory can be changed when the VM is running (decreasing is not advised)
+# Used memory can be changed when the VM is running (decreasing is not 
+# advised).
 # Change memory for this session only (reverts after shutdown and start):
-<code><span style="Color:DodgerBlue">virsh setmem NAME 1536M
-</span></code><code><span style="Color:DodgerBlue">virsh setmem NAME 1536M --live
-</span></code><code><span style="Color:DodgerBlue">virsh setmem NAME 1536M --current
+<code><span style="Color:DodgerBlue">virsh setmem NAME 2536M
+</span></code><code><span style="Color:DodgerBlue">virsh setmem NAME 2536M --live
+</span></code><code><span style="Color:DodgerBlue">virsh setmem NAME 2536M --current
 </span></code># Change memory after the next shutdown and start
-<code><span style="Color:DodgerBlue">virsh setmem NAME 1536M --config
-</span></code># Activate immediately and keep the changes after the next shutdown and start
+<code><span style="Color:DodgerBlue">virsh setmem NAME 2536M --config
+</span></code># Activate immediately and keep the changes after the next shutdown and 
+# start
 <code><span style="Color:DodgerBlue">virsh setmem NAME 1536M --live --config
-</span></code><code><span style="Color:DodgerBlue">virsh setmem ubuntu20 1536M --live --config
+</span></code><code><span style="Color:DodgerBlue">virsh setmem ubuntu22 2536M --live --config
 </span></code># !!!!! Beware of Shutdown and Start. Reboots do not count !!!!!
 # 
 <B><span style="Font-Family:Verdana">#-- 5.8. VM vCPU Management
 </B></span># Just like memory, VMs have 2 virtual CPU parameters. Maximum and Current.
 # Current is the number of vcpus that VM uses actively (on-line).
-# Maximum is the max number of vcpus to be allocated to the VM.
+# Maximum is the max number of vcpus can be allocated to the VM.
 # Also, there are 2 states. Config and Live.
 # Config is the permanent state, it will be active after shutdown and start.
 # Live is the running VM's state, it may not be active after shutdown and start.
@@ -403,14 +575,15 @@ ethernets:
 #   current live   : Active number of vcpus, valid now (while running).
 # To see these values for your VM:
 <code><span style="Color:DodgerBlue">virsh vcpucount NAME
-</span></code># - I keep saying shutdown and start instead of restart or reboot, because kvm, qemu 
-# or whatever it is, acts differently when you reboot or shutdown and then start 
-# the VM. 
-# - So when I say shutdown and start, I mean shutdown first, wait a while (from 0.001
-# miliseconds to as long as you want) and then start the VM.
+</span></code>#
+# - I keep saying shutdown and start instead of restart or reboot, because 
+# kvm, qemu or whatever it is, acts differently when you reboot or shutdown
+# and then start the VM. 
+# - So when I say shutdown and start, I mean shutdown first, wait a while 
+# (from 0.001 # miliseconds to as long as you want) and then start the VM.
 #
-# - There is no way (AFAIK) to change maximum live value, you can change maximum 
-# config as:
+# - There is no way (AFAIK) to change maximum live value, you can change 
+# maximum config as:
 <code><span style="Color:DodgerBlue">virsh setvcpus NAME NUMBER --maximum --config
 </span></code><code><span style="Color:DodgerBlue">virsh setvcpus ubuntu22 3 --maximum --config
 </span></code># To change current vcpu count for the current state (all options are valid)
@@ -427,30 +600,30 @@ ethernets:
 <code><span style="Color:DodgerBlue">virsh setvcpus NAME NUMBER --config --live
 </span></code><code><span style="Color:DodgerBlue">virsh setvcpus ubuntu22 3 --config --live
 </span></code>#
-# - You can both increase and decrease the vcpu count. But beware that decreasing 
-# vcpu count of a running VM could be dangerous.
+# - You can both increase and decrease the vcpu count. But beware that 
+# decreasing vcpu count of a running VM could be dangerous.
 #
-# - When you increase the current live vcpu count, the increased vcpus becomes 
-# offline. That means you cannot use them right away. At least that is what
-# happened to me. You can see online and offline vcpu information of your VM with 
-# the following command (run it on your VM):
+# - When you increase the current live vcpu count, the increased vcpus 
+# becomes offline. That means you cannot use them right away. At least 
+# that is what happened to me. You can see online and offline vcpu 
+# information of your VM with the following command (run it on your VM):
 <code><span style="Color:DodgerBlue">lscpu | head
-</span></code># To activate an offline cpu, first you have to know its number. cpu numbering 
-# starts from 0, so if you had 2 vcpus and increased them by 1, the number for 
-# the 3rd vcpu will be 2. You need to edit the following file and change the 0
-# inside to 1:
+</span></code># - To activate an offline cpu, first you have to know its number. cpu 
+# numbering starts from 0, so if you had 2 vcpus and increased them by 1, 
+# the number for the 3rd vcpu will be 2. You need to edit the following file 
+# and change the 0 inside to 1:
 <code><span style="Color:DodgerBlue">sudo nano /sys/devices/system/cpu/cpu2/online
-</span></code># - The number 2 after cpu means the cpu with number 2 i.e. 3rd cpu. When you change 
-# the file, magically that vcpu will become online. For more vcpus, you have to 
-# change that file for each vcpu you added.
+</span></code># - The number 2 after cpu means the cpu with number 2 i.e. 3rd cpu. When 
+# you change # the file, magically that vcpu will become online. For more 
+# vcpus, you have to change that file for each vcpu you added.
 #
 <B><span style="Font-Family:Verdana">#-- 5.9. Snapshots
 </B></span># When you take a snapshot, current disk and memory state is saved.
 # Take a live snapshot
 <code><span style="Color:DodgerBlue">virsh snapshot-create-as VMNAME --name SNAPSHOTNAME --description DESCRIPTION
 </span></code><code><span style="Color:DodgerBlue">virsh snapshot-create-as ubuntu22 --name ss1-ubuntu22 --description "Firsh Snapshot of Ubuntu22"
-</span></code># - The snapshot becomes the current one and everything after is built onto this 
-# snapshot. If you want to revert to that snapshot:
+</span></code># - The snapshot becomes the current one and everything after is built onto 
+# this snapshot. If you want to revert to that snapshot:
 <code><span style="Color:DodgerBlue">virsh snapshot-revert VMNAME --current
 </span></code># If you want to revert to a specific snapshot:
 <code><span style="Color:DodgerBlue">virsh snapshot-revert VMNAME --snapshotname SNAPSHOTNAME
@@ -464,28 +637,30 @@ ethernets:
 <code><span style="Color:DodgerBlue">virsh snapshot-list VMNAME
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 5.10. Attach Another Disk to a VM
-</B></span># - Suppose that, for our ubuntu22 VM, we need another disk of 20GB size. Because, we 
-# need to keep some data on another disk. 
+</B></span># - Suppose that, for our ubuntu22 VM, we need another disk of 20GB size. 
+# Because, we need to keep some data on another disk. 
 # We need to create a new image and attach it to the VM.
 # Create a 20GB image in qcow2 format:
 <code><span style="Color:DodgerBlue">sudo qemu-img create -f qcow2 /srv/kvm/ubuntu22-disk2.qcow2 20G
-</span></code># - Now our image is ready to be attached to our VM. Before attaching it to the VM, 
-# we have to decide its name on the VM.
-# - VM disks are named as vda, vdb, vdc ... so on. We have to give it a name just 
-# follows the last disk. Because my ubuntu22 VM has only one disk, name for the 
-# second one will be vdb. To see your disks on your VM, type the following 
-# command (On your VM):
+</span></code># - Now our image is ready to be attached to our VM. Before attaching it to 
+# the VM, we have to decide its name on the VM.
+# - VM disks are named as vda, vdb, vdc ... so on. We have to give it a name 
+# just # follows the last disk. Because my ubuntu22 VM has only one disk, 
+# name for the second one will be vdb. To see your disks on your VM, type 
+# the following command (On your VM):
 <code><span style="Color:DodgerBlue">lsblk -o name -d | grep vd
-</span></code># - Most probably you will only have vda, in that case you can use the name vdb. 
-# Otherwise use a name just after the last disk name.
+</span></code># - Most probably you will only have vda, in that case you can use the name 
+# vdb. Otherwise use a name just after the last disk name.
 # Add the new image as a second disk to my ubuntu22 VM:
 <code><span style="Color:DodgerBlue">virsh attach-disk ubuntu22 /srv/kvm/ubuntu22-disk2.qcow2 vdb --persistent
-</span></code># - The disk is added persistently, that is it is added alive and it will be there 
-# after shutdown and and start. If you want to add the disk for the session only, 
-# you can change --persistent to --live. Also, if you want to add the disk after 
-# shutdown and start you can change --persistent to --config.
-# - Needless to say that, you are going to have to mount the new disk before using 
-# it.
+</span></code># - The disk is added persistently, that is it is added alive and it will be 
+# there after shutdown and and start. If you want to add the disk for the 
+# session only, you can change --persistent to --live. Also, if you want to 
+# add the disk after shutdown and start you can change --persistent to --
+# config.
+#
+# - Needless to say that, you are going to have to mount the new disk before 
+# using it.
 #
 # In any case, if you want to detach the added disk, solution is easy:
 <code><span style="Color:DodgerBlue">virsh detach-disk ubuntu22 vdb --persistent
@@ -495,8 +670,8 @@ ethernets:
 <p> <H4><a href="javascript:myFunction('Div8')">6. All virsh Commands
 </a> </H4><div id="Div8" style="margin-left:1%;"><pre ># The following output is taken from the following command: 
 <code><span style="Color:DodgerBlue">virsh --help
-</span></code># You can get detailed help for each subcommand with: virsh SUBCOMMAND --help, 
-#   like:
+</span></code># - You can get detailed help for each subcommand with: virsh SUBCOMMAND --
+# help, like:
 <code><span style="Color:DodgerBlue">virsh dominfo --help
 </span></code>#
 # Domain Management (help keyword 'domain')
@@ -780,9 +955,9 @@ ethernets:
 #    vol-wipe                       wipe a vol
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div9')">7. qemu-img: Shell Based Image Management
-</a> </H4><div id="Div9" style="margin-left:1%;"><pre ># - qemu-img allows us to manipulate images. The command is expected to work offline. 
-# That means, before you start using qemu-img, you have to shut down the VM 
-# associated with it. 
+</a> </H4><div id="Div9" style="margin-left:1%;"><pre ># - qemu-img allows us to manipulate images. The command is expected to work 
+# offline. That means, before you start using qemu-img, you have to shut 
+# down the VM associated with it. 
 # !!! Do not use qemu-img with an image of running VM !!!
 # A full documentation can be found at the below site:
 <a href="https://www.qemu.org/docs/master/tools/qemu-img.html" target="_blank">https://www.qemu.org/docs/master/tools/qemu-img.html</a>
@@ -791,15 +966,17 @@ ethernets:
 </B></span><code><span style="Color:DodgerBlue">qemu-img info FILENAME
 </span></code># FILENAME is the name of the file which is the image for the VM.
 # For my ubuntu22 VM's image info:
-<code><span style="Color:DodgerBlue">qemu-img info ubuntusrv-cloudimg.qcow2
+<code><span style="Color:DodgerBlue">qemu-img info /srv/kvm/ubuntusrv-cloudimg.qcow2
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 7.2. Creating an Image
 </B></span><code><span style="Color:DodgerBlue">qemu-img create -f FORMAT FILENAME SIZE
-</span></code># Remember, at 5.10. we created an empty disk image to add as another disk to a VM:
+</span></code># Remember, at 5.10. we created an empty disk image to add as another disk 
+# to a VM:
 <code><span style="Color:DodgerBlue">sudo qemu-img create -f qcow2 /srv/kvm/ubuntu22-disk2.qcow2 20G
 </span></code>#
-# - An image also can be created by backing from another image. In that way, we will 
-# have another image from an image, differentiating its format and size:
+# - An image also can be created by backing from another image. In that way, 
+# we will have another image from an image, differentiating its format and 
+# size:
 <code><span style="Color:DodgerBlue">sudo qemu-img create -b BACKINGFILENAME -F BACKINGFILEFORMAT \
 </span></code><code><span style="Color:DodgerBlue">    -f OUTPUTFILEFORMAT OUTPUTFILENAME SIZE
 </span></code># - Remember, at 4.2. we created a new cloud image from the cloud image we 
@@ -808,8 +985,8 @@ ethernets:
 </span></code><code><span style="Color:DodgerBlue">    -f qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 20G
 </span></code># 
 <B><span style="Font-Family:Verdana">#-- 7.3. Changing the Format of an Image
-</B></span># - There are a lot of formats for images. For us, the 2 most important ones are raw 
-# and qcow2. 
+</B></span># - There are a lot of formats for images. For us, the 2 most important ones 
+# are raw and qcow2. 
 # raw   : As the name implies. 
 # qcow2 : Feature rich, allows snapshots, compression and encrytion.
 # qcow  : Older version of qcow2.
@@ -820,19 +997,20 @@ ethernets:
 # vhdx  : Micros*ft HyperV format
 <code><span style="Color:DodgerBlue">qemu-img convert -f SOURCEFORMAT -O DESTINATIONFORMAT SOURCEFILE DESTFILE
 </span></code>#
-# - I have Virtualbox installed on my workstation (Ubuntu 22.04 LTS). There is a 
-# Windows 10 installed on it for testing purposes. I'll copy its image (obviously
-# in vdi format) to my server to /srv/kvm directory, convert it to qcow2 and run 
-# it on my server using KVM. 
+# - I have Virtualbox installed on my workstation (Ubuntu 22.04 LTS). There 
+# is a Windows 10 installed on it for testing purposes. I'll copy its image 
+# (obviously in vdi format) to my server to /srv/kvm directory, convert it
+# to qcow2 and run it on my server using KVM. 
 # !!! On my workstation BEGIN !!!
 # Copy Windows 10 image to the server
-<code><span style="Color:DodgerBlue">scp windows10.vdi exforge@apple:/tmp
+<code><span style="Color:DodgerBlue">scp windows10.vdi exforge@elma:/tmp
 </span></code># !!! On my workstation END !!!
 #
 # On my server
+# Convert image to qcow2
 <code><span style="Color:DodgerBlue">sudo qemu-img convert -f vdi -O qcow2 /tmp/windows10.vdi /srv/kvm/windows10.qcow2
-</span></code># If we want to display the progress percentage while converting the image, add -p 
-#   option.
+</span></code># If we want to display the progress percentage while converting the image, 
+# add -p option.
 <code><span style="Color:DodgerBlue">sudo qemu-img convert -p -f vdi -O qcow2 /tmp/windows10.vdi /srv/kvm/windows10.qcow2
 </span></code># Now we can add it as a KVM image
 <code><span style="Color:DodgerBlue">virt-install --name windows10 \
@@ -840,21 +1018,22 @@ ethernets:
 </span></code><code><span style="Color:DodgerBlue">  --virt-type kvm --memory 2048 --vcpus 2 \
 </span></code><code><span style="Color:DodgerBlue">  --boot hd,menu=on \
 </span></code><code><span style="Color:DodgerBlue">  --disk path=/srv/kvm/windows10.qcow2,device=disk \
-</span></code><code><span style="Color:DodgerBlue">  --graphics vnc,port=5901,listen=0.0.0.0 \
+</span></code><code><span style="Color:DodgerBlue">  --graphics vnc,port=5904,listen=0.0.0.0 \
 </span></code><code><span style="Color:DodgerBlue">  --os-variant win10 \
 </span></code><code><span style="Color:DodgerBlue">  --network bridge=br0 \
 </span></code><code><span style="Color:DodgerBlue">  --noautoconsole
 </span></code>#   
 <B><span style="Font-Family:Verdana">#-- 7.4. Resize a Disk Image.
-</B></span># - If you need extra disk space for your VM, you can increase the size of the image 
-# file.
+</B></span># - If you need extra disk space for your VM, you can increase the size of 
+# the image file.
 <code><span style="Color:DodgerBlue">sudo qemu-img resize FILENAME +SIZE
-</span></code># Resize an image, FILENAME is the name of the file which is the image for the VM.
-# - SIZE could be something like +10G. Image size will be increased by (not to) this 
-# amount. it is possible to shrink with -
+</span></code># Resize an image, FILENAME is the name of the file which is the image for 
+# the VM.
+# - SIZE could be something like +10G. Image size will be increased by (not 
+# to) this amount. it is possible to shrink with -
 # - You must use the parameter --shrink to shrink the image
-# - You must use partitioning tools in the VM to resize the disk to shrinked size 
-# before shrinking.
+# - You must use partitioning tools in the VM to resize the disk to shrinked 
+# size before shrinking.
 # To increase the size of my ubuntu20 VM's image by 5GB:
 <code><span style="Color:DodgerBlue">sudo qemu-img resize /srv/kvm/ubuntusrv-cloudimg.qcow2 +5G
 </span></code>#
@@ -863,25 +1042,25 @@ ethernets:
 </span></code># In any case if you suspect the integrity of the image file
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div10')">8. Export and Import of VMs
-</a> </H4><div id="Div10" style="margin-left:1%;"><pre ># - If you want to move your VM to another host, or in a way you want to backup and 
-# restore your VM; there might be a lot of ways to do it. I'm going to demonstrate 
-# a very simple  method which requires shutting down the VM (you can try while it is
-# running, but with no success guaranteed).
+</a> </H4><div id="Div10" style="margin-left:1%;"><pre ># - If you want to move your VM to another host, or in a way you want to 
+# backup and restore your VM; there might be a lot of ways to do it. I'm 
+# going to demonstrate a very simple  method which requires shutting down 
+# the VM (you can try while it is running, but with no success guaranteed).
 #
 <B><span style="Font-Family:Verdana">#-- 8.1. Export
-</B></span># - First of all, let's prepare a place for our backup files, /tmp/kvmbackup would be 
-# fine.
+</B></span># - First of all, let's prepare a place for our backup files, /tmp/kvmbackup 
+# would be fine.
 <code><span style="Color:DodgerBlue">mkdir /tmp/kvmbackup
-</span></code># - We need the definition file of our VM and the image file it is using. "virsh 
-# dumpxml" command creates the definition file in xml format, we can save it with 
-# the VM's name.
+</span></code># - We need the definition file of our VM and the image file it is using. 
+# "virsh dumpxml" command creates the definition file in xml format, we can 
+# save it with the VM's name.
 <code><span style="Color:DodgerBlue">virsh dumpxml ubuntu22 &gt; /tmp/kvmbackup/ubuntu22.xml
 </span></code># This file contains all the necessary information about our VM.
 #
-# - If our VM was installed from the scratch as in 2.1. there will be only 1 image 
-# file. But if it was installed from a cloud image as we did in 4. or if another 
-# disk was added as in 5.10; there would be more than 1 images. We need to copy 
-# all the images. 
+# - If our VM was installed from the scratch as in 2.1. there will be only 1 
+# image file. But if it was installed from a cloud image as we did in 4. or 
+# if another disk was added as in 5.10; there would be more than 1 images. 
+# We need to copy all the images. 
 #
 # Images used by the VM is listed in the xml file. Let's find them:
 <code><span style="Color:DodgerBlue">grep "source file" /tmp/kvmbackup/ubuntu22.xml
@@ -893,35 +1072,36 @@ ethernets:
 # Lets copy them to our backup locations.
 <code><span style="Color:DodgerBlue">cp /srv/kvm/ubuntu22-seed.qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 \
 </span></code><code><span style="Color:DodgerBlue">   /tmp/kvmbackup
-</span></code># - Beware: You can copy the files while the VM is running, but it is advised to 
-# shutdown (or at least suspend your VM) before copying. Continue at your own 
-# risk.
+</span></code># - Beware: You can copy the files while the VM is running, but it is 
+# advised to shutdown (or at least suspend your VM) before copying. Continue 
+# at your own risk.
 #
 # Let's package them
 <code><span style="Color:DodgerBlue">tar -cf /tmp/ubuntu22.tar -C /tmp/kvmbackup .
-</span></code># Now we have /tmp/ubuntu22.tar, it has all the necessary data to import our VM 
-#   anywhere.
+</span></code># Now we have /tmp/ubuntu22.tar, it has all the necessary data to import our 
+# VM anywhere.
 # You have to copy this file to another server, before importing there.
 #
 <B><span style="Font-Family:Verdana">#-- 8.2. Import
-</B></span># - Assuming we have another virtualization server and we have copied ubuntu20.tar 
-# there, we are going to import it and make it operational.
-# - Beware: Before importing your VM to another server, you have to remove it on the 
-# original server, otherwise you would have 2 guests with the same IP and that
-# may cause unexpected results.
+</B></span># - Assuming we have another virtualization server and we have copied 
+# ubuntu20.tar there, we are going to import it and make it operational.
+# - Beware: Before importing your VM to another server, you have to remove 
+# it on the original server, otherwise you would have 2 guests with the same 
+# IP and that may cause unexpected results.
+#
 # ubuntu22.tar is copied to the server's /tmp directory as /tmp/ubuntu22.tar
 # Create a place for our import files
 <code><span style="Color:DodgerBlue">mkdir /tmp/import
 </span></code># Extract tar file there
 <code><span style="Color:DodgerBlue">tar -xf /tmp/ubuntu22.tar -C /tmp/import
-</span></code># - Now we need to move our image files to their directories as in the original 
-# server. If you have a different directory structure on your new server, and you
-# want to copy files to different directories you have to edit the xml file and 
-# change directories there.
+</span></code># - Now we need to move our image files to their directories as in the 
+# original server. If you have a different directory structure on your new 
+# server, and you want to copy files to different directories you have to 
+# edit the xml file and change directories there.
 <code><span style="Color:DodgerBlue">sudo cp /tmp/import/ubuntu22-seed.qcow2 /tmp/import/ubuntusrv-cloudimg.qcow2 /srv/kvm
 </span></code># 
-# - It is time to define our server. Remember the xml file? We will use it to define 
-# our ubuntu22 server.
+# - It is time to define our server. Remember the xml file? We will use it 
+# to define our ubuntu22 server.
 <code><span style="Color:DodgerBlue">virsh define /tmp/import/ubuntu22.xml
 </span></code># Now we can start it
 <code><span style="Color:DodgerBlue">virsh start ubuntu22
@@ -929,22 +1109,23 @@ ethernets:
 <p> <H4><a href="javascript:myFunction('Div11')">9. libguestfs: VM Disk Management
 </a> </H4><div id="Div11" style="margin-left:1%;"><pre ># - A set of commands for managing VM disks. Full documentation:
 <a href="https://libguestfs.org/" target="_blank">https://libguestfs.org/</a>
-# - Normally, as a system admin, you won't need to reach to VM's disks. But there may 
-# happen a need once in a while. 
-# - I think you already understand that when you have a VPS on a cloud server, the 
-# administrators of that cloud environment can reach your VPS' data. 
+# - Normally, as a system admin, you won't need to reach to VM's disks. But 
+# there may happen a need once in a while. 
+# - I think you already understand that when you have a VPS on a cloud 
+# server, the administrators of that cloud environment can reach your VPS' 
+# data. 
 # There are many tools, I'm going to try to explain only mounting commands. 
 #
 <B><span style="Font-Family:Verdana">#-- 9.1. Installation
 </B></span><code><span style="Color:DodgerBlue">sudo apt update
-</span></code><code><span style="Color:DodgerBlue">sudo apt-get install libguestfs-tools
+</span></code><code><span style="Color:DodgerBlue">sudo apt-get --yes install libguestfs-tools
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 9.2. Mounting VM's Disks
-</B></span># - Works online (While the VM is running) Mount my VMs disk on my host's /mnt 
-# directory:
+</B></span># - Works online (While the VM is running) Mount my VMs disk on my host's /
+# mnt directory:
 <code><span style="Color:DodgerBlue">sudo guestmount -d ubuntu22 -i --ro /mnt
-</span></code># - /mnt directory holds all the files of my VM. If you remove --ro, you can mount it 
-# with write permissions. But be very careful.
+</span></code># - /mnt directory holds all the files of my VM. If you remove --ro, you can 
+# mount it with write permissions. But be very careful.
 # Unmount it:
 <code><span style="Color:DodgerBlue">sudo guestunmount /mnt
 </span></code># I prefer mounting with readonly permissions just to be safe.
@@ -987,7 +1168,6 @@ ethernets:
 # virt-tar(1) — archive and upload files
 # virt-tar-in(1) — archive and upload files
 # virt-tar-out(1) — archive and download files
-</pre> </div> </p>
 </pre> </div> </p>
 <br /><br /><br /><script>
 function myFunction(divid) {

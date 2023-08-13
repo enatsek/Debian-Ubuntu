@@ -274,6 +274,8 @@ sudo virt-install --name testkvm \
     --os-variant ubuntu22.04 \
     --noautoconsole
 #
+# - Debian 11 does not recognize ubuntu22.04 os variant, so you can change 
+# it as --os-variant ubuntu20.04
 #-- 2.2. os-variant List
 # - There are lots of OS Variant selections. You can find yours with the 
 # following command. It helps hypervisor to optimize the system for the 

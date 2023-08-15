@@ -45,7 +45,7 @@ There are txt and html versions of each document. In the html version, commands 
 
 - AGT-PostgresqlOnUbuntu: Postgresql installation and basic configuration on Ubuntu. Includes some user management, cluster management, backup and restore.
 
-- AGT-OtherLinuxesOnUbuntu: Basic management of Debian, Red Hat, OpenSuse, and Alpine distributions.
+- OtherLinuxesOnDebianUbuntu: Basic management of Debian, Ubuntu, Red Hat, OpenSuse, Alpine and Devuan distributions.
 
 - AGT-NginxOnUbuntu: Installing and configuring Nginx on Ubuntu server. With sample configuration and SSL support.
 

@@ -35,7 +35,7 @@ There are txt and html versions of each document. In the html version, commands 
 
 - AGT-ISPMailOnUbuntu: A step by step Ubuntu tutorial for Christoph Haas' ISPMail Tutorials.
 
-- AGT-ADOnUbuntu1: Simple Active Directory, with 1 domain, 2 DCs and 1 Fileserver with Ubuntu Servers.
+- ADOnDebianUbuntu: Simple Active Directory, with 1 domain, 2 DCs and 1 Fileserver with Debian and Ubuntu Servers.
 
 - AGT-MariadbClusterOnUbuntu: MariaDB master-master replication with Galera Cluster tutorial on Ubuntu Servers.
 

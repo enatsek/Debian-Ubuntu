@@ -49,8 +49,8 @@ There are txt and html versions of each document. In the html version, commands 
 
 - AGT-NginxOnUbuntu: Installing and configuring Nginx on Ubuntu server. With sample configuration and SSL support.
 
-- AGT-SystemdOnUbuntu: Basic systemd tutorial.
+- SystemdOnDebianUbuntu: Basic systemd tutorial.
 
-- AGT-DebPackagingOnUbuntu: A basic tutorial about creating and using .deb packages.
+- DebPackagingOnDebianUbuntu: A basic tutorial about creating and using .deb packages.
 
 - AGT-FirewallOnUbuntu: Basic UFW (Uncomplicated Firewall) tutorial.

@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>systemd Tutorial On Ubuntu Server 22.04
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>SystemdOnDebianUbuntu systemd Tutorial On Debian and Ubuntu
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,25 +15,25 @@
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div2')"> 0. Specs
 </a> </H4><div id="Div2" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 0.0. Intro 
-</B></span># - systemd is a suite of basic building blocks for a Linux system. It provides 
-# a system and service manager that runs as PID 1 and starts the rest of the
-# system (from systemd.io site).
-# - systemd is a software suite that provides an array of system components for
-# Linux operating systems (from wikipedia).
-# - systemd is an init system for Linux. It replaces SysV init. There are a lot of 
-# distros that use it as an init system, like Debian, Ubuntu, RHEL. Also there
-# are a lot of distros that don't use systemd, like Slackware, Devuan, Alpine, 
-# Gentoo.
-# - A strong alternative of systemd is OpenRC (you may expect a tutorial for OpenRC).
+</B></span># - systemd is a suite of basic building blocks for a Linux system. It 
+# provides a system and service manager that runs as PID 1 and starts the 
+# rest of the system (from systemd.io site).
+# - systemd is a software suite that provides an array of system components 
+# for Linux operating systems (from wikipedia).
+# - systemd is an init system for Linux. It replaces SysV init. There are a 
+# lot of distros that use it as an init system, like Debian, Ubuntu, RHEL.
+# Also there are a lot of distros that don't use systemd, like Slackware,
+# Devuan, Alpine, Gentoo.
+# - A strong alternative of systemd is OpenRC (you may expect a tutorial for 
+# OpenRC).
 # 
 <B><span style="Font-Family:Verdana">#-- 0.1. Definitions
-</B></span># - D-Bus (Desktop Bus) is a message-oriented middleware mechanism that allows
-# communication between multiple processes running concurrently on the same
-# machine (from wikipedia).
-# - cgroups: A part built into kernel, that allows setting resource utilization
-# limits for processes. Like; cpu shares, memory usage, block I/O per process.
-# Developed by Google. There are Ver1 and Ver2. Ubuntu 22.04 adapted version 2.
-# systemd Target: 
+</B></span># - D-Bus (Desktop Bus) is a message-oriented middleware mechanism that 
+# allows communication between multiple processes running concurrently on 
+# the same machine (from wikipedia).
+# - cgroups: A part built into kernel, that allows setting resource 
+# utilization limits for processes. Like; cpu shares, memory usage, block 
+# I/O per process. Developed by Google.
 #
 <B><span style="Font-Family:Verdana">#-- 0.2. Sources
 </B></span><a href="https://wiki.debian.org/systemd/documentation" target="_blank">https://wiki.debian.org/systemd/documentation</a>
@@ -58,27 +58,29 @@
 # - /etc/systemd/system
 #
 <B><span style="Font-Family:Verdana">#-- 1.2. Unit Types:
-</B></span># - .service: Contains information on managing a service or application. Managing
-# includes starting, stopping, automatic starting, dependencies etc.
-# - .socket: Describes a socket for systemd's socket based activation. It must have
-# an associated .service file for a service.
-# - .device: Describes a device that needs systemd management. Not all devices
-# has a .device file.
+</B></span># - .service: Contains information on managing a service or application. 
+# Managing includes starting, stopping, automatic starting, dependencies 
+# etc.
+# - .socket: Describes a socket for systemd's socket based activation. It 
+# must have an associated .service file for a service.
+# - .device: Describes a device that needs systemd management. Not all 
+# devices has a .device file.
 # - .mount: Mountpoints needed to be managed by systemd.
-# - .automount: Configures a mountpoint to be automatically mounted. Must have a 
-# .mount unit.
+# - .automount: Configures a mountpoint to be automatically mounted. Must 
+# have a .mount unit.
 # - .swap: Describes swap space on the system.
 # - .target: Used to provide syncronization with other units. 
-# - .path: Defines a path for path based activation. A matching unit is started 
-# depending on the path existence or inexistence.
-# - .timer: Defines a timer to be managed by systemd. A matching unit is started 
-# when the timer is reached.
-# - .snapshot: Created with systemctl snapshot command. Saves a state of the system.
-# Does not survive among sessions.
-# - .slice: Associated with cgroups (Linux Control Group nodes). Allows resources 
-# to be restricted.
-# - .scope: Created automatically by systemd from information received from its bus
-# interfaces. Used to manage sets of system processes that are created externally.
+# - .path: Defines a path for path based activation. A matching unit is 
+# started depending on the path existence or inexistence.
+# - .timer: Defines a timer to be managed by systemd. A matching unit is 
+# started when the timer is reached.
+# - .snapshot: Created with systemctl snapshot command. Saves a state of the 
+# system. Does not survive among sessions.
+# - .slice: Associated with cgroups (Linux Control Group nodes). Allows 
+# resources to be restricted.
+# - .scope: Created automatically by systemd from information received from 
+# its bus interfaces. Used to manage sets of system processes that are 
+# created externally.
 #
 <B><span style="Font-Family:Verdana">#-- 1.3. Sample Unit Files
 </B></span># Contents of /lib/systemd/system/apache2.service
@@ -151,44 +153,47 @@ WantedBy=snapd.mounts.target
 WantedBy=multi-user.target
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 1.4. Unit File Structure
-</B></span># - Unit files are made of sections. Unit and Install sections can exist in all
-# types of units. Also there are some other sections which can exist in certain 
-# unit types. They are Socket, Mount, Automount, Swap, Path, Timer, and Slice.
-# - Sections contain directives. Some directives are unit type specific and some 
-# are general.
+</B></span># - Unit files are made of sections. Unit and Install sections can exist in 
+# all types of units. Also there are some other sections which can exist in 
+# certain unit types. They are Socket, Mount, Automount, Swap, Path, Timer, 
+# and Slice.
+# - Sections contain directives. Some directives are unit type specific and 
+# some are general.
 # For a full list of directives see:
 <a href="https://www.freedesktop.org/software/systemd/man/systemd.directives.html" target="_blank">https://www.freedesktop.org/software/systemd/man/systemd.directives.html</a>
 #
 # 1.4.1. Unit Section Directives (Applies to all unit types)
 # - Description: A short description of the unit.
 # - Documentation: Location of documentation.
-# - Requires: The units that this unit depends. All of them must be activated for 
-# this unit to be activated.
-# - Wants: Similar to Requires, but not strict. Systemd tries to activate the list
-# of units before activating this unit.
-# - BindsTo: Similar to Requires, also stops this unit when the listed unit stops.
-# - Before: This unit must be started before the listed units. Does not imply
-# dependency.
-# - After: The list of units must be started before this unit. Does not imply
-# dependency.
-# - Conflicts: This unit can not be run at the same time with the listed unit. If 
-# this unit starts, other units stop.
-# - Condition: This unit starts if the conditions are met. If conditions are not met,
-# this unit is skipped.
-# - Assert: Similar to condition. But if conditions are not met, a failure is caused.
-# - ConditionPathExists: Unit starts if this path exists. Start the path with ! to
-# negate.
+# - Requires: The units that this unit depends. All of them must be 
+# activated for this unit to be activated.
+# - Wants: Similar to Requires, but not strict. Systemd tries to activate 
+# the list of units before activating this unit.
+# - BindsTo: Similar to Requires, also stops this unit when the listed unit 
+# stops.
+# - Before: This unit must be started before the listed units. Does not 
+# imply dependency.
+# - After: The list of units must be started before this unit. Does not 
+# imply dependency.
+# - Conflicts: This unit can not be run at the same time with the listed 
+# unit. If this unit starts, other units stop.
+# - Condition: This unit starts if the conditions are met. If conditions are 
+# not met, this unit is skipped.
+# - Assert: Similar to condition. But if conditions are not met, a failure 
+# is caused.
+# - ConditionPathExists: Unit starts if this path exists. Start the path 
+# with ! to negate.
 #
 # 1.4.2. Install Section Directives (Applies to all unit types)
-# - WantedBy: Similar to Wants directive of the Unit section. Mostly used with 
-# targets.
-# - RequiredBy: Similar to WantedBy but is more strict. Causes a failure if the 
-# dependency is not met.
+# - WantedBy: Similar to Wants directive of the Unit section. Mostly used 
+# with targets.
+# - RequiredBy: Similar to WantedBy but is more strict. Causes a failure if 
+# the dependency is not met.
 # - Alias: Allows the unit have an alias name. (Like ssh, sshd).
 # - Also: Additional units to install/deinstall when this unit is installed/
 # deinstalled,
-# - DefaultInstance: Only used with template units. Default instance name of the
-# unit enabled from a template.
+# - DefaultInstance: Only used with template units. Default instance name of 
+# the unit enabled from a template.
 #
 # 1.4.3. Service Section Directives (Applies to Service unit types)
 # - Type: Could be one of the following
@@ -198,47 +203,50 @@ WantedBy=multi-user.target
 # -- oneshot: The service live for a short time and then exit.
 # -- dbus: The service will take a name on the D-Bus bus.
 # -- notify: The service will notify when finishes starting up.
-# -- idle: This indicates that the service will not be run until all jobs are 
-# dispatched.
+# -- idle: This indicates that the service will not be run until all jobs 
+# are dispatched.
 # - RemainAfterExit: Commonly used with the oneshot type. Indicates that the 
 # service isactive even after the process exits.
 # - PIDFile: For forking type, file to contain the PID of the child process.
 # - BusName: For dbus type, name to acquire as D-Bus name.
-# - NotifyAccess: Takes none, main, exec or none values. Controls which service 
-# status messages are notified. 
+# - NotifyAccess: Takes none, main, exec or none values. Controls which 
+# service status messages are notified. 
 # - Environment: Environment values to set.
-# - EnvironmentFile: Read a list of environment values from this file. (-) sign
-# before the file name means, ignore if the file is not found.
-# - Killmode: How to stop the service. process means only to kill the main process,
-# mixed means to kill the main process and the others, none means just run
-# ExecStop.
-# - ExecStart: Command to start the service. If starts with -, ignore failure.
+# - EnvironmentFile: Read a list of environment values from this file. (-) 
+# sign before the file name means, ignore if the file is not found.
+# - Killmode: How to stop the service. process means only to kill the main 
+# process, mixed means to kill the main process and the others, none means 
+# just run ExecStop.
+# - ExecStart: Command to start the service. If starts with -, ignore 
+# failure.
 # - ExecStartPre: Additional commands to run before the main process. 
 # - ExecStartPost: Additional commands to run after the main process.
 # - ExecReload: Command to reload the service.
 # - ExecStop: Command to stop the service.
 # - ExecStopPost: Additional commands to run after stopping the process.
 # - RestartSec: Amount of time to wait before restart.
-# - Restart: Circumstances to automatically restart the service. Could be: always,
-# on-success, on-failure, on-abnormal, on-abort, on-watchdog etc.
-# - RestartPreventExitStatus: Prevents the service from automatically restarting 
-# if the given exit code is received.
+# - Restart: Circumstances to automatically restart the service. Could be: 
+# always, on-success, on-failure, on-abnormal, on-abort, on-watchdog etc.
+# - RestartPreventExitStatus: Prevents the service from automatically 
+# restarting if the given exit code is received.
 # - RuntimeDirectory: Directory to run the service (under /run).
-# - RuntimeDirectoryMode: Permissions of the runtime directory (Default 0755).
-# - TimeoutSec: Amount of time to wait before starting or stopping the service 
-# before marking as failed (or killing it).
-# - TimeoutStartSec: Amount of time to wait before starting service before marking 
-# as failed (or killing it).
-# - TimeoutStopSec: Amount of time to wait before starting service before marking 
-# as failed (or killing it).
+# - RuntimeDirectoryMode: Permissions of the runtime directory (Default 
+# 0755).
+# - TimeoutSec: Amount of time to wait before starting or stopping the 
+# service before marking as failed (or killing it).
+# - TimeoutStartSec: Amount of time to wait before starting service before 
+# marking as failed (or killing it).
+# - TimeoutStopSec: Amount of time to wait before starting service before 
+# marking as failed (or killing it).
 #
 # 1.4.3. Socket Section Directives (Applies to Socket unit types)
 # - ListenStream: Address to listen on for a TCP stream.
 # - ListenDatagram: Address to listen on for a UDP stream.
 # - ListenSequentialPacket: Address to listen on for a Unix socket stream.
 # - ListenFIFO: File system FIFO to listen on.
-# - Accept: If yes, a service instance is spawned for each incoming connection, if 
-# no, all listening sockets are passed to the started service unit.
+# - Accept: If yes, a service instance is spawned for each incoming 
+# connection, if no, all listening sockets are passed to the started service
+# unit.
 # - SocketUser: Unix user name for the socket (default root).
 # - SocketGroup: Unix group name for the socket (default root).
 # - SocketMode: System access permissions for the socket (default 0666).
@@ -249,10 +257,11 @@ WantedBy=multi-user.target
 # - Where: Path to mount.
 # - Type: The filesystem type of the mount.
 # - Options: A comma-separated list of the mount options.
-# - SloppyOptions: Boolean to determine whether the mount will fail if there is an 
-# unrecognized mount option.
+# - SloppyOptions: Boolean to determine whether the mount will fail if there 
+# is an unrecognized mount option.
 # - DirectoryMode: Permission mode for the parent dirs of the mount point.
-# - TimeoutSec: Amount of time to wait before the operation is marked as failed.
+# - TimeoutSec: Amount of time to wait before the operation is marked as 
+# failed.
 #
 # 1.4.5. Automount Section Directives (Applies to Automount unit types)
 # - Where: Path to mount.
@@ -262,44 +271,46 @@ WantedBy=multi-user.target
 # - What: Path of the location of swap (file or device).
 # - Priority: Swap priority in integer form.
 # - Options: Comma separated list of options for /etc/fstab file.
-# - TimeoutSec: Amount of time to wait before the operation is marked as failed.
+# - TimeoutSec: Amount of time to wait before the operation is marked as 
+# failed.
 #
 # 1.4.7. Path Section Directives (Applies to Path unit types)
 # - PathExists: If this path exists, associated unit will be activated.
 # - PathExistsGlob: Similar to PathExists, supports file glob expressions.
-# - PathChanged: Activates the associated unit when the file in the path is saved 
-# and closed.
-# - PathModified: Similar to PathChanged but also activates the unit when the file
-# is changed.
-# - DirectoryNotEmpty: Activates the associated unit when the specified directory
-# is not empty.
+# - PathChanged: Activates the associated unit when the file in the path is 
+# saved and closed.
+# - PathModified: Similar to PathChanged but also activates the unit when 
+# the file is changed.
+# - DirectoryNotEmpty: Activates the associated unit when the specified 
+# directory is not empty.
 # - Unit: Connected unit name (if different than the path name).
-# - MakeDirectory: If true, the directories to watch are created before watching
+# - MakeDirectory: If true, the directories to watch are created before 
+# watching.
 # - DirectoryMode: Permissions to use if MakeDirectory is true (Default 755)
 #
 # 1.4.8. Timer Section Directives (Applies to Timer unit types)
-# - OnActiveSec: Activate the associated unit after this amount of time  after the 
-# activation time of the timer unit.
-# - OnBootSec: Activate the associated unit after this amount of the time after
-# the boot.
-# - OnStartupSec: Activate the associated unit after this amount of the time after
-# systemd process started.
-# - OnUnitActiveSec: Activate the associated unit after this amount of the time 
-# after the associated unit last activated.
-# - OnUnitInactiveSec: Activate the associated unit after this amount of the time 
-# after the associated unit last marked as inactive.
+# - OnActiveSec: Activate the associated unit after this amount of time  
+# after the activation time of the timer unit.
+# - OnBootSec: Activate the associated unit after this amount of the time 
+# after the boot.
+# - OnStartupSec: Activate the associated unit after this amount of the time 
+# after systemd process started.
+# - OnUnitActiveSec: Activate the associated unit after this amount of the 
+# time after the associated unit last activated.
+# - OnUnitInactiveSec: Activate the associated unit after this amount of the 
+# time after the associated unit last marked as inactive.
 # - OnCalendar: Absolute time to activate the associated unit.
 # - AccuracySec: Level of accuracy of the timer.
 # - Unit: Associated unit name (if different than the timer name).
-# - Persistent: If true, the time when the service unit was last triggered is 
-# stored on disk. When the timer is activated, the service unit is triggered 
-# immediately if it would have been triggered at least once during the time 
-# when the timer was inactive. 
+# - Persistent: If true, the time when the service unit was last triggered 
+# is stored on disk. When the timer is activated, the service unit is 
+# triggered immediately if it would have been triggered at least once during
+# the time when the timer was inactive. 
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div4')">2. Targets
 </a> </H4><div id="Div4" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 2.1. Definition and List
-</B></span># - Similar to SysV init runlevel. Their purpose is to group together other systemd 
-# units through a chain of dependencies.
+</B></span># - Similar to SysV init runlevel. Their purpose is to group together other 
+# systemd units through a chain of dependencies.
 # A fresh install Ubuntu 22.04 server has the following targets:
 <code><span style="Color:DodgerBlue">systemctl list-unit-files --type=target
 </span></code><code><span style="Color:MediumSeaGreen">UNIT FILE                     STATE           VENDOR PRESET
@@ -569,33 +580,36 @@ AllowIsolate=yes
 <p> <H4><a href="javascript:myFunction('Div7')">5. Other systemd Components
 </a> </H4><div id="Div7" style="margin-left:1%;"><pre ># systemd has some other components too. Some of them:
 #
-# - systemd-boot: UEFI boot manager. Supports basic boot manager configuration. 
+# - systemd-boot: UEFI boot manager. Supports basic boot manager 
+# configuration. 
 # Integrates with systemctl command. Has the command bootctl.
 # - systemd-cat: Adds a record to the systemd log with a pipeline.
 <code><span style="Color:DodgerBlue">echo "Test" | systemd-cat -p info
-</span></code># - systemd-localed: Manages system locale settings. Has the command localectl.
-# - systemd-logind: Manages user logins. Keeps track of users and sessions. Handles
-# device access management for users.
-# - systemd-machined: Detects and monitors virtual machines and containers. Has 
-# machinectl command.
+</span></code># - systemd-localed: Manages system locale settings. Has the command 
+# localectl.
+# - systemd-logind: Manages user logins. Keeps track of users and sessions. 
+# Handles device access management for users.
+# - systemd-machined: Detects and monitors virtual machines and containers. 
+# Has machinectl command.
 # - systemd-mount: Handles .mount and .automount units.
-# - systemd-networkd: Network configuration management. Configuration files are in
-# /lib/systemd/network, /run/systemd/network, and /etc/systemd/network in 
-# increasing precedence.
+# - systemd-networkd: Network configuration management. Configuration files 
+# are in /lib/systemd/network, /run/systemd/network, and /etc/systemd/network 
+# in increasing precedence.
 # - systemd-nspawn: May be used to run a command or OS in a light-weight
 # namespace container. In many ways it is similar to chroot
-# - systemd-resolved: Provides network name resolution. Has resolvectl command.
+# - systemd-resolved: Provides network name resolution. Has resolvectl 
+# command.
 # - systemd-sysusers: Creates system users and groups.
-# - systemd-timesyncd: Provides system time synchronization across the network with
-# a remote NTP server. Has timedatectl command.
-# - systemd-tmpfiles: Creates, deletes, and cleans up volatile and temporary files
-# and directories.
+# - systemd-timesyncd: Provides system time synchronization across the 
+# network with a remote NTP server. Has timedatectl command.
+# - systemd-tmpfiles: Creates, deletes, and cleans up volatile and temporary 
+# files and directories.
 # - systemd-udevd: Manages physical devices.
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div8')">6. Creating a Service
-</a> </H4><div id="Div8" style="margin-left:1%;"><pre ># - We will create a very simple service. Our service will ping an IP address in 
-# every 10 minutes. It will create an info log if the ping is OK, otherwise
-# it will create and error log.
+</a> </H4><div id="Div8" style="margin-left:1%;"><pre ># - We will create a very simple service. Our service will ping an IP 
+# address in every 10 minutes. It will create an info log if the ping is OK, 
+# otherwise it will create and error log.
 # - The application will be a shell script, the script will be put into 
 # /usr/local/bin, a unit file will be created, enabled, started and tested.
 #
@@ -605,7 +619,7 @@ AllowIsolate=yes
 <code><span style="Color:MediumSeaGreen">#!/bin/bash
 echo "ipcheck.service: Start. $(date)" | systemd-cat -p info
 while true ; do
-  ping -q -w 1 192.168.0.231 &gt; /dev/null
+  ping -q -w 1 192.168.1.1 &gt; /dev/null
   if &lsqb; $? = 0 &rsqb; ; then
      echo "ipcheck.service: Ping to IP is OK. $(date)" | systemd-cat -p info
   else
@@ -627,7 +641,7 @@ done
 <code><span style="Color:MediumSeaGreen">&lsqb;Unit&rsqb;
 Description=IPCheck Demo Service
 Wants=network.target
-After=syslog.target network-online.target84
+After=syslog.target network-online.target
 &lsqb;Service&rsqb;
 ExecStart=/usr/local/bin/ipcheck.sh
 Restart=on-failure
@@ -641,7 +655,7 @@ WantedBy=multi-user.target
 </span></code><code><span style="Color:DodgerBlue">sudo systemctl start ipcheck.service
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 6.5. Test it
-</B></span><code><span style="Color:DodgerBlue">journalctl -n 20
+</B></span><code><span style="Color:DodgerBlue">sudo journalctl -n 20
 </span></code></pre> </div> </p>
 </pre> </div> </p>
 <br /><br /><br /><script>

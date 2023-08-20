@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>Adminer on Ubuntu 22.04 for MariaDB 
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>AdminerOnDebianUbuntu: Adminer on Debian and Ubuntu for MariaDB 
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2020 - 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -13,25 +13,28 @@
 # along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div2')">Specs
-</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># - Adminer is a powerful web based management tool for Mysql and Mariadb and more.
-# You have to install it on the server which has the DB installed.
-# - On my config I wanted to bind Adminer to a specific site config on the server 
-# side and restrict it with only 1 client IP (might be more) to reach.
+</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># - Adminer is a powerful web based management tool for Mysql, Mariadb and
+# more. You have to install it on the server which has the DB installed.
+# - On my config I wanted to bind Adminer to a specific site config on the 
+# server side and restrict it with only 1 client IP (might be more) to
+# reach.
 #
 # - My Hostname: adminer.x11.xyz
 # Lamp is already installed (See LampOnUbuntu Tutorial)
-# My Client IP address: 195.174.209.24
+# My Client IP address: 192.168.1.108
 # MariaDB Admin User: dbadmin   Password: PaSswOrD1234
+# - Server Versions: Debian 12/11 Ubuntu 22.04/20.04 LTS Server
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div3')">1. Install Adminer
-</a> </H4><div id="Div3" style="margin-left:1%;"><pre ># - It is possible to donwload Adminer php files and use them, but I prefer installing
-# its package, this way all the upgrades will be managed by Ubuntu.
+</a> </H4><div id="Div3" style="margin-left:1%;"><pre ># - It is possible to download Adminer php files and use them, but I prefer
+# installing its package, this way all the upgrades will be managed by
+# Debian/Ubuntu.
 <code><span style="Color:DodgerBlue">sudo apt update
-</span></code><code><span style="Color:DodgerBlue">sudo apt install adminer
+</span></code><code><span style="Color:DodgerBlue">sudo apt install adminer --yes
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div4')">2. DB Admin User
-</a> </H4><div id="Div4" style="margin-left:1%;"><pre ># - We are going to need a Database Admin user to log in Adminer and manage the 
-# databases.
+</a> </H4><div id="Div4" style="margin-left:1%;"><pre ># - We are going to need a Database Admin user to log in Adminer and manage 
+# the databases.
 <code><span style="Color:DodgerBlue">sudo mariadb
 </span></code># - Run on Mariadb shell
 <code><span style="Color:DodgerBlue">grant all on *.* to 'dbadmin'@'localhost' identified by 'PaSswOrD1234';
@@ -44,7 +47,7 @@
 # If you don't need IP control, remove all the directory stanza (lines 2,3,4)
 <code><span style="Color:MediumSeaGreen">&lt;VirtualHost *:80&gt;
     &lt;Directory /usr/share/adminer/adminer&gt;
-       Require ip 195.174.209.24
+       Require ip 192.168.1.108
     &lt;/Directory&gt;   
     Alias /adminer /usr/share/adminer/adminer
     ServerAdmin webmaster@x11.xyz	
@@ -58,8 +61,9 @@
 <code><span style="Color:DodgerBlue">sudo mkdir /var/www/adminer
 </span></code><code><span style="Color:DodgerBlue">sudo chown www-data:www-data /var/www/adminer
 </span></code><code><span style="Color:DodgerBlue">sudo chmod 770 /var/www/adminer
-</span></code># - If you want, you can put an index.html file to the home directory, but I prefer
-# leaving the home directory empty and access to Adminer through its directory.
+</span></code># - If you want, you can put an index.html file to the home directory, but I 
+# prefer leaving the home directory empty and access to Adminer through its
+# directory.
 #
 <B><span style="Font-Family:Verdana">#-- 3.2. Enable the Site and Reload Apache
 </B></span><code><span style="Color:DodgerBlue">sudo a2ensite adminer.x11.xyz.conf
@@ -67,15 +71,15 @@
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div6')">4. Run it
 </a> </H4><div id="Div6" style="margin-left:1%;"><pre ># - Your web based Database Management tool is ready:
-<code><span style="Color:DodgerBlue">http://adminer.x11.xyx/adminer
-</span></code># - You need to select MySQL for MariaDB, server must be localhost (defalt), username: 
-# dbadmin, password: (whatever you gave at the Mariadb script, 
-# Database: leave empty to reach all the databases.
+<code><span style="Color:DodgerBlue">http://adminer.x11.xyz/adminer
+</span></code># - You need to select MySQL for MariaDB, server must be localhost 
+# (default), username: dbadmin, password: (whatever you gave at the Mariadb 
+# script, Database: leave empty to reach all the databases.
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div7')">5. Security
-</a> </H4><div id="Div7" style="margin-left:1%;"><pre ># You should enable https if you want to put your site on the internet. Actually
-#   https should be enabled on local network sites too. Refer to CertbotOnUbuntu
-#   tutorial for enabling https with free certificates.
+</a> </H4><div id="Div7" style="margin-left:1%;"><pre ># - You should enable https if you want to put your site on the internet. 
+# Actually https should be enabled on local network sites too. Refer to 
+# CertbotOnDebianUbuntu tutorial for enabling https with free certificates.
 </pre> </div> </p>
 </pre> </div> </p>
 <br /><br /><br /><script>

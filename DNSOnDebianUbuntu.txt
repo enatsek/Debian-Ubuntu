@@ -1,4 +1,4 @@
-DNSOnUbuntu: Installation and Configuration of DNS Servers on Debian and Ubuntu 
+DNSOnDebianUbuntu: Installation and Configuration of DNS Servers on Debian and Ubuntu 
 
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org

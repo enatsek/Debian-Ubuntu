@@ -1,4 +1,4 @@
-LampOnUbuntu: LAMP Stack On Debian 12 and Ubuntu 22.04
+LampOnDebianUbuntu: LAMP Stack On Debian and Ubuntu 
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org
 # - This document is free text: you can redistribute it and/or modify
@@ -16,7 +16,7 @@ LampOnUbuntu: LAMP Stack On Debian 12 and Ubuntu 22.04
 
 
 #---Specs
-# L: Debian 12 (and 11) or Ubuntu 22.04 (and 20.04) Server
+# L: Debian 12/11 or Ubuntu 22.04/20.04 LTS Server
 # A: Apache 2 
 # M: MariaDB (Mysql could be another option)
 # P: PHP (Python or Perl could be other options)

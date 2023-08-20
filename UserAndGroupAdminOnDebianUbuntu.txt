@@ -1,4 +1,4 @@
-UserAndGroupAdminOnUbuntu: User and Group Administration on Debian and Ubuntu
+UserAndGroupAdminOnDebianUbuntu: User and Group Administration on Debian and Ubuntu
 
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org

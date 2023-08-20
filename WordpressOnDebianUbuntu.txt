@@ -1,4 +1,4 @@
-WordpressOnUbuntu: Install Wordpress  On Debian 12 and Ubuntu 22.04
+WordpressOnDebianUbuntu: Install Wordpress  On Debian and Ubuntu
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org
 # - This document is free text: you can redistribute it and/or modify

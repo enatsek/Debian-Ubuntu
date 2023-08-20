@@ -1,4 +1,4 @@
-ApacheOnUbuntu: Apache 2 Tutorial on Debian 12 & Ubuntu 22.04
+ApacheOnDebianUbuntu: Apache 2 Tutorial on Debian and Ubuntu 
 
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org

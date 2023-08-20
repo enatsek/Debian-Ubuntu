@@ -1,4 +1,4 @@
-CertbotOnUbuntu: Auto Free SSL Certificates for Apache2 Tutorial on Debian 12 and Ubuntu 22.04 
+CertbotOnDebianUbuntu: Auto Free SSL Certificates for Apache2 Tutorial on Debian and Ubuntu
 
 
 #---Copyright (C) 2020 - 2023 Exforge exforge@x386.org

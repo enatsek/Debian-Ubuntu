@@ -1,4 +1,4 @@
-OtherLinuxesOnUbuntu - Other Linuxes for Debian/Ubuntu Admins
+OtherLinuxesOnDebianUbuntu - Other Linuxes for Debian/Ubuntu Admins
 
 
 #---Copyright (C) 2023 Exforge exforge@x386.org

@@ -41,7 +41,7 @@ There are txt and html versions of each document. In the html version, commands 
 
 - AGT-HAProxyOnUbuntu: HAProxy High Availability Load Balancing with Letsencrypt free certificates HTTPS support and keepalived.
  
-- AGT-AdminerOnUbuntu: Adminer, a replacement for PHPMyAdmin. Web based Database Management.
+- AdminerOnDebianUbuntu: Adminer, a replacement for PHPMyAdmin. Web based Database Management.
 
 - AGT-PostgresqlOnUbuntu: Postgresql installation and basic configuration on Ubuntu. Includes some user management, cluster management, backup and restore.
 

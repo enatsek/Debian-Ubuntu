@@ -37,7 +37,7 @@ There are txt and html versions of each document. In the html version, commands 
 
 - ADOnDebianUbuntu: Simple Active Directory, with 1 domain, 2 DCs and 1 Fileserver with Debian and Ubuntu Servers.
 
-- AGT-MariadbClusterOnUbuntu: MariaDB master-master replication with Galera Cluster tutorial on Ubuntu Servers.
+- MariadbClusterOnDebianUbuntu: MariaDB main-main (master-master) replication with Galera Cluster tutorial on Debian and Ubuntu Servers.
 
 - AGT-HAProxyOnUbuntu: HAProxy High Availability Load Balancing with Letsencrypt free certificates HTTPS support and keepalived.
  

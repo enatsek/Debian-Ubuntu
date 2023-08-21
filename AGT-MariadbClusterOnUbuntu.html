@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>Mariadb Master-Master Replication with Galera Cluster Tutorial on Ubuntu 22.04
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>MariadbClusterOnDebianUbuntu: Mariadb Main-Main Replication with Galera Cluster Tutorial on Debian and Ubuntu
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2021 - 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,17 +16,20 @@
 <p> <H4><a href="javascript:myFunction('Div2')">0. Specs
 </a> </H4><div id="Div2" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 0.1. Definitions
 </B></span># - 3 servers will be installed and configured as Mariadb clusters. All the 
-# changes in one server will be updated to others momentarily. At least 3 nodes 
-# are advised for Mariadb cluster, there is no upper limit.
+# changes in one server will be updated to others momentarily. At least 3
+# nodes are advised for Mariadb cluster, there is no upper limit.
 # 
-# - !!! At least 2 of the cluster nodes must be online always. If you fall to 1
-# you may have problems. If you shut down all of the nodes, your cluster stops
-# and you need some work to (hopefully) start again. !!!
+# - !!! At least 2 of the cluster nodes must be online always. If you fall 
+# to 1 you may have problems. If you shut down all of the nodes, your
+# cluster stops and you need some work to (hopefully) start again. !!!
 #
 <B><span style="Font-Family:Verdana">#-- 0.2. My Configuration
-</B></span># srv1 -&gt; Ubuntu 22.04 Server 192.168.0.231
-# srv2 -&gt; Ubuntu 22.04 Server 192.168.0.232
-# srv3 -&gt; Ubuntu 22.04 Server 192.168.0.233
+</B></span># srv1 -&gt; 192.168.1.214 Debian 12/11 Ubuntu 22.04/20.04 LTS Server
+# srv2 -&gt; 192.168.1.215 Debian 12/11 Ubuntu 22.04/20.04 LTS Server
+# srv3 -&gt; 192.168.1.216 Debian 12/11 Ubuntu 22.04/20.04 LTS Server
+#
+# - All the nodes must have the same version of Mariadb. That is, they must
+# have the same Linux distros.
 #
 <B><span style="Font-Family:Verdana">#-- 0.3. Resources
 </B></span><a href="https://www.howtoforge.com/how-to-setup-mariadb-galera-multi-master-synchronous-replication-using-debian-10/" target="_blank">https://www.howtoforge.com/how-to-setup-mariadb-galera-multi-master-synchronous-replication-using-debian-10/</a>
@@ -40,18 +43,19 @@
 </span></code><code><span style="Color:DodgerBlue">sudo apt install mariadb-server galera-4 --yes
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 1.2. Secure Mariadb Installations
-</B></span><code><span style="Color:DodgerBlue">sudo mysql_secure_installation
-</span></code># All default answers, give a good root password
-# 
-<B><span style="Font-Family:Verdana">#-- 1.3. Set Mariadb root User to Native Mode
-</B></span><code><span style="Color:DodgerBlue">sudo mariadb
-</span></code># Run on mariadb shell
-<code><span style="Color:DodgerBlue">UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE USER='root';
-</span></code><code><span style="Color:DodgerBlue">FLUSH PRIVILEGES;
-</span></code><code><span style="Color:DodgerBlue">EXIT;
-</span></code># Now you can run mariadb with root user and password
-<code><span style="Color:DodgerBlue">mariadb -u root -p
-</span></code></pre> </div> </p>
+</B></span>#   The following command makes some fine tunes regarding Mariadb security.
+<code><span style="Color:DodgerBlue">sudo mysql_secure_installation
+</span></code>#   You will be asked some questions.
+#     "Enter current password for root (enter for none):"
+#     There is no password yet, so press enter.
+#   The next 2 questions "Switch to unix_socket authentication &lsqb;Y/n&rsqb;" and 
+#     "Change the root password? &lsqb;Y/n&rsqb;" (for Ubuntu 20.04 there is only 1 
+#     question "Set root password? &lsqb;Y/n&rsqb;" only) are about securing root 
+#     account. In Ubuntu and Debian root account is already protected, so 
+#     you can answer n.
+#   For the next questions you can select default answers.
+#
+</pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div4')">2. Mariadb Configurations (Run on all servers)
 </a> </H4><div id="Div4" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 2.1. Temporarily Stop Mariadb
 </B></span><code><span style="Color:DodgerBlue">sudo systemctl stop mariadb
@@ -59,7 +63,7 @@
 <B><span style="Font-Family:Verdana">#-- 2.2. Bind Address Enablement
 </B></span># Mariadb daemon must listen to the network for the cluster
 <code><span style="Color:DodgerBlue">sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
-</span></code># Change the following line (Around line 27)
+</span></code># Change the following line (Around line 27-30)
 <code><span style="Color:MediumSeaGreen">bind-address = 127.0.0.1
 </span></code># to:
 <code><span style="Color:MediumSeaGreen">bind-address = 0.0.0.0
@@ -74,7 +78,7 @@ innodb_autoinc_lock_mode = 2
 # Name of the cluster, you can change it
 wsrep_cluster_name    = "x386_cluster"
 # List of cluster nodes
-wsrep_cluster_address = "gcomm://192.168.0.231,192.168.0.232,192.168.0.233"
+wsrep_cluster_address = "gcomm://192.168.1.214,192.168.1.215,192.168.1.216"
 # Galera plugin path
 wsrep_provider = /usr/lib/galera/libgalera_smm.so
 # If a node does not respond in 10 second, it is assumed to be offline
@@ -104,14 +108,14 @@ binlog_format = ROW
 </a> </H4><div id="Div6" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- We will run commands on the nodes and see the changes on other nodes
 </B></span># 4.1. Create a Database on the First Node
 # !!! Run on the first server !!!
-<code><span style="Color:DodgerBlue">mariadb -u root -p
+<code><span style="Color:DodgerBlue">sudo mariadb
 </span></code># Run on mariadb shell
 <code><span style="Color:DodgerBlue">CREATE DATABASE Test;
 </span></code><code><span style="Color:DodgerBlue">exit;
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 4.2. Create a Table on the Database on the Second Node
 </B></span># !!! Run on second server !!!
-<code><span style="Color:DodgerBlue">mariadb -u root -p
+<code><span style="Color:DodgerBlue">sudo mariadb
 </span></code># Run on mariadb shell
 <code><span style="Color:DodgerBlue">USE Test;
 </span></code><code><span style="Color:DodgerBlue">CREATE TABLE People (Name char(15), Age int(3));
@@ -119,7 +123,7 @@ binlog_format = ROW
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 4.3. Add Records to the Table on the Third Node
 </B></span># !!! Run on third server !!!
-<code><span style="Color:DodgerBlue">mariadb -u root -p
+<code><span style="Color:DodgerBlue">sudo mariadb
 </span></code># Run on mariadb shell
 <code><span style="Color:DodgerBlue">USE Test;
 </span></code><code><span style="Color:DodgerBlue">INSERT INTO People VALUES ('Exforge', '52');
@@ -129,7 +133,7 @@ binlog_format = ROW
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 4.4. Check First and Second Node for the Records
 </B></span># !!! Run on first and second server !!!
-<code><span style="Color:DodgerBlue">mariadb -u root -p
+<code><span style="Color:DodgerBlue">sudo mariadb
 </span></code># Run on mariadb shell
 <code><span style="Color:DodgerBlue">USE Test;
 </span></code><code><span style="Color:DodgerBlue">SELECT * FROM People;
@@ -137,8 +141,8 @@ binlog_format = ROW
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div7')">5. Maintenance 
 </a> </H4><div id="Div7" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 5.1. Healthcheck
-</B></span># The following commands runs on Mariadb shell and show information about Mariadb 
-# cluster.
+</B></span># - The following commands runs on Mariadb shell and show information about 
+# Mariadb cluster.
 # Show the running nodes:
 <code><span style="Color:DodgerBlue">show status like 'wsrep_incoming_addresses' ;
 </span></code># Show the number of running nodes:
@@ -149,51 +153,55 @@ binlog_format = ROW
 <code><span style="Color:DodgerBlue">show status like 'wsrep_local_state_comment';
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 5.2. Adding a Node to Mariadb Cluster
-</B></span># - Install Mariadb and Galera Cluster to the new node, that is follow the steps at
-# 1. and 2. At step 2.3. at the line starting with wsrep_cluster_address, add the 
-# IP of the new server too. Then start mariadb:
+</B></span># - Install Mariadb and Galera Cluster to the new node, that is follow the 
+# steps at 1. and 2. At step 2.3. at the line starting with 
+# wsrep_cluster_address, add the IP of the new server too. Then start 
+# mariadb:
 <code><span style="Color:DodgerBlue">sudo systemctl start mariadb
-</span></code># - The new node is going to start replicating data, it may take some time depending
-# on the volume of the DBs. You can run following command and see the status of the
-# replication:
+</span></code># - The new node is going to start replicating data, it may take some time 
+# depending on the volume of the DBs. You can run following command and see
+# the status of the replication:
 <code><span style="Color:DodgerBlue">show status like 'wsrep_local_state_comment';
-</span></code># - When you see the value as "Synced", you can understand that the new node is 
-# replicated.
-# - You added the ip of the new node to the configuration of the new node only.
+</span></code># - When you see the value as "Synced", you can understand that the new node 
+# is replicated.
+# - You added the ip of the new node to the configuration of the new node 
+# only.
 # - Before it is too late, You need to add it to the other cluster member
-# configuraitons too. Otherwise, it would be very difficult to resolve if any cluster
-# error occurs in the future.
+# configuraitons too. Otherwise, it would be very difficult to resolve if 
+# any cluster error occurs in the future.
 # Run on other cluster members one by one:
 <code><span style="Color:DodgerBlue">sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
-</span></code># At the line starting with wsrep_cluster_address, add the IP of the new server.
+</span></code># At the line starting with wsrep_cluster_address, add the IP of the new 
+# server.
 # Restart Mariadb after changing the configuration
 <code><span style="Color:DodgerBlue">sudo systemctl restart mariadb
 </span></code># 
 <B><span style="Font-Family:Verdana">#-- 5.3. Removing a Node from Mariadb Cluster
-</B></span># - If you want to remove a node temporarily, it wouldn't be a problem. If you don't 
-# change any configurations on the cluster servers, it would join back to the 
-# cluster.
-# - If you want to remove a node permanently, a good way would be uninstall mariadb
-# or permanently poweroff the computer. And then, remove its ip from other servers'
-# /etc/mysql/mariadb.conf.d/99-cluster.cnf file and restart mariadb at the other
-# servers one by one.
+</B></span># - If you want to remove a node temporarily, it wouldn't be a problem. If 
+# you don't change any configurations on the cluster servers, it would join 
+# back to the cluster.
+# - If you want to remove a node permanently, a good way would be uninstall 
+# mariadb or permanently poweroff the computer. And then, remove its ip from 
+# other servers' /etc/mysql/mariadb.conf.d/99-cluster.cnf file and restart
+# mariadb at the other servers one by one.
 #
 <B><span style="Font-Family:Verdana">#-- 5.4. Shutting Down the Cluster
-</B></span># - It is not advised to keep less than 2 nodes online. But if you really need to 
-# shutdown all the cluster (e.g. to physically move to somewhere else), or a 
-# total power failure occurs; you may try to shutdown server one at a time and 
-# when they are ready to start, first you have to turn on the last shutdowned node.
+</B></span># - It is not advised to keep less than 2 nodes online. But if you really 
+# need to shutdown all the cluster (e.g. to physically move to somewhere
+# else), or a total power failure occurs; you may try to shutdown server one
+# at a time and when they are ready to start, first you have to turn on the
+# last shutdown node.
 # - If the cluster doesn't go online, refer to 6.
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div8')">6. Recovery
-</a> </H4><div id="Div8" style="margin-left:1%;"><pre ># - Mariadb Galera Cluster would run fine for a long time, as long as you keep at 
-# least 2 nodes alive and running. If you have 3 nodes, you can proceed on 
-# maintenance tasks (backup, upgrade etc) one at a time. 
-# - But problems are for humans (and computers). There might come one day and
-# cluster doesn't start. And when cluster doesn't start, Mariadb doesn't start
-# either.
-# - In that case, we need to restart the cluster, but we need to find the safe
-# node to start the cluster.
+</a> </H4><div id="Div8" style="margin-left:1%;"><pre ># - Mariadb Galera Cluster would run fine for a long time, as long as you 
+# keep at least 2 nodes alive and running. If you have 3 nodes, you can 
+# proceed on maintenance tasks (backup, upgrade etc) one at a time. 
+# - But problems are for humans (and computers). There might come one day 
+# and cluster doesn't start. And when cluster doesn't start, Mariadb doesn't
+# start either.
+# - In that case, we need to restart the cluster, but we need to find the 
+# safe node to start the cluster.
 #
 <B><span style="Font-Family:Verdana">#-- 6.1. Finding the Safe Node - 1st Try
 </B></span># run the following command on every node:
@@ -211,9 +219,9 @@ uuid: 886dd8da-3d07-11e8-a109-8a3c80cebab4
 seqno: 31929
 safe_to_bootstrap: 1
 </span></code>#
-# - If output in any node contains "safe_to_bootstrap: 1" or a positive value of 
-# "seqno: ", that means we can restart the cluster at that node. We have found
-# the safe node, proceed to 6.3.
+# - If output in any node contains "safe_to_bootstrap: 1" or a positive 
+# value of "seqno: ", that means we can restart the cluster at that node. We 
+# have found the safe node, proceed to 6.3.
 # Otherwise, we keep trying to find the safe node.
 #
 <B><span style="Font-Family:Verdana">#-- 6.2. Finding the Safe Node - 2nd Try
@@ -223,9 +231,9 @@ safe_to_bootstrap: 1
 <code><span style="Color:MediumSeaGreen">WSREP: Recovered position 2d878884-9ae6-11eb-955f-fa6fa258f122:8
 --wsrep_start_position=2d878884-9ae6-11eb-955f-fa6fa258f122:8
 </span></code>#
-# - The node with the highest value after ":" will be our candidate to restart the
-# cluster. We have found the safe node. If more than 1 node has the same highest 
-# value, just choose one.
+# - The node with the highest value after ":" will be our candidate to 
+# restart the cluster. We have found the safe node. If more than 1 node has
+# the same highest value, just choose one.
 # We need to set safe node to restart the cluster:
 # !!! Run on the Safe Node !!!
 <code><span style="Color:DodgerBlue">sudo nano /var/lib/mysql/grastate.dat
@@ -240,8 +248,8 @@ safe_to_bootstrap: 1
 </span></code># The cluster is working again, we are done
 # It would be wise to make a healthcheck as in 5.1. and see cluster is working.
 #
-# - If this step doesn't work either. We have just one more thing to do. Go to the 
-# next step.
+# - If this step doesn't work either. We have just one more thing to do. Go 
+# to the next step.
 # 
 <B><span style="Font-Family:Verdana">#-- 6.4. Last Chance
 </B></span># !! On the safe node !!
@@ -251,9 +259,9 @@ safe_to_bootstrap: 1
 </span></code>#
 # Edit cluster config at the safe node:
 <code><span style="Color:DodgerBlue">sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
-</span></code># - Change the wsrep_cluster_address parameter to contain only the safe node e.g. if 
-# the 3rd node is the safe node as below
-<code><span style="Color:DodgerBlue">wsrep_cluster_address = "gcomm://192.168.0.233"
+</span></code># - Change the wsrep_cluster_address parameter to contain only the safe node 
+# e.g. if the 3rd node is the safe node as below
+<code><span style="Color:DodgerBlue">wsrep_cluster_address = "gcomm://192.168.1.216"
 </span></code># Enable mariadb 
 <code><span style="Color:DodgerBlue">sudo systemctl enable mariadb
 </span></code># Start Galera Cluster
@@ -262,21 +270,21 @@ safe_to_bootstrap: 1
 # !! On the other nodes !!
 # Restart mariadb 
 <code><span style="Color:DodgerBlue">sudo systemctl restart mariadb
-</span></code># - If they cannot restart, it is because it cannot be stopped Do the disable,
-# reboot, enable trick on them too
+</span></code># - If they cannot restart, it is because it cannot be stopped Do the 
+# disable, reboot, enable trick on them too
 <code><span style="Color:DodgerBlue">sudo systemctl disable mariadb
 </span></code><code><span style="Color:DodgerBlue">sudo reboot
 </span></code># After reboot enable and start mariadb
 <code><span style="Color:DodgerBlue">sudo systemctl enable mariadb
 </span></code><code><span style="Color:DodgerBlue">sudo systemctl start mariadb
-</span></code># - If they start, most probably your cluster is working again Otherwise, you need 
-# a professional support
+</span></code># - If they start, most probably your cluster is working again Otherwise, 
+# you need a professional support.
 # 
 # !! On the safe node
 # Revert the first node to the original configuration
 <code><span style="Color:DodgerBlue">sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
 </span></code># Change the wsrep_cluster_address parameter to original
-<code><span style="Color:DodgerBlue">wsrep_cluster_address = "gcomm://192.168.0.231,192.168.0.232,192.168.0.233"
+<code><span style="Color:DodgerBlue">wsrep_cluster_address = "gcomm://192.168.1.214,192.168.1.215,192.168.1.216"
 </span></code># Restart mariadb
 <code><span style="Color:DodgerBlue">sudo systemctl restart mariadb
 </span></code></pre> </div> </p>

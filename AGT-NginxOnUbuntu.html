@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>NginxOnUbuntu: Basic Nginx Configuration On Ubuntu 22.04
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>NginxOnDebianUbuntu: Basic Nginx Configuration On Debian and Ubuntu
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 </a> </H4><div id="Div2" style="margin-left:1%;"><pre ># - Basic Nginx configuration, installation, SSL, LEMP stack, sample site
 # configurations, 
 # 
-# Server: Ubuntu 22.04 LTS Server
+# Server: Debian 12/11 or Ubuntu 22.04/20.04 LTS Server
 # srv1, srv2, srv3, srv4 all has the server's IP address.
 #
 # Sources:
@@ -51,13 +51,13 @@
 <code><span style="Color:DodgerBlue">sudo systemctl reload nginx
 </span></code># 
 <B><span style="Font-Family:Verdana">#-- 1.3. Site enable and disable scripts
-</B></span># - You may remember Ubuntu (and Debian) Apache installations has a2ensite and 
-# a2dissite scripts. We will create very (actually very very) simple nginx scripts
-# like them. 
+</B></span># - You may remember Ubuntu (and Debian) Apache installations has a2ensite 
+# and a2dissite scripts. We will create very (actually very very) simple 
+# nginx scripts like them. 
 #
 # 1.3.1. Create ~/bin Directory
-# - This directory is in the search list of the executable files. You may already
-# have it. If it is so, skip this step.
+# - This directory is in the search list of the executable files. You may 
+# already have it. If it is so, skip this step.
 <code><span style="Color:DodgerBlue">mkdir ~/bin
 </span></code># You have to logoff and logon again.
 #
@@ -83,8 +83,9 @@ sudo rm /etc/nginx/sites-enabled/$1
 </span></code><code><span style="Color:DodgerBlue">ngdissite default
 </span></code># 
 <B><span style="Font-Family:Verdana">#-- 1.4. Redesign Our Site
-</B></span># - We will disable default configuration, leave it at sites-available as a template,
-# create a new conf with the name srv1 (my hostname) and enable it.
+</B></span># - We will disable default configuration, leave it at sites-available as a 
+# template, create a new conf with the name srv1 (my hostname) and enable 
+# it.
 #
 # 1.4.1. Disable default Conf
 <code><span style="Color:DodgerBlue">sudo rm /etc/nginx/sites-enabled/default
@@ -122,8 +123,9 @@ sudo rm /etc/nginx/sites-enabled/$1
 <code><span style="Color:DodgerBlue">sudo systemctl reload nginx
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div4')"> 2. SSL Configuration
-</a> </H4><div id="Div4" style="margin-left:1%;"><pre ># - We will test SSL configuration with self signed certificates. Later on the 
-# tutorial, we are going to test getting certificates with certbot tool too.
+</a> </H4><div id="Div4" style="margin-left:1%;"><pre ># - We will test SSL configuration with self signed certificates. Later on 
+# the tutorial, we are going to test getting certificates with certbot tool 
+# too.
 #
 <B><span style="Font-Family:Verdana">#-- 2.1. Create a Self Signed Certificate
 </B></span># Create a place for the certificates
@@ -156,56 +158,58 @@ sudo rm /etc/nginx/sites-enabled/$1
 <code><span style="Color:DodgerBlue">ngensite srv1-ssl
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 2.2. HTTPS Redirection
-</B></span># - We have to add a redirection to srv1 conf to automatically redirect http://srv1/ 
-# to https://srv1/
+</B></span># - We have to add a redirection to srv1 conf to automatically redirect 
+# http://srv1/ to https://srv1/
 <code><span style="Color:DodgerBlue">sudo nano /etc/nginx/sites-available/srv1
 </span></code># Add the line below after the listen lines
-<code><span style="Color:MediumSeaGreen">return 301 https://$host$request_uri;
+<code><span style="Color:MediumSeaGreen">   return 301 https://$host$request_uri;
 </span></code>#
 # Reload nginx
 <code><span style="Color:DodgerBlue">sudo systemctl reload nginx
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 2.3. SSL Site is Ready
 </B></span><code><span style="Color:DodgerBlue">https://srv1/
-</span></code># - Your firefox will complain as "Warning: Potential Security Risk Ahead", because
-# our certificate is a self signed one. You can click "Advanced" and
+</span></code># - Your firefox will complain as "Warning: Potential Security Risk Ahead", 
+# because our certificate is a self signed one. You can click "Advanced" and
 # "Accept the Risk and Continue" to reach the SSL site.
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div5')"> 3. LEMP Stack
-</a> </H4><div id="Div5" style="margin-left:1%;"><pre ># L: Linux (Ubuntu in our case)
+</a> </H4><div id="Div5" style="margin-left:1%;"><pre ># L: Linux (Debian or Ubuntu in our case)
 # E: Nginx (Enginx actually)
 # M: Mariadb (or Mysql if you love Or*cle so much)
 # P: PHP, Python, or Perl (PHP in our case)
 #
-# So not a big deal, we'll install Mariadb and PHP and connect them with Nginx.
+# So not a big deal, we'll install Mariadb and PHP and connect them with 
+# Nginx.
 #
 <B><span style="Font-Family:Verdana">#-- 3.1. Install mariadb, php, and necessary dependancies.
-</B></span># php-fpm   : to run php as a cgi, nginx doesn't have a native support for php
+</B></span># php-cli   : PHP client package
+# php-fpm   : to run php as a cgi, nginx doesn't have a native support for 
 # php-mysql : for php to connect to mariadb
-<code><span style="Color:DodgerBlue">sudo apt install mariadb-server, php, php-fpm, php-mysql
-</span></code># This packages installs apache2 too, disable it
-<code><span style="Color:DodgerBlue">sudo systemctl stop apache2
-</span></code><code><span style="Color:DodgerBlue">sudo systemctl disable apache2
+<code><span style="Color:DodgerBlue">sudo apt install --yes mariadb-server php-cli php-fpm php-mysql
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 3.2. Update srv1-ssl Conf for PHP
 </B></span><code><span style="Color:DodgerBlue">sudo nano /etc/nginx/sites-available/srv1-ssl
-</span></code># Add the following part after the end of location stanza (just before the end).
-<code><span style="Color:MediumSeaGreen">location ~ \.php$ {
-       fastcgi_pass unix:/run/php/php8.1-fpm.sock;
-}
-</span></code># Reload nginx
-<code><span style="Color:DodgerBlue">sudo systemctl reload nginx
+</span></code># Add the following part after the end of the location stanza.
+<code><span style="Color:MediumSeaGreen">   location ~ \.php$ {
+      fastcgi_pass unix:/run/php/php-fpm.sock;
+      include fastcgi.conf;
+   }
+</span></code>#
+# Restart nginx
+<code><span style="Color:DodgerBlue">sudo systemctl restart nginx
 </span></code># 
 <B><span style="Font-Family:Verdana">#-- 3.3. Test it
-</B></span># - We'll create a test database, a table in that database, add some rows to the 
-# table on Mariadb. We will also create a test PHP file with the PHP code to 
-# retrieve the data from the database and display it as HTML. 
+</B></span># - We'll create a test database, a table in that database, add some rows to 
+# the table on Mariadb. We will also create a test PHP file with the PHP 
+# code to retrieve the data from the database and display it as HTML. 
 #
 # 3.3.1. DB Operations
 # Connect to Mariadb shell
 <code><span style="Color:DodgerBlue">sudo mariadb
-</span></code># Create nysampledb database, connect to it, create a table, fill the table,
-#    create a user with the access permission to that database and the table.
+</span></code># - Create mysampledb database, connect to it, create a table, fill the 
+# table, create a user with the access permission to that database and the 
+# table.
 # !!! BEGIN Run on Mariadb shell. !!!
 <code><span style="Color:DodgerBlue">CREATE DATABASE mysampledb;
 </span></code><code><span style="Color:DodgerBlue">USE mysampledb;
@@ -270,7 +274,8 @@ sudo rm /etc/nginx/sites-enabled/$1
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div6')"> 4. Sample Configs
 </a> </H4><div id="Div6" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 4.1. Three Sites in One Conf File
-</B></span># srv2, srv3, and srv4 all have their directories and served in the same server
+</B></span># srv2, srv3, and srv4 all have their directories and served in the same 
+# server
 <code><span style="Color:MediumSeaGreen">server {
    listen 80;
    listen &lsqb;::&rsqb;:80;
@@ -309,8 +314,8 @@ server {
    root /var/www/srv2;
    index index.html index.htm index.nginx-debian.html;
    server_name srv2;
-   allow 192.168.0.200;
-   allow 192.168.0.201;
+   allow 192.168.1.108;
+   allow 192.168.1.109;
    deny all;
    location / {
       try_files $uri $uri/ =404;
@@ -330,15 +335,15 @@ server {
       try_files $uri $uri/ =404;
    }
    location /admin {
-      allow 192.168.0.200;
+      allow 192.168.1.108;
       deny all;
    }
 }
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 4.4. Https Redirection with Certbot Access
-</B></span># - Redirect to Https site except the certbot (Letsencrypt acme challenge) accessing
-# /.well-known/acme-challenge/. So that certbot can renew certificates by
-# connecting to the Http site.
+</B></span># - Redirect to Https site except the certbot (Letsencrypt acme challenge) 
+# accessing /.well-known/acme-challenge/. So that certbot can renew 
+# certificates by connecting to the Http site.
 #
 <code><span style="Color:MediumSeaGreen">server {
    listen 80;
@@ -356,17 +361,16 @@ server {
 }
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div7')"> 5. HTTPS With Free Let&#x27;s Encrypt Certificates
-</a> </H4><div id="Div7" style="margin-left:1%;"><pre ># - This section is performed on a VPS on internet. To get free Let's Encrypt 
-# certificates, our hostname must be in a DNS in internet. 
+</a> </H4><div id="Div7" style="margin-left:1%;"><pre ># - This section is performed on a VPS on internet. To get free Let's 
+# Encrypt certificates, our hostname must be in a DNS in internet. 
 #
 <B><span style="Font-Family:Verdana">#-- 5.0. Specs
-</B></span># Server   : Ubuntu 22.04 LTS Server
+</B></span># Server   : Debian 12/11 or Ubuntu 22.04/20.04 LTS Server
 # Hostname : x11.xyz
-# IP       : 195.181.240.41
-# Server is fresh install.
+# Server is fresh installed.
 # 
-# - Remember to change all the occurences of x11.xyz and www.x11.xyz with your
-# server names.
+# - Remember to change all the occurences of x11.xyz and www.x11.xyz with 
+# your server names.
 #
 <B><span style="Font-Family:Verdana">#-- 5.1. Install Nginx
 </B></span><code><span style="Color:DodgerBlue">sudo apt update
@@ -400,26 +404,69 @@ server {
 # 
 <B><span style="Font-Family:Verdana">#-- 5.4. Install certbot and Get a Free Certificate
 </B></span># Install certbot
-<code><span style="Color:DodgerBlue">sudo snap install --classic certbot
-</span></code># - Create a certificate - key pair for domains x11.xyz and www.x11.xyz 
-# (remember to change to your domain names)
-<code><span style="Color:DodgerBlue">sudo certbot --nginx
-</span></code># - It will ask some questions:
-# Your email address, do not hesitate supplying it.
-# Aggreing terms, you should answer Y
-# Sharing your email address, I would say yes.
-# Domain names to select, in my case x11.xyz and www.x11.xyz
+<code><span style="Color:DodgerBlue">sudo apt install certbot --yes
+</span></code>#
+# - Run certbot to get certificates. For authentication method question; 
+# select the option 2 (Place files ...), and enter root directory 
+# (/var/www/x11.xyz for my server).  Enter an email address and accept TOS.
+<code><span style="Color:DodgerBlue">sudo certbot certonly -d x11.xyz -d www.x11.xyz
+</span></code># Certificates are installed to /etc/letsencrypt/live/x11.xyz/
 # Certificates will auto renew, you can check the process with:
 <code><span style="Color:DodgerBlue">sudo certbot renew --dry-run
-</span></code></pre> </div> </p>
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.5. Create a conf for the SSL site
+</B></span><code><span style="Color:DodgerBlue">sudo nano /etc/nginx/sites-available/x11.xyz-ssl
+</span></code><code><span style="Color:MediumSeaGreen">server {
+   listen 443 ssl;
+   listen &lsqb;::&rsqb;:443 ssl;
+   root /var/www/x11.xyz;
+   index index.html index.htm index.nginx-debian.html;
+   server_name x11.xyz www.x11.xyz;
+   ssl_certificate /etc/letsencrypt/live/x11.xyz/fullchain.pem;
+   ssl_certificate_key /etc/letsencrypt/live/x11.xyz/privkey.pem;
+   ssl_session_timeout 5m;
+   location / {
+      try_files $uri $uri/ =404;
+   }
+   server_tokens off;
+}
+</span></code># Enable it
+<code><span style="Color:DodgerBlue">ngensite x11.xyz-ssl
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.5. Update HTTP conf
+</B></span># Our http conf must redirect to https site with the exception of certbot
+# renew process
+<code><span style="Color:DodgerBlue">sudo nano /etc/nginx/sites-available/x11.xyz
+</span></code># Change as below
+<code><span style="Color:MediumSeaGreen">server {
+   listen 80;
+   listen &lsqb;::&rsqb;:80;
+   index index.html index.htm index.nginx-debian.html;
+   server_name x11.xyz www.x11.xyz;
+   location ^~ /.well-known/acme-challenge {
+       allow all; 
+       root /var/www/x11.xyz;
+   }
+    location / {
+       return 301 https://$host$request_uri;
+    }
+   server_tokens off;
+}
+</span></code>#
+# Reload Nginx
+<code><span style="Color:DodgerBlue">sudo systemctl reload nginx
+</span></code>#
+# Your HTTPS site is ready:
+<a href="https://x11.xyz/" target="_blank">https://x11.xyz/</a>
+</pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div8')"> 6. Nginx and Apache Together
-</a> </H4><div id="Div8" style="margin-left:1%;"><pre ># !!! This section starts with a fresh installed Ubuntu 22.04 Server !!!
-# - Nginx is very good at static content, Apache is very good at dynamic content. So
-# we can use them together for the maximum performance.
+</a> </H4><div id="Div8" style="margin-left:1%;"><pre ># !!! This section starts with a fresh installed server !!!
+# - Nginx is very good at static content, Apache is very good at dynamic 
+# content. So we can use them together for the maximum performance.
 <B><span style="Font-Family:Verdana">#-- 6.0. Specs
 </B></span># - Nginx will run at port 80 and listen to the outside.
-# - Apache will run at port 8080 and listen to only inside. That is it can be 
-# connected by only the localhost. So that only Nginx will listen to it.
+# - Apache will run at port 8080 and listen to only inside. That is it can 
+# be connected by only the localhost. So that only Nginx will listen to it.
 # - PHP and Mariadb will be connected to Apache only.
 # - All the HTML (and other static content) will be served by Nginx.
 # - All the PHP (and other dynamic content) will be served by Apache.
@@ -439,7 +486,7 @@ server {
    listen &lsqb;::&rsqb;:80;
    server_name .x11.xyz;
    index index.html index.htm index.nginx-debian.html;
-   root /var/www/x11.xyz;
+   root /var/www/html;
    location ~ \.php {
       proxy_pass http://127.0.0.1:8080;
    }

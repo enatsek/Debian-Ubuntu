@@ -47,7 +47,7 @@ There are txt and html versions of each document. In the html version, commands 
 
 - OtherLinuxesOnDebianUbuntu: Basic management of Debian, Ubuntu, Red Hat, OpenSuse, Alpine and Devuan distributions.
 
-- AGT-NginxOnUbuntu: Installing and configuring Nginx on Ubuntu server. With sample configuration and SSL support.
+- NginxOnDebianUbuntu: Installing and configuring Nginx on Debian and Ubuntu server. With sample configuration and SSL support.
 
 - SystemdOnDebianUbuntu: Basic systemd tutorial.
 

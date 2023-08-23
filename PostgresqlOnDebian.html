@@ -1,0 +1,342 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>PostgresqlOnDebian: Postgresql Tutorial On Debian
+</H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2023 Exforge exforge@x386.org
+</a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# - This document is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# - You should have received a copy of the GNU General Public License
+# along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div2')">0. Specs
+</a> </H4><div id="Div2" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 0.0. Notes
+</B></span># - Debian 12 and Ubuntu 22.04 LTS Server has packages for different 
+# versions of Postgresql (15 and 14). 
+# - For the ease of following the tutorials, I prepared different versions 
+# for Debian and Ubuntu.
+#
+<B><span style="Font-Family:Verdana">#-- 0.1. Infrastructure
+</B></span># Server:      Debian 12   IP: 192.168.1.174
+# Workstation: Debian 12   IP: 192.168.1.231
+#
+<B><span style="Font-Family:Verdana">#-- 0.2. Resources
+</B></span><a href="https://www.postgresql.org/docs" target="_blank">https://www.postgresql.org/docs</a>
+<a href="https://www.postgresqltutorial.com/" target="_blank">https://www.postgresqltutorial.com/</a>
+<code><span style="Color:DodgerBlue">ISBN: 978-1-80324-897-4 PostgreSQL 14 Administration Cookbook by Simon Riggs &amp; Gianni Ciolli
+</span></code><code><span style="Color:DodgerBlue">ISBN: 978-1-83898-528-8 Learn PostgreSQL by Luca Ferrari &amp; Enrico Pirozzi 
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div3')"> 1. Introduction
+</a> </H4><div id="Div3" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 1.1. Terminology:
+</B></span># Cluster  : A PostgreSQL Instance. Can contain many databases
+# Database : Accessed by allowed users. Can contain schemas (namespaces)
+# Schema   : Used for organizing database objects. Can contain database 
+# objects.
+# Database Objects: Tables, functions, triggers, data types etc.
+#
+<B><span style="Font-Family:Verdana">#-- 1.2. Basic Information
+</B></span># 2 types of users: Normal and Superuser
+# All the data and configuration information is kept in PGDATA directory.
+# PostgreSQL supports information schema, but has catalog which is more 
+# detailed.
+# Postmaster: The first process, responsible for all the executions.
+# WAL (Write Ahead Logs): Database change log, mainly used for recovering.
+#
+<B><span style="Font-Family:Verdana">#-- 1.3. Software Components:
+</B></span># PostgreSQL server  : Database server.
+# PostgreSQL client  : Client tools
+# PostgreSQL contrib : Extensions.
+# PostgreSQL docs    : Documentation.
+# PostgreSQL PL/Perl, PL/Python, and PL/Tcl: Programming interface.
+# Ubuntu postgresql package installs postgresql-client by default
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div4')"> 2. Installation and Basic Management
+</a> </H4><div id="Div4" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 2.1. Installation
+</B></span># Update repositories
+<code><span style="Color:DodgerBlue">sudo apt update
+</span></code># Install necessary packages
+# Debian 12 installs Postgresql version 15
+<code><span style="Color:DodgerBlue">sudo apt install --yes postgresql
+</span></code># Check status
+<code><span style="Color:DodgerBlue">systemctl status postgresql
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.2. Cluster Management
+</B></span># Debian allows running more than 1 clusters (instances) on a server.
+# See the list of clusters on a server:
+<code><span style="Color:DodgerBlue">pg_lsclusters
+</span></code># Sample output:
+<code><span style="Color:MediumSeaGreen">Ver Cluster Port Status Owner    Data directory              Log file
+15  main    5432 online postgres /var/lib/postgresql/15/main /var/log/...
+</span></code># - Values of Ver anf Cluster is important for us. We'll use them for 
+# pg_ctlcluster command. Ours are 15 and main.
+# pg_ctlcluster is a wrapper command for the original pg_ctl command of 
+# postgres.
+# See the status of a cluster:
+<code><span style="Color:DodgerBlue">sudo pg_ctlcluster 15 main status
+</span></code># Start a cluster
+<code><span style="Color:DodgerBlue">sudo pg_ctlcluster 15 main start
+</span></code># Stop a cluster
+<code><span style="Color:DodgerBlue">sudo pg_ctlcluster 15 main stop
+</span></code># - There are 3 modes of stop: smart (wait for connections to stop), fast 
+# (stop all connections), immediate (immediately). immediate option may
+# cause database to crash. Default mode is fast.
+<code><span style="Color:DodgerBlue">sudo pg_ctlcluster 15 main stop -m smart
+</span></code><code><span style="Color:DodgerBlue">sudo pg_ctlcluster 15 main stop -m fast
+</span></code><code><span style="Color:DodgerBlue">sudo pg_ctlcluster 15 main stop -m immediate
+</span></code># Restart, reload a cluster
+<code><span style="Color:DodgerBlue">sudo pg_ctlcluster 15 main restart
+</span></code><code><span style="Color:DodgerBlue">sudo pg_ctlcluster 15 main reload
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.3. Adding and Deleting Clusters
+</B></span># - There might be more than 1 clusters on a server. At the first sight it 
+# may not make sense, but for example if you need of 2 different admins for 
+# 2 different databases this solution could be very useful.
+# - Currently we only have main cluster. We will add a second one with the 
+# name second. 
+# Create another Postgres 15 cluster with the name second
+<code><span style="Color:DodgerBlue">sudo pg_createcluster 15 second
+</span></code># Start it
+<code><span style="Color:DodgerBlue">sudo pg_ctlcluster 15 second start
+</span></code># Create another Postgres 15 cluster with the name third and start it
+<code><span style="Color:DodgerBlue">sudo pg_createcluster 15 third --start
+</span></code># Delete (drop) third cluster
+<code><span style="Color:DodgerBlue">sudo pg_dropcluster 15 third --stop
+</span></code># Rename second cluster to secondary
+<code><span style="Color:DodgerBlue">sudo pg_renamecluster 15 second secondary
+</span></code># List clusters:
+<code><span style="Color:DodgerBlue">pg_lsclusters
+</span></code># Sample output:
+<code><span style="Color:MediumSeaGreen">Ver Cluster   Port Status Owner    Data directory                   Log file
+15  main      5432 online postgres /var/lib/postgresql/15/main      /var/log/..
+15  secondary 5433 online postgres /var/lib/postgresql/15/secondary /var/log/..
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div5')"> 3. User and Connection Management
+</a> </H4><div id="Div5" style="margin-left:1%;"><pre ># - After installing Postgres, postgres user is able to login psql shell 
+# with Linux authentication. No other users are defined and noone can login 
+# remotely.
+# - We will implement a scenario for user management.
+#
+<B><span style="Font-Family:Verdana">#-- 3.0. Backup Configuration Files
+</B></span><code><span style="Color:DodgerBlue">cd /etc/postgresql/15/main/
+</span></code><code><span style="Color:DodgerBlue">sudo cp postgresql.conf postgresql.conf.backup
+</span></code><code><span style="Color:DodgerBlue">sudo cp pg_hba.conf pg_hba.conf.backup
+</span></code># 
+<B><span style="Font-Family:Verdana">#-- 3.1. Scenario
+</B></span># - Leave postgres user as it is (will be used as DB admin)
+# - Create a database named test1
+# - Create a user (role) rwuser with read and write permission at all the 
+# test1 tables. Can access only from 1 IP (192.168.1.231). 
+# - Create a user (role) rouser with read only permissons at all the test1 
+# tables.
+# Can access from a network (192.168.1.1/24).
+#
+<B><span style="Font-Family:Verdana">#-- 3.2. Create users
+</B></span># Give their passwords too
+<code><span style="Color:DodgerBlue">sudo -u postgres createuser --pwprompt rwuser
+</span></code><code><span style="Color:DodgerBlue">sudo -u postgres createuser --pwprompt rouser
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 3.3. Create test1 database and give R/W and R/O permissions. 
+</B></span># Create database
+<code><span style="Color:DodgerBlue">sudo -u postgres createdb test1
+</span></code># Create a sample table and fill it with sample data.
+# Run psql to connect test1 database
+<code><span style="Color:DodgerBlue">sudo -u postgres psql test1
+</span></code># Run on psql shell
+<code><span style="Color:DodgerBlue">CREATE TABLE Employees (Name char(15), Age int, Occupation char(15));
+</span></code><code><span style="Color:DodgerBlue">INSERT INTO Employees VALUES ('Joe Smith', '26', 'Ninja');
+</span></code><code><span style="Color:DodgerBlue">GRANT ALL ON ALL TABLES IN SCHEMA public to rwuser;
+</span></code><code><span style="Color:DodgerBlue">GRANT SELECT ON ALL TABLES IN SCHEMA public to rouser;
+</span></code><code><span style="Color:DodgerBlue">exit
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 3.4. Configure Postgres to allow remote connections
+</B></span># Edit postgres.conf file to allow network connections
+<code><span style="Color:DodgerBlue">sudo nano /etc/postgresql/15/main/postgresql.conf
+</span></code># Uncomment and change the line below (around line 60)
+<code><span style="Color:MediumSeaGreen">#listen_addresses = 'localhost'         # what IP address(es) to listen on;
+</span></code># as below
+<code><span style="Color:MediumSeaGreen">listen_addresses = '*'                  # what IP address(es) to listen on;
+</span></code>#
+# - Edit pg_hba.conf file to allow rwuser and rouser to allow connections 
+# from specified ip/networks.
+<code><span style="Color:DodgerBlue">sudo nano /etc/postgresql/15/main/pg_hba.conf
+</span></code># Add following lines to the file
+<code><span style="Color:MediumSeaGreen">host    test1           rwuser          192.168.1.231/32        scram-sha-256
+host    test1           rouser          192.168.1.0/24          scram-sha-256
+</span></code>#
+# Restart our cluster
+<code><span style="Color:DodgerBlue">sudo pg_ctlcluster restart 15 main
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 3.5. Connection test from Workstation (192.168.1.231)
+</B></span># !! Run on workstation !!
+# Install Postgres Client to the workstation
+<code><span style="Color:DodgerBlue">sudo apt update
+</span></code><code><span style="Color:DodgerBlue">sudo apt install postgresql-client --yes	
+</span></code># 
+# Connect with rwuser and test adding data (test must be successfull)
+<code><span style="Color:DodgerBlue">psql -h 192.168.1.174 -U rwuser test1
+</span></code># Run on psql shell
+<code><span style="Color:DodgerBlue">INSERT INTO Employees VALUES ('John Doe', '33', 'Kedi');
+</span></code><code><span style="Color:DodgerBlue">exit
+</span></code>#
+# - Connect with rouser and test reading and adding data 
+# (reading test must be successfull, adding test must fail)
+<code><span style="Color:DodgerBlue">psql -h 192.168.1.174 -U rouser test1
+</span></code># Run on psql shell
+<code><span style="Color:DodgerBlue">SELECT * from Employees;
+</span></code><code><span style="Color:DodgerBlue">INSERT INTO Employees VALUES ('Halim Selim', '41', 'Hirsiz');
+</span></code><code><span style="Color:DodgerBlue">exit
+</span></code># - If you try to use psql from another workstation in 192.168.1.0/24 
+# network, you will see that rwuser cannot connect and rouser can connect.
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div6')"> 4. Backup and Restore
+</a> </H4><div id="Div6" style="margin-left:1%;"><pre ># - You can backup a database or a whole cluster. When backing up a 
+# database, users (roles) and any other clusterwide data is not backed up.
+# So if you backup a database and restore it on another cluster, you have to
+# create users and (if necessary) access permissions there too.
+#
+<B><span style="Font-Family:Verdana">#-- 4.0. Considerations
+</B></span># - We need to use postgres user for backup and restore. When we sudo for
+# this user; we need to change the directory to /tmp, because postgres user
+# does not have permissions on our home directory.
+#
+<B><span style="Font-Family:Verdana">#-- 4.1. Backup a database
+</B></span># - Backing up a database is performed with pg_dump command:
+#    pg_dump dbname &gt; dumpfile
+# - pg_dump command's connection parameters are like psql command's. 
+# Move to /tmp directory
+<code><span style="Color:DodgerBlue">cd /tmp
+</span></code># Backup test1 database on 15 main cluster to test1.pg file
+<code><span style="Color:DodgerBlue">sudo -u postgres pg_dump test1 &gt; /tmp/test1.pg
+</span></code># Backup postgres database on 15 secondary cluster to sdb.pg
+#    We need to specify the port of 15 secondary cluster
+<code><span style="Color:DodgerBlue">sudo -u postgres pg_dump -p 5433 postgres &gt; /tmp/sdb.pg
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 4.2. Restore a database
+</B></span># You can restore a database dump with psql command:
+<code><span style="Color:DodgerBlue">psql dbname &lt; dumpfile
+</span></code># Restore test1 database back on 15 main cluster
+<code><span style="Color:DodgerBlue">sudo -u postgres psql test1 &lt; /tmp/test1.pg
+</span></code>#
+# Lets restore test1 db to secondary cluster
+# We need an empty test1 database. 
+# Create test1 database on 15 secondary
+<code><span style="Color:DodgerBlue">sudo -u postgres createdb -p 5433 test1
+</span></code># Create users rwuser and rouser on secondary cluster. 
+# createuser command's connection parameter are like psql command's too. So 
+# we need to specify port number 5433 for secondary cluster.
+<code><span style="Color:DodgerBlue">sudo -u postgres createuser -p 5433 --pwprompt rwuser
+</span></code><code><span style="Color:DodgerBlue">sudo -u postgres createuser -p 5433 --pwprompt rouser
+</span></code># Import the database
+<code><span style="Color:DodgerBlue">sudo -u postgres psql -p 5433 test1 &lt; /tmp/test1.pg
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 4.3. Backup and Restore Whole Cluster
+</B></span># - When we backup a cluster, all clusterwide data including users and 
+# access rights are backed up too. But remember, you have to change the 
+# configuration files by yourself.
+# - Cluster dump is made by pg_dumpall command. This command too has the 
+# same connection parameters as psql command. 
+# Backup 15 main cluster to main.pg file
+<code><span style="Color:DodgerBlue">sudo -u postgres pg_dumpall &gt; /tmp/main.pg
+</span></code># Restore main.pg file to 14 secondary cluster
+<code><span style="Color:DodgerBlue">sudo -u postgres psql -p 5433 -f /tmp/main.pg
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div7')"> 5. psql - PostgreSQL Shell
+</a> </H4><div id="Div7" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 5.1. The Command
+</B></span># - psql command is used to open a Postgres shell. At the fresh install, 
+# only postgres Linux user has the right to connect to Postgres shell. So 
+# we need to run it by impersonating postgres user:
+<code><span style="Color:DodgerBlue">sudo -u postgres psql
+</span></code># - If we want another Linux user to login to psql shell, we have to create 
+# them using createuser command and add connection permission to them at
+# pg_hba.conf configuration file. I don't prefer that method. In my very
+# humble opinion, 1 database admin is enough.
+# 
+<B><span style="Font-Family:Verdana">#-- 5.2. The command arguments
+</B></span># - psql command has a lot of arguments. If no argument is given; it tries 
+# to connect with the current Linux user name as the user name and again
+# current Linux user name as the database name. My Linux user name is
+# exforge, so when I run psql command, I get the following error message.
+<code><span style="Color:MediumSeaGreen">psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432"
+failed: FATAL:  role "exforge" does not exist
+</span></code># - If I go beyond and create exforge user (role actually, user=role in 
+# postgres) only I have a different error message:
+<code><span style="Color:MediumSeaGreen">psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "exforge" does not exist
+</span></code># -- If I go even beyond and create a database named exforge then everything 
+# goes fine.
+# - Well, of course instead of creating a database with my user name, I can 
+# connect to psql with specifying an existing database.
+<code><span style="Color:DodgerBlue">psql postgres
+</span></code>#
+# - As we have seen before we can specify port number with -p switch, host 
+# name with -h switch. We can also specify postgres user with -U switch.
+# Full list of arguments can be seen with --help switch
+<code><span style="Color:DodgerBlue">psql --help
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 5.3. psql Commands
+</B></span># - You can run SQL commands at psql shell. You can also run psql commands, 
+# some of which are very useful.
+# \x	Toggles expanded display
+# \c	Connect to a database
+# \d	List tables
+# \du 	List roles (users)
+# \?	psql command help
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div8')"> 6. Bonus: Postgres 15 and Postgres 14 together
+</a> </H4><div id="Div8" style="margin-left:1%;"><pre ># - For testing purposes we will install Postgresql 14 on the same server. 
+# That way we will have different postgres clusters with different versions.
+# - Debian 12 has Postgres 15 in its repositories. For Postgres 14 we 
+# need to add Postgres repositories.
+<B><span style="Font-Family:Verdana">#-- 6.1. Add Postgresql Repositories
+</B></span># We are going to need, gpg and curl. Let's install them:
+<code><span style="Color:DodgerBlue">sudo apt install gpg curl --yes
+</span></code># Add keys
+<code><span style="Color:DodgerBlue">curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+</span></code><code><span style="Color:DodgerBlue">    | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+</span></code># Add repository
+<code><span style="Color:DodgerBlue">sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt \
+</span></code><code><span style="Color:DodgerBlue">       $(lsb_release -cs)-pgdg main" &gt; /etc/apt/sources.list.d/pgdg.list'
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 6.2. Install Postgresql 14
+</B></span><code><span style="Color:DodgerBlue">sudo apt update
+</span></code><code><span style="Color:DodgerBlue">sudo apt install postgresql-14
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 6.3. List clusters:
+</B></span><code><span style="Color:DodgerBlue">pg_lsclusters
+</span></code># - Output will be like below, now we have 3 clusters namely 14-main, 15-
+# main, and 15-secondary running on the same computer:
+<code><span style="Color:MediumSeaGreen">Ver Cluster   Port Status Owner    Data directory                   Log file
+14  main      5434 online postgres /var/lib/postgresql/14/main      /var/..
+15  main      5432 online postgres /var/lib/postgresql/15/main      /var/..
+15  secondary 5433 online postgres /var/lib/postgresql/15/secondary /var/..
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 6.4. Connecting to the clusters with psql
+</B></span># Connect to the first cluster (15-main), remember it runs on port 5432
+<code><span style="Color:DodgerBlue">sudo -u postgres psql -p 5432
+</span></code># Connect to the second cluster (15-secondary), remember it runs on port 
+# 5433
+<code><span style="Color:DodgerBlue">sudo -u postgres psql -p 5433
+</span></code># Connect to the third cluster (14-main), remember it runs on port 5434
+<code><span style="Color:DodgerBlue">sudo -u postgres psql -p 5434
+</span></code></pre> </div> </p>
+</pre> </div> </p>
+<br /><br /><br /><script>
+function myFunction(divid) {
+  var x = document.getElementById(divid);
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+var i;
+var str;
+
+for (i=1; i<9; i++) {
+    str = "Div" + i.toString();
+    myFunction(str);
+}
+</script></body> </html>

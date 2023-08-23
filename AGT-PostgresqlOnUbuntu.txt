@@ -1,4 +1,4 @@
-Postgresql Tutorial On Ubuntu Server 22.04
+PostgresqlOnUbuntu: Postgresql Tutorial On Ubuntu
 
 
 #---Copyright (C) 2023 Exforge exforge@x386.org
@@ -18,9 +18,15 @@ Postgresql Tutorial On Ubuntu Server 22.04
 
 
 #---0. Specs
+#-- 0.0. Notes
+# - Debian 12 and Ubuntu 22.04 LTS Server has packages for different 
+# versions of Postgresql (15 and 14). 
+# - For the ease of following the tutorials, I prepared different versions 
+# for Debian and Ubuntu.
+#
 #-- 0.1. Infrastructure
-# Server:      Ubuntu 22.04 LTS Server IP: 192.168.0.231
-# Workstation: Ubuntu 22.04 LTS        IP: 192.168.0.230
+# Server:      Ubuntu 22.04 LTS Server IP: 192.168.1.182
+# Workstation: Ubuntu 22.04 LTS Server IP: 192.168.1.232
 #
 #-- 0.2. Resources
 Link:https://www.postgresql.org/docs
@@ -33,13 +39,15 @@ ISBN: 978-1-83898-528-8 Learn PostgreSQL by Luca Ferrari & Enrico Pirozzi
 #-- 1.1. Terminology:
 # Cluster  : A PostgreSQL Instance. Can contain many databases
 # Database : Accessed by allowed users. Can contain schemas (namespaces)
-# Schema   : Used for organizing database objects. Can contain database objects.
+# Schema   : Used for organizing database objects. Can contain database 
+# objects.
 # Database Objects: Tables, functions, triggers, data types etc.
 #
 #-- 1.2. Basic Information
 # 2 types of users: Normal and Superuser
 # All the data and configuration information is kept in PGDATA directory.
-# PostgreSQL supports information schema, but has catalog which is more detailed.
+# PostgreSQL supports information schema, but has catalog which is more 
+# detailed.
 # Postmaster: The first process, responsible for all the executions.
 # WAL (Write Ahead Logs): Database change log, mainly used for recovering.
 #
@@ -71,18 +79,19 @@ pg_lsclusters
 Ver Cluster Port Status Owner    Data directory              Log file
 14  main    5432 online postgres /var/lib/postgresql/14/main /var/log/...
 #_______________________________________________________________________________
-# - Values of Ver anf Cluster is important for us. We'll use them for pg_ctlcluster
-# command. Ours are 14 and main.
-# pg_ctlcluster is a wrapper command for the original pg_ctl command of postgres.
+# - Values of Ver anf Cluster is important for us. We'll use them for 
+# pg_ctlcluster command. Ours are 14 and main.
+# pg_ctlcluster is a wrapper command for the original pg_ctl command of 
+# postgres.
 # See the status of a cluster:
 sudo pg_ctlcluster 14 main status
 # Start a cluster
 sudo pg_ctlcluster 14 main start
 # Stop a cluster
 sudo pg_ctlcluster 14 main stop
-# - There are 3 modes of stop: smart (wait for connections to stop), fast (stop all
-# connections), immediate (immediately). immediate option may cause database to
-# crash. Default mode is fast.
+# - There are 3 modes of stop: smart (wait for connections to stop), fast 
+# (stop all connections), immediate (immediately). immediate option may
+# cause database to crash. Default mode is fast.
 sudo pg_ctlcluster 14 main stop -m smart
 sudo pg_ctlcluster 14 main stop -m fast
 sudo pg_ctlcluster 14 main stop -m immediate
@@ -91,11 +100,11 @@ sudo pg_ctlcluster 14 main restart
 sudo pg_ctlcluster 14 main reload
 #
 #-- 2.3. Adding and Deleting Clusters
-# - There might be more than 1 clusters on a server. At the first sight it may not
-# make sense, but for example if you need of 2 different admins for 2 different
-# databases this solution could be very useful.
-# - Currently we only have main cluster. We will add a second one with the name 
-# second. 
+# - There might be more than 1 clusters on a server. At the first sight it 
+# may not make sense, but for example if you need of 2 different admins for 
+# 2 different databases this solution could be very useful.
+# - Currently we only have main cluster. We will add a second one with the 
+# name second. 
 # Create another Postgres 14 cluster with the name second
 sudo pg_createcluster 14 second
 # Start it
@@ -115,8 +124,9 @@ Ver Cluster   Port Status Owner    Data directory                   Log file
 14  secondary 5433 online postgres /var/lib/postgresql/14/secondary /var/log/...
 #_______________________________________________________________________________
 #
-# - Here we can understand that, our 14 main cluster listens on port 5432 (default 
-# postgres listening port), and 14 secondary cluster listens on port 5433.
+# - Here we can understand that, our 14 main cluster listens on port 5432 
+# (default postgres listening port), and 14 secondary cluster listens on
+# port 5433.
 # - Directory of configuration files for both clusters:
 # /var/lib/postgresql/14/main/ and /var/lib/postgresql/14/secondary.
 #
@@ -126,53 +136,55 @@ Ver Cluster   Port Status Owner    Data directory                   Log file
 sudo systemctl stop postgresql
 # Stop 14-main postgres cluster
 sudo systemctl stop postgresql@14-main
-# - Other systemctl options (like restart, stop, enable, disable, reload) can be
-# used too.
+# - Other systemctl options (like restart, stop, enable, disable, reload) 
+# can be used too.
 #
 #-- 2.5. Login to Postgres shell
-# - With the default installation; postgres linux user can login to psql shell 
-# without the need of password authentication. 
+# - With the default installation; postgres linux user can login to psql 
+# shell without the need of password authentication. 
 sudo -u postgres psql
 # Type exit to quit from postgres shell
-# - As you may guess, you logged in to 14 Main cluster. To login 14 secondary 
-# cluster:
+# - As you may guess, you logged in to 14 Main cluster. To login 14 
+# secondary cluster:
 sudo -u postgres psql -p 5433
 
 
 #--- 3. User and Connection Management
-# - After installing Postgres, postgres user is able to login psql shell with
-# Linux authentication. No other users are defined and noone can login remotely.
+# - After installing Postgres, postgres user is able to login psql shell 
+# with Linux authentication. No other users are defined and noone can login 
+# remotely.
 # - We will implement a scenario for user management.
 #
 #-- 3.0. Backup Configuration Files
 cd /etc/postgresql/14/main/
-cp postgresql.conf postgresql.conf.backup
-cp pg_hba.conf pg_hba.conf.backup
+sudo cp postgresql.conf postgresql.conf.backup
+sudo cp pg_hba.conf pg_hba.conf.backup
 # 
 #-- 3.1. Scenario
 # - Leave postgres user as it is (will be used as DB admin)
 # - Create a database named test1
-# - Create a user (role) rwuser with read and write permission at all the test1 
-# tables. Can access only from 1 IP (192.168.0.230). 
-# - Create a user (role) rouser with read only permissons at all the test1 tables.
-# Can access from a network (192.168.0.0/24).
+# - Create a user (role) rwuser with read and write permission at all the 
+# test1 tables. Can access only from 1 IP (192.168.1.232). 
+# - Create a user (role) rouser with read only permissons at all the test1 
+# tables.
+# Can access from a network (192.168.1.1/24).
 #
 #-- 3.2. Create users
 # Give their passwords too
 sudo -u postgres createuser --pwprompt rwuser
 sudo -u postgres createuser --pwprompt rouser
 #
-#-- 3.3. Create test1 database and give read/write and read only permissions. 
+#-- 3.3. Create test1 database and give R/W and R/O permissions. 
 # Create database
 sudo -u postgres createdb test1
 # Create a sample table and fill it with sample data.
 # Run psql to connect test1 database
 sudo -u postgres psql test1
 # Run on psql shell
-GRANT ALL ON ALL TABLES IN SCHEMA public to rwuser;
-GRANT SELECT ON ALL TABLES IN SCHEMA public to rouser;
 CREATE TABLE Employees (Name char(15), Age int, Occupation char(15));
 INSERT INTO Employees VALUES ('Joe Smith', '26', 'Ninja');
+GRANT ALL ON ALL TABLES IN SCHEMA public to rwuser;
+GRANT SELECT ON ALL TABLES IN SCHEMA public to rouser;
 exit
 #
 #-- 3.4. Configure Postgres to allow remote connections
@@ -187,51 +199,58 @@ sudo nano /etc/postgresql/14/main/postgresql.conf
 listen_addresses = '*'                  # what IP address(es) to listen on;
 #___________________________________________________________________________
 #
-# - Edit pg_hba.conf file to allow rwuser and rouser to allow connections from 
-# specified ip/networks.
+# - Edit pg_hba.conf file to allow rwuser and rouser to allow connections 
+# from specified ip/networks.
 sudo nano /etc/postgresql/14/main/pg_hba.conf
 # Add following lines to the file
 #___________________________________________________________________________
-host    test1           rwuser          192.168.0.230/32        scram-sha-256
-host    test1           rouser          192.168.0.0/24          scram-sha-256
+host    test1           rwuser          192.168.1.232/32        scram-sha-256
+host    test1           rouser          192.168.1.0/24          scram-sha-256
 #___________________________________________________________________________
 #
 # Restart our cluster
 sudo pg_ctlcluster restart 14 main
 #
-#-- 3.5. Connection test from Workstation (192.168.0.230)
+#-- 3.5. Connection test from Workstation (192.168.1.232)
 # !! Run on workstation !!
 # Install Postgres Client to the workstation
 sudo apt update
-sudo apt install postgresql-client
+sudo apt install postgresql-client --yes	
 # 
 # Connect with rwuser and test adding data (test must be successfull)
-psql -h 192.168.0.231 -U rwuser test1
+psql -h 192.168.1.182 -U rwuser test1
 # Run on psql shell
 INSERT INTO Employees VALUES ('John Doe', '33', 'Kedi');
 exit
 #
 # - Connect with rouser and test reading and adding data 
 # (reading test must be successfull, adding test must fail)
-psql -h 192.168.0.231 -U rouser test1
+psql -h 192.168.1.182 -U rouser test1
 # Run on psql shell
 SELECT * from Employees;
 INSERT INTO Employees VALUES ('Halim Selim', '41', 'Hirsiz');
 exit
-# - If you try to use psql from another workstation in 192.168.0.0/24 network,
-# you will see that rwuser cannot connect and rouser can connect.
+# - If you try to use psql from another workstation in 192.168.1.0/24 
+# network, you will see that rwuser cannot connect and rouser can connect.
 
 
 #--- 4. Backup and Restore
-# - You can backup a database or a whole cluster. When backing up a database, users
-# (roles) and any other clusterwide data is not backed up. So if you backup 
-# a database and restore it on another cluster, you have to create users and 
-# (if necessary) access permissions there too.
+# - You can backup a database or a whole cluster. When backing up a 
+# database, users (roles) and any other clusterwide data is not backed up.
+# So if you backup a database and restore it on another cluster, you have to
+# create users and (if necessary) access permissions there too.
+#
+#-- 4.0. Considerations
+# - We need to use postgres user for backup and restore, when we sudo for
+# this user; we need to change the directory to /tmp, because postgres user
+# does not have permissions on our home directory.
 #
 #-- 4.1. Backup a database
 # - Backing up a database is performed with pg_dump command:
 #    pg_dump dbname > dumpfile
 # - pg_dump command's connection parameters are like psql command's. 
+# Move to /tmp directory
+cd /tmp
 # Backup test1 database on 14 main cluster to test1.pg file
 sudo -u postgres pg_dump test1 > /tmp/test1.pg
 # Backup postgres database on 14 secondary cluster to sdb.pg
@@ -249,19 +268,19 @@ sudo -u postgres psql test1 < /tmp/test1.pg
 # Create test1 database on 14 secondary
 sudo -u postgres createdb -p 5433 test1
 # Create users rwuser and rouser on secondary cluster. 
-# createuser command's connection parameter are like psql command's too. So we 
-#    need to specify port number 5433 for secondary cluster.
+# createuser command's connection parameter are like psql command's too. So 
+# we need to specify port number 5433 for secondary cluster.
 sudo -u postgres createuser -p 5433 --pwprompt rwuser
 sudo -u postgres createuser -p 5433 --pwprompt rouser
 # Import the database
 sudo -u postgres psql -p 5433 test1 < /tmp/test1.pg
 #
 #-- 4.3. Backup and Restore Whole Cluster
-# - When we backup a cluster, all clusterwide data including users and access
-# rights are backed up too. But remember, you have to change the configuration
-# files by yourself.
-# - Cluster dump is made by pg_dumpall command. This command too has the same 
-# connection parameters as psql command. 
+# - When we backup a cluster, all clusterwide data including users and 
+# access rights are backed up too. But remember, you have to change the 
+# configuration files by yourself.
+# - Cluster dump is made by pg_dumpall command. This command too has the 
+# same connection parameters as psql command. 
 # Backup 14 main cluster to main.pg file
 sudo -u postgres pg_dumpall > /tmp/main.pg
 # Restore main.pg file to 14 secondary cluster
@@ -270,43 +289,43 @@ sudo -u postgres psql -p 5433 -f /tmp/main.pg
 
 #--- 5. psql - PostgreSQL Shell
 #-- 5.1. The Command
-# - psql command is used to open a Postgres shell. At the fresh install, only
-# postgres Linux user has the right to connect to Postgres shell. So we need 
-# to run it by impersonating postgres user:
+# - psql command is used to open a Postgres shell. At the fresh install, 
+# only postgres Linux user has the right to connect to Postgres shell. So 
+# we need to run it by impersonating postgres user:
 sudo -u postgres psql
-# - If we want another Linux user to login to psql shell, we have to create them 
-# using createuser command and add connection permission to them at pg_hba.conf
-# configuration file. I don't prefer that method. In my very humble opinion, 1
-# database admin is enough.
+# - If we want another Linux user to login to psql shell, we have to create 
+# them using createuser command and add connection permission to them at
+# pg_hba.conf configuration file. I don't prefer that method. In my very
+# humble opinion, 1 database admin is enough.
 # 
 #-- 5.2. The command arguments
-# - psql command has a lot of arguments. If no argument is given; it tries to 
-# connect with the current Linux user name as the user name and again current
-# Linux user name as the database name. My Linux user name is exforge, so when
-# I run psql command, I get the following error message.
+# - psql command has a lot of arguments. If no argument is given; it tries 
+# to connect with the current Linux user name as the user name and again
+# current Linux user name as the database name. My Linux user name is
+# exforge, so when I run psql command, I get the following error message.
 #_______________________________________________________________________________
 psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432"
 failed: FATAL:  role "exforge" does not exist
 #_______________________________________________________________________________
-# - If I go beyond and create exforge user (role actually, user=role in postgres)
-# only I have a different error message:
+# - If I go beyond and create exforge user (role actually, user=role in 
+# postgres) only I have a different error message:
 #_______________________________________________________________________________
 psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "exforge" does not exist
 #_______________________________________________________________________________
-# -- If I go even beyond and create a database named exforge then everything goes 
-# fine.
-# - Well, of course instead of creating a database with my user name, I can connect
-# to psql with specifying an existing database.
+# -- If I go even beyond and create a database named exforge then everything 
+# goes fine.
+# - Well, of course instead of creating a database with my user name, I can 
+# connect to psql with specifying an existing database.
 psql postgres
 #
-# - As we have seen before we can specify port number with -p switch, host name with
-# -h switch. We can also specify postgres user with -U switch.
+# - As we have seen before we can specify port number with -p switch, host 
+# name with -h switch. We can also specify postgres user with -U switch.
 # Full list of arguments can be seen with --help switch
 psql --help
 #
 #-- 5.3. psql Commands
-# - You can run SQL commands at psql shell. You can also run psql commands, some 
-# of which are very useful.
+# - You can run SQL commands at psql shell. You can also run psql commands, 
+# some of which are very useful.
 # \x	Toggles expanded display
 # \c	Connect to a database
 # \d	List tables
@@ -315,10 +334,10 @@ psql --help
 
 
 #--- 6. Bonus: Postgres 14 and Postgres 15 together
-# - For testing purposes we will install Postgresql 15 on the same server. That way 
-# we will have different postgres clusters with different versions.
-# - Ubuntu 22.04 has Postgres 14 in its repositories. For Postgres 15 we need to
-# add a PPA.
+# - For testing purposes we will install Postgresql 15 on the same server. 
+# That way we will have different postgres clusters with different versions.
+# - Ubuntu 22.04 has Postgres 14 in its repositories. For Postgres 15 we 
+# need to add a PPA.
 #-- 6.1. Add Postgresql PPA
 # Add keys
 curl -fSsL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
@@ -336,8 +355,8 @@ sudo apt install postgresql-15
 #
 #-- 6.3. List clusters:
 pg_lsclusters
-# - Output will be like below, now we have 3 clusters namely 14-main, 14-secondary, 
-# and 15-main running on the same computer:
+# - Output will be like below, now we have 3 clusters namely 14-main, 14-
+# secondary, and 15-main running on the same computer:
 #_______________________________________________________________________________
 Ver Cluster   Port Status Owner    Data directory                   Log file
 14  main      5432 online postgres /var/lib/postgresql/14/main      /var/log/...
@@ -348,7 +367,8 @@ Ver Cluster   Port Status Owner    Data directory                   Log file
 #-- 6.4. Connecting to the clusters with psql
 # Connect to the first cluster (14-main), remember it runs on port 5432
 sudo -u postgres psql -p 5432
-# Connect to the second cluster (14-secondary), remember it runs on port 5433
+# Connect to the second cluster (14-secondary), remember it runs on port 
+# 5433
 sudo -u postgres psql -p 5433
 # Connect to the third cluster (15-main), remember it runs on port 5434
 sudo -u postgres psql -p 5434

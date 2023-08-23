@@ -43,7 +43,9 @@ There are txt and html versions of each document. In the html version, commands 
  
 - AdminerOnDebianUbuntu: Adminer, a replacement for PHPMyAdmin. Web based Database Management.
 
-- AGT-PostgresqlOnUbuntu: Postgresql installation and basic configuration on Ubuntu. Includes some user management, cluster management, backup and restore.
+- PostgresqlOnUbuntu: Postgresql installation and basic configuration on Ubuntu. Includes some user management, cluster management, backup and restore.
+
+- PostgresqlOnDebian: Postgresql installation and basic configuration on Debian. Includes some user management, cluster management, backup and restore.
 
 - OtherLinuxesOnDebianUbuntu: Basic management of Debian, Ubuntu, Red Hat, OpenSuse, Alpine and Devuan distributions.
 

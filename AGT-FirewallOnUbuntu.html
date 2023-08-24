@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>FirewallOnUbuntu: Basic UFW Tutorial On Ubuntu 22.04
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>UFWOnDebianOnUbuntu: Basic UFW (Uncomplicated Firewall) Tutorial On Ubuntu and Debian
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,8 +14,9 @@
 # along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div2')">0. Specs
-</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># - Basic UFW (Uncompicated Firewall) tutorial. Enabling, adding, deleting rules,
-# syntax etc.
+</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># - Basic UFW (Uncomplicated Firewall) tutorial. Enabling, adding, deleting 
+# rules, syntax etc.
+# - Prepared for Debian 12/11 and Ubuntu 22.04/20.04 LTS Server
 #
 # Sources:
 <a href="https://www.netfilter.org/" target="_blank">https://www.netfilter.org/</a>
@@ -26,18 +27,19 @@
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div3')"> 1. Firewall Architecture 
 </a> </H4><div id="Div3" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 1.1. Netfilter
-</B></span># - Netfilter represents a set of hooks for network packets, it is integrated to the
+</B></span># - Netfilter represents a set of hooks for network packets, it is 
+# integrated to the
 # Linux kernel. It supplies a framework for packet filtering, NAT, and port 
 # translation.
 # It is the first (deepest) layer for Linux firewalls.
 #
 <B><span style="Font-Family:Verdana">#-- 1.2. Nftables and Iptables
-</B></span># - Nftables, which is the successor of Iptables, is the second layer of Linux 
-# firewalls. It can be considered as a generic firewall. It allows defining rulesets 
-# based on network packets.
-# - We can use nftables (or iptables, at the older Linux distros) to supply firewall
-# functionality, but because it is very complex; linux distros supply a higher level
-# firewall tools for easy manipulation.
+</B></span># - Nftables, which is the successor of Iptables, is the second layer of 
+# Linux firewalls. It can be considered as a generic firewall. It allows 
+# defining rulesets based on network packets.
+# - We can use nftables (or iptables, at the older Linux distros) to supply 
+# firewall functionality, but because it is very complex; linux distros 
+# supply a higher level firewall tools for easy manipulation.
 #
 <B><span style="Font-Family:Verdana">#-- 1.3. Ufw
 </B></span># Ufw is the higher level firewall program supplied by Ubuntu (Canonical).
@@ -46,21 +48,22 @@
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div4')"> 2. Ufw Basics
 </a> </H4><div id="Div4" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 2.1. Installation
-</B></span># ufw is installed by default on Ubuntu server. If not:
+</B></span># ufw is installed and inactive by default on Ubuntu server. For Debian :
 <code><span style="Color:DodgerBlue">sudo apt update
 </span></code><code><span style="Color:DodgerBlue">sudo apt install ufw --yes
-</span></code><B><span style="Font-Family:Verdana">#-- 2.2. Status
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.2. Status
 </B></span># Check ufw status (must be inactive)
 <code><span style="Color:DodgerBlue">sudo ufw status
 </span></code># in verbose mode:
 <code><span style="Color:DodgerBlue">sudo ufw status verbose
-</span></code><B><span style="Font-Family:Verdana">#-- 2.3. Enabbling/Disabling
-</B></span># - ufw is disabled by default. - When you enable ufw, all incoming traffic is 
-# denied, and all outgoing traffic is allowed.
-# - So if you enable it while connected with ssh it may break your connection.
-# - When you enable ufw, all incoming traffic is denied, and all outgoing traffic 
-# is allowed.
-# That means you have to allow ssh before enabling it.
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.3. Enabling/Disabling
+</B></span># - ufw is disabled by default. 
+# - When you enable ufw, all incoming traffic is denied, and all outgoing
+# traffic is allowed.
+# - So if you enable it while connected with ssh it may break your 
+# connection. That means you have to allow ssh before enabling it.
 # Add ssh for everyone
 <code><span style="Color:DodgerBlue">sudo ufw allow ssh
 </span></code># Now we can enable it:
@@ -110,8 +113,8 @@
 </B></span># Most of (if not all) the parameters can be omitted from the long format.
 # Some examples:
 # Allow/deny from an IP
-<code><span style="Color:DodgerBlue">sudo ufw deny from 192.168.0.11
-</span></code><code><span style="Color:DodgerBlue">sudo ufw allow from 192.168.0.11
+<code><span style="Color:DodgerBlue">sudo ufw deny from 192.168.1.11
+</span></code><code><span style="Color:DodgerBlue">sudo ufw allow from 192.168.1.11
 </span></code>#
 # Allow/deny from a network
 <code><span style="Color:DodgerBlue">sudo ufw allow from 192.168.0.0/24
@@ -125,10 +128,10 @@
 <code><span style="Color:DodgerBlue">sudo ufw allow proto tcp from any to any port 80,443
 </span></code>#
 # Allow from one IP to MySQL
-<code><span style="Color:DodgerBlue">sudo ufw allow from 192.168.0.11 to any port 3306
+<code><span style="Color:DodgerBlue">sudo ufw allow from 192.168.1.11 to any port 3306
 </span></code>#
 # Allow from a network to Postgres
-<code><span style="Color:DodgerBlue">sudo ufw allow from 192.168.0.0/24 to any port 5432
+<code><span style="Color:DodgerBlue">sudo ufw allow from 192.168.1.0/24 to any port 5432
 </span></code>#
 # Block outgoing SMTP
 <code><span style="Color:DodgerBlue">sudo ufw deny out 25
@@ -141,36 +144,37 @@
 <code><span style="Color:DodgerBlue">sudo ufw allow in on enp0s3 to any port 80
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 3.3. Rule Order
-</B></span># - Rules are processed from the top to the bottom. When an applicable rule is 
-# is found, the remaining rules are skipped.
+</B></span># - Rules are processed from the top to the bottom. When an applicable rule 
+# is is found, the remaining rules are skipped.
 # When you add a new rule, it is added to the bottom. 
 #
 # Inserting a rule to the top
-<code><span style="Color:DodgerBlue">sudo ufw insert 1 deny from 192.168.0.0/24 to any
+<code><span style="Color:DodgerBlue">sudo ufw insert 1 deny from 192.168.1.0/24 to any
 </span></code># We can use service name instead of a port number. ufw reads services from 
 # /etc/services file.
 <code><span style="Color:DodgerBlue">sudo ufw allow ssh
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div6')"> 4. Case Study 1
 </a> </H4><div id="Div6" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 4.0. Specs
-</B></span># - Allow SSH for 1 IP - 192.168.0.200
-# - Allow MariaDB for 1 network except 1 IP - 192.168.0.0/24 - 192.168.0.230
+</B></span># - Allow SSH for 1 IP - 192.168.1.108
+# - Allow MariaDB for 1 network except 1 IP - 192.168.1.0/24 - 192.168.1.231
 # - Allow HTTP, HTTPS for everyone 
 # - Deny outgoing SMTP - Port 25 TCP
-# - Add one more IP for deny MariaDB exception  - 192.168.0.232
+# - Add one more IP for deny MariaDB exception  - 192.168.1.232
 #
 <B><span style="Font-Family:Verdana">#-- 4.1. Always Add SSH First 
-</B></span># Allow incoming SSH (Port 22/TCP) from 192.168.0.200
-<code><span style="Color:DodgerBlue">sudo ufw allow in proto tcp from 192.168.0.200 to any port 22
+</B></span># Allow incoming SSH (Port 22/TCP) from 192.168.1.108
+<code><span style="Color:DodgerBlue">sudo ufw allow in proto tcp from 192.168.1.108 to any port 22
 </span></code># Enable ufw
 <code><span style="Color:DodgerBlue">sudo ufw enable
-</span></code># Now we enabled our firewall, it only allows ssh, we're going to add the other
-# rules.
+</span></code># Now we enabled our firewall, it only allows ssh, we're going to add the 
+# other rules.
 #
 <B><span style="Font-Family:Verdana">#-- 4.2. Add Mariadb Rules
 </B></span># Add MariaDB deny exception, it has to be before MariaDB allowing
-# Add Mariadb allow network
-<code><span style="Color:DodgerBlue">sudo ufw allow in proto tcp from 192.168.0.0/24 to any port 3306
+<code><span style="Color:DodgerBlue">sudo ufw deny in proto tcp from 192.168.1.231 to any port 3306
+</span></code># Add Mariadb allow network
+<code><span style="Color:DodgerBlue">sudo ufw allow in proto tcp from 192.168.1.0/24 to any port 3306
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 4.3. Add HTTP(S) Rules
 </B></span># Add allow HTTP and HTTPS
@@ -182,15 +186,15 @@
 <code><span style="Color:DodgerBlue">sudo ufw deny out proto tcp from any to any port 25
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 4.5. Additional Mariadb Exception
-</B></span># Add one more deny exception for Mariasb
+</B></span># Add one more deny exception for Mariadb
 # Before going on let's see our rules
 <code><span style="Color:DodgerBlue">sudo ufw status numbered
 </span></code><code><span style="Color:MediumSeaGreen">Status: active
      To                         Action      From
      --                         ------      ----
-&lsqb; 1&rsqb; 22/tcp                     ALLOW IN    192.168.0.200             
-&lsqb; 2&rsqb; 3306/tcp                   DENY IN     192.168.0.230             
-&lsqb; 3&rsqb; 3306/tcp                   ALLOW IN    192.168.0.0/24            
+&lsqb; 1&rsqb; 22/tcp                     ALLOW IN    192.168.1.108             
+&lsqb; 2&rsqb; 3306/tcp                   DENY IN     192.168.1.231             
+&lsqb; 3&rsqb; 3306/tcp                   ALLOW IN    192.168.1.0/24            
 &lsqb; 4&rsqb; 80/tcp                     ALLOW IN    Anywhere                  
 &lsqb; 5&rsqb; 443/tcp                    ALLOW IN    Anywhere                  
 &lsqb; 6&rsqb; 25/tcp                     DENY OUT    Anywhere                   (out)
@@ -199,40 +203,40 @@
 &lsqb; 9&rsqb; 25/tcp (v6)                DENY OUT    Anywhere (v6)              (out)
 #
 </span></code>#
-# - As you can see, rules are added to the end as you add them. First come the TCP/IP
-# version 4 rules, then come the version 6 rules.
-# If we add another rule with the following command, rule list will be like the 
-# following:
-<code><span style="Color:DodgerBlue">sudo ufw deny in proto tcp from 192.168.0.230 to any port 3306
+# - As you can see, rules are added to the end as you add them. First come 
+# the TCP/IP version 4 rules, then come the version 6 rules.
+# If we add another rule with the following command, rule list will be like 
+# the following:
+<code><span style="Color:DodgerBlue">sudo ufw deny in proto tcp from 192.168.1.232 to any port 3306
 </span></code><code><span style="Color:MediumSeaGreen">Status: active
      To                         Action      From
      --                         ------      ----
-&lsqb; 1&rsqb; 22/tcp                     ALLOW IN    192.168.0.200             
-&lsqb; 2&rsqb; 3306/tcp                   DENY IN     192.168.0.230             
-&lsqb; 3&rsqb; 3306/tcp                   ALLOW IN    192.168.0.0/24            
+&lsqb; 1&rsqb; 22/tcp                     ALLOW IN    192.168.1.108             
+&lsqb; 2&rsqb; 3306/tcp                   DENY IN     192.168.1.231             
+&lsqb; 3&rsqb; 3306/tcp                   ALLOW IN    192.168.1.0/24            
 &lsqb; 4&rsqb; 80/tcp                     ALLOW IN    Anywhere                  
 &lsqb; 5&rsqb; 443/tcp                    ALLOW IN    Anywhere                  
 &lsqb; 6&rsqb; 25/tcp                     DENY OUT    Anywhere                   (out)
-&lsqb; 7&rsqb; 3306/tcp                   DENY IN     192.168.0.232             
+&lsqb; 7&rsqb; 3306/tcp                   DENY IN     192.168.1.232             
 &lsqb; 8&rsqb; 80/tcp (v6)                ALLOW IN    Anywhere (v6)             
 &lsqb; 9&rsqb; 443/tcp (v6)               ALLOW IN    Anywhere (v6)             
 &lsqb;10&rsqb; 25/tcp (v6)                DENY OUT    Anywhere (v6)              (out)
 </span></code>#
-# - Because the rules are processed in order, our new rule (number 7) will never be
-# reached, because the rule number 3 will allow the connection.
+# - Because the rules are processed in order, our new rule (number 7) will
+# never be reached, because the rule number 3 will allow the connection.
 # Delete our useless new rule
 <code><span style="Color:DodgerBlue">sudo ufw delete 7
 </span></code># Now we insert our new rule to the 3rd place
-<code><span style="Color:DodgerBlue">sudo ufw insert 3 deny in proto tcp from 192.168.0.232 to any port 3306
+<code><span style="Color:DodgerBlue">sudo ufw insert 3 deny in proto tcp from 192.168.1.232 to any port 3306
 </span></code># Now our new rule is at the right place:
 <code><span style="Color:MediumSeaGreen">sudo ufw status numbered
 Status: active
      To                         Action      From
      --                         ------      ----
-&lsqb; 1&rsqb; 22/tcp                     ALLOW IN    192.168.0.200             
-&lsqb; 2&rsqb; 3306/tcp                   DENY IN     192.168.0.230             
-&lsqb; 3&rsqb; 3306/tcp                   DENY IN     192.168.0.232             
-&lsqb; 4&rsqb; 3306/tcp                   ALLOW IN    192.168.0.0/24            
+&lsqb; 1&rsqb; 22/tcp                     ALLOW IN    192.168.1.108             
+&lsqb; 2&rsqb; 3306/tcp                   DENY IN     192.168.1.231             
+&lsqb; 3&rsqb; 3306/tcp                   DENY IN     192.168.1.232             
+&lsqb; 4&rsqb; 3306/tcp                   ALLOW IN    192.168.1.0/24            
 &lsqb; 5&rsqb; 80/tcp                     ALLOW IN    Anywhere                  
 &lsqb; 6&rsqb; 443/tcp                    ALLOW IN    Anywhere                  
 &lsqb; 7&rsqb; 25/tcp                     DENY OUT    Anywhere                   (out)
@@ -243,13 +247,13 @@ Status: active
 <p> <H4><a href="javascript:myFunction('Div7')"> 5. Case Study 2
 </a> </H4><div id="Div7" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 5.0. Specs
 </B></span># - Two network interfaces - enp0s3 and enp0s8
-# - Allow SSH for 1 IP on interface 1 - port 22/TCP 192.168.0.200
+# - Allow SSH for 1 IP on interface 1 - port 22/TCP 192.168.1.108
 # - Allow SSH for all on interface 2 - port 22
 # - Allow HTTP, HTTPS for all on interface 1 - ports 80 and 443/TCP
 # 
 <B><span style="Font-Family:Verdana">#-- 5.1. First SSH Rule
 </B></span># Allow SSH for 1 IP for the 1st network interface enp0s3
-<code><span style="Color:DodgerBlue">sudo ufw allow in on enp0s3 proto tcp from 192.168.0.200 to any port 22
+<code><span style="Color:DodgerBlue">sudo ufw allow in on enp0s3 proto tcp from 192.168.1.108 to any port 22
 </span></code># Enable ufw
 <code><span style="Color:DodgerBlue">sudo ufw enable
 </span></code>#
@@ -267,7 +271,7 @@ Status: active
 </span></code><code><span style="Color:MediumSeaGreen">Status: active
      To                         Action      From
      --                         ------      ----
-&lsqb; 1&rsqb; 22/tcp on enp0s3           ALLOW IN    192.168.0.200             
+&lsqb; 1&rsqb; 22/tcp on enp0s3           ALLOW IN    192.168.1.108             
 &lsqb; 2&rsqb; 22/tcp on enp0s8           ALLOW IN    Anywhere                  
 &lsqb; 3&rsqb; 80/tcp on enp0s3           ALLOW IN    Anywhere                  
 &lsqb; 4&rsqb; 443/tcp on enp0s3          ALLOW IN    Anywhere                  

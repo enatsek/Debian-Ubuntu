@@ -39,7 +39,7 @@ There are txt and html versions of each document. In the html version, commands 
 
 - MariadbClusterOnDebianUbuntu: MariaDB main-main (master-master) replication with Galera Cluster tutorial on Debian and Ubuntu Servers.
 
-- AGT-HAProxyOnUbuntu: HAProxy High Availability Load Balancing with Letsencrypt free certificates HTTPS support and keepalived.
+- HAProxyOnDebianUbuntu: HAProxy High Availability Load Balancing with Letsencrypt free certificates HTTPS support and keepalived.
  
 - AdminerOnDebianUbuntu: Adminer, a replacement for PHPMyAdmin. Web based Database Management.
 

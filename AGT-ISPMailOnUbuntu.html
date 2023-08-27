@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>ISPmail Tutorial for Ubuntu 22.04 Server
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>ISPMailOnUbuntu: ISPmail Tutorial for Ubuntu 22.04 Server
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2021 - 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,15 +18,16 @@
 #
 # Very highly based on ISPmail tutorials of Christoph Haas
 <a href="https://workaround.org/ispmail" target="_blank">https://workaround.org/ispmail</a>
-# with some additions from ISP Mail Tutorial (Caramel Edition) of Alexey Abel
+# with some additions from ISP Mail Tutorial (Caramel Edition) of Alexey 
+# Abel
 <a href="https://123qwe.com/" target="_blank">https://123qwe.com/</a>
 #
-# - Please consider, all the hard work is done by Christoph Haas, I am just an
-#   implementer.
+# - Please consider, all the hard work is done by Christoph Haas, I am just 
+# an implementer.
 #
-# - To guarantee everything works, you need to implement the tutorial on a freshly
-#   installed Ubuntu 22.04 version. It is tested on freshly installed Ubuntu 22.04 
-#   system. But of course you are free to use it as you wish.
+# - To guarantee everything works, you need to implement the tutorial on a 
+# freshly installed Ubuntu 22.04 version. It is tested on freshly installed
+# Ubuntu 22.04 system. But of course you are free to use it as you wish.
 #
 #
 # Ubuntu 22.04 LTS  	(Debian Buster Originally)
@@ -50,13 +51,13 @@
 # There must be an A record for mail.x11.xyz with the IP of your server. 
 # 
 # Replace with your server and domains with those names.
-# - It would be wise to choose your main mail domain and name your server like
-# mail.domain.com
+# - It would be wise to choose your main mail domain and name your server 
+# like mail.domain.com
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div3')">1.Preliminary Tasks
-</a> </H4><div id="Div3" style="margin-left:1%;"><pre ># - I am sure (almost) everything is possible with sudo, but for this tutorial only
-# I prefer becoming root and processing that way. It is just because the original
-# document uses root.
+</a> </H4><div id="Div3" style="margin-left:1%;"><pre ># - I am sure (almost) everything is possible with sudo, but for this 
+# tutorial only I prefer becoming root and processing that way. It is just
+# because the original document uses root.
 #
 <B><span style="Font-Family:Verdana">#-- 1.1. Become root
 </B></span><code><span style="Color:DodgerBlue">sudo -i
@@ -77,7 +78,8 @@
 </span></code># Certbot, for ssl certificates
 <code><span style="Color:DodgerBlue">apt -y install certbot
 </span></code># Dovecot
-<code><span style="Color:DodgerBlue">apt -y install dovecot-mysql dovecot-pop3d dovecot-imapd dovecot-managesieved dovecot-lmtpd
+<code><span style="Color:DodgerBlue">apt -y install dovecot-mysql dovecot-pop3d dovecot-imapd \
+</span></code><code><span style="Color:DodgerBlue">   dovecot-managesieved dovecot-lmtpd
 </span></code># Adminer, a replacement of phpmyadmin, for managing DB
 <code><span style="Color:DodgerBlue">apt -y install adminer
 </span></code># default set of certificates of common certificate authorities.
@@ -114,10 +116,11 @@
 # Now we need to get our ssl certificates
 #
 <B><span style="Font-Family:Verdana">#-- 2.8. Get SSL Certificates form letsencrypt.org using certbot
-</B></span><code><span style="Color:DodgerBlue">certbot certonly --webroot --webroot-path /var/www/mail.x11.xyz -d mail.x11.xyz
+</B></span><code><span style="Color:DodgerBlue">certbot certonly --webroot --webroot-path /var/www/mail.x11.xyz \
+</span></code><code><span style="Color:DodgerBlue">   -d mail.x11.xyz
 </span></code># - You will be asked to give your email, don't hesitate giving it. You must 
-# agree their Terms of Service with A. Then you'll be asked to share your email 
-# with EFF (Organization that owns LetsEncrytp, I advise you to say Y
+# agree their Terms of Service with A. Then you'll be asked to share your 
+# email with EFF (Organization that owns LetsEncrytp, I advise you to say Y
 #
 # - If everything goes well there will be 4 files on : 
 # /etc/letsencrypt/archive/mail.x11.xyz
@@ -145,9 +148,10 @@
 </span></code><code><span style="Color:DodgerBlue">systemctl restart apache2
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 2.10. Redirect http to https
-</B></span># - We want http://mail.x11.xyz to redirect https://mail.x11.xyz unless letsencrypt 
-# checking /well-known/acme-challenge directory
-# Add redirect lines to just before the end of the http conf before &lt;/VirtualHost&gt;
+</B></span># - We want http://mail.x11.xyz to redirect https://mail.x11.xyz unless 
+# letsencrypt checking /well-known/acme-challenge directory
+# - Add redirect lines to just before the end of the http conf before 
+# &lt;/VirtualHost&gt;
 <code><span style="Color:DodgerBlue">nano /etc/apache2/sites-available/mail.x11.xyz-http.conf
 </span></code><code><span style="Color:MediumSeaGreen">  RewriteEngine On
   RewriteCond %{REQUEST_URI} !.well-known/acme-challenge
@@ -158,10 +162,10 @@
 </span></code><code><span style="Color:DodgerBlue">systemctl restart apache2
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 2.11. Automatic Ceritificate Renewal
-</B></span># - Certbot automatically renews the certificates, if any error happens we will be
-# warned by an email. But there is a small issue; when the certificate renews; 
-# postfix, dovecot and apache services on our server must be restarted. Therefore 
-# we will add an post-hook to certbot to do it.
+</B></span># - Certbot automatically renews the certificates, if any error happens we 
+# will be warned by an email. But there is a small issue; when the
+# certificate renews; postfix, dovecot and apache services on our server 
+# must be restarted. Therefore we will add an post-hook to certbot to do it.
 # - Create a file on the place certbot looks for running
 <code><span style="Color:DodgerBlue">nano /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
 </span></code><code><span style="Color:MediumSeaGreen">#!/bin/bash
@@ -231,7 +235,7 @@ systemctl reload dovecot
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div6')">4. Postfix - MariaDB Integration
 </a> </H4><div id="Div6" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 4.1. Connect Domains
-</B></span># Create a config file and fill it, remember changing password
+</B></span># Create a config file and fill it, remember changing the password
 <code><span style="Color:DodgerBlue">nano /etc/postfix/mysql-virtual-mailbox-domains.cf
 </span></code><code><span style="Color:MediumSeaGreen">user = mailserver
 password = Password34
@@ -381,7 +385,8 @@ iterate_query = SELECT email AS user FROM virtual_users
 # email if the user's mailbox exceed her quota.
 <B><span style="Font-Family:Verdana">#-- 7.1. Setting Dovecot Quota Policy
 </B></span><code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/90-quota.conf
-</span></code># Select one amongst several plugin {…} sections, and make it look like below:
+</span></code># - Select one amongst several plugin {…} sections, and make it look like 
+# below:
 <code><span style="Color:MediumSeaGreen">plugin {
   quota = maildir:User quota
   quota_status_success = DUNNO
@@ -438,7 +443,8 @@ EOF
 <code><span style="Color:DodgerBlue">chmod +x /usr/local/bin/quota-warning.sh
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 7.5. Recalculate quota
-</B></span># - If you manually remove from a user's Maildir, quota calculations are mixed up.
+</B></span># - If you manually remove from a user's Maildir, quota calculations are 
+# mixed up.
 # To force Dovecot to recalculate users quota run:
 <code><span style="Color:DodgerBlue">doveadm quota recalc -u user@example.org
 </span></code><B><span style="Font-Family:Verdana">#-- 7.6. Restart Dovecot and Postfix
@@ -446,9 +452,10 @@ EOF
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div10')">8. Roundcube as Webmail
 </a> </H4><div id="Div10" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 8.1. Install Roundcube
-</B></span><code><span style="Color:DodgerBlue">apt -y install roundcube roundcube-plugins roundcube-plugins-extra roundcube-mysql
-</span></code># - Answer yes to first question and give an empty password. If it asks for database,
-# select mysql.
+</B></span><code><span style="Color:DodgerBlue">apt -y install roundcube roundcube-plugins roundcube-plugins-extra \
+</span></code><code><span style="Color:DodgerBlue">   roundcube-mysql
+</span></code># - Answer yes to first question and give an empty password. If it asks for 
+# database, select mysql.
 #
 <B><span style="Font-Family:Verdana">#-- 8.2. Configure Apache for Roundcube
 </B></span><code><span style="Color:DodgerBlue">nano /etc/apache2/sites-available/mail.x11.xyz-https.conf
@@ -495,8 +502,8 @@ $config&lsqb;'password_query'&rsqb; = "UPDATE virtual_users SET password=%D WHER
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 8.6. Restart Dovecot
 </B></span><code><span style="Color:DodgerBlue">systemctl restart dovecot
-</span></code># - Just a quick reminder: When you login to webmail, you have to use your full email
-# address. 
+</span></code># - Just a quick reminder: When you login to webmail, you have to use your 
+# full email address. 
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div11')">9. Configure Postfix to Send Mail
 </a> </H4><div id="Div11" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 9.1. Configure Postfix to use Dovecot authentication
@@ -658,9 +665,9 @@ exec /usr/bin/rspamc learn_ham
 <code><span style="Color:DodgerBlue">systemctl restart dovecot rspamd
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 10.7. Rspamd Web Interface
-</B></span># - rspamd comes with a web interface, it can be reached from localhost only from 
-# port 11334.
-# By using http proxy modules of Apache, we can reach it from outside
+</B></span># - rspamd comes with a web interface, it can be reached from localhost only 
+# from port 11334.
+# - By using http proxy modules of Apache, we can reach it from outside.
 # Enable Apache modules HTTP proxy and rewrite
 <code><span style="Color:DodgerBlue">a2enmod proxy_http
 </span></code><code><span style="Color:DodgerBlue">a2enmod rewrite
@@ -694,30 +701,32 @@ exec /usr/bin/rspamc learn_ham
 <code><span style="Color:DodgerBlue">systemctl restart rspamd apache2
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 10.8. Privacy Warning
-</B></span># - Rspamd uses so called fuzzy feeds for spam detection, that is it contacts its 
-# server with your data.
-# - Rspamd is not completely free, if 1 of the 2 following conditions are met, 
-# you need a license
+</B></span># - Rspamd uses so called fuzzy feeds for spam detection, that is it 
+# contacts its server with your data.
+# - Rspamd is not completely free, if 1 of the 2 following conditions are 
+# met, you need a license
 # 1. Using commercial data
 # 2. More than 500.000 spam scans a day
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div13')">Break Time
-</a> </H4><div id="Div13" style="margin-left:1%;"><pre ># - I skipped the sections about malware protection. I believe it is not necessary
-# for my installations. If you'd like to enable it, please refer to the original
-# document: 
+</a> </H4><div id="Div13" style="margin-left:1%;"><pre ># - I skipped the sections about malware protection. I believe it is not 
+# necessary for my installations. If you'd like to enable it, please refer
+# to the original document: 
 <a href="https://workaround.org/ispmail/buster/blocking-malware/" target="_blank">https://workaround.org/ispmail/buster/blocking-malware/</a>
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div14')">11. Adding DNS Records
-</a> </H4><div id="Div14" style="margin-left:1%;"><pre ># - Assuming your host already has a DNS A Record; for every domain to be hosted, 
-# you need to create MX records pointing to your hostname.
+</a> </H4><div id="Div14" style="margin-left:1%;"><pre ># - Assuming your host already has a DNS A Record; for every domain to be 
+# hosted, you need to create MX records pointing to your hostname.
 #
-# - In my case, my hostname is mail.x11.xyz, x11.xyz, u11.xyz and  v11.xyz will be 
-# hosted. So for all domains there must be an MX record pointing to mail.x11.xyz 
-# with a small priority number (say 10)
-# - We also need spf and dmarc DNS entries to ensure no other mail servers can 
-# send emails using our domain names.
+# - In my case, my hostname is mail.x11.xyz, x11.xyz, u11.xyz and  v11.xyz 
+# will be hosted. So for all domains there must be an MX record pointing to
+# mail.x11.xyz with a small priority number (say 10)
 #
-# - In my configuration, mail.x11.xyz is the mail server and it hosts 3 domains:
+# - We also need spf and dmarc DNS entries to ensure no other mail servers 
+# can send emails using our domain names.
+#
+# - In my configuration, mail.x11.xyz is the mail server and it hosts 3 
+# domains:
 # x11.xyz, u11.xyz and v11.xyz.
 # My DNS servers will have following records
 #
@@ -738,13 +747,13 @@ exec /usr/bin/rspamc learn_ham
 # TXT Record --&gt; _dmarc v=DMARC1; aspf=s; adkim=s; pct=100; p=reject; rua=mailto:postmaster@x11.xyz
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div15')">12. Preventing Spoofing with DKIM
-</a> </H4><div id="Div15" style="margin-left:1%;"><pre ># - With DKIM, we can sign our emails with a certificate and the other mail    
-# servers can make sure that the emails coming from us are legitimate.
-# - We need to create keypairs (private and public) for all the domains we host, 
-# put private keys to rspamd and public keys to DNS records. 
-# - When we create a keypair, we use a selector (or a sequence number) to add a 
-# date record to it. In this case, when we create another keypair later, we can
-# distinguish them and older mails wouldn't be invalidated.
+</a> </H4><div id="Div15" style="margin-left:1%;"><pre ># - With DKIM, we can sign our emails with a certificate and the other 
+# mail servers can make sure that the emails coming from us are legitimate.
+# - We need to create keypairs (private and public) for all the domains we 
+# host, put private keys to rspamd and public keys to DNS records. 
+# - When we create a keypair, we use a selector (or a sequence number) to 
+# add a date record to it. In this case, when we create another keypair 
+# later, we can distinguish them and older mails wouldn't be invalidated.
 #
 <B><span style="Font-Family:Verdana">#-- 12.1. Create a home for our DKIM keypairs and fix permissions
 </B></span><code><span style="Color:DodgerBlue">mkdir /var/lib/rspamd/dkim
@@ -759,21 +768,21 @@ selector_map = "/etc/rspamd/dkim_selectors.map";
 </span></code># We will put our maps in this /etc/rspamd/dkim_selectors.map file later
 #
 <B><span style="Font-Family:Verdana">#-- 12.3. Create keypairs for all the domains we host
-</B></span># - This step must be followed for all the domains we host. I'll do this for x11.xyz, 
-# u11.xyz and v11.xyz 
-# Save the outputs of all commands somewhere.
+</B></span># - This step must be followed for all the domains we host. I'll do this for 
+# x11.xyz, u11.xyz and v11.xyz 
+# Save the outputs of all the commands somewhere.
 # Create keypair (-s option is for the selector)
 <code><span style="Color:DodgerBlue">rspamadm dkim_keygen -d x11.xyz -s 20230105 -k /var/lib/rspamd/dkim/x11.xyz.20230105.key
 </span></code><code><span style="Color:DodgerBlue">rspamadm dkim_keygen -d u11.xyz -s 20230105 -k /var/lib/rspamd/dkim/u11.xyz.20230105.key
 </span></code><code><span style="Color:DodgerBlue">rspamadm dkim_keygen -d v11.xyz -s 20230105 -k /var/lib/rspamd/dkim/v11.xyz.20230105.key
 </span></code>#
-# - The output will be used for DNS records. If you have your own DNS server, you can 
-# put it as it is to the DNS server. But if you use cloudfare or a similar service 
-# like me, you can use their web interface to insert your record  considering below 
-# comments:
-# - Create a new TXT record with a hostname 20230105._domainkey and put the value
-# in the record as in the example below. That is starting from v=DKIM1; removing all 
-# double quotes and paranthesis.
+# - The output will be used for DNS records. If you have your own DNS 
+# server, you can put it as it is to the DNS server. But if you use 
+# cloudfare or a similar service like me, you can use their web interface to
+# insert your record  considering below comments:
+# - Create a new TXT record with a hostname 20230105._domainkey and put the 
+# value in the record as in the example below. That is starting from
+# v=DKIM1; removing all double quotes and paranthesis.
 # v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBA....
 #
 <B><span style="Font-Family:Verdana">#-- 12.4. Enable DKIM maps
@@ -797,7 +806,8 @@ selector_map = "/etc/rspamd/dkim_selectors.map";
 # The Easy Way: Using a web interface for it
 #
 # We will start with the hard way.
-# Remember we installed Mariadb and created a database on it named mailserver.
+# Remember we installed Mariadb and created a database on it named 
+# mailserver.
 # - I'll use Mariadb shell, but you may prefer to use Adminer interface we 
 # installed at 3.1.
 #
@@ -819,7 +829,8 @@ selector_map = "/etc/rspamd/dkim_selectors.map";
 <code><span style="Color:DodgerBlue">INSERT INTO virtual_domains (name) VALUES ('example.org');
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 13.3. Delete Domains
-</B></span># - When you delete a domain, all users and aliases of this domain are deleted too. 
+</B></span># - When you delete a domain, all users and aliases of this domain are 
+# deleted too. 
 # But mailboxes stay on disk at /var/vmail/...
 # You have to delete them too.
 # Delete our test domain
@@ -904,7 +915,8 @@ selector_map = "/etc/rspamd/dkim_selectors.map";
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div17')">14. User, Alias, and Domain Management - Through Web Interface
 </a> </H4><div id="Div17" style="margin-left:1%;"><pre ># There are some software written to manage ISPmail.
-# The one I choose is; Tomas Kelemen's fork of Ole Jungclaussen's ISPmailadmin.
+# The one I choose is; Tomas Kelemen's fork of Ole Jungclaussen's 
+# ISPmailadmin.
 # Ole Jungclaussen's ISPmailadmin site:
 <a href="https://ima.jungclaussen.com/" target="_blank">https://ima.jungclaussen.com/</a>
 # Tomas Kelemen's fork:
@@ -966,31 +978,31 @@ selector_map = "/etc/rspamd/dkim_selectors.map";
 </pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div18')">15. Accessing Your Mail
 </a> </H4><div id="Div18" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 15.1. Through Web Interface
-</B></span># - Obviously you can access your mail through webmail for x11.xyz, u11.xyz, and 
-# v11.xyz at the following address:
+</B></span># - Obviously you can access your mail through webmail for x11.xyz, u11.xyz, 
+# and v11.xyz at the following address:
 <code><span style="Color:DodgerBlue">https://mail.x11.xyz
-</span></code># You should use your email address in exforge@x11.xyz or exforge@u11.xyz format for 
-#   username and you email password as password.
+</span></code># - You should use your email address in exforge@x11.xyz or exforge@u11.xyz 
+# format for username and your email password as password.
 # 
 <B><span style="Font-Family:Verdana">#-- 15.2. Through Mail Client
-</B></span># - Some people (myself as an example) prefers using a mail client (like Thunderbird) 
-# instead of a web mail interface. 
-# - Also you may prefer using Thunderbird on your main computer and use webmail when 
-# you are away. 
-# - For exforge@x11.xyz, exforge@u11.xyz, and exforge@v11.xyz accounts, configuration 
-# screens are given below.
+</B></span># - Some people (myself as an example) prefers using a mail client (like 
+# Thunderbird) instead of a web mail interface. 
+# - Also you may prefer using Thunderbird on your main computer and use 
+# webmail when you are away. 
+# - For exforge@x11.xyz, exforge@u11.xyz, and exforge@v11.xyz accounts, 
+# configuration screens are given below.
 <a href="https://imgur.com/a/uGt7EdV" target="_blank">https://imgur.com/a/uGt7EdV</a>
 #
 <B><span style="Font-Family:Verdana">#-- 15.3. Mail Client Autoconfig
-</B></span># - When you try to "Add mail account" on Thunderbird, a pop-up displays with the
-# header "Set Up Your Existing Email Address". After entering your name, email 
-# address and password, it tries to configure automatically. Sometimes it can,
-# sometimes it can't.
-# - There is no magic there; if a domain has a mail autoconfig file, its mail 
-# accounts can be automatically configured.
+</B></span># - When you try to "Add mail account" on Thunderbird, a pop-up displays 
+# with the header "Set Up Your Existing Email Address". After entering your 
+# name, email address and password, it tries to configure automatically. 
+# Sometimes it can, sometimes it can't.
+# - There is no magic there; if a domain has a mail autoconfig file, its 
+# mail accounts can be automatically configured.
 # - Because we have 3 domains, we need 3 autoconfig files. Where to host the 
-# autoconfig files and the content of the autoconfig files are explained by examples 
-# below.
+# autoconfig files and the content of the autoconfig files are explained by 
+# examples below.
 #
 # For x11.xyz
 # File must be hosted at the below address (http is ok too) :
@@ -1096,12 +1108,14 @@ selector_map = "/etc/rspamd/dkim_selectors.map";
 </span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div19')">16. ISPMailInstall
 </a> </H4><div id="Div19" style="margin-left:1%;"><pre ># - The best is saved for the last. 
-# - There is a Python3 program that implements all of the tasks in this document. 
-# - That is you can download it and run it to have a working mail server with as many
-# domains as you want. 
-# - The program carries out all the necessary tasks (including SSL certificates) 
-# except DNS configuration and hosting mail server autoconfig files. Description for 
-# them will be given to you by the program as text files. 
+# - There is a Python3 program that implements all of the tasks in this 
+# document. 
+# - That is you can download it and run it to have a working mail server 
+# with as many domains as you want. 
+# - The program carries out all the necessary tasks (including SSL 
+# certificates) except DNS configuration and hosting mail server autoconfig 
+# files. Description for them will be given to you by the program as text 
+# files. 
 # - The program has a web site and github page as below:
 <a href="https://ispmailinstall.x386.org/" target="_blank">https://ispmailinstall.x386.org/</a>
 <a href="https://github.com/enatsek/ISPMailInstall" target="_blank">https://github.com/enatsek/ISPMailInstall</a>
@@ -1118,16 +1132,16 @@ selector_map = "/etc/rspamd/dkim_selectors.map";
 <B><span style="Font-Family:Verdana">#-- 16.3. Set Program Configurations
 </B></span># Go to program directory
 <code><span style="Color:DodgerBlue">cd /tmp/ispmailinstall
-</span></code># - There is a file ispmail.conf as a configuration file there. It is very well
-# documented. You can set parameters as hostname, domains to hosts, and necessary 
-# passwords. It can generate passwords too. 
+</span></code># - There is a file ispmail.conf as a configuration file there. It is very 
+# well documented. You can set parameters as hostname, domains to hosts, and
+# necessary passwords. It can generate passwords too. 
 # Set all the parameters as you wish. 
 <code><span style="Color:DodgerBlue">nano ispmail.conf
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 16.4. Run the Program
 </B></span><code><span style="Color:DodgerBlue">python3 ./ispmail.py
-</span></code># - Check log files if everything is OK. Use created text files to set DNS records 
-# and mail autocofigurations as you wish, and everything is ready.
+</span></code># - Check log files if everything is OK. Use created text files to set DNS 
+# records and mail autocofigurations as you wish, and everything is ready.
 # ispmail.log         --&gt; All commands and their output
 # ispmail.error.log   --&gt; Errors (if any)
 # *.*.dns.config      --&gt; DNS configurations for the domains

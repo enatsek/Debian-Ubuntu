@@ -1,4 +1,4 @@
-ISPMailOnUbuntu: ISPmail Tutorial for Ubuntu 22.04 Server
+ISPMailOnDebianUbuntu: ISPmail Tutorial for Debian and Ubuntu
 
 
 #---Copyright (C) 2021 - 2023 Exforge exforge@x386.org
@@ -27,15 +27,19 @@ Link:https://workaround.org/ispmail
 # Abel
 Link:https://123qwe.com/
 #
+# - Christoph Haas has not released the Debian 12 version yet. This document
+# will be updated after his release.
+#
 # - Please consider, all the hard work is done by Christoph Haas, I am just 
 # an implementer.
 #
 # - To guarantee everything works, you need to implement the tutorial on a 
-# freshly installed Ubuntu 22.04 version. It is tested on freshly installed
-# Ubuntu 22.04 system. But of course you are free to use it as you wish.
+# freshly installed server. It is tested on freshly installed Debian 12/11
+# and Ubuntu 22.04/20.04 systems. But of course you are free to use it as
+# you wish.
 #
+# Distro Versions:      Debian 12/11  Ubuntu 22.04/20.04 LTS
 #
-# Ubuntu 22.04 LTS  	(Debian Buster Originally)
 # Postfix               SMTP
 # rspamd                spam check
 # Dovecot               POP3 & IMAP
@@ -87,11 +91,14 @@ apt -y install certbot
 # Dovecot
 apt -y install dovecot-mysql dovecot-pop3d dovecot-imapd \
    dovecot-managesieved dovecot-lmtpd
-# Adminer, a replacement of phpmyadmin, for managing DB
+# Adminer, a replacement of phpmyadmin, for managing database
 apt -y install adminer
 # default set of certificates of common certificate authorities.
 #   Don't mind if already installed.
 apt -y install ca-certificates
+
+
+
 
 
 #---2.Configuring Apache Server and Certificates
@@ -192,6 +199,7 @@ systemctl reload dovecot
 chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
 
 
+
 #---3. Preparing The Database
 #-- 3.1. Setting up Adminer
 # - Adminer will be our Mariadb Management tool
@@ -201,7 +209,7 @@ nano /etc/apache2/sites-available/mail.x11.xyz-https.conf
  Alias /adminer /usr/share/adminer/adminer
 #___________________________________________
 # Reload apache
-systemctl restart apache2
+systemctl reload apache2
 # You can see its login screen at:
 https://mail.x11.xyz/adminer
 # But it is not ready yet
@@ -252,6 +260,7 @@ CREATE TABLE IF NOT EXISTS `virtual_aliases` (
  FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE
  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
  
+
 
 #---4. Postfix - MariaDB Integration
 #-- 4.1. Connect Domains
@@ -309,6 +318,10 @@ postconf virtual_alias_maps=mysql:/etc/postfix/mysql-virtual-alias-maps.cf,mysql
 #-- 4.5. Fix Permissions on Files
 chgrp postfix /etc/postfix/mysql-*.cf
 chmod u=rw,g=r,o= /etc/postfix/mysql-*.cf
+
+
+
+
 
 #---5. Dovecot Setup
 # - Dovecot will:
@@ -405,7 +418,7 @@ systemctl restart dovecot
 #---6. Postfix - Dovecot Connection
 #-- 6.1. Connect Dovecot to Postfix using LMTP
 nano /etc/dovecot/conf.d/10-master.conf
-# Around lines 54-57, change like below
+# Around lines 54-65, change like below
 #_______________________________________________________
 service lmtp {
   unix_listener /var/spool/postfix/private/dovecot-lmtp {
@@ -509,6 +522,7 @@ doveadm quota recalc -u user@example.org
 systemctl restart dovecot postfix
 
 
+
 #---8. Roundcube as Webmail
 #-- 8.1. Install Roundcube
 apt -y install roundcube roundcube-plugins roundcube-plugins-extra \
@@ -518,10 +532,18 @@ apt -y install roundcube roundcube-plugins roundcube-plugins-extra \
 #
 #-- 8.2. Configure Apache for Roundcube
 nano /etc/apache2/sites-available/mail.x11.xyz-https.conf
+# !!! For Debian 11, Debian 12 and Ubuntu 22.04 LTS !!!
 # Change DocumentRoot line as below:
 #_________________________________________
  DocumentRoot /var/lib/roundcube/public_html
 #_________________________________________
+#
+# !!! For Ubuntu 20.04 LTS !!!
+# Change DocumentRoot line as below:
+#_________________________________________
+ DocumentRoot /var/lib/roundcube
+#_________________________________________
+#
 # Add following line just after the <VirtualHost> line
 #_________________________________________
  Include /etc/roundcube/apache.conf
@@ -530,17 +552,19 @@ nano /etc/apache2/sites-available/mail.x11.xyz-https.conf
 systemctl restart apache2
 #
 #-- 8.3. Configure Roundcube
+# 8.3.1. For Debian 11, Ubuntu 20.04 and Ubuntu 22.04
 nano /etc/roundcube/config.inc.php
+# !!! Remember to change to your domains !!!
 # Around line 36 change as below
 #____________________________________________________-
 $config['default_host'] = 'tls://mail.x11.xyz';
 #____________________________________________________-
-# Around lines 50 & 53  change as below
+# Around lines 48-50   change as below
 #____________________________________________________-
 $config['smtp_server'] = 'tls://mail.x11.xyz';
 $config['smtp_port'] = 587;
 #____________________________________________________-
-# Around lines 79-80 change as below
+# Around lines 76-79 change as below
 #____________________________________________________-
 $config['plugins'] = array(
      'managesieve',
@@ -548,8 +572,28 @@ $config['plugins'] = array(
  );
 #____________________________________________________-
 #
+# 8.3.2. For Debian 12
+nano /etc/roundcube/config.inc.php
+# !!! Remember to change to your domains !!!
+# Around line 27 change as below
+#____________________________________________________-
+$config['imap_host'] = ['tls://mail.x11.xyz'];
+#____________________________________________________-
+#
+# Around line 31 change as below
+#____________________________________________________-
+
+#____________________________________________________-
+# Around lines 56-59 change as below
+#____________________________________________________-
+$config['plugins'] = [
+     'managesieve',
+     'password',
+];
+#____________________________________________________-
+#
 #-- 8.4. Configure Password Plugin
-# This plugin will let the user change her password
+# This plugin will let the user change their password
 nano /etc/roundcube/plugins/password/config.inc.php
 # Clear the $config=array(); line fill it as below just before ?>
 # At the line 1 before the end, remember to enter your mailadmin password
@@ -580,6 +624,7 @@ systemctl restart dovecot
 
 
 
+
 #---9. Configure Postfix to Send Mail
 #-- 9.1. Configure Postfix to use Dovecot authentication
 postconf smtpd_sasl_type=dovecot
@@ -595,7 +640,7 @@ postconf smtp_tls_security_level=may
 #
 #-- 9.3. Enable Postfix for port 587 smtp for end users 
 nano /etc/postfix/master.cf
-# Around lines 19-30 change as below (remove comments)
+# Around lines 17-19 change as below (remove comments)
 #______________________________________________________________________
 submission inet n       -       y       -       -       smtpd
  -o syslog_name=postfix/submission
@@ -619,6 +664,8 @@ systemctl restart postfix
 
 
 
+
+
 #---10. Handling Spam with rspamd
 #-- 10.1. Configuring postfix to use rspamd
 postconf smtpd_milters=inet:127.0.0.1:11332
@@ -637,7 +684,7 @@ systemctl restart rspamd
 #
 #-- 10.3. Sending spam mails to Junk folder
 nano /etc/dovecot/conf.d/90-sieve.conf
-# Around line 83 add a new line with indent
+# Around line 83-86 add a new line with indent
 #_____________________________________
   sieve_after = /etc/dovecot/sieve-after
 #_____________________________________
@@ -678,14 +725,16 @@ users_enabled = true;
 # When users move an email to junk folder, rspamd will learn from it
 # Edit conf file to enable IMAPSieve
 nano /etc/dovecot/conf.d/20-imap.conf
-# Find the line with mail_plugins around line 94, uncomment and change it as below
+# Find the line with mail_plugins around line 93-94, uncomment and change it
+# as below
 #_____________________________________________________
-mail_plugins = $mail_plugins imap_sieve
+  mail_plugins = $mail_plugins imap_sieve
 #_____________________________________________________
 #
 # Edit Dovecot Sieve conf
 nano /etc/dovecot/conf.d/90-sieve.conf
-# Put the following lines just before the end of the file, remember indenting
+# - Put the following lines just before the end of the file (}), remember 
+# indenting
 #_____________________________________________________
   # From elsewhere to Junk folder
   imapsieve_mailbox1_name = Junk
@@ -729,7 +778,7 @@ sievec /etc/dovecot/sieve/learn-spam.sieve
 sievec /etc/dovecot/sieve/learn-ham.sieve
 # Fix permissions for these files
 chmod u=rw,go= /etc/dovecot/sieve/learn-{spam,ham}.{sieve,svbin}
-chown vmail.vmail /etc/dovecot/sieve/learn-{spam,ham}.{sieve,svbin}
+chown vmail:vmail /etc/dovecot/sieve/learn-{spam,ham}.{sieve,svbin}
 # Create shell scripts for spam and ham learning
 # Create spam learning script
 nano /etc/dovecot/sieve/rspamd-learn-spam.sh
@@ -745,11 +794,12 @@ nano /etc/dovecot/sieve/rspamd-learn-ham.sh
 #!/bin/sh
 exec /usr/bin/rspamc learn_ham
 #_____________________________________________________
-# Fix their permissions
+# Fix their permissions, ownerships
 chmod u=rwx,go= /etc/dovecot/sieve/rspamd-learn-{spam,ham}.sh
-chown vmail.vmail /etc/dovecot/sieve/rspamd-learn-{spam,ham}.sh
+chown vmail:vmail /etc/dovecot/sieve/rspamd-learn-{spam,ham}.sh
 #
-#-- 10.6. Configure Dovecot to autodelete Junk and Trash folders after 30 days
+#-- 10.6. Configure Dovecot to autodelete Junk and Trash folders after 30 
+days
 nano /etc/dovecot/conf.d/15-mailboxes.conf 
 # Add just 1 line before the end
 #___________________________
@@ -859,6 +909,8 @@ Link:https://workaround.org/ispmail/buster/blocking-malware/
 
 
 
+
+
 #---12. Preventing Spoofing with DKIM
 # - With DKIM, we can sign our emails with a certificate and the other 
 # mail servers can make sure that the emails coming from us are legitimate.
@@ -887,15 +939,15 @@ selector_map = "/etc/rspamd/dkim_selectors.map";
 # x11.xyz, u11.xyz and v11.xyz 
 # Save the outputs of all the commands somewhere.
 # Create keypair (-s option is for the selector)
-rspamadm dkim_keygen -d x11.xyz -s 20230105 -k /var/lib/rspamd/dkim/x11.xyz.20230105.key
-rspamadm dkim_keygen -d u11.xyz -s 20230105 -k /var/lib/rspamd/dkim/u11.xyz.20230105.key
-rspamadm dkim_keygen -d v11.xyz -s 20230105 -k /var/lib/rspamd/dkim/v11.xyz.20230105.key
+rspamadm dkim_keygen -d x11.xyz -s 20230830 -k /var/lib/rspamd/dkim/x11.xyz.20230830.key
+rspamadm dkim_keygen -d u11.xyz -s 20230830 -k /var/lib/rspamd/dkim/u11.xyz.20230830.key
+rspamadm dkim_keygen -d v11.xyz -s 20230830 -k /var/lib/rspamd/dkim/v11.xyz.20230830.key
 #
 # - The output will be used for DNS records. If you have your own DNS 
 # server, you can put it as it is to the DNS server. But if you use 
 # cloudfare or a similar service like me, you can use their web interface to
 # insert your record  considering below comments:
-# - Create a new TXT record with a hostname 20230105._domainkey and put the 
+# - Create a new TXT record with a hostname 20230830._domainkey and put the 
 # value in the record as in the example below. That is starting from
 # v=DKIM1; removing all double quotes and paranthesis.
 # v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBA....
@@ -905,9 +957,9 @@ rspamadm dkim_keygen -d v11.xyz -s 20230105 -k /var/lib/rspamd/dkim/v11.xyz.2023
 nano /etc/rspamd/dkim_selectors.map
 # Fill it as below, remember to change to your domains and selectors.
 #  If you have more than 2 domains, add them too
-x11.xyz 20230105
-u11.xyz 20230105
-v11.xyz 20230105
+x11.xyz 20230830
+u11.xyz 20230830
+v11.xyz 20230830
 # Fix file permissions
 chown _rspamd /var/lib/rspamd/dkim/*
 chmod u=r,go= /var/lib/rspamd/dkim/*

@@ -33,7 +33,7 @@ There are txt and html versions of each document. In the html version, commands 
 
 - AGT-KVMOnUbuntu2: KVM Virtualization tutorial (networking) on Ubuntu Server. 
 
-- AGT-ISPMailOnUbuntu: A step by step Ubuntu tutorial for Christoph Haas' ISPMail Tutorials.
+- ISPMailOnDebianUbuntu: A step by step Debian and Ubuntu tutorial for Christoph Haas' ISPMail Tutorials.
 
 - ADOnDebianUbuntu: Simple Active Directory, with 1 domain, 2 DCs and 1 Fileserver with Debian and Ubuntu Servers.
 

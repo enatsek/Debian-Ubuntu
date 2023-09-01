@@ -582,8 +582,9 @@ $config['imap_host'] = ['tls://mail.x11.xyz'];
 #
 # Around line 31 change as below
 #____________________________________________________-
-
+$config['smtp_host'] = 'tls://mail.x11.xyz:587';
 #____________________________________________________-
+#
 # Around lines 56-59 change as below
 #____________________________________________________-
 $config['plugins'] = [

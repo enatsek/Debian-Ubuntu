@@ -1,4 +1,4 @@
-<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>ISPMailOnUbuntu: ISPmail Tutorial for Ubuntu 22.04 Server
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>ISPMailOnDebianUbuntu: ISPmail Tutorial for Debian and Ubuntu
 </H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2021 - 2023 Exforge exforge@x386.org
 </a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,15 +22,19 @@
 # Abel
 <a href="https://123qwe.com/" target="_blank">https://123qwe.com/</a>
 #
+# - Christoph Haas has not released the Debian 12 version yet. This document
+# will be updated after his release.
+#
 # - Please consider, all the hard work is done by Christoph Haas, I am just 
 # an implementer.
 #
 # - To guarantee everything works, you need to implement the tutorial on a 
-# freshly installed Ubuntu 22.04 version. It is tested on freshly installed
-# Ubuntu 22.04 system. But of course you are free to use it as you wish.
+# freshly installed server. It is tested on freshly installed Debian 12/11
+# and Ubuntu 22.04/20.04 systems. But of course you are free to use it as
+# you wish.
 #
+# Distro Versions:      Debian 12/11  Ubuntu 22.04/20.04 LTS
 #
-# Ubuntu 22.04 LTS  	(Debian Buster Originally)
 # Postfix               SMTP
 # rspamd                spam check
 # Dovecot               POP3 &amp; IMAP
@@ -80,7 +84,7 @@
 </span></code># Dovecot
 <code><span style="Color:DodgerBlue">apt -y install dovecot-mysql dovecot-pop3d dovecot-imapd \
 </span></code><code><span style="Color:DodgerBlue">   dovecot-managesieved dovecot-lmtpd
-</span></code># Adminer, a replacement of phpmyadmin, for managing DB
+</span></code># Adminer, a replacement of phpmyadmin, for managing database
 <code><span style="Color:DodgerBlue">apt -y install adminer
 </span></code># default set of certificates of common certificate authorities.
 #   Don't mind if already installed.
@@ -182,7 +186,7 @@ systemctl reload dovecot
 <code><span style="Color:DodgerBlue">nano /etc/apache2/sites-available/mail.x11.xyz-https.conf
 </span></code><code><span style="Color:MediumSeaGreen"> Alias /adminer /usr/share/adminer/adminer
 </span></code># Reload apache
-<code><span style="Color:DodgerBlue">systemctl restart apache2
+<code><span style="Color:DodgerBlue">systemctl reload apache2
 </span></code># You can see its login screen at:
 <code><span style="Color:DodgerBlue">https://mail.x11.xyz/adminer
 </span></code># But it is not ready yet
@@ -360,7 +364,7 @@ iterate_query = SELECT email AS user FROM virtual_users
 <p> <H4><a href="javascript:myFunction('Div8')">6. Postfix - Dovecot Connection
 </a> </H4><div id="Div8" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 6.1. Connect Dovecot to Postfix using LMTP
 </B></span><code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/10-master.conf
-</span></code># Around lines 54-57, change like below
+</span></code># Around lines 54-65, change like below
 <code><span style="Color:MediumSeaGreen">service lmtp {
   unix_listener /var/spool/postfix/private/dovecot-lmtp {
     group = postfix
@@ -459,28 +463,51 @@ EOF
 #
 <B><span style="Font-Family:Verdana">#-- 8.2. Configure Apache for Roundcube
 </B></span><code><span style="Color:DodgerBlue">nano /etc/apache2/sites-available/mail.x11.xyz-https.conf
-</span></code># Change DocumentRoot line as below:
+</span></code># !!! For Debian 11, Debian 12 and Ubuntu 22.04 LTS !!!
+# Change DocumentRoot line as below:
 <code><span style="Color:MediumSeaGreen"> DocumentRoot /var/lib/roundcube/public_html
-</span></code># Add following line just after the &lt;VirtualHost&gt; line
+</span></code>#
+# !!! For Ubuntu 20.04 LTS !!!
+# Change DocumentRoot line as below:
+<code><span style="Color:MediumSeaGreen"> DocumentRoot /var/lib/roundcube
+</span></code>#
+# Add following line just after the &lt;VirtualHost&gt; line
 <code><span style="Color:MediumSeaGreen"> Include /etc/roundcube/apache.conf
 </span></code># Restart Apache
 <code><span style="Color:DodgerBlue">systemctl restart apache2
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 8.3. Configure Roundcube
-</B></span><code><span style="Color:DodgerBlue">nano /etc/roundcube/config.inc.php
-</span></code># Around line 36 change as below
+</B></span># 8.3.1. For Debian 11, Ubuntu 20.04 and Ubuntu 22.04
+<code><span style="Color:DodgerBlue">nano /etc/roundcube/config.inc.php
+</span></code># !!! Remember to change to your domains !!!
+# Around line 36 change as below
 <code><span style="Color:MediumSeaGreen">$config&lsqb;'default_host'&rsqb; = 'tls://mail.x11.xyz';
-</span></code># Around lines 50 &amp; 53  change as below
+</span></code># Around lines 48-50   change as below
 <code><span style="Color:MediumSeaGreen">$config&lsqb;'smtp_server'&rsqb; = 'tls://mail.x11.xyz';
 $config&lsqb;'smtp_port'&rsqb; = 587;
-</span></code># Around lines 79-80 change as below
+</span></code># Around lines 76-79 change as below
 <code><span style="Color:MediumSeaGreen">$config&lsqb;'plugins'&rsqb; = array(
      'managesieve',
      'password',
  );
 </span></code>#
+# 8.3.2. For Debian 12
+<code><span style="Color:DodgerBlue">nano /etc/roundcube/config.inc.php
+</span></code># !!! Remember to change to your domains !!!
+# Around line 27 change as below
+<code><span style="Color:MediumSeaGreen">$config&lsqb;'imap_host'&rsqb; = &lsqb;'tls://mail.x11.xyz'&rsqb;;
+</span></code>#
+# Around line 31 change as below
+<code><span style="Color:MediumSeaGreen">$config&lsqb;'smtp_host'&rsqb; = 'tls://mail.x11.xyz:587';
+</span></code>#
+# Around lines 56-59 change as below
+<code><span style="Color:MediumSeaGreen">$config&lsqb;'plugins'&rsqb; = &lsqb;
+     'managesieve',
+     'password',
+&rsqb;;
+</span></code>#
 <B><span style="Font-Family:Verdana">#-- 8.4. Configure Password Plugin
-</B></span># This plugin will let the user change her password
+</B></span># This plugin will let the user change their password
 <code><span style="Color:DodgerBlue">nano /etc/roundcube/plugins/password/config.inc.php
 </span></code># Clear the $config=array(); line fill it as below just before ?&gt;
 # At the line 1 before the end, remember to enter your mailadmin password
@@ -520,7 +547,7 @@ $config&lsqb;'password_query'&rsqb; = "UPDATE virtual_users SET password=%D WHER
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 9.3. Enable Postfix for port 587 smtp for end users 
 </B></span><code><span style="Color:DodgerBlue">nano /etc/postfix/master.cf
-</span></code># Around lines 19-30 change as below (remove comments)
+</span></code># Around lines 17-19 change as below (remove comments)
 <code><span style="Color:MediumSeaGreen">submission inet n       -       y       -       -       smtpd
  -o syslog_name=postfix/submission
  -o smtpd_tls_security_level=encrypt
@@ -556,7 +583,7 @@ $config&lsqb;'password_query'&rsqb; = "UPDATE virtual_users SET password=%D WHER
 </span></code>#
 <B><span style="Font-Family:Verdana">#-- 10.3. Sending spam mails to Junk folder
 </B></span><code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/90-sieve.conf
-</span></code># Around line 83 add a new line with indent
+</span></code># Around line 83-86 add a new line with indent
 <code><span style="Color:MediumSeaGreen">  sieve_after = /etc/dovecot/sieve-after
 </span></code># Make the directory to put the rule
 <code><span style="Color:DodgerBlue">mkdir /etc/dovecot/sieve-after
@@ -589,12 +616,14 @@ if header :contains "X-Spam" "Yes" {
 </B></span># When users move an email to junk folder, rspamd will learn from it
 # Edit conf file to enable IMAPSieve
 <code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/20-imap.conf
-</span></code># Find the line with mail_plugins around line 94, uncomment and change it as below
-<code><span style="Color:MediumSeaGreen">mail_plugins = $mail_plugins imap_sieve
+</span></code># Find the line with mail_plugins around line 93-94, uncomment and change it
+# as below
+<code><span style="Color:MediumSeaGreen">  mail_plugins = $mail_plugins imap_sieve
 </span></code>#
 # Edit Dovecot Sieve conf
 <code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/90-sieve.conf
-</span></code># Put the following lines just before the end of the file, remember indenting
+</span></code># - Put the following lines just before the end of the file (}), remember 
+# indenting
 <code><span style="Color:MediumSeaGreen">  # From elsewhere to Junk folder
   imapsieve_mailbox1_name = Junk
   imapsieve_mailbox1_causes = COPY
@@ -632,7 +661,7 @@ pipe :copy "rspamd-learn-ham.sh";
 </span></code><code><span style="Color:DodgerBlue">sievec /etc/dovecot/sieve/learn-ham.sieve
 </span></code># Fix permissions for these files
 <code><span style="Color:DodgerBlue">chmod u=rw,go= /etc/dovecot/sieve/learn-{spam,ham}.{sieve,svbin}
-</span></code><code><span style="Color:DodgerBlue">chown vmail.vmail /etc/dovecot/sieve/learn-{spam,ham}.{sieve,svbin}
+</span></code><code><span style="Color:DodgerBlue">chown vmail:vmail /etc/dovecot/sieve/learn-{spam,ham}.{sieve,svbin}
 </span></code># Create shell scripts for spam and ham learning
 # Create spam learning script
 <code><span style="Color:DodgerBlue">nano /etc/dovecot/sieve/rspamd-learn-spam.sh
@@ -644,12 +673,13 @@ exec /usr/bin/rspamc learn_spam
 </span></code># And fill it as below
 <code><span style="Color:MediumSeaGreen">#!/bin/sh
 exec /usr/bin/rspamc learn_ham
-</span></code># Fix their permissions
+</span></code># Fix their permissions, ownerships
 <code><span style="Color:DodgerBlue">chmod u=rwx,go= /etc/dovecot/sieve/rspamd-learn-{spam,ham}.sh
-</span></code><code><span style="Color:DodgerBlue">chown vmail.vmail /etc/dovecot/sieve/rspamd-learn-{spam,ham}.sh
+</span></code><code><span style="Color:DodgerBlue">chown vmail:vmail /etc/dovecot/sieve/rspamd-learn-{spam,ham}.sh
 </span></code>#
-<B><span style="Font-Family:Verdana">#-- 10.6. Configure Dovecot to autodelete Junk and Trash folders after 30 days
-</B></span><code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/15-mailboxes.conf 
+<B><span style="Font-Family:Verdana">#-- 10.6. Configure Dovecot to autodelete Junk and Trash folders after 30 
+</B></span><code><span style="Color:DodgerBlue">days
+</span></code><code><span style="Color:DodgerBlue">nano /etc/dovecot/conf.d/15-mailboxes.conf 
 </span></code># Add just 1 line before the end
 <code><span style="Color:MediumSeaGreen">  mailbox Junk {
     special_use = \Junk
@@ -772,15 +802,15 @@ selector_map = "/etc/rspamd/dkim_selectors.map";
 # x11.xyz, u11.xyz and v11.xyz 
 # Save the outputs of all the commands somewhere.
 # Create keypair (-s option is for the selector)
-<code><span style="Color:DodgerBlue">rspamadm dkim_keygen -d x11.xyz -s 20230105 -k /var/lib/rspamd/dkim/x11.xyz.20230105.key
-</span></code><code><span style="Color:DodgerBlue">rspamadm dkim_keygen -d u11.xyz -s 20230105 -k /var/lib/rspamd/dkim/u11.xyz.20230105.key
-</span></code><code><span style="Color:DodgerBlue">rspamadm dkim_keygen -d v11.xyz -s 20230105 -k /var/lib/rspamd/dkim/v11.xyz.20230105.key
+<code><span style="Color:DodgerBlue">rspamadm dkim_keygen -d x11.xyz -s 20230830 -k /var/lib/rspamd/dkim/x11.xyz.20230830.key
+</span></code><code><span style="Color:DodgerBlue">rspamadm dkim_keygen -d u11.xyz -s 20230830 -k /var/lib/rspamd/dkim/u11.xyz.20230830.key
+</span></code><code><span style="Color:DodgerBlue">rspamadm dkim_keygen -d v11.xyz -s 20230830 -k /var/lib/rspamd/dkim/v11.xyz.20230830.key
 </span></code>#
 # - The output will be used for DNS records. If you have your own DNS 
 # server, you can put it as it is to the DNS server. But if you use 
 # cloudfare or a similar service like me, you can use their web interface to
 # insert your record  considering below comments:
-# - Create a new TXT record with a hostname 20230105._domainkey and put the 
+# - Create a new TXT record with a hostname 20230830._domainkey and put the 
 # value in the record as in the example below. That is starting from
 # v=DKIM1; removing all double quotes and paranthesis.
 # v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBA....
@@ -790,9 +820,9 @@ selector_map = "/etc/rspamd/dkim_selectors.map";
 <code><span style="Color:DodgerBlue">nano /etc/rspamd/dkim_selectors.map
 </span></code># Fill it as below, remember to change to your domains and selectors.
 #  If you have more than 2 domains, add them too
-<code><span style="Color:DodgerBlue">x11.xyz 20230105
-</span></code><code><span style="Color:DodgerBlue">u11.xyz 20230105
-</span></code><code><span style="Color:DodgerBlue">v11.xyz 20230105
+<code><span style="Color:DodgerBlue">x11.xyz 20230830
+</span></code><code><span style="Color:DodgerBlue">u11.xyz 20230830
+</span></code><code><span style="Color:DodgerBlue">v11.xyz 20230830
 </span></code># Fix file permissions
 <code><span style="Color:DodgerBlue">chown _rspamd /var/lib/rspamd/dkim/*
 </span></code><code><span style="Color:DodgerBlue">chmod u=r,go= /var/lib/rspamd/dkim/*

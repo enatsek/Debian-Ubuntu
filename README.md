@@ -31,7 +31,7 @@ There are txt and html versions of each document. In the html version, commands 
 
 - KVMOnDebianUbuntu1: KVM Virtualization tutorial (beginner) on Debian and Ubuntu Server. 
 
-- AGT-KVMOnUbuntu2: KVM Virtualization tutorial (networking) on Ubuntu Server. 
+- KVMOnDebianUbuntu2: KVM Virtualization tutorial (networking) on Debian and Ubuntu Server. 
 
 - ISPMailOnDebianUbuntu: A step by step Debian and Ubuntu tutorial for Christoph Haas' ISPMail Tutorials.
 

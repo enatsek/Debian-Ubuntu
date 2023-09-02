@@ -162,8 +162,9 @@ sudo netplan apply
 # - If you run "ip link" now, you can see our bridge br0
 #
 # 1.2.2. Debian Bridge Configuration
-# - But we want the VMs join to our network by getting IP address from our 
-# network.
+# - By default KVM creates a virtual bridge named virbr0. This bridge allows 
+# the VMs to communicate between each other and the host. But we want the
+# VMs join to our network by getting IP address from our network.
 # - First we need to disable netfilter, which is enabled on bridges by 
 # default.
 sudo nano /etc/sysctl.d/bridge.conf
@@ -217,7 +218,7 @@ iface br0 inet static
         bridge_maxwait 0
         dns-nameservers 8.8.8.8
 #___________________________________________________
-# Apply the changes. If you connect through ssh, you connection may break.
+# Apply the changes. If you connect through ssh, your connection may break.
 #   In this case, close the terminal and reconnect.
 sudo systemctl restart networking.service
 #

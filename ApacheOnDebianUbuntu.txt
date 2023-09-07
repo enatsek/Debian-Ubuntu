@@ -318,6 +318,6 @@ a2enmod rewrite
 
 #---7. Free SSL Certificates
 # You can use free, autorenewing SSL certificates from Letsencrypt.org 
-#   with Certbot tool from EFF. Check it out at my CertbotOnUbuntu Tutorial.
+#   with Certbot tool from EFF. Check it out at my CertbotOnDebianUbuntu Tutorial.
 
 

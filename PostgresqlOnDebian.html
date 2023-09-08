@@ -113,7 +113,31 @@
 <code><span style="Color:MediumSeaGreen">Ver Cluster   Port Status Owner    Data directory                   Log file
 15  main      5432 online postgres /var/lib/postgresql/15/main      /var/log/..
 15  secondary 5433 online postgres /var/lib/postgresql/15/secondary /var/log/..
-</pre> </div> </p>
+</span></code>#
+# - Here we can understand that, our 14 main cluster listens on port 5432 
+# (default postgres listening port), and 14 secondary cluster listens on
+# port 5433.
+# - Directory of configuration files for both clusters:
+# /var/lib/postgresql/14/main/ and /var/lib/postgresql/14/secondary.
+#
+<B><span style="Font-Family:Verdana">#-- 2.4. Service vs Cluster Management
+</B></span># Postgres and its clusters can be managed by systemctl command too.
+# Stop postgres (all the clusters)
+<code><span style="Color:DodgerBlue">sudo systemctl stop postgresql
+</span></code># Stop 15-main postgres cluster
+<code><span style="Color:DodgerBlue">sudo systemctl stop postgresql@15-main
+</span></code># - Other systemctl options (like restart, stop, enable, disable, reload) 
+# can be used too.
+#
+<B><span style="Font-Family:Verdana">#-- 2.5. Login to Postgres shell
+</B></span># - With the default installation; postgres linux user can login to psql 
+# shell without the need of password authentication. 
+<code><span style="Color:DodgerBlue">sudo -u postgres psql
+</span></code># Type exit to quit from postgres shell
+# - As you may guess, you logged in to 14 Main cluster. To login 14 
+# secondary cluster:
+<code><span style="Color:DodgerBlue">sudo -u postgres psql -p 5433
+</span></code></pre> </div> </p>
 <p> <H4><a href="javascript:myFunction('Div5')"> 3. User and Connection Management
 </a> </H4><div id="Div5" style="margin-left:1%;"><pre ># - After installing Postgres, postgres user is able to login psql shell 
 # with Linux authentication. No other users are defined and noone can login 

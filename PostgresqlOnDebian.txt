@@ -122,7 +122,6 @@ pg_lsclusters
 Ver Cluster   Port Status Owner    Data directory                   Log file
 15  main      5432 online postgres /var/lib/postgresql/15/main      /var/log/..
 15  secondary 5433 online postgres /var/lib/postgresql/15/secondary /var/log/..
-
 #_______________________________________________________________________________
 #
 # - Here we can understand that, our 14 main cluster listens on port 5432 

@@ -57,3 +57,5 @@ There are txt and html versions of each document. In the html version, commands 
 - DebPackagingOnDebianUbuntu: A basic tutorial about creating and using .deb packages.
 
 - UFWOnDebianUbuntu: Basic UFW (Uncomplicated Firewall) tutorial for Debian and Ubuntu.
+
+- LappOnDebianUbuntu: Installation of LAPP (Linux, Apache, Postgresql, PHP) stack on Debian and Ubuntu servers.

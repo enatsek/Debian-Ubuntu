@@ -1,0 +1,139 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>LappOnDebianUbuntu: LAPP Stack On Debian and Ubuntu 
+</H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2023 Exforge exforge@x386.org
+</a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# - This document is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# - You should have received a copy of the GNU General Public License
+# along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div2')">Specs
+</a> </H4><div id="Div2" style="margin-left:1%;"><pre ># L: Debian 12/11 or Ubuntu 22.04/20.04 LTS Server
+# A: Apache 2 
+# P: Postgresql
+# P: PHP (Python or Perl could be other options)
+#
+# Sources:
+<a href="https://stackoverflow.com/questions/49157928/how-to-fetch-data-from-postgresql-using-php" target="_blank">https://stackoverflow.com/questions/49157928/how-to-fetch-data-from-postgresql-using-php</a>
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div3')"> 1. Install Packages
+</a> </H4><div id="Div3" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 1.0. Update Repositories
+</B></span><code><span style="Color:DodgerBlue">sudo apt update
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 1.1. Install Apache
+</B></span><code><span style="Color:DodgerBlue">sudo apt install --yes apache2
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 1.2. Install Postgres
+</B></span><code><span style="Color:DodgerBlue">sudo apt install --yes postgresql
+</span></code>#
+#
+<B><span style="Font-Family:Verdana">#-- 1.4. Install PHP, Postgres and Apache dependencies
+</B></span><code><span style="Color:DodgerBlue">sudo apt install --yes php libapache2-mod-php php-pgsql
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 1.5. Install other PHP dependencies 
+</B></span># Depending on the PHP code, you may need some more PHP library packages.
+# For example, Wordpress needs the following packages:
+<code><span style="Color:DodgerBlue">sudo apt install --yes php-curl php-gd php-mbstring php-xml php-xmlrpc \
+</span></code><code><span style="Color:DodgerBlue">     php-soap php-intl php-zip
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 1.6. Restart Apache
+</B></span><code><span style="Color:DodgerBlue">sudo systemctl restart apache2
+</span></code></pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div4')"> 2. Test LAPP Stack
+</a> </H4><div id="Div4" style="margin-left:1%;"><pre ># - We'll create a test database, a table in that database, add some rows to the 
+# table on Postgres. We will also create a test PHP file with the PHP code to 
+# retrieve the data from the database and display it as HTML. 
+#
+<B><span style="Font-Family:Verdana">#-- 2.1. DB Operations
+</B></span># Create a test Postgres user
+# Give its password too
+<code><span style="Color:DodgerBlue">sudo -u postgres createuser --pwprompt testuser
+</span></code>#
+# Create a test Database
+<code><span style="Color:DodgerBlue">sudo -u postgres createdb testdb
+</span></code>#
+# Connect to Postgres shell
+<code><span style="Color:DodgerBlue">sudo -u postgres psql testdb
+</span></code># - Create a table, fill the table, give test user access permission to that 
+# database and the table.
+# !!! BEGIN Run on Postgres shell. !!!
+<code><span style="Color:DodgerBlue">CREATE TABLE Employees (Name char(15), Age int, Occupation char(15));
+</span></code><code><span style="Color:DodgerBlue">INSERT INTO Employees VALUES ('Joe Smith', '26', 'Ninja');
+</span></code><code><span style="Color:DodgerBlue">INSERT INTO Employees VALUES ('John Doe', '33', 'Sleeper');
+</span></code><code><span style="Color:DodgerBlue">INSERT INTO Employees VALUES ('Postgres Server', '14', 'RDBM');
+</span></code><code><span style="Color:DodgerBlue">GRANT SELECT ON ALL TABLES IN SCHEMA public to testuser;
+</span></code><code><span style="Color:DodgerBlue">exit
+</span></code># !!! END Run on Postgres shell. !!!
+# 
+<B><span style="Font-Family:Verdana">#-- 2.2. Create Test PHP
+</B></span><code><span style="Color:DodgerBlue">sudo nano /var/www/html/test.php
+</span></code># Fill it as below, remember to change to your password
+<code><span style="Color:MediumSeaGreen">&lt;?php
+    $dbh = 'localhost';
+    $dbn= 'testdb';
+    $dbu = 'testuser';
+    $dbp = 'password';
+    $dbconn = pg_connect("host=$dbh dbname=$dbn user=$dbu password=$dbp")
+        or die('Connection Error: ' . pg_last_error());
+   $query = 'SELECT * FROM Employees';
+   $result = pg_query($query) or die('Error message: ' . pg_last_error());
+?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;table&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;Name&lt;/th&gt;
+                &lt;th&gt;Age&lt;/th&gt;
+                &lt;th&gt;Occupation&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+            &lt;?php
+               while ($row = pg_fetch_row($result)) {
+            ?&gt;
+            &lt;tr&gt;
+                &lt;td&gt;&lt;?php echo $row&lsqb;0&rsqb;; ?&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;?php echo $row&lsqb;1&rsqb;; ?&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;?php echo $row&lsqb;2&rsqb;; ?&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;?php } ?&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&lt;?php
+    pg_free_result($result);
+    pg_close($dbconn);
+?&gt;
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.3. Test it
+</B></span># Now, from your workstation's browser, load the page (replace srv with your 
+#    server's IP: 
+#    http:/srv/test.php
+</pre> </div> </p>
+</pre> </div> </p>
+<br /><br /><br /><script>
+function myFunction(divid) {
+  var x = document.getElementById(divid);
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+var i;
+var str;
+
+for (i=1; i<5; i++) {
+    str = "Div" + i.toString();
+    myFunction(str);
+}
+</script></body> </html>

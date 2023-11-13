@@ -2,7 +2,7 @@
 
 I am a learner of Debian and Ubuntu Linux. These are the tutorials I prepared with the help of internet sources and books. I credited the sources that helped me on each document.
 
-My Linux voyage started with Ubuntu. I still use Ubuntu as desktop, but for the server part, I'm using Debian and Ubuntu.
+My Linux voyage started with Ubuntu. I converted to Debian as desktop, but for the server part, I'm using Debian and Ubuntu.
 
 There are txt and html versions of each document. In the html version, commands and codes are in colors for easy navigation.
 

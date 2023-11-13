@@ -1,6 +1,6 @@
 #Debian and Ubuntu Tutorials
 
-I am a learner of Debian and Ubuntu. These are the tutorials I prepared with the help of internet sources and books. I credited the sources that helped me on each document.
+I am a learner of Debian and Ubuntu Linux. These are the tutorials I prepared with the help of internet sources and books. I credited the sources that helped me on each document.
 
 My Linux voyage started with Ubuntu. I still use Ubuntu as desktop, but for the server part, I'm using Debian and Ubuntu.
 

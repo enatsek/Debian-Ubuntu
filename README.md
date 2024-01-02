@@ -59,3 +59,6 @@ There are txt and html versions of each document. In the html version, commands 
 - UFWOnDebianUbuntu: Basic UFW (Uncomplicated Firewall) tutorial for Debian and Ubuntu.
 
 - LappOnDebianUbuntu: Installation of LAPP (Linux, Apache, Postgresql, PHP) stack on Debian and Ubuntu servers.
+
+- SystemdOnDebianUbuntu2: Additional services and tools of Systemd.
+

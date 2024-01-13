@@ -62,4 +62,6 @@ There are txt and html versions of each document. In the html version, commands 
 
 - SystemdOnDebianUbuntu2: Additional services and tools of Systemd.
 
-- FHSOnDebianUbuntu2: File Hierarchy Standard specifications.
+- FHSOnDebianUbuntu: File Hierarchy Standard specifications.
+
+- FileCompressionOnDebianUbuntu: Overview and tutorial of file compression utilities.

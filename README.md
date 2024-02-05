@@ -65,3 +65,5 @@ There are txt and html versions of each document. In the html version, commands 
 - FHSOnDebianUbuntu: File Hierarchy Standard specifications.
 
 - FileCompressionOnDebianUbuntu: Overview and tutorial of file compression utilities.
+
+- LVMOnDebianUbuntu: Logical Volume Management tutorial.

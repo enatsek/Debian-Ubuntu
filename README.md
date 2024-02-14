@@ -67,3 +67,8 @@ There are txt and html versions of each document. In the html version, commands 
 - FileCompressionOnDebianUbuntu: Overview and tutorial of file compression utilities.
 
 - LVMOnDebianUbuntu: Logical Volume Management tutorial.
+
+- NetworkOnDebian: Debian basic network configuration tutorial.
+
+- NetworkOnUbuntu: Ubuntu basic network configuration tutorial.
+

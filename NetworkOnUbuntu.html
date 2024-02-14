@@ -1,0 +1,267 @@
+<!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>NetworkOnUbuntu: Network Configuration On Ubuntu Server
+</H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2024 Exforge exforge@x386.org
+</a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# - This document is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div2')"> 0. Specs
+</a> </H4><div id="Div2" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 0.0. Info
+</B></span># - Network configuration examples on Ubuntu 20.04 LTS and 22.04 LTS Servers.
+# - Tried to be as thorough much as possible: single nic, multi nics, multi 
+# networks, nic bonding.
+# - Debian and Ubuntu network configurations are very different so there are 
+# different tutorials for Debian and Ubuntu.
+#
+<B><span style="Font-Family:Verdana">#-- 0.1. Configuration Files
+</B></span># - Ubuntu 20.04 and 22.04 LTS Servers use Systemd-Networkd and Netplan over 
+# it for network configuration.
+# - Configuration files reside as yaml files in /etc/netplan dir. A good
+# practice would be to have one configuration file there.
+# - This configuration file consists all network configuration including the
+# name servers.
+#
+<B><span style="Font-Family:Verdana">#-- 0.2. Sources
+</B></span><a href="https://netplan.io/" target="_blank">https://netplan.io/</a>
+<a href="https://netplan.readthedocs.io/en/stable/" target="_blank">https://netplan.readthedocs.io/en/stable/</a>
+# ChatGPT
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div3')"> 1. Example Configurations
+</a> </H4><div id="Div3" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 1.1. DHCP Configuration
+</B></span># Our nic is enp0s3
+<code><span style="Color:DodgerBlue">sudo nano /etc/netplan/00-installer-config.yaml
+</span></code><code><span style="Color:MediumSeaGreen">network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      dhcp4: true
+</span></code>#
+<code><span style="Color:DodgerBlue">sudo netplan apply
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 1.2. Static IP Configuration
+</B></span># Our nic is enp0s3
+<code><span style="Color:DodgerBlue">sudo nano /etc/netplan/00-installer-config.yaml
+</span></code><code><span style="Color:MediumSeaGreen">network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      addresses:
+        - 192.168.1.216/24
+      nameservers:
+        search:
+          - "x386.org"
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+      routes:
+        - to: default
+          via: 192.168.1.1
+</span></code>#
+<code><span style="Color:DodgerBlue">sudo netplan apply
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 1.3. Static IP Configuration with 2 IPs
+</B></span># Our nic is enp0s3
+<code><span style="Color:DodgerBlue">sudo nano /etc/netplan/00-installer-config.yaml
+</span></code><code><span style="Color:MediumSeaGreen">network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      addresses:
+        - 192.168.1.216/24
+        - 10.1.1.1/8
+      nameservers:
+        search:
+          - "x386.org"
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+      routes:
+        - to: default
+          via: 192.168.1.1
+</span></code>#
+<code><span style="Color:DodgerBlue">sudo netplan apply
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 1.4. Static IP Configuration with 2 NICs
+</B></span># Our nics are enp0s3 enp0s8
+<code><span style="Color:DodgerBlue">sudo nano /etc/netplan/00-installer-config.yaml
+</span></code><code><span style="Color:MediumSeaGreen">network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      addresses:
+        - 192.168.1.216/24
+      nameservers:
+        search:
+          - "x386.org"
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+      routes:
+        - to: default
+          via: 192.168.1.1
+    enp0s8:
+      addresses:
+        - 10.1.1.1/8
+</span></code>#
+<code><span style="Color:DodgerBlue">sudo netplan apply
+</span></code>#
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div4')"> 2. Case Study - Multiple Networks
+</a> </H4><div id="Div4" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 2.0. Specs
+</B></span># - We have 2 separate networks (192.168.1.X and 10.X.X.X). Some hosts from one
+# network need to reach to the hosts from the other network.
+# - We are going to install a new host to act as a router between the networks.
+# The host will have 2 NICs (1 in each network), and we'll enable ip routing
+# on it.
+# - This way, hosts in one network could be able to reach to the hosts in the
+# other network. This will be possible by defining ip routes on the hosts to
+# use the server with 2 nics as a router to the other network.
+# - Hosts in 192.168.1.X network use 192.168.1.1 as the default gateway, hosts
+# in 10.X.X.X network use 10.1.1.1 as the default gateway.
+# - Our router will have 2 NICs, one with the IP 192.168.1.216 and the other 
+# with the IP 10.1.1.216.
+# - The hosts in 192.168.1.X network will use 192.168.1.216 to reach the 
+# 10.X.X.X network. The hosts in 10.X.X.X network will use 10.1.1.216 to reach 
+# the 192.168.1.X network. 
+#
+# - We are going to configure the router (192.168.1.216 &amp; 10.1.1.216), the host
+# in the first network (192.168.1.217), and the host in the second network 
+# (10.1.1.218), and check connectivity between them.
+#
+<B><span style="Font-Family:Verdana">#-- 2.1. Configuration of the Router
+</B></span># We have 2 NICs (enp0s3 - 192.168.1.X network, and enp0s8 -10.X.X.X network).
+#
+# Configure NICs
+# - (enp0s3): 192.168.1.216/24
+# - (enp0s8): 10.1.1.216/8
+<code><span style="Color:DodgerBlue">sudo nano /etc/netplan/00-installer-config.yaml
+</span></code><code><span style="Color:MediumSeaGreen">network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      addresses:
+        - 192.168.1.216/24
+      nameservers:
+        search:
+          - "x386.org"
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+      routes:
+        - to: default
+          via: 192.168.1.1
+    enp0s8:
+      addresses:
+        - 10.1.1.216/8
+</span></code>#
+# Restart Networking (Your SSH connection may break, reconnect)
+<code><span style="Color:DodgerBlue">sudo netplan apply
+</span></code>#
+# Enable IP Forwarding
+<code><span style="Color:DodgerBlue">sudo nano /etc/sysctl.conf
+</span></code># Add the following line to the end
+<code><span style="Color:MediumSeaGreen">net.ipv4.ip_forward = 1
+</span></code># Activate
+<code><span style="Color:DodgerBlue">sudo sysctl -p
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.2. Configuration of the First Host
+</B></span># We have 1 NICs (enp0s3 - 192.168.1.X network).
+<code><span style="Color:DodgerBlue">sudo nano /etc/netplan/00-installer-config.yaml
+</span></code><code><span style="Color:MediumSeaGreen">network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      addresses:
+        - 192.168.1.217/24
+      nameservers:
+        search:
+          - "x386.org"
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+      routes:
+        - to: default
+          via: 192.168.1.1
+        - to: 10.0.0.0/8
+          via: 192.168.1.216
+</span></code>#
+# Restart Networking (Your SSH connection may break, reconnect)
+<code><span style="Color:DodgerBlue">sudo netplan apply
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.3. Configuration of the Second Host
+</B></span># We have 1 NICs (enp0s3 - 192.168.1.X network).
+<code><span style="Color:DodgerBlue">sudo nano /etc/netplan/00-installer-config.yaml
+</span></code><code><span style="Color:MediumSeaGreen">network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp0s3:
+      addresses:
+        - 10.1.1.218/8
+      nameservers:
+        search:
+          - "x386.org"
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+      routes:
+        - to: default
+          via: 10.1.1.1
+        - to: 192.168.1.0/24
+          via: 10.1.1.216
+</span></code>#
+# Restart Networking (Your SSH connection may break, reconnect)
+<code><span style="Color:DodgerBlue">sudo netplan apply
+</span></code>#
+<B><span style="Font-Family:Verdana">#-- 2.4. Notes
+</B></span># The host in the first network can ping the host in the other network now, 
+# and vice versa.
+# Try on the first host (192.168.1.217)
+<code><span style="Color:DodgerBlue">ping 10.1.1.218
+</span></code># Try on the second host (10.1.1.218)
+<code><span style="Color:DodgerBlue">ping 192.168.1.217
+</span></code>#
+# - For a host to connect to another host on the other network, routing must be
+# defined on the both hosts.
+#
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div5')"> 3. NIC Bonding
+</a> </H4><div id="Div5" style="margin-left:1%;"><pre ># - I tried NIC Bonding on Ubuntu, but unfortunately I was successful. That 
+# might be because of Virtualbox, Netplan, or Networkd. So I gave up. Maybe
+# next time.
+#
+# - I was able to create the bond interface, it got IP address to, but it can
+# not connect to anywhere on the network. Even working on Networkd directly
+# didn't help.
+</pre> </div> </p>
+</pre> </div> </p>
+<br /><br /><br /><script>
+function myFunction(divid) {
+  var x = document.getElementById(divid);
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+var i;
+var str;
+
+for (i=1; i<6; i++) {
+    str = "Div" + i.toString();
+    myFunction(str);
+}
+</script></body> </html>

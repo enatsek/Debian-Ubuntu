@@ -72,3 +72,5 @@ There are txt and html versions of each document. In the html version, commands 
 
 - NetworkOnUbuntu: Ubuntu basic network configuration tutorial.
 
+- RegexOnDebianUbuntu: Regular Expressions tutorial.
+

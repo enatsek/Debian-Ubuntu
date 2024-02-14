@@ -1,6 +1,20 @@
 <!DOCTYPE html> <html> <head> <meta charset="UTF-8"></head><body><H1>Regular Expressions On Debian and Ubuntu
-</H1><p> <H4><a href="javascript:myFunction('Div1')">0. Specs
-</a> </H4><div id="Div1" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 0.0. Info
+</H1><p> <H4><a href="javascript:myFunction('Div1')">Copyright (C) 2024 Exforge exforge@x386.org
+</a> </H4><div id="Div1" style="margin-left:1%;"><pre ># - This document is free text: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# - This document is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# - You should have received a copy of the GNU General Public License
+# along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.
+</pre> </div> </p>
+<p> <H4><a href="javascript:myFunction('Div2')">0. Specs
+</a> </H4><div id="Div2" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 0.0. Info
 </B></span># - Well I know Regex is (almost) the same on every system, but this site is
 # for Debian and Ubuntu, so it is named as.
 <B><span style="Font-Family:Verdana">#-- 0.1. Resources:
@@ -8,8 +22,8 @@
 # Book: 978-1-4842-3875-2 Regex Quick Syntax Reference by Zsolt Nagy
 # Book: 978-1-449-31943-4Regular Expressions Cookbook by Jan Goyvaerts and Steven Levithan
 </pre> </div> </p>
-<p> <H4><a href="javascript:myFunction('Div2')">1. Basics
-</a> </H4><div id="Div2" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 1.1. A string itself
+<p> <H4><a href="javascript:myFunction('Div3')">1. Basics
+</a> </H4><div id="Div3" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 1.1. A string itself
 </B></span># - Obviously every string is a match for itself
 <code><span style="Color:DodgerBlue">go     # go
 </span></code><code><span style="Color:DodgerBlue">dog    # dog
@@ -65,8 +79,8 @@
 </span></code># - When used in a bracket, \ is not necessary
 <code><span style="Color:DodgerBlue">&lsqb;().\&rsqb;   # ( ) . or \
 </span></code></pre> </div> </p>
-<p> <H4><a href="javascript:myFunction('Div3')">2. Quantifiers and Boundaries
-</a> </H4><div id="Div3" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 2.1. * Quantifier
+<p> <H4><a href="javascript:myFunction('Div4')">2. Quantifiers and Boundaries
+</a> </H4><div id="Div4" style="margin-left:1%;"><pre ><B><span style="Font-Family:Verdana">#-- 2.1. * Quantifier
 </B></span># - a * quantifier after a character or group means 0 or more occurences of it
 <code><span style="Color:DodgerBlue">goal*          # goa goal goall goalll goallll ...
 </span></code><code><span style="Color:DodgerBlue">co(me)*        # co come  comeme comememe comememe ...
@@ -126,8 +140,8 @@
 </span></code><code><span style="Color:DodgerBlue">.*END$             # All the lines ending with END
 </span></code><code><span style="Color:DodgerBlue">^Begin&lsqb;\s\w&rsqb;+End$  # All the lines starting with Begin and ending with End
 </span></code></pre> </div> </p>
-<p> <H4><a href="javascript:myFunction('Div4')">3. Subexpressions and Backreferences
-</a> </H4><div id="Div4" style="margin-left:1%;"><pre >#- 3.1. Subexpressions
+<p> <H4><a href="javascript:myFunction('Div5')">3. Subexpressions and Backreferences
+</a> </H4><div id="Div5" style="margin-left:1%;"><pre >#- 3.1. Subexpressions
 # - A subexpression is a group of characters or operators in paranthesis. They 
 # are used to apply quantifiers to expressions.
 <code><span style="Color:DodgerBlue">dis(like)         # matches dislike 
@@ -160,8 +174,8 @@
 # word example, if we want to replace repeating words to a single one, for the
 # replace part we would have to write \1
 </pre> </div> </p>
-<p> <H4><a href="javascript:myFunction('Div5')">4. Regex Examples
-</a> </H4><div id="Div5" style="margin-left:1%;"><pre ># Please consider, this examples are not perfect. You or someone else 
+<p> <H4><a href="javascript:myFunction('Div6')">4. Regex Examples
+</a> </H4><div id="Div6" style="margin-left:1%;"><pre ># Please consider, this examples are not perfect. You or someone else 
 #   can definitely find or write better versions. 
 #
 <B><span style="Font-Family:Verdana">#-- 4.1. Email address   abc.def@email.duck.com.nz
@@ -208,7 +222,7 @@ function myFunction(divid) {
 var i;
 var str;
 
-for (i=1; i<6; i++) {
+for (i=1; i<7; i++) {
     str = "Div" + i.toString();
     myFunction(str);
 }

@@ -75,3 +75,8 @@ There are txt and html versions of each document. In the html version, commands 
 - RegexOnDebianUbuntu: Regular Expressions tutorial.
 
 - EtcOnDebianUbuntu: Contents of /etc/ folder on Debian & Ubuntu.
+
+- PackagesOnDebian: Default software packages on Debian Server
+
+- PackagesOnUbuntu: Default software packages on Ubuntu Server
+

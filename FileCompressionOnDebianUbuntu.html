@@ -1,0 +1,1163 @@
+<!-- HTML Header Start -->
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+ 
+ 
+ 
+ 
+ 
+ 
+<style>
+/* base.css */
+body {
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 40px;
+  border: 1px solid transparent;
+}
+
+body blockquote {
+  background-color: initial;
+}
+
+body code {
+  color: inherit;
+}
+
+body code > div {
+  background: none;
+}
+
+body.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+body p,
+body blockquote,
+body ul,
+body ol,
+body dl,
+body table,
+body pre {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+/* github-markdown.css */
+body {
+  color-scheme: dark;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  margin: 0;
+  color: #c9d1d9;
+  background-color: #0d1117;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word
+}
+body .octicon {
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: text-bottom
+}
+body h1:hover .anchor .octicon-link:before,
+body h2:hover .anchor .octicon-link:before,
+body h3:hover .anchor .octicon-link:before,
+body h4:hover .anchor .octicon-link:before,
+body h5:hover .anchor .octicon-link:before,
+body h6:hover .anchor .octicon-link:before {
+  width: 16px;
+  height: 16px;
+  content: ' ';
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>")
+}
+body details,
+body figcaption,
+body figure {
+  display: block
+}
+body summary {
+  display: list-item
+}
+body a {
+  background-color: transparent;
+  color: #58a6ff;
+  text-decoration: none
+}
+body a:active,
+body a:hover {
+  outline-width: 0
+}
+body abbr[title] {
+  border-bottom: none;
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted
+}
+body b,
+body strong {
+  font-weight: 600
+}
+body dfn {
+  font-style: italic
+}
+body h1 {
+  margin: .67em 0;
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 1.8em;
+  border-bottom: 1px solid #21262d
+}
+body mark {
+  background-color: #ff0;
+  color: #c9d1d9
+}
+body small {
+  font-size: 90%
+}
+body sub,
+body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline
+}
+body sub {
+  bottom: -.25em
+}
+body sup {
+  top: -.5em
+}
+body img {
+  border-style: none;
+  max-width: 100%;
+  box-sizing: content-box;
+  background-color: #0d1117
+}
+body code,
+body kbd,
+body pre,
+body samp {
+  font-family: monospace,monospace;
+  font-size: 1em
+}
+body figure {
+  margin: 1em 40px
+}
+body hr {
+  box-sizing: content-box;
+  overflow: hidden;
+  background: 0 0;
+  border-bottom: 1px solid #21262d;
+  height: .25em;
+  padding: 0;
+  margin: 24px 0;
+  background-color: #30363d;
+  border: 0
+}
+body [type=reset],
+body [type=submit],
+body html [type=button] {
+  -webkit-appearance: button
+}
+body [type=button]::-moz-focus-inner,
+body [type=reset]::-moz-focus-inner,
+body [type=submit]::-moz-focus-inner {
+  border-style: none;
+  padding: 0
+}
+body [type=button]:-moz-focusring,
+body [type=reset]:-moz-focusring,
+body [type=submit]:-moz-focusring {
+  outline: 1px dotted ButtonText
+}
+body [type=checkbox],
+body [type=radio] {
+  box-sizing: border-box;
+  padding: 0
+}
+body [type=number]::-webkit-inner-spin-button,
+body [type=number]::-webkit-outer-spin-button {
+  height: auto
+}
+body [type=search] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px
+}
+body [type=search]::-webkit-search-cancel-button,
+body [type=search]::-webkit-search-decoration {
+  -webkit-appearance: none
+}
+body ::-webkit-input-placeholder {
+  color: inherit;
+  opacity: .54
+}
+body ::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit
+}
+body a:hover {
+  text-decoration: underline
+}
+body hr::before {
+  display: table;
+  content: ""
+}
+body hr::after {
+  display: table;
+  clear: both;
+  content: ""
+}
+body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto
+}
+body td,
+body th {
+  padding: 0
+}
+body details summary {
+  cursor: pointer
+}
+body details:not([open]) > :not(summary) {
+  display: none!important
+}
+body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  line-height: 10px;
+  color: #c9d1d9;
+  vertical-align: middle;
+  background-color: #161b22;
+  border: solid 1px rgba(110,118,129,.4);
+  border-bottom-color: rgba(110,118,129,.4);
+  border-radius: 6px;
+  box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
+}
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25
+}
+body h2 {
+  font-weight: 600;
+  font-size: 1.6em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h3 {
+  font-weight: 600;
+  font-size: 1.4em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h4 {
+  font-weight: 600;
+  font-size: 1.2em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h5 {
+  font-weight: 600;
+  font-size: 1.0em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h6 {
+  font-weight: 600;
+  font-size: 1em;
+  color: #8b949e
+}
+body p {
+  margin-top: 0;
+  margin-bottom: 10px
+}
+body blockquote {
+  margin: 0;
+  padding: 0 1em;
+  color: #8b949e;
+  border-left: .25em solid #30363d
+}
+body ol,
+body ul {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 2em
+}
+body ol ol,
+body ul ol {
+  list-style-type: lower-roman
+}
+body ol ol ol,
+body ol ul ol,
+body ul ol ol,
+body ul ul ol {
+  list-style-type: lower-alpha
+}
+body dd {
+  margin-left: 0
+}
+body code,
+body tt {
+  font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  font-size: 12px
+}
+body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  font-size: 12px;
+  word-wrap: normal
+}
+body :-ms-input-placeholder {
+  color: #484f58;
+  opacity: 1
+}
+body ::-ms-input-placeholder {
+  color: #484f58;
+  opacity: 1
+}
+body ::placeholder {
+  color: #484f58;
+  opacity: 1
+}
+body .pl-c {
+  color: #8b949e
+}
+body .pl-c1,
+body .pl-s .pl-v {
+  color: #79c0ff
+}
+body .pl-e,
+body .pl-en {
+  color: #d2a8ff
+}
+body .pl-s .pl-s1,
+body .pl-smi {
+  color: #c9d1d9
+}
+body .pl-ent {
+  color: #7ee787
+}
+body .pl-k {
+  color: #ff7b72
+}
+body .pl-pds,
+body .pl-s,
+body .pl-s .pl-pse .pl-s1,
+body .pl-sr,
+body .pl-sr .pl-cce,
+body .pl-sr .pl-sra,
+body .pl-sr .pl-sre {
+  color: #a5d6ff
+}
+body .pl-smw,
+body .pl-v {
+  color: #ffa657
+}
+body .pl-bu {
+  color: #f85149
+}
+body .pl-ii {
+  color: #f0f6fc;
+  background-color: #8e1519
+}
+body .pl-c2 {
+  color: #f0f6fc;
+  background-color: #b62324
+}
+body .pl-sr .pl-cce {
+  font-weight: 700;
+  color: #7ee787
+}
+body .pl-ml {
+  color: #f2cc60
+}
+body .pl-mh,
+body .pl-mh .pl-en,
+body .pl-ms {
+  font-weight: 700;
+  color: #1f6feb
+}
+body .pl-mi {
+  font-style: italic;
+  color: #c9d1d9
+}
+body .pl-mb {
+  font-weight: 700;
+  color: #c9d1d9
+}
+body .pl-md {
+  color: #ffdcd7;
+  background-color: #67060c
+}
+body .pl-mi1 {
+  color: #aff5b4;
+  background-color: #033a16
+}
+body .pl-mc {
+  color: #ffdfb6;
+  background-color: #5a1e02
+}
+body .pl-mi2 {
+  color: #c9d1d9;
+  background-color: #1158c7
+}
+body .pl-mdr {
+  font-weight: 700;
+  color: #d2a8ff
+}
+body .pl-ba {
+  color: #8b949e
+}
+body .pl-sg {
+  color: #484f58
+}
+body .pl-corl {
+  text-decoration: underline;
+  color: #a5d6ff
+}
+body [data-catalyst] {
+  display: block
+}
+body g-emoji {
+  font-family: "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 1em;
+  font-style: normal!important;
+  font-weight: 400;
+  line-height: 1;
+  vertical-align: -.075em
+}
+body g-emoji img {
+  width: 1em;
+  height: 1em
+}
+body::before {
+  display: table;
+  content: ""
+}
+body::after {
+  display: table;
+  clear: both;
+  content: ""
+}
+body > :first-child {
+  margin-top: 0!important
+}
+body > :last-child {
+  margin-bottom: 0!important
+}
+body a:not([href]) {
+  color: inherit;
+  text-decoration: none
+}
+body .absent {
+  color: #f85149
+}
+body .anchor {
+  float: left;
+  padding-right: 4px;
+  margin-left: -20px;
+  line-height: 1
+}
+body .anchor:focus {
+  outline: 0
+}
+body blockquote,
+body details,
+body dl,
+body ol,
+body p,
+body pre,
+body table,
+body ul {
+  margin-top: 0;
+  margin-bottom: 16px
+}
+body blockquote > :first-child {
+  margin-top: 0
+}
+body blockquote > :last-child {
+  margin-bottom: 0
+}
+body sup > a::before {
+  content: "["
+}
+body sup > a::after {
+  content: "]"
+}
+body h1 .octicon-link,
+body h2 .octicon-link,
+body h3 .octicon-link,
+body h4 .octicon-link,
+body h5 .octicon-link,
+body h6 .octicon-link {
+  color: #c9d1d9;
+  vertical-align: middle;
+  visibility: hidden
+}
+body h1:hover .anchor,
+body h2:hover .anchor,
+body h3:hover .anchor,
+body h4:hover .anchor,
+body h5:hover .anchor,
+body h6:hover .anchor {
+  text-decoration: none
+}
+body h1:hover .anchor .octicon-link,
+body h2:hover .anchor .octicon-link,
+body h3:hover .anchor .octicon-link,
+body h4:hover .anchor .octicon-link,
+body h5:hover .anchor .octicon-link,
+body h6:hover .anchor .octicon-link {
+  visibility: visible
+}
+body h1 code,
+body h1 tt,
+body h2 code,
+body h2 tt,
+body h3 code,
+body h3 tt,
+body h4 code,
+body h4 tt,
+body h5 code,
+body h5 tt,
+body h6 code,
+body h6 tt {
+  padding: 0 .2em;
+  font-size: inherit
+}
+body ol.no-list,
+body ul.no-list {
+  padding: 0;
+  list-style-type: none
+}
+body ol[type="1"] {
+  list-style-type: decimal
+}
+body ol[type=a] {
+  list-style-type: lower-alpha
+}
+body ol[type=i] {
+  list-style-type: lower-roman
+}
+body div > ol:not([type]) {
+  list-style-type: decimal
+}
+body ol ol,
+body ol ul,
+body ul ol,
+body ul ul {
+  margin-top: 0;
+  margin-bottom: 0
+}
+body li > p {
+  margin-top: 16px
+}
+body li + li {
+  margin-top: .25em
+}
+body dl {
+  padding: 0
+}
+body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: 600
+}
+body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px
+}
+body table th {
+  font-weight: 600
+}
+body table td,
+body table th {
+  padding: 6px 13px;
+  border: 1px solid #30363d
+}
+body table tr {
+  background-color: #0d1117;
+  border-top: 1px solid #21262d
+}
+body table tr:nth-child(2n) {
+  background-color: #161b22
+}
+body table img {
+  background-color: transparent
+}
+body img[align=right] {
+  padding-left: 20px
+}
+body img[align=left] {
+  padding-right: 20px
+}
+body .emoji {
+  max-width: none;
+  vertical-align: text-top;
+  background-color: transparent
+}
+body span.frame {
+  display: block;
+  overflow: hidden
+}
+body span.frame > span {
+  display: block;
+  float: left;
+  width: auto;
+  padding: 7px;
+  margin: 13px 0 0;
+  overflow: hidden;
+  border: 1px solid #30363d
+}
+body span.frame span img {
+  display: block;
+  float: left
+}
+body span.frame span span {
+  display: block;
+  padding: 5px 0 0;
+  clear: both;
+  color: #c9d1d9
+}
+body span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both
+}
+body span.align-center > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: center
+}
+body span.align-center span img {
+  margin: 0 auto;
+  text-align: center
+}
+body span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both
+}
+body span.align-right > span {
+  display: block;
+  margin: 13px 0 0;
+  overflow: hidden;
+  text-align: right
+}
+body span.align-right span img {
+  margin: 0;
+  text-align: right
+}
+body span.float-left {
+  display: block;
+  float: left;
+  margin-right: 13px;
+  overflow: hidden
+}
+body span.float-left span {
+  margin: 13px 0 0
+}
+body span.float-right {
+  display: block;
+  float: right;
+  margin-left: 13px;
+  overflow: hidden
+}
+body span.float-right > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: right
+}
+body code,
+body tt {
+  padding: .2em .4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(110,118,129,.4);
+  border-radius: 6px
+}
+body code br,
+body tt br {
+  display: none
+}
+body del code {
+  text-decoration: inherit
+}
+body pre code {
+  font-size: 100%
+}
+body pre > code {
+  padding: 0;
+  margin: 0;
+  word-break: normal;
+  white-space: pre;
+  background: 0 0;
+  border: 0
+}
+body .highlight {
+  margin-bottom: 16px
+}
+body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal
+}
+body .highlight pre,
+body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #161b22;
+  border-radius: 6px
+}
+body pre code,
+body pre tt {
+  display: inline;
+  max-width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0
+}
+body .csv-data td,
+body .csv-data th {
+  padding: 5px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1;
+  text-align: left;
+  white-space: nowrap
+}
+body .csv-data .blob-num {
+  padding: 10px 8px 9px;
+  text-align: right;
+  background: #0d1117;
+  border: 0
+}
+body .csv-data tr {
+  border-top: 0
+}
+body .csv-data th {
+  font-weight: 600;
+  background: #161b22;
+  border-top: 0
+}
+body .footnotes {
+  font-size: 12px;
+  color: #8b949e;
+  border-top: 1px solid #30363d
+}
+body .footnotes ol {
+  padding-left: 16px
+}
+body .footnotes li {
+  position: relative
+}
+body .footnotes li:target::before {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  bottom: -8px;
+  left: -24px;
+  pointer-events: none;
+  content: "";
+  border: 2px solid #1f6feb;
+  border-radius: 6px
+}
+body .footnotes li:target {
+  color: #c9d1d9
+}
+body .footnotes .data-footnote-backref g-emoji {
+  font-family: monospace
+}
+body [hidden] {
+  display: none!important
+}
+body ::-webkit-calendar-picker-indicator {
+  filter: invert(50%)
+}
+
+/* node_modules/highlight.js/styles/github-dark.css */
+pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}/*!
+  Theme: GitHub Dark
+  Description: Dark theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-dark
+  Current colors taken from GitHub's CSS
+*/.hljs{color:#c9d1d9;background:#0d1117}.hljs-doctag,.hljs-keyword,.hljs-meta .hljs-keyword,.hljs-template-tag,.hljs-template-variable,.hljs-type,.hljs-variable.language_{color:#ff7b72}.hljs-title,.hljs-title.class_,.hljs-title.class_.inherited__,.hljs-title.function_{color:#d2a8ff}.hljs-attr,.hljs-attribute,.hljs-literal,.hljs-meta,.hljs-number,.hljs-operator,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-variable{color:#79c0ff}.hljs-meta .hljs-string,.hljs-regexp,.hljs-string{color:#a5d6ff}.hljs-built_in,.hljs-symbol{color:#ffa657}.hljs-code,.hljs-comment,.hljs-formula{color:#8b949e}.hljs-name,.hljs-quote,.hljs-selector-pseudo,.hljs-selector-tag{color:#7ee787}.hljs-subst{color:#c9d1d9}.hljs-section{color:#1f6feb;font-weight:700}.hljs-bullet{color:#f2cc60}.hljs-emphasis{color:#c9d1d9;font-style:italic}.hljs-strong{color:#c9d1d9;font-weight:700}.hljs-addition{color:#aff5b4;background-color:#033a16}.hljs-deletion{color:#ffdcd7;background-color:#67060c}
+
+</style>
+</head>
+<body>
+<div class="document">
+<div class="header"></div><div class="inner">
+<!-- HTML Header End -->
+<!-- Header Start -->
+
+<h1>x386.org: Debian and Ubuntu Documentation</h1>
+<h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
+<!-- Copyright Start -->
+<details>
+   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+
+<hr>
+
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+
+<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+<hr>
+</details>
+<!-- Copyright End -->
+
+<!-- Header End -->
+<h5>FileCompressionOnDebianUbuntu</h5>
+<h1>File Compression and Packaging on Debian And Ubuntu</h1>
+<h2>0. Specs</h2>
+<hr />
+<h3>0.0. Info</h3>
+<p>When sharing files with other people, you may need to package and compress them. </p>
+<p>There are very good tools for them:</p>
+<ul>
+<li>gzip </li>
+<li>bzip2 </li>
+<li>xz </li>
+<li>tar </li>
+<li>zip</li>
+</ul>
+<h3>0.1. Abstract</h3>
+<p>Package and compress the contents of a directory (including subdirs):</p>
+<pre><code>tar -czvf archive.tar.gz /tmp/testdir
+</code></pre>
+<p>Decompress and unpackage the archive:</p>
+<pre><code>tar -xzvf archive.tar.gz
+</code></pre>
+<h3>0.2. Create Test Environment</h3>
+<p>Create a temporary test directory</p>
+<pre><code>mkdir /tmp/testdir
+</code></pre>
+<p>Create 3 more directories d1, d2, d3</p>
+<pre><code>mkdir /tmp/testdir/d{1..3}
+</code></pre>
+<p>Create 3 files at each directory</p>
+<pre><code>touch /tmp/testdir/d1/f1{1..3}
+touch /tmp/testdir/d2/f2{1..3}
+touch /tmp/testdir/d3/f3{1..3}
+</code></pre>
+<p>Fill the files with random data with the given size</p>
+<pre><code>&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c1M &gt; /tmp/testdir/d1/f11
+&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c2M &gt; /tmp/testdir/d1/f12
+&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c3M &gt; /tmp/testdir/d1/f13
+&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c4M &gt; /tmp/testdir/d2/f21
+&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c5M &gt; /tmp/testdir/d2/f22
+&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c6M &gt; /tmp/testdir/d2/f23
+&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c7M &gt; /tmp/testdir/d3/f31
+&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c8M &gt; /tmp/testdir/d3/f32
+&lt; /dev/urandom tr -dc &quot;[:space:][:print:]&quot; | head -c9M &gt; /tmp/testdir/d3/f33
+</code></pre>
+<p>Final tree</p>
+<pre><code>├── d1
+│   ├── f11
+│   ├── f12
+│   └── f13
+├── d2
+│   ├── f21
+│   ├── f22
+│   └── f23
+└── d3
+    ├── f31
+    ├── f32
+    └── f33
+</code></pre>
+<h3>0.3. Sources</h3>
+<p>Man pages, the commands with --help option, and ChatGPT as always.<br />
+<strong>Never trust ChatGPT, check everything it says.</strong><br />
+<a href="https://linuxconfig.org/create-a-random-character-text-file-using-linux-shell">https://linuxconfig.org/create-a-random-character-text-file-using-linux-shell</a></p>
+<p><br></p>
+<h2>1. gzip</h2>
+<hr />
+<h3>1.1. Info</h3>
+<p>Installation (Most probably, it is already installed).</p>
+<pre><code>sudo apt update
+sudo apt install gzip
+</code></pre>
+<p>gzip compresses (and decompresses) only 1 file, it is not used to prepare a package of files. But it can be combined with tar to make a compressed  package of files.</p>
+<h3>1.2. Usage</h3>
+<p>Compress a file<br />
+(Original file is removed, a new file is created there with .gz extension)</p>
+<pre><code>gzip /tmp/testdir/d1/f11
+</code></pre>
+<p>Decompress a file<br />
+(.gz file is removed, a new file is created there without .gz extension)</p>
+<pre><code>gzip -d /tmp/testdir/d1/f11.gz
+gunzip /tmp/testdir/d1/f11.gz
+</code></pre>
+<p>Compress a file, keep the original file</p>
+<pre><code>gzip -k /tmp/testdir/d1/f11
+</code></pre>
+<p>Decompress a file, keep the .gz file</p>
+<pre><code>gzip -kd /tmp/testdir/d1/f11.gz
+</code></pre>
+<p>Compress all files in a directory<br />
+(All files are removed, new files are created there with .gz extensions)</p>
+<pre><code>gzip /tmp/testdir/d1/*
+</code></pre>
+<p>Decompress all files in a directory</p>
+<pre><code>gzip -d /tmp/testdir/d1/*
+gunzip /tmp/testdir/d1/*
+</code></pre>
+<p>Compress all files recursively (including subdirectories)</p>
+<pre><code>gzip -r /tmp/testdir
+</code></pre>
+<p>Decompress all files recursively (including subdirectories)</p>
+<pre><code>gzip -rd /tmp/testdir
+</code></pre>
+<p>Some useful options:</p>
+<ul>
+<li>-l --list: List compressed file contents</li>
+<li>-q --quiet: Suppress all warnings</li>
+<li>-1 --fast: Compress faster</li>
+<li>-9 --best: Compress better</li>
+</ul>
+<p><br></p>
+<h2>2. bzip2</h2>
+<hr />
+<h3>2.1. Info</h3>
+<p>Installation (Most probably, it is already installed).</p>
+<pre><code>sudo apt update
+sudo apt install bzip2
+</code></pre>
+<p>bzip2 compresses (and decompresses) only 1 file, it is not used to prepare a package of files. But it can be combined with tar to make a compressed  package of files.</p>
+<p>Provides higher compression ratios compared to gzip, but may be slower.</p>
+<h3>2.2. Usage</h3>
+<p>Compress a file<br />
+(Original file is removed, a new file is created there with .bz2 extension)</p>
+<pre><code>bzip2 /tmp/testdir/d1/f11
+</code></pre>
+<p>Decompress a file<br />
+(.bz2 file is removed, a new file is created there without .bz2 extension)</p>
+<pre><code>bzip2 -d /tmp/testdir/d1/f11.bz2
+bunzip2 /tmp/testdir/d1/f11.bz2
+</code></pre>
+<p>Compress a file, keep the original file</p>
+<pre><code>bzip2 -k /tmp/testdir/d1/f11
+</code></pre>
+<p>Decompress a file, keep the .bz2 file</p>
+<pre><code>bzip2 -kd /tmp/testdir/d1/f11.bz2
+</code></pre>
+<p>Compress all files in a directory<br />
+(All files are removed, new files are created there with .bz2 extensions)</p>
+<pre><code>bzip2 /tmp/testdir/d1/*
+</code></pre>
+<p>Decompress all files in a directory</p>
+<pre><code>bzip2 -d /tmp/testdir/d1/*
+bunzip2 /tmp/testdir/d1/*
+</code></pre>
+<p>Some useful options:</p>
+<ul>
+<li>-q --quiet: Suppress all warnings</li>
+<li>-1 --fast: Compress faster</li>
+<li>-9 --best: Compress better</li>
+</ul>
+<p><br></p>
+<h2>3. xz</h2>
+<hr />
+<h3>3.1. Info</h3>
+<p>Installation (Most probably, it is already installed).</p>
+<pre><code>sudo apt update
+sudo apt install xz-utils
+</code></pre>
+<p>xz compresses (and decompresses) only 1 file, it is not used to prepare  a package of files. But it can be combined with tar to make a compressed  package of files.</p>
+<h3>3.2. Usage</h3>
+<p>Compress a file<br />
+(Original file is removed, a new file is created there with .xz extension)</p>
+<pre><code>xz /tmp/testdir/d1/f11
+</code></pre>
+<p>Decompress a file<br />
+(.gz file is removed, a new file is created there without .gz extension)</p>
+<pre><code>xz -d /tmp/testdir/d1/f11.xz
+unxz /tmp/testdir/d1/f11.xz
+</code></pre>
+<p>Compress a file, keep the original file</p>
+<pre><code>xz -k /tmp/testdir/d1/f11
+</code></pre>
+<p>Decompress a file, keep the .xz file</p>
+<pre><code>xz -kd /tmp/testdir/d1/f11.xz
+</code></pre>
+<p>Compress all files in a directory<br />
+(All files are removed, new files are created there with .xz extensions)</p>
+<pre><code>xz /tmp/testdir/d1/*
+</code></pre>
+<p>Decompress all files in a directory</p>
+<pre><code>xz -d /tmp/testdir/d1/*
+unxz /tmp/testdir/d1/*
+</code></pre>
+<p>Some useful options:</p>
+<ul>
+<li>-l --list: List compressed file contents</li>
+<li>-q --quiet: Suppress all warnings</li>
+<li>-0: Compress faster</li>
+<li>-9: Compress better</li>
+</ul>
+<p><br></p>
+<h2>4. tar</h2>
+<hr />
+<h4>4.1. Info</h4>
+<p>Installation (Most probably, it is already installed)</p>
+<pre><code>sudo apt update
+sudo apt install tar
+</code></pre>
+<p>tar actually is an archiving utility, it is used to package files. It can  package many files to a file. It can also transparently be combined with gzip bzip2 and xz tools to compress files. </p>
+<h3>4.2. Usage</h3>
+<h4>4.2.1. With Compression</h4>
+<p>Package and compress (with gzip) the contents of a directory (including subdirectories).<br />
+Archive file is created in the current directory.</p>
+<pre><code>tar -czvf archive.tar.gz /tmp/testdir
+</code></pre>
+<p>Decompress and unpackage the archive<br />
+Creates the directory structure under current directory</p>
+<pre><code>tar -xzvf archive.tar.gz
+</code></pre>
+<p>(package) compress &amp; decompress (unpackage) with bzip2</p>
+<pre><code>tar -cjvf archive.tar.bz2 /tmp/testdir
+tar -xjvf archive.tar.bz2
+</code></pre>
+<p>(package) compress &amp; decompress (unpackage) with xz</p>
+<pre><code>tar -cJvf archive.tar.xz /tmp/testdir
+tar -xJvf archive.tar.xz
+</code></pre>
+<p>See the contents of an archive</p>
+<pre><code>tar -tvf archive.tar.gz
+tar -tvf archive.tar.bz2
+tar -tvf archive.tar.xz
+</code></pre>
+<p>Extract files to another directory<br />
+Directory must exist.</p>
+<pre><code>tar -xzvf archive.tar.gz -C /tmp
+tar -xjvf archive.tar.bz2 -C /tmp
+tar -xJvf archive.tar.xz -C /tmp
+</code></pre>
+<h4>4.2.2. Without Compression (Archiving)</h4>
+<p>Tar can be used without compressing too, actually it is the main usage of  the tar command.</p>
+<p>All the conditions apply in 4.2.1., if you skip compression options (-z, -j, -J) then you get an archive without compression. This time you can add files to it, or remove files from it.</p>
+<p>Archive a directory (and subdirectories)</p>
+<pre><code>tar -cvf archive.tar /tmp/testdir
+</code></pre>
+<p>List the contents</p>
+<pre><code>tar -tvf archive.tar
+</code></pre>
+<p>Unarchive it</p>
+<pre><code>tar -xvf archive.tar
+</code></pre>
+<p>Add a file to the archive</p>
+<pre><code>tar -rvf archive.tar test.txt
+</code></pre>
+<p>Remove a file from the archive</p>
+<pre><code>tar -vf archive.tar --delete test.txt
+</code></pre>
+<h4>4.2.3. Options</h4>
+<p>Tar has tons of options. You can list them all by:</p>
+<pre><code>tar --help
+</code></pre>
+<p>Some selected options:</p>
+<ul>
+<li>-c: Create a new archive.</li>
+<li>-t: List the contents of the archive.    </li>
+<li>-x: Extract files from the archive.</li>
+<li>-v: Verbose mode (show the progress and file names).</li>
+<li>-f: Specify the archive file name.</li>
+<li>-z: Use gzip compression.</li>
+<li>-j: Use bzip2 compression.</li>
+<li>-J: Use xz compression.</li>
+<li>-C: Change to the specified directory before extracting.</li>
+<li>-r: Append files to the end of an archive</li>
+<li>-a: use archive suffix to determine the compression program.</li>
+<li>--delete: delete from the archive</li>
+<li>--exclude=PATTERN: exclude files, given as a PATTERN</li>
+<li>--overwrite: overwrite existing files when extracting</li>
+<li>--remove-files: remove files after adding them to the archive</li>
+</ul>
+<p><br></p>
+<h2>5. zip</h2>
+<hr />
+<h3>5.1. Info</h3>
+<p>Although gzip, bzip2, xz, and tar is more than enough for compression and archiving; sometimes you may need to exchange files with the unlucky people using Wind*ws. zip tool may be helpful then.</p>
+<p>Installation</p>
+<pre><code>sudo apt update
+sudo apt install zip
+</code></pre>
+<h3>5.2. Usage</h3>
+<p>Compress a file
+(File zip file is created in the current dir, original file stays there)</p>
+<pre><code>zip f11.zip /tmp/testdir/d1/f11
+</code></pre>
+<p>Decompress a file
+(Decompress to the current dir by creating the directory structure in zip file, zip file stays where it is).</p>
+<pre><code>unzip f11.zip
+</code></pre>
+<p>Compress all the files in a directory</p>
+<pre><code>zip d1.zip /tmp/testdir/d1/*
+</code></pre>
+<p>Compress all the files in a directory including subdirectories</p>
+<pre><code>zip -r test.zip /tmp/testdir/
+</code></pre>
+<p>Compress and encrypt</p>
+<pre><code>zip -er test.zip /tmp/testdir/
+</code></pre>
+<p>List the contents of a zip file</p>
+<pre><code>unzip -l test.zip
+</code></pre>
+<p>Add new files to a zip file</p>
+<pre><code>zip -u d1.zip /tmp/testdir/d2/*
+</code></pre>
+<p>Some options:</p>
+<ul>
+<li>-u: update; only changed or new files</li>
+<li>-d: delete entries in zipfile    </li>
+<li>-m: move into zipfile (delete OS files)</li>
+<li>-r: recurse into directories     </li>
+<li>-j: junk (don't record) directory names</li>
+<li>-1: compress faster              </li>
+<li>-9: compress better</li>
+<li>-q: quiet operation              </li>
+<li>-v: verbose operation/print version info</li>
+<li>-x: exclude the following names  </li>
+<li>-i: include only the following names</li>
+<li>-e: encrypt                      </li>
+</ul><!-- HTML Footer Start -->
+
+</body>
+</html>
+
+<!-- HTML Footer End -->

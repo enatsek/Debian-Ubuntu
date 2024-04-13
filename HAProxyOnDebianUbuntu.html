@@ -1,0 +1,1760 @@
+<!-- HTML Header Start -->
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+ 
+ 
+ 
+ 
+ 
+ 
+<style>
+/* base.css */
+body {
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 40px;
+  border: 1px solid transparent;
+}
+
+body blockquote {
+  background-color: initial;
+}
+
+body code {
+  color: inherit;
+}
+
+body code > div {
+  background: none;
+}
+
+body.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+body p,
+body blockquote,
+body ul,
+body ol,
+body dl,
+body table,
+body pre {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+/* github-markdown.css */
+body {
+  color-scheme: dark;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  margin: 0;
+  color: #c9d1d9;
+  background-color: #0d1117;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word
+}
+body .octicon {
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: text-bottom
+}
+body h1:hover .anchor .octicon-link:before,
+body h2:hover .anchor .octicon-link:before,
+body h3:hover .anchor .octicon-link:before,
+body h4:hover .anchor .octicon-link:before,
+body h5:hover .anchor .octicon-link:before,
+body h6:hover .anchor .octicon-link:before {
+  width: 16px;
+  height: 16px;
+  content: ' ';
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>")
+}
+body details,
+body figcaption,
+body figure {
+  display: block
+}
+body summary {
+  display: list-item
+}
+body a {
+  background-color: transparent;
+  color: #58a6ff;
+  text-decoration: none
+}
+body a:active,
+body a:hover {
+  outline-width: 0
+}
+body abbr[title] {
+  border-bottom: none;
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted
+}
+body b,
+body strong {
+  font-weight: 600
+}
+body dfn {
+  font-style: italic
+}
+body h1 {
+  margin: .67em 0;
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 1.8em;
+  border-bottom: 1px solid #21262d
+}
+body mark {
+  background-color: #ff0;
+  color: #c9d1d9
+}
+body small {
+  font-size: 90%
+}
+body sub,
+body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline
+}
+body sub {
+  bottom: -.25em
+}
+body sup {
+  top: -.5em
+}
+body img {
+  border-style: none;
+  max-width: 100%;
+  box-sizing: content-box;
+  background-color: #0d1117
+}
+body code,
+body kbd,
+body pre,
+body samp {
+  font-family: monospace,monospace;
+  font-size: 1em
+}
+body figure {
+  margin: 1em 40px
+}
+body hr {
+  box-sizing: content-box;
+  overflow: hidden;
+  background: 0 0;
+  border-bottom: 1px solid #21262d;
+  height: .25em;
+  padding: 0;
+  margin: 24px 0;
+  background-color: #30363d;
+  border: 0
+}
+body [type=reset],
+body [type=submit],
+body html [type=button] {
+  -webkit-appearance: button
+}
+body [type=button]::-moz-focus-inner,
+body [type=reset]::-moz-focus-inner,
+body [type=submit]::-moz-focus-inner {
+  border-style: none;
+  padding: 0
+}
+body [type=button]:-moz-focusring,
+body [type=reset]:-moz-focusring,
+body [type=submit]:-moz-focusring {
+  outline: 1px dotted ButtonText
+}
+body [type=checkbox],
+body [type=radio] {
+  box-sizing: border-box;
+  padding: 0
+}
+body [type=number]::-webkit-inner-spin-button,
+body [type=number]::-webkit-outer-spin-button {
+  height: auto
+}
+body [type=search] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px
+}
+body [type=search]::-webkit-search-cancel-button,
+body [type=search]::-webkit-search-decoration {
+  -webkit-appearance: none
+}
+body ::-webkit-input-placeholder {
+  color: inherit;
+  opacity: .54
+}
+body ::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit
+}
+body a:hover {
+  text-decoration: underline
+}
+body hr::before {
+  display: table;
+  content: ""
+}
+body hr::after {
+  display: table;
+  clear: both;
+  content: ""
+}
+body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto
+}
+body td,
+body th {
+  padding: 0
+}
+body details summary {
+  cursor: pointer
+}
+body details:not([open]) > :not(summary) {
+  display: none!important
+}
+body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  line-height: 10px;
+  color: #c9d1d9;
+  vertical-align: middle;
+  background-color: #161b22;
+  border: solid 1px rgba(110,118,129,.4);
+  border-bottom-color: rgba(110,118,129,.4);
+  border-radius: 6px;
+  box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
+}
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25
+}
+body h2 {
+  font-weight: 600;
+  font-size: 1.6em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h3 {
+  font-weight: 600;
+  font-size: 1.4em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h4 {
+  font-weight: 600;
+  font-size: 1.2em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h5 {
+  font-weight: 600;
+  font-size: 1.0em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h6 {
+  font-weight: 600;
+  font-size: 1em;
+  color: #8b949e
+}
+body p {
+  margin-top: 0;
+  margin-bottom: 10px
+}
+body blockquote {
+  margin: 0;
+  padding: 0 1em;
+  color: #8b949e;
+  border-left: .25em solid #30363d
+}
+body ol,
+body ul {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 2em
+}
+body ol ol,
+body ul ol {
+  list-style-type: lower-roman
+}
+body ol ol ol,
+body ol ul ol,
+body ul ol ol,
+body ul ul ol {
+  list-style-type: lower-alpha
+}
+body dd {
+  margin-left: 0
+}
+body code,
+body tt {
+  font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  font-size: 12px
+}
+body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  font-size: 12px;
+  word-wrap: normal
+}
+body :-ms-input-placeholder {
+  color: #484f58;
+  opacity: 1
+}
+body ::-ms-input-placeholder {
+  color: #484f58;
+  opacity: 1
+}
+body ::placeholder {
+  color: #484f58;
+  opacity: 1
+}
+body .pl-c {
+  color: #8b949e
+}
+body .pl-c1,
+body .pl-s .pl-v {
+  color: #79c0ff
+}
+body .pl-e,
+body .pl-en {
+  color: #d2a8ff
+}
+body .pl-s .pl-s1,
+body .pl-smi {
+  color: #c9d1d9
+}
+body .pl-ent {
+  color: #7ee787
+}
+body .pl-k {
+  color: #ff7b72
+}
+body .pl-pds,
+body .pl-s,
+body .pl-s .pl-pse .pl-s1,
+body .pl-sr,
+body .pl-sr .pl-cce,
+body .pl-sr .pl-sra,
+body .pl-sr .pl-sre {
+  color: #a5d6ff
+}
+body .pl-smw,
+body .pl-v {
+  color: #ffa657
+}
+body .pl-bu {
+  color: #f85149
+}
+body .pl-ii {
+  color: #f0f6fc;
+  background-color: #8e1519
+}
+body .pl-c2 {
+  color: #f0f6fc;
+  background-color: #b62324
+}
+body .pl-sr .pl-cce {
+  font-weight: 700;
+  color: #7ee787
+}
+body .pl-ml {
+  color: #f2cc60
+}
+body .pl-mh,
+body .pl-mh .pl-en,
+body .pl-ms {
+  font-weight: 700;
+  color: #1f6feb
+}
+body .pl-mi {
+  font-style: italic;
+  color: #c9d1d9
+}
+body .pl-mb {
+  font-weight: 700;
+  color: #c9d1d9
+}
+body .pl-md {
+  color: #ffdcd7;
+  background-color: #67060c
+}
+body .pl-mi1 {
+  color: #aff5b4;
+  background-color: #033a16
+}
+body .pl-mc {
+  color: #ffdfb6;
+  background-color: #5a1e02
+}
+body .pl-mi2 {
+  color: #c9d1d9;
+  background-color: #1158c7
+}
+body .pl-mdr {
+  font-weight: 700;
+  color: #d2a8ff
+}
+body .pl-ba {
+  color: #8b949e
+}
+body .pl-sg {
+  color: #484f58
+}
+body .pl-corl {
+  text-decoration: underline;
+  color: #a5d6ff
+}
+body [data-catalyst] {
+  display: block
+}
+body g-emoji {
+  font-family: "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 1em;
+  font-style: normal!important;
+  font-weight: 400;
+  line-height: 1;
+  vertical-align: -.075em
+}
+body g-emoji img {
+  width: 1em;
+  height: 1em
+}
+body::before {
+  display: table;
+  content: ""
+}
+body::after {
+  display: table;
+  clear: both;
+  content: ""
+}
+body > :first-child {
+  margin-top: 0!important
+}
+body > :last-child {
+  margin-bottom: 0!important
+}
+body a:not([href]) {
+  color: inherit;
+  text-decoration: none
+}
+body .absent {
+  color: #f85149
+}
+body .anchor {
+  float: left;
+  padding-right: 4px;
+  margin-left: -20px;
+  line-height: 1
+}
+body .anchor:focus {
+  outline: 0
+}
+body blockquote,
+body details,
+body dl,
+body ol,
+body p,
+body pre,
+body table,
+body ul {
+  margin-top: 0;
+  margin-bottom: 16px
+}
+body blockquote > :first-child {
+  margin-top: 0
+}
+body blockquote > :last-child {
+  margin-bottom: 0
+}
+body sup > a::before {
+  content: "["
+}
+body sup > a::after {
+  content: "]"
+}
+body h1 .octicon-link,
+body h2 .octicon-link,
+body h3 .octicon-link,
+body h4 .octicon-link,
+body h5 .octicon-link,
+body h6 .octicon-link {
+  color: #c9d1d9;
+  vertical-align: middle;
+  visibility: hidden
+}
+body h1:hover .anchor,
+body h2:hover .anchor,
+body h3:hover .anchor,
+body h4:hover .anchor,
+body h5:hover .anchor,
+body h6:hover .anchor {
+  text-decoration: none
+}
+body h1:hover .anchor .octicon-link,
+body h2:hover .anchor .octicon-link,
+body h3:hover .anchor .octicon-link,
+body h4:hover .anchor .octicon-link,
+body h5:hover .anchor .octicon-link,
+body h6:hover .anchor .octicon-link {
+  visibility: visible
+}
+body h1 code,
+body h1 tt,
+body h2 code,
+body h2 tt,
+body h3 code,
+body h3 tt,
+body h4 code,
+body h4 tt,
+body h5 code,
+body h5 tt,
+body h6 code,
+body h6 tt {
+  padding: 0 .2em;
+  font-size: inherit
+}
+body ol.no-list,
+body ul.no-list {
+  padding: 0;
+  list-style-type: none
+}
+body ol[type="1"] {
+  list-style-type: decimal
+}
+body ol[type=a] {
+  list-style-type: lower-alpha
+}
+body ol[type=i] {
+  list-style-type: lower-roman
+}
+body div > ol:not([type]) {
+  list-style-type: decimal
+}
+body ol ol,
+body ol ul,
+body ul ol,
+body ul ul {
+  margin-top: 0;
+  margin-bottom: 0
+}
+body li > p {
+  margin-top: 16px
+}
+body li + li {
+  margin-top: .25em
+}
+body dl {
+  padding: 0
+}
+body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: 600
+}
+body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px
+}
+body table th {
+  font-weight: 600
+}
+body table td,
+body table th {
+  padding: 6px 13px;
+  border: 1px solid #30363d
+}
+body table tr {
+  background-color: #0d1117;
+  border-top: 1px solid #21262d
+}
+body table tr:nth-child(2n) {
+  background-color: #161b22
+}
+body table img {
+  background-color: transparent
+}
+body img[align=right] {
+  padding-left: 20px
+}
+body img[align=left] {
+  padding-right: 20px
+}
+body .emoji {
+  max-width: none;
+  vertical-align: text-top;
+  background-color: transparent
+}
+body span.frame {
+  display: block;
+  overflow: hidden
+}
+body span.frame > span {
+  display: block;
+  float: left;
+  width: auto;
+  padding: 7px;
+  margin: 13px 0 0;
+  overflow: hidden;
+  border: 1px solid #30363d
+}
+body span.frame span img {
+  display: block;
+  float: left
+}
+body span.frame span span {
+  display: block;
+  padding: 5px 0 0;
+  clear: both;
+  color: #c9d1d9
+}
+body span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both
+}
+body span.align-center > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: center
+}
+body span.align-center span img {
+  margin: 0 auto;
+  text-align: center
+}
+body span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both
+}
+body span.align-right > span {
+  display: block;
+  margin: 13px 0 0;
+  overflow: hidden;
+  text-align: right
+}
+body span.align-right span img {
+  margin: 0;
+  text-align: right
+}
+body span.float-left {
+  display: block;
+  float: left;
+  margin-right: 13px;
+  overflow: hidden
+}
+body span.float-left span {
+  margin: 13px 0 0
+}
+body span.float-right {
+  display: block;
+  float: right;
+  margin-left: 13px;
+  overflow: hidden
+}
+body span.float-right > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: right
+}
+body code,
+body tt {
+  padding: .2em .4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(110,118,129,.4);
+  border-radius: 6px
+}
+body code br,
+body tt br {
+  display: none
+}
+body del code {
+  text-decoration: inherit
+}
+body pre code {
+  font-size: 100%
+}
+body pre > code {
+  padding: 0;
+  margin: 0;
+  word-break: normal;
+  white-space: pre;
+  background: 0 0;
+  border: 0
+}
+body .highlight {
+  margin-bottom: 16px
+}
+body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal
+}
+body .highlight pre,
+body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #161b22;
+  border-radius: 6px
+}
+body pre code,
+body pre tt {
+  display: inline;
+  max-width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0
+}
+body .csv-data td,
+body .csv-data th {
+  padding: 5px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1;
+  text-align: left;
+  white-space: nowrap
+}
+body .csv-data .blob-num {
+  padding: 10px 8px 9px;
+  text-align: right;
+  background: #0d1117;
+  border: 0
+}
+body .csv-data tr {
+  border-top: 0
+}
+body .csv-data th {
+  font-weight: 600;
+  background: #161b22;
+  border-top: 0
+}
+body .footnotes {
+  font-size: 12px;
+  color: #8b949e;
+  border-top: 1px solid #30363d
+}
+body .footnotes ol {
+  padding-left: 16px
+}
+body .footnotes li {
+  position: relative
+}
+body .footnotes li:target::before {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  bottom: -8px;
+  left: -24px;
+  pointer-events: none;
+  content: "";
+  border: 2px solid #1f6feb;
+  border-radius: 6px
+}
+body .footnotes li:target {
+  color: #c9d1d9
+}
+body .footnotes .data-footnote-backref g-emoji {
+  font-family: monospace
+}
+body [hidden] {
+  display: none!important
+}
+body ::-webkit-calendar-picker-indicator {
+  filter: invert(50%)
+}
+
+/* node_modules/highlight.js/styles/github-dark.css */
+pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}/*!
+  Theme: GitHub Dark
+  Description: Dark theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-dark
+  Current colors taken from GitHub's CSS
+*/.hljs{color:#c9d1d9;background:#0d1117}.hljs-doctag,.hljs-keyword,.hljs-meta .hljs-keyword,.hljs-template-tag,.hljs-template-variable,.hljs-type,.hljs-variable.language_{color:#ff7b72}.hljs-title,.hljs-title.class_,.hljs-title.class_.inherited__,.hljs-title.function_{color:#d2a8ff}.hljs-attr,.hljs-attribute,.hljs-literal,.hljs-meta,.hljs-number,.hljs-operator,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-variable{color:#79c0ff}.hljs-meta .hljs-string,.hljs-regexp,.hljs-string{color:#a5d6ff}.hljs-built_in,.hljs-symbol{color:#ffa657}.hljs-code,.hljs-comment,.hljs-formula{color:#8b949e}.hljs-name,.hljs-quote,.hljs-selector-pseudo,.hljs-selector-tag{color:#7ee787}.hljs-subst{color:#c9d1d9}.hljs-section{color:#1f6feb;font-weight:700}.hljs-bullet{color:#f2cc60}.hljs-emphasis{color:#c9d1d9;font-style:italic}.hljs-strong{color:#c9d1d9;font-weight:700}.hljs-addition{color:#aff5b4;background-color:#033a16}.hljs-deletion{color:#ffdcd7;background-color:#67060c}
+
+</style>
+</head>
+<body>
+<div class="document">
+<div class="header"></div><div class="inner">
+<!-- HTML Header End -->
+<!-- Header Start -->
+
+<h1>x386.org: Debian and Ubuntu Documentation</h1>
+<h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
+<!-- Copyright Start -->
+<details>
+   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+
+<hr>
+
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+
+<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+<hr>
+</details>
+<!-- Copyright End -->
+
+<!-- Header End -->
+<h5>HAProxyOnDebianUbuntu</h5>
+<h1>High Availability with HAProxy Load Balancer on Debian and Ubuntu</h1>
+<h2>0. Specs</h2>
+<hr />
+<h3>0.0. Abstract</h3>
+<p>High Availability Load Balancing with Letsencrypt free certificates HTTPS  support.</p>
+<h3>0.1. Definitions</h3>
+<p>HAProxy is a powerful software for Load Balancing. </p>
+<p>It can be used for Level 4 (TCP) or Level 7 (Http) load balancing. That  means you can use it to share load on web sites or directly client server  programs.</p>
+<h3>0.2. Configurations</h3>
+<p>srv    : Load Balancer floating IP --&gt; 192.168.1.210<br />
+srvlb1 : Load Balancer 1  --&gt; 192.168.1.221 <br />
+srvlb2 : Load Balancer 2  --&gt; 192.168.1.222 <br />
+srvaw1 : App/Web Server 1 --&gt; 192.168.1.223<br />
+srvaw2 : App/Web Server 2 --&gt; 192.168.1.224<br />
+srvaw3 : App/Web Server 3 --&gt; 192.168.1.225<br />
+My SMTP Server --&gt; 192.168.1.140 (for keepalived notify messages)</p>
+<p>Tested with Debian 12/11 and Ubuntu 22.04/20.04 LTS Servers</p>
+<p>A keepalived cluster of 2 load balancers will be used. Normally the first server will run, but if an error happens on the first load balancer or if it is powered off, the second load balancer will take the control of  balancing. This step is not absolutely necessary but it eliminates the  risk of Single Point of Failure.</p>
+<p>This way, our infrastructure keeps running if any of the servers go  offline.</p>
+<p>2 Load Balancers will be configured with the floating IP of  192.168.1.210. An email from keepalived@x11.xyz to notify@x11.xyz will be  sent if any error occurs or main server changes. </p>
+<p>Our Application or Web Servers must be configured exactly the same way.  That way the users will never know to which server they are connected. </p>
+<p>For our examples, we'll install Apache and Mariadb to each App/Web server.</p>
+<p>We'll also install galera cluster to the servers to establish Mariadb  clustering. </p>
+<p>That way, any change of the database on a server will be replicated to  the others.</p>
+<p>First we'll load balance the web server, than we'll load balance the  Mariadb database usage. At that time, you'll realize, you can load balance any kind of software.</p>
+<p>The users only see the floating IP (192.168.1.210) of the Load Balancers, they will never see or realize the other servers or their IPs.</p>
+<h3>0.3. Sources:</h3>
+<p><a href="http://www.haproxy.org/">http://www.haproxy.org/</a><br />
+<a href="https://www.server-world.info/en/note?os=Ubuntu_20.04&amp;p=haproxy&amp;f=1">https://www.server-world.info/en/note?os=Ubuntu_20.04&amp;p=haproxy&amp;f=1</a><br />
+<a href="https://cbonte.github.io/haproxy-dconv/2.3/configuration.html">https://cbonte.github.io/haproxy-dconv/2.3/configuration.html</a><br />
+<a href="https://cbonte.github.io/haproxy-dconv/2.3/management.html">https://cbonte.github.io/haproxy-dconv/2.3/management.html</a><br />
+Book: ISBN: 9781519073846 <strong>Load Balancing with HAProxy</strong> by Nick Ramirez</p>
+<p><br></p>
+<h2>1. Install and Configure Load Balancers</h2>
+<hr />
+<h3>1.1. Install keepalived (srvlb1 and srvlb2)</h3>
+<pre><code>sudo apt update
+sudo apt install keepalived --yes
+</code></pre>
+<h3>1.2. Configure First Load Balancer (srvlb1)</h3>
+<p>Create a config file</p>
+<pre><code>sudo nano /etc/keepalived/keepalived.conf
+</code></pre>
+<p>Fill it as below, remember to change to your IPs, also remember to rename your network adapter from enp0s3 to whatever yours is.</p>
+<pre><code>global_defs {
+    notification_email {
+    notify@x11.xyz
+    }
+    notification_email_from keepalived@x11.xyz
+    smtp_server 192.168.1.140
+    smtp_connect_timeout 30
+    router_id load_balancer
+}
+vrrp_instance VI_1 {
+    smtp_alert
+    interface enp0s3
+    virtual_router_id 51
+    priority 100
+    advert_int 5
+    virtual_ipaddress {
+    192.168.1.210
+    }
+}
+</code></pre>
+<h3>1.3. Configure Second Load Balancer (srvlb2)</h3>
+<p>Create a config file</p>
+<pre><code>sudo nano /etc/keepalived/keepalived.conf
+</code></pre>
+<p>Fill it as below, remember to change to your IPs, also remember to rename your network adapter from enp0s3 to whatever yours is.</p>
+<pre><code>global_defs {
+    notification_email {
+    notify@x11.xyz
+    }
+    notification_email_from keepalived@x11.xyz
+    smtp_server 192.168.1.140
+    smtp_connect_timeout 30
+    router_id load_balancer
+}
+vrrp_instance VI_1 {
+    smtp_alert
+    interface enp0s3
+    virtual_router_id 51
+    priority 90
+    advert_int 5
+    virtual_ipaddress {
+    192.168.1.210
+    }
+}
+</code></pre>
+<h3>1.4. Start keepalived on Load Balancers (srvlb1 and srvlb2)</h3>
+<pre><code>sudo systemctl start keepalived
+</code></pre>
+<p>You can check the status of keepalived with the following command:</p>
+<pre><code>sudo systemctl status -l keepalived
+</code></pre>
+<h3>1.5. Install haproxy on Load Balancers (srvlb1 and srvlb2)</h3>
+<pre><code>sudo apt install haproxy --yes
+</code></pre>
+<p>Stop it for now, we'll restart it after configuring</p>
+<pre><code>sudo systemctl stop haproxy
+</code></pre>
+<p><br></p>
+<h2>2. Install and Configure Application/Web Servers</h2>
+<hr />
+<h3>2.1. Install Apache, Mariadb and Galera Cluster on App/Web Servers (srvaw1, srvaw2, and srwaw3)</h3>
+<pre><code>sudo apt update
+sudo apt install apache2 mariadb-server galera-4 --yes
+</code></pre>
+<p>For Ubuntu 20.04 galera-4 is not compatible, install as below:</p>
+<pre><code>sudo apt install apache2 mariadb-server galera-3 --yes
+</code></pre>
+<h3>2.2. Create Default Web Pages for App/Web Servers</h3>
+<h4>2.2.1. Create a Default Web Page for the First Server (srvaw1)</h4>
+<p>Delete the original one</p>
+<pre><code>sudo rm /var/www/html/index.html
+</code></pre>
+<p>Create and Fill the new one</p>
+<pre><code>sudo nano /var/www/html/index.html
+</code></pre>
+<p>Normally, they should have all the same html files, but just to test load balancing we'll put a slight information about the server name.</p>
+<pre><code>&lt;html&gt;
+&lt;title&gt;SrvAW1&lt;/title&gt;
+&lt;body&gt;
+&lt;h1&gt;SrvAW1&lt;/h1&gt;
+&lt;p&gt;Empty yet.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h4>2.2.2. Create a Default Web Page for the Second Server (srvaw2)</h4>
+<p>Delete the original one</p>
+<pre><code>sudo rm /var/www/html/index.html
+</code></pre>
+<p>Create and fill the new one</p>
+<pre><code>sudo nano /var/www/html/index.html
+</code></pre>
+<p>Normally, they should have the same html files, but just to test load  balancing we'll put a slight information about the server name</p>
+<pre><code>&lt;html&gt;
+&lt;title&gt;SrvAW2&lt;/title&gt;
+&lt;body&gt;
+&lt;h1&gt;SrvAW2&lt;/h1&gt;
+&lt;p&gt;Empty yet.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h4>2.2.3. Create a Default Web Page for the Third Server (srvaw3)</h4>
+<p>Delete the original one</p>
+<pre><code>sudo rm /var/www/html/index.html
+</code></pre>
+<p>Create and fill the new one</p>
+<pre><code>sudo nano /var/www/html/index.html
+</code></pre>
+<p>Normally, they should have the same html files, but just to test load  balancing we'll put a slight information about the server name</p>
+<pre><code>&lt;html&gt;
+&lt;title&gt;SrvAW3&lt;/title&gt;
+&lt;body&gt;
+&lt;h1&gt;SrvAW3&lt;/h1&gt;
+&lt;p&gt;Empty yet.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3>2.3. Apache Configuration for Logs (srvaw1, srvaw2, and srvaw3)</h3>
+<p>Because the web access is forwarded through the load balancer, our app/web servers sees the IP of the LB (Load Balancer) as the connecting IP. </p>
+<p>That way, all of the access logs (and error logs) will contain the IP of  the LB only. To overcome this situation and log the correct IPs, some  configurations are needed.</p>
+<h4>2.3.1. Enable Apache2 remoteip Mod (srvaw1, srvaw2, and srvaw3)</h4>
+<pre><code>sudo a2enmod remoteip
+</code></pre>
+<h4>2.3.2. Change Apache Log to Contain Real IPs (srvaw1, srvaw2, and srvaw3)</h4>
+<p>When the LB forward the request, it adds a X-Forwarded-For header to the  request. We'll configure Apache2 to include the contents of that header  in the log file.</p>
+<p>Edit Apache config file</p>
+<pre><code>sudo nano /etc/apache2/apache2.conf
+</code></pre>
+<p>Around line 212, add the first 2 lines, and change the second 2 lines as  below. Remember to use both of your LB IPs.</p>
+<pre><code>RemoteIPHeader X-Forwarded-For
+RemoteIPInternalProxy 192.168.1.221 192.168.1.222
+LogFormat &quot;%v:%p %a %l %u %t \&quot;%r\&quot; %&gt;s %O \&quot;%{Referer}i\&quot; \&quot;%{User-Agent}i\&quot;&quot; vhost_combined
+LogFormat &quot;%a %l %u %t \&quot;%r\&quot; %&gt;s %O \&quot;%{Referer}i\&quot; \&quot;%{User-Agent}i\&quot;&quot; combined
+</code></pre>
+<h4>2.3. Restart Apache (srvaw1, srvaw2, and srvaw3)</h4>
+<pre><code>sudo systemctl restart apache2
+</code></pre>
+<h3>2.4. Configure Mariadb on App/Web Servers (srvaw1, srvaw2, and srvaw3)</h3>
+<h4>2.4.1. Secure Mariadb Installations (srvaw1, srvaw2, and srvaw3)</h4>
+<p>The following command makes some fine tunes regarding Mariadb security.</p>
+<pre><code>sudo mysql_secure_installation
+</code></pre>
+<p>You will be asked some questions.  </p>
+<p><code>Enter current password for root (enter for none):</code>  </p>
+<p>There is no password yet, so press enter.</p>
+<p>The next 2 questions </p>
+<p><code>Switch to unix_socket authentication [Y/n]</code> <br />
+and<br />
+<code>Change the root password? [Y/n]</code>   </p>
+<p>are about securing root account. In Ubuntu and Debian root account is  already protected, so you can answer n.</p>
+<p>For the next questions you can select default answers.</p>
+<h4>2.4.2. Create a Mariadb User to Access from Our Workstation (srvaw1, srvaw2, and srvaw3)</h4>
+<p>Will be used for testing, remember to change to your LB IPs and give your  password.</p>
+<pre><code>sudo mariadb
+</code></pre>
+<p>Run on mariadb shell</p>
+<pre><code>GRANT ALL ON *.* TO 'admin'@'192.168.1.221' IDENTIFIED BY 'Password12';
+GRANT ALL ON *.* TO 'admin'@'192.168.1.222' IDENTIFIED BY 'Password12';
+FLUSH PRIVILEGES;
+EXIT;
+</code></pre>
+<h3>2.5. Configure Galera Cluster on Mariadb (srvaw1, srvaw2, and srvaw3)</h3>
+<h4>2.5.1. Temporarily Stop Mariadb Before Configuration (srvaw1, srvaw2, and srvaw3)</h4>
+<pre><code>sudo systemctl stop mariadb
+</code></pre>
+<h4>2.5.2. Enable Mariadb Binds to Other Computers (srvaw1, srvaw2, and srvaw3)</h4>
+<p>This is necessary for the cluster, also will let us join Mariadb from our workstation.</p>
+<pre><code>sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
+</code></pre>
+<p>Change the following line (Around line 27-30)</p>
+<p>from:</p>
+<pre><code>bind-address = 127.0.0.1
+</code></pre>
+<p>to:</p>
+<pre><code>bind-address = 0.0.0.0
+</code></pre>
+<h4>2.5.3. Configure Galera Cluster on Mariadb (srvaw1, srvaw2, and srvaw3)</h4>
+<p>Create a new conf file and fill it</p>
+<pre><code>sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
+</code></pre>
+<p>Fill as below, remember to use your ip addresses</p>
+<pre><code>[galera]
+innodb_autoinc_lock_mode = 2
+wsrep_cluster_name    = &quot;x386_cluster&quot;
+wsrep_cluster_address = &quot;gcomm://192.168.1.223,192.168.1.224,192.168.1.225&quot;
+wsrep_provider = /usr/lib/galera/libgalera_smm.so
+wsrep_provider_options = &quot;evs.suspect_timeout=PT10S&quot;
+wsrep_on = on 
+default_storage_engine = InnoDB 
+innodb_doublewrite = 1 
+binlog_format = ROW
+</code></pre>
+<h4>2.5.4. Start Galera Cluster On First App/Web Server (srvaw1)</h4>
+<p><strong>!!! You should run this only on one of the servers !!!</strong></p>
+<pre><code>sudo galera_new_cluster
+</code></pre>
+<p>This command should also starts mariadb on this node</p>
+<h4>2.5.5. Start Mariadb on Other Nodes too (srvaw2 and srvaw3)</h4>
+<p>Run on the other servers:</p>
+<pre><code>sudo systemctl start mariadb
+</code></pre>
+<p><br></p>
+<h2>3. Configure Web Server Load Balancing</h2>
+<hr />
+<p>We'll configure HAProxy to load balance 3 web servers (192.168.1.223,  192.168.1.224 and 192.168.1.225. </p>
+<h3>3.1. Configure HAProxy (srvlb1 and srvlb2)</h3>
+<pre><code>sudo nano /etc/haproxy/haproxy.cfg
+</code></pre>
+<p>Add to the end of the file</p>
+<pre><code># define frontend for apache
+frontend fe_http_80
+        # listen to port 80
+        bind *:80
+        # set the backend
+        default_backend    be_http_80
+        # send X-Forwarded-For header
+        option   forwardfor
+# define backend for apache
+backend be_http_80
+        # use roundrobin algorithm for balancing
+        balance  roundrobin
+        # define backend servers
+        server   srvaw1 192.168.1.223:80 check
+        server   srvaw2 192.168.1.224:80 check
+        server   srvaw3 192.168.1.225:80 check
+</code></pre>
+<h3>3.2. Restart haproxy (srvlb1 and srvlb2)</h3>
+<pre><code>sudo systemctl restart haproxy
+</code></pre>
+<h3>3.3. Explanations</h3>
+<p>frontend is the incoming connection(s) coming to LB (Load Balancer)<br />
+backend is the forwarding places for these icoming connection(s)  </p>
+<p><code>frontend fe_http_80</code></p>
+<p>Define a frontend connection and label it as fe_http_80. You can label it  whatever you want.</p>
+<p><code>bind *:80</code></p>
+<p>Listen incoming connection from all the IPs of the LB at port 80</p>
+<p><code>default_backend    be_http_80</code></p>
+<p>The backend for this frontend is named as be_http_80</p>
+<p><code>option  forwardfor</code></p>
+<p>Capture the IP of the client at add it with a X-Forwarded-For header. We  will use this IP at Apache log.</p>
+<p><code>backend be_http_80</code></p>
+<p>Define the backend named as be_http_80</p>
+<p><code>balance  roundrobin</code></p>
+<p>Roundrobin algorithm is used for load balancing. There are some other  algorithms too, and they will be explained at 5. Round robin algorithm  means the servers will be selected as one by one. </p>
+<p><code>server   srvaw1 192.168.1.223:80 check</code><br />
+<code>server   srvaw2 192.168.1.224:80 check</code><br />
+<code>server   srvaw3 192.168.1.225:80 check</code>  </p>
+<p>List of backend servers. srvaw1, srvaw2 and srvaw3 are used as labels. IP  and port will be used as forwarding ip and port. check parameter informs # the LB to check the backend server if the ip and port is alive. There are  some other parameters too, and they will be explained at 5.</p>
+<h3>3.4. Testing</h3>
+<p>You can connect to web site http://192.168.1.210 from different  workstations and see it is connecting to 192.168.1.223, 192.168.1.224, and 192.168.1.225.</p>
+<p><br></p>
+<h2>4. Configure Mariadb Load Balancing</h2>
+<h3>4.1. Explanations</h3>
+<p>Load Balancing an application is similar to load balancing a web server. </p>
+<p>All we need is determining the TCP/IP port it is using and making the  configurations using that port. We also use mode directive with tcp  keyword at backend and frontend sections to instruct HAProxy that it will  use tcp (level 4) load balancing.</p>
+<p>Mariadb uses port 3306, so we'll make configurations with that port.</p>
+<h3>4.2. Configure HAProxy (srvlb1 and srvlb2)</h3>
+<pre><code>sudo nano /etc/haproxy/haproxy.cfg
+</code></pre>
+<p>Add to the end of the file:</p>
+<pre><code># define frontend for mariadb
+frontend fe_mariadb_3306
+        mode            tcp
+        # listen to port 3306
+        bind *:3306
+        # set the backend
+        default_backend    be_mariadb_3306
+# define backend for mariadb
+backend be_mariadb_3306
+        mode            tcp
+        # use roundrobin algorithm for balancing
+        balance  roundrobin
+        # define backend servers
+        server   srvaw1 192.168.1.223:3306 check
+        server   srvaw2 192.168.1.224:3306 check
+        server   srvaw3 192.168.1.225:3306 check
+</code></pre>
+<h3>4.3. Reload haproxy (srvlb1 and srvlb2)</h3>
+<p>We can reload the conf, without interrupting web server balancing </p>
+<pre><code>sudo systemctl reload haproxy
+</code></pre>
+<h3>4.4. Testing</h3>
+<p>You can connect from your workstation using the following command. </p>
+<p><strong>Remember:</strong> you need to install mariadb-client package in your workstation, if you haven't done so already.</p>
+<p>Use the password given at 2.4.3.</p>
+<pre><code>mariadb -u admin -p -h 192.168.1.210
+</code></pre>
+<p>If you run the following command on mariadb shell, you can tell which  server you connected.</p>
+<pre><code>SHOW VARIABLES LIKE 'hostname';
+</code></pre>
+<p><br></p>
+<h2>5. More on HAProxy Configuration Options</h2>
+<hr />
+<h3>5.1. Default Configuration File</h3>
+<p>Default configuration file is as below:</p>
+<pre><code>global
+        log /dev/log    local0
+        log /dev/log    local1 notice
+        chroot /var/lib/haproxy
+        stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
+        stats timeout 30s
+        user haproxy
+        group haproxy
+        daemon
+        # Default SSL material locations
+        ca-base /etc/ssl/certs
+        crt-base /etc/ssl/private
+        # See: https://ssl-config.mozilla.org/#server=haproxy&amp;serve...
+        ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDH...
+        ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AE...
+        ssl-default-bind-options ssl-min-ver TLSv1.2 no-tls-tickets
+defaults
+        log     global
+        mode    http
+        option  httplog
+        option  dontlognull
+        timeout connect 5000
+        timeout client  50000
+        timeout server  50000
+        errorfile 400 /etc/haproxy/errors/400.http
+        errorfile 403 /etc/haproxy/errors/403.http
+        errorfile 408 /etc/haproxy/errors/408.http
+        errorfile 500 /etc/haproxy/errors/500.http
+        errorfile 502 /etc/haproxy/errors/502.http
+        errorfile 503 /etc/haproxy/errors/503.http
+        errorfile 504 /etc/haproxy/errors/504.http
+</code></pre>
+<h3>5.2. Explanation of Default Config Parameters</h3>
+<h4>5.2.1. global Section</h4>
+<p>The settings for "global" section is for HAProxy process settings.</p>
+<ul>
+<li><strong>log</strong> options set up logging for requests and errors. Most of the time we don't need to change them.</li>
+<li><strong>chroot</strong> option makes HAProxy run under that specific diretory, and  prevents it from accessing any other place, thus enables enhanced  security.</li>
+<li><strong>stats</strong> options enables accessing HAProxy from the command line, and  sets it timeout value. </li>
+<li><strong>user</strong> and <strong>group</strong> options sets the user and group that HAProxy runs as.</li>
+<li><strong>daemon</strong> option makes HAProxy run as a background process.</li>
+<li><strong>ca-base</strong> and <strong>crt-base</strong> options defines the TLS (SSL) certificates if we enable SSL. We will use them when we load balance SSL sites.</li>
+<li>The 3 <strong>ssl-default-</strong>... options are specifications for SSL configuration.</li>
+</ul>
+<p>There are much more parameters, refer to:<br />
+<a href="https://cbonte.github.io/haproxy-dconv/2.3/configuration.html#3">https://cbonte.github.io/haproxy-dconv/2.3/configuration.html#3</a></p>
+<h4>5.2.2. defaults Section</h4>
+<p>This section is for the default values for which we define load balancing. </p>
+<ul>
+<li><strong>log global</strong> option says that our definitions will use global log  options.</li>
+<li><strong>mode http</strong> option states that load balancing operate on level 7 (http), if we set it as "home tcp" it operates at level 4 (tcp), as we did for mariadb load balancing.</li>
+<li><strong>option httplog</strong> HTTP messages logging is verbosed</li>
+<li><strong>option dontlognull</strong> don't log requests with no data</li>
+<li>3 <strong>timeout</strong> options with milisecond values. <strong>connect</strong> for connection to backend servers, <strong>client</strong> for waiting for a client, <strong>server</strong> when a
+response is expected from a backend server.</li>
+<li><strong>errorfile</strong> options defines the error message html files when there is an error at the HAProxy itself. These files can be modified.</li>
+</ul>
+<h3>5.3. Other Sections</h3>
+<p>The other sections are the options we add to the end of the config file. </p>
+<p>At 3. and 4. we used "backend" and "frontend" sections. </p>
+<h4>5.3.1. frontend Section</h4>
+<p>frontend section defines the part of Load Balancing which is seen by the  users. We can define listening IPs and Ports here, and reference the  backend section to forward the requests.</p>
+<h4>5.3.2. backend Section</h4>
+<p>In this section, we define the IPs and Ports to forwarded, we can define  algorithm, mode and some other values here.</p>
+<h4>5.3.3. listen Section</h4>
+<p>There is one more possible section, which is "listen". Is it somewhat a  combination of frontend and backend. Below is a very simple example:</p>
+<pre><code>listen myproxy
+     bind *:80
+     server srv1 192.168.1.181:80
+</code></pre>
+<p><br></p>
+<h2>6. Load Balancing Algorithms</h2>
+<hr />
+<ul>
+<li>Round Robin: Split Traffic Equally</li>
+<li>Weighted Round Robin: Split Traffic by Weight</li>
+<li>Leastconn: Split Connections Equally</li>
+<li>Weighted Leastconn: Split Connections by Weight</li>
+<li>Hash: The same requests always goes to the same servers.</li>
+<li>First Available: Each server sequentially take some number of connections.</li>
+</ul>
+<h3>6.1. Round Robin Algorithm</h3>
+<p>For our Apache and Mariadb LB, we used this algorithm. It is a very  simple way to split the traffic equally among the servers. All the  requests are forwarded to each server sequentially.</p>
+<p>Example frontend and backend sections:</p>
+<pre><code>frontend fe_http_80
+        bind *:80
+        default_backend    be_http_80
+backend be_http_80
+        balance  roundrobin
+        server   srv1 192.168.1.223:80 check
+        server   srv2 192.168.1.224:80 check
+        server   srv3 192.168.1.225:80 check
+</code></pre>
+<h3>6.2. Weighted Round Robin Algorithm</h3>
+<p>Weighted Round Robing is similar to standart Round Robin, just you can  set weights to the backends, so that they can have more traffic. It is  useful, if some of your servers have more processing power.</p>
+<p>Example frontend and backend sections, srv1 and srv2 will have 2 times  more of traffic than srv3:</p>
+<pre><code>frontend fe_http_80
+        bind *:80
+        default_backend    be_http_80
+backend be_http_80
+        balance  roundrobin
+        server   srv1 192.168.1.222:80 weight 2 check
+        server   srv2 192.168.1.223:80 weight 2 check
+        server   srv3 192.168.1.224:80 weight 1 check
+</code></pre>
+<p>You can temporarily disable a backend server by disabled keyword:</p>
+<pre><code>        server   srv3 192.168.1.224:80 weight 1 disabled
+</code></pre>
+<h3>6.3. Leastconn Algorithm</h3>
+<p>Leastconn algorithm splits the traffic amongst the server regarding the  connection numbers. So that, all the servers gets equal number of  connections. It is very useful for Load Balancing databases.</p>
+<p>Example frontend and backend sections:</p>
+<pre><code>frontend fe_mariadb_3306
+        mode            tcp
+        bind *:3306
+        default_backend    be_mariadb_3306
+backend be_mariadb_3306
+        mode            tcp
+        balance  leastconn
+        server   srv1 192.168.1.223:3306 check
+        server   srv2 192.168.1.224:3306 check
+        server   srv3 192.168.1.225:3306 check
+</code></pre>
+<p>With this algorith, a newly added server may have all the traffic # because it has no connection, to avoid it, there is a keyword named as  slowstart followed by time :</p>
+<pre><code>        server   srv4 192.168.1.232:3306 check slowstart 60s
+</code></pre>
+<h3>6.4. Weighted Leastconn Algorithm</h3>
+<p>Weighted Leastconn is similar to standart Leastconn algorithm , just you  can set weights to the backends, so that they can have more traffic. It is # useful, if some of your servers have more processing power.</p>
+<p>Example frontend and backend sections, srw1 and srv2 will have 2 times  more of connections than srv3:</p>
+<pre><code>frontend fe_mariadb_3306
+        mode            tcp
+        bind *:3306
+        default_backend    be_mariadb_3306
+backend be_mariadb_3306
+        mode            tcp
+        balance  leastconn
+        server   srv1 192.168.1.223:3306 weight 2 check
+        server   srv2 192.168.1.224:3306 weight 2 check
+        server   srv3 192.168.1.225:3306 weight 1 check
+</code></pre>
+<h3>6.5. HASH Uri Algorithm</h3>
+<p>This algorithm is very useful especially when load balancing static web  servers with caching. This algorithm always forwards the same requests to  the same nodes. This way, cache hits and performance increase.</p>
+<p>Example frontend and backend sections:</p>
+<pre><code>frontend fe_http_80
+        bind *:80
+        default_backend    be_http_80
+backend be_http_80
+        balance  uri
+        server   srv1 192.168.1.223:80 check
+        server   srv2 192.168.1.224:80 check
+        server   srv3 192.168.1.225:80 check
+</code></pre>
+<p>This algorithm can be used in weighted mode too. This way you can utilize the faster servers better. </p>
+<p>Example frontend and backend sections, srw1 and srv2 will have 2 times  more of traffic than srv3:</p>
+<pre><code>frontend fe_http_80
+        bind *:80
+        default_backend    be_http_80
+backend be_http_80
+        balance  uri
+        server   srv1 192.168.1.222:80 weight 2 check
+        server   srv2 192.168.1.223:80 weight 2 check
+        server   srv3 192.168.1.224:80 weight 1 check
+</code></pre>
+<h3>6.6. First Available Algorithm</h3>
+<p>This algorithm allows to use servers sequentially, but steps up to next  server when specified number of connection is established. That way, it  will use srv1 until the first (say) 50 connections, and after it will use  srv2 etc. This algorithm can be useful when you don't want to install a  server when it is not necessary.</p>
+<p>Example frontend and backend sections:</p>
+<pre><code>frontend fe_http_80
+        bind *:80
+        default_backend    be_http_80
+backend be_http_80
+        balance  first
+        server   srv1 192.168.1.223:80 maxconn 50
+        server   srv2 192.168.1.224:80 maxconn 50
+        server   srv3 192.168.1.225:80 maxconn 50
+</code></pre>
+<p><br></p>
+<h2>7. URL Redirection</h2>
+<hr />
+<p>The requested URL can be redirected depending on URL path, URL  parameters, HTTP headers, or HTTP address. This redirections could be very efficient at some circumstances.</p>
+<h3>7.1. URL Path Redirection</h3>
+<h4>7.1.0. Scenario</h4>
+<p>We have 3 folders at our webserver, folder1, folder2, and folder3. When  folder1 is requested it will be redirected to srvaw1, folder2 to srvaw2, folder3 to srvaw3. </p>
+<p>Otherwise the standart load balancing will keep going as it is at Section 3.</p>
+<h4>7.1.1. Configuration  (srvlb1 and srvlb2)</h4>
+<pre><code>sudo nano /etc/haproxy/haproxy.cfg
+</code></pre>
+<p>Remove previously added backend and frontend sections for HTTP and add to the end of the file:</p>
+<pre><code>frontend fe_http_80
+    bind *:80
+    acl acl_folder1 path_beg -i /folder1
+    use_backend be_folder1 if acl_folder1
+    acl acl_folder2 path_beg -i /folder2
+    use_backend be_folder2 if acl_folder2
+    acl acl_folder3 path_beg -i /folder3
+    use_backend be_folder3 if acl_folder3
+    default_backend    be_http_80
+        option   forwardfor
+backend be_folder1
+        server   srvaw1 192.168.1.223:80 check
+backend be_folder2
+        server   srvaw2 192.168.1.224:80 check
+backend be_folder3
+        server   srvaw3 192.168.1.225:80 check
+backend be_http_80
+        balance  roundrobin
+        server   srvaw1 192.168.1.223:80 check
+        server   srvaw2 192.168.1.224:80 check
+        server   srvaw3 192.168.1.225:80 check
+</code></pre>
+<p>Restart HAProxyy</p>
+<pre><code>sudo systemctl restart haproxy
+</code></pre>
+<p>You may prefer reloading haproxy, if it is already active</p>
+<pre><code>sudo systemctl reload haproxy
+</code></pre>
+<h4>7.1.2. Explanations</h4>
+<p>ACLs (Access Control Lists) are used to check if a URL path starts with  something.</p>
+<ul>
+<li>acl acl_folder1 path_beg -i /folder1</li>
+</ul>
+<p>acl is a keyword to define an ACL, acl_folder1 is the given name for that acl, path_beg mean a condition of URL path (part of the URL after the  address) starts with something, -i means following string will be  considered as case insensitive, finally the /folder1 is the string we are  looking for.</p>
+<p>ACL acl_folder1 is activated when a url path starts with /folder1 like in:</p>
+<p>http://www.x11.xyz/folder1</p>
+<p>For a URL of http://www.x11.xyz/folder1/folder2/folder3, the URL Path is: /folder1/folder2/folder3</p>
+<ul>
+<li>use_backend be_folder1 if acl_folder3</li>
+</ul>
+<p>This command instructs HAProxy to use the server(s) in be_folder1 backend when acl_folder1 is activated.</p>
+<p>Similar ACLs and Backends are created for /folder2 and /folder3 too.</p>
+<p>There are other possible conditions for URL Path. List of them:</p>
+<pre><code>path        exact URL path 
+path_beg    URL path begins with the string
+path_end    URL path ends with the string
+path_sub    URL path has the string as a substring
+path_dir    URL path has the string as a subdirectory
+path_len    Exact length of the URL path
+path_reg    Regex match of the URL path
+</code></pre>
+<h4>7.1.3. URL Path ACL Examples</h4>
+<p>An acl for info page</p>
+<pre><code>acl acl_info path -i /info/info.html
+</code></pre>
+<p>An acl for jpg and png images</p>
+<pre><code>acl acl_image path_end .jpg .png
+</code></pre>
+<p>An acl for image directories</p>
+<pre><code>acl acl_image2 path_dir -i /images
+</code></pre>
+<p>An acl for URL paths more than 20 chars</p>
+<pre><code>acl acl_long path_len gt 20
+</code></pre>
+<p>An acl for paths including cart</p>
+<pre><code>acl acl_cart path_sub -i cart
+</code></pre>
+<p>Another acl for images</p>
+<pre><code>acl acl_image3 path_reg (jpg|jpeg|bmp|gif|png)
+</code></pre>
+<h3>7.2. URL Parameter Redirection</h3>
+<p>A URL parameter is a variable and  value pair. A lot of websites  including duckduckgo and google use it to send a search to the website.  Below is an example:</p>
+<p><a href="https://www.x386.org/?s=x386">https://www.x386.org/?s=x386</a></p>
+<p>s is the variable which stands for search and x386 is the value to search  for.</p>
+<p>HAProxy can capture the parameter (the  variable and the value) and  redirect a certain pair to a certain website. </p>
+<h4>7.2.1. Example</h4>
+<p>Assume that we have a variable named block_number and it can have values  first, second, third, and rest. A URL for first block number will be like  something below:</p>
+<p>http:/x11.xyz/?block_number=First</p>
+<p>We want to redirect first block to a website, second and third to another website and the rest to another website. A frontend section would be like below:</p>
+<pre><code>frontend fe_blocks
+    bind *:80
+    acl acl_block1 url_param(block_number) -i -m str first
+    use_backend be_block1 if acl_block1
+    acl acl_block23 url_param(block_number) -i -m str second third
+    use_backend be_block23 if acl_block23
+    acl acl_blockrest url_param(block_number) -i -m str rest
+    use_backend be_blockrest if acl_blockrest
+    default_backend blocks
+</code></pre>
+<p>As you might remember -i directive is for case-insensitive string match.  -m directive is used for exact string match.</p>
+<h3>7.3. HTTP Header Redirection</h3>
+<p>HTTP Headers may contain many information including User-Agent, Host  (website root address), Content-Type, Referer (not referrer). For a full list, please refer:</p>
+<p><a href="https://en.wikipedia.org/wiki/List_of_HTTP_header_fields">https://en.wikipedia.org/wiki/List_of_HTTP_header_fields</a></p>
+<p>A User-Agent HTTP Header would be something like below:</p>
+<p>Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0</p>
+<p>A host HTTP Header would be something like below:</p>
+<p>Host: www.x11.xyz</p>
+<p>A frontend section to redirect requests from mobile devices to a specific address would be:</p>
+<pre><code>frontend be_http
+    bind *:80
+    acl acl_mobile req.hdr(User-Agent) -i -m reg (android|iphone)
+    use_backend be_mobile if acl_mobile
+    default_backend be_http
+</code></pre>
+<p><br></p>
+<h2>8. Enabling HTTPS at HAProxy</h2>
+<hr />
+<p>This section deals with using https with HAProxy. Using TLS (SSL)  certificates are easy with HAProxy. But we want to use LetsEncrypt  certificates and certbot tool for frequent (every 2 months) renewals.</p>
+<p>I test everything I write here, actually I write here what I do on  servers. To use LetsEncrypt certificates with certbot, the servers must be connected to the internet. So we need VPS servers. Therefore, for this  section only, I use 1 HAProxy server and 2 web servers (No keepalived). </p>
+<h3>8.0. Configurations (For this section only)</h3>
+<p>x11.xyz: Load Balancer  --&gt; 178.128.174.77 
+u11.xyz: Web Server 1   --&gt; 178.128.34.126 
+v11.xyz: Web Server 2   --&gt; 178.128.165.126</p>
+<p>Tested with Debian 12/11 and Ubuntu 22.04/20.04 LTS Servers</p>
+<p>HAProxy is already installed on x11.xyz, Apache is already installed and  running on u11.xyz and v11.xyz.</p>
+<p>HAProxy configuration must not have any frontend or backend sections.</p>
+<h3>8.1. Considerations</h3>
+<p>To receive (and then renew) certificates from LetsEncrypt with Certbot;  either you should have a web server listening on port 80 on your server,  or Certbot spins a temporary web server at port 80 when it is working. </p>
+<p>It is not so easy, because we bind port 80 at HAProxy configuration. </p>
+<p>There are some complicated solutions on the web. I found a solution which is not so painful, also looks safe to implement. </p>
+<ul>
+<li>We install apache to our Load Balancer, but bind it on loopback adapter  (127.0.0.1). </li>
+<li>HAProxy is binded to server's other IP addresses. </li>
+<li>The request of LetsEncrypt's challenge directory is redirected to internal Apache server. That way Apache and HAProxy can survive together, both binding to port 80.</li>
+</ul>
+<h3>8.2. Install And Configure Apache on Load Balancer (Run on x11.xyz)</h3>
+<pre><code>sudo apt update
+sudo apt install apache2 --yes
+</code></pre>
+<p>Apache may give error messages and cannot start. Don't worry, it is  because HAProxy uses port 80 already.</p>
+<p>Configure Apache to bind only on loopback</p>
+<pre><code>sudo nano /etc/apache2/ports.conf
+</code></pre>
+<p>Change as Below</p>
+<pre><code>Listen 127.0.0.1:80
+&lt;IfModule ssl_module&gt;
+        Listen 127.0.0.1:443
+&lt;/IfModule&gt;
+&lt;IfModule mod_gnutls.c&gt;
+        Listen 127.0.0.1:443
+&lt;/IfModule&gt;
+</code></pre>
+<p>Configure the Default Site Conf to only bind to loopback IP</p>
+<pre><code>sudo nano /etc/apache2/sites-available/000-default.conf
+</code></pre>
+<p>Change as below, remember to change to your domains</p>
+<pre><code>&lt;VirtualHost 127.0.0.1:80&gt;
+        ServerAdmin webmaster@localhost
+        ServerName x11.xyz
+        ServerAlias www.x11.xyz
+        DocumentRoot /var/www/html
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>Create Letsencrypt's challenge directory</p>
+<pre><code>sudo mkdir -p /var/www/html/.well-known/acme-challenge
+</code></pre>
+<p>Restart Apache</p>
+<pre><code>sudo systemctl restart apache2
+</code></pre>
+<h3>8.3. Configure HAProxy to Redirect to Apache (Run on x11.xyz)</h3>
+<p>Edit HAProxy configuration file</p>
+<pre><code>sudo nano /etc/haproxy/haproxy.cfg
+</code></pre>
+<p>Add to the end of the file, remember to use your servers' IPs at bind  directive. </p>
+<p>You can see them with "ip a" command.</p>
+<pre><code>frontend fe_http
+        bind 178.128.174.77:80
+        acl acl_acme path_beg -i /.well-known/acme-challenge
+        use_backend be_acme if acl_acme
+backend be_acme
+        server self 127.0.0.1:80 check
+</code></pre>
+<p>Restart HAProxy</p>
+<pre><code>sudo systemctl restart haproxy
+</code></pre>
+<h3>8.4. Install and Run Certbot (Run on x11.xyz)</h3>
+<p>Install Certbot</p>
+<pre><code>sudo apt update
+sudo apt install --yes  certbot
+</code></pre>
+<p>Run Certbot to Produce Certificates, remember to change to your domain(s).</p>
+<pre><code>sudo certbot certonly --webroot --webroot-path /var/www/html \
+   -d x11.xyz,www.x11.xyz
+</code></pre>
+<h3>8.5. Generate Certificate for HAProxy (Run on x11.xyz)</h3>
+<p>Your LetsEncrypt certificates are located at the dir /etc/letsencrypt/live/x11.xyz.</p>
+<p>Of course yours have your domain name instead of x11.xyz. You can see its  name with the following command: </p>
+<pre><code>sudo ls -al /etc/letsencrypt/live
+</code></pre>
+<p>The directory that you see there, is your domain to replace with x11.xyz  at the following commands.</p>
+<p>HAProxy certificate is generated by adding public key and private key  together to a file.</p>
+<p>Temporarily become root and generate certificate</p>
+<pre><code>sudo -i
+cd /etc/letsencrypt/live/x11.xyz
+cat fullchain.pem privkey.pem &gt;&gt; haproxy.pem
+exit
+</code></pre>
+<h3>8.6. Configure HAProxy (Run on x11.xyz)</h3>
+<p>At 8.3. we made a configuration for redirecting to Apache. This time we  are configuring HAProxy website redirection with SSL.</p>
+<pre><code>sudo nano /etc/haproxy/haproxy.cfg
+</code></pre>
+<p>Add to the end of the file, remember to use your servers' IPs at bind  directive. </p>
+<p>You can see them with "ip a" command. Remove the lines we added at 8.3. </p>
+<pre><code>frontend fe_http
+        bind 178.128.174.77:80
+        bind 178.128.174.77:443 ssl crt /etc/letsencrypt/live/x11.xyz/haproxy.pem
+        acl acl_acme path_beg -i /.well-known/acme-challenge
+        use_backend be_acme if acl_acme
+        default_backend    be_http
+        option   forwardfor
+backend be_acme
+        server self 127.0.0.1:80 check
+backend be_http
+        balance  roundrobin
+        server   u11 178.128.34.126:80 check
+        server   v11 178.128.165.126:80 check
+</code></pre>
+<p>Restart HAProxy</p>
+<pre><code>sudo systemctl restart haproxy
+</code></pre>
+<p>SSL redirection is running now, but we have some more work to polish it.</p>
+<h3>8.7. Check Certbot for Renewal and Add Renewal-Hooks (Run on x11.xyz)</h3>
+<p>We are going to wait for 60 days to renew our certificates, but we can  simulate it with the following command:</p>
+<pre><code>sudo certbot renew --dry-run
+</code></pre>
+<p>If it works without any errors, most probably it will work forever.</p>
+<p>But there is some more things to consider. Everytime the certificates  are renewed, we have to generate certificate for HAProxy and restart HAProxy to use that new certificate. </p>
+<p>It is easier than you think. We will create a script to do that work, and make it run everytime our certificates renewed.</p>
+<p>Certbot runs all scripts in /etc/letsencrypt/renewal-hooks/deploy/ folder after it successfully renews a certificate. So we'll add a file there with the necessary operations</p>
+<pre><code>sudo nano /etc/letsencrypt/renewal-hooks/deploy/haproxy.sh
+</code></pre>
+<p>Fill as below, remember to change to your domain</p>
+<pre><code>cat /etc/letsencrypt/live/x11.xyz/fullchain.pem /etc/letsencrypt/live/x11.xyz/privkey.pem \
+  &gt;&gt; /etc/letsencrypt/live/x11.xyz/haproxy.pem
+systemctl restart haproxy
+</code></pre>
+<p>Make it executable</p>
+<pre><code>sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/haproxy.sh
+</code></pre>
+<h3>8.8. Explanations</h3>
+<p>Everything is fine until now. We have our SSL (actually TLS)  certificates, they are renewed automatically. We can connect to our site  using https.</p>
+<p>Actually only the traffic between our browser and the Load Balancer is  encrypted, the traffic between Load Balancer and the Web Servers are  cleartext. This is called TLS Termination. It may not be a problem if your web servers are not connected to the internet. But to be stay safe, we'd  better encrypt that traffic too. And this is called TLS re-encryption.</p>
+<p>To establish TLS re-encryption, we'll use self signed certificates on our Web Servers, and instruct our Load Balancer to reach them using https. </p>
+<h3>8.9. Enable HTTPS at Web Servers (Run on u11.xyz and v11.xyz)</h3>
+<p>Enable Apache SSL module</p>
+<pre><code>sudo a2enmod ssl
+</code></pre>
+<p>Restart Apache</p>
+<pre><code>sudo systemctl restart apache2
+</code></pre>
+<p>Create a directory for the certificates</p>
+<pre><code>sudo mkdir /etc/apache2/certs
+</code></pre>
+<p>Create a self signed certificate</p>
+<pre><code>sudo openssl req -x509 -nodes -days 7300 -newkey rsa:2048 \
+-keyout /etc/apache2/certs/x11.xyz.key -out /etc/apache2/certs/x11.xyz.crt
+</code></pre>
+<p>It will ask some questions, answer them with common sense</p>
+<p>Create a conf file for ssl site</p>
+<pre><code>sudo nano /etc/apache2/sites-available/000-virtual-ssl.conf
+</code></pre>
+<p>Fill as below:</p>
+<pre><code>&lt;IfModule mod_ssl.c&gt;
+    &lt;VirtualHost *:443&gt;
+        ServerName x11.xyz
+        ServerAlias www.x11.xyz
+        ServerAdmin webmaster@x11.xyz
+        DocumentRoot /var/www/html
+        ErrorLog ${APACHE_LOG_DIR}/x11.xyz-error.log
+        CustomLog ${APACHE_LOG_DIR}/x11.xyz-access.log combined
+        SSLEngine on
+        SSLCertificateFile  /etc/apache2/certs/x11.xyz.crt
+        SSLCertificateKeyFile   /etc/apache2/certs/x11.xyz.key
+    &lt;/VirtualHost&gt;
+&lt;/IfModule&gt;
+</code></pre>
+<p>Enable the new ssl site</p>
+<pre><code>sudo a2ensite 000-virtual-ssl.conf
+</code></pre>
+<p>Reload apache</p>
+<pre><code>sudo systemctl reload apache2
+</code></pre>
+<p>Our web servers are ready for https. Now we need to instruct our Load  Balancer to connect them through https.</p>
+<h3>8.10. Instruct HAProxy to Access Web Servers Through HTTPS (Run on x11.xyz)</h3>
+<pre><code>sudo nano /etc/haproxy/haproxy.cfg
+</code></pre>
+<p>Change Backend Sections as below</p>
+<pre><code>backend be_acme
+        server self 127.0.0.1:80 check
+backend be_http
+        balance  roundrobin
+        server   u11 178.128.34.126:443 check ssl verify none
+        server   v11 178.128.165.126:443 check ssl verify none
+</code></pre>
+<p>Restart HAProxy</p>
+<pre><code>sudo systemctl restart haproxy
+</code></pre>
+<h3>8.11. Auto HTTP to HTTPS Redirection</h3>
+<p>Now when someone types https://x11.xyz on the browser, all the traffic  between the client and our web servers are encrypted. But if someone types http://x11.xyz, all the traffic goes in plain, old, clear format (unless  the browser automatically converts it to https, like Firefox does). We can force HTTP to HTTPS redirection by modifying frontend section.</p>
+<pre><code>sudo nano /etc/haproxy/haproxy.cfg
+</code></pre>
+<p>Add following line after the bind lines of the frontend section:</p>
+<pre><code>        redirect scheme https if !{ ssl_fc }
+</code></pre>
+<p>The modified frontend section will look like below:</p>
+<pre><code>frontend fe_http
+        bind 178.128.174.77:80
+        bind 178.128.174.77:443 ssl crt /etc/letsencrypt/live/x11.xyz/haproxy.pem
+        redirect scheme https if !{ ssl_fc }
+        acl acl_acme path_beg -i /.well-known/acme-challenge
+        use_backend be_acme if acl_acme
+        default_backend    be_http
+        option   forwardfor
+</code></pre>
+<p>Restart HAProxy</p>
+<pre><code>sudo systemctl restart haproxy
+</code></pre>
+<h3>8.12. Server Persistance with Cookies</h3>
+<p>One final touch and we are good to go. We may want the same computers  always connect to the same frontend servers. This is especially necessary  when the connection has a session information. Otherwise, the user must  login again everytime the server changed. </p>
+<p>Server persistance can be established with cookies easily. At the backend session, a cookie directive is added and all servers are assigned to have a unique cookie.</p>
+<pre><code>sudo nano /etc/haproxy/haproxy.cfg
+</code></pre>
+<p>Change backend sections as below:</p>
+<pre><code>backend be_acme
+        server self 127.0.0.1:80 check
+backend be_http
+        balance  roundrobin
+    cookie ACTIVESERVER insert indirect nocache
+        server   u11 178.128.34.126:443 check ssl verify none cookie u11
+        server   v11 178.128.165.126:443 check ssl verify none cookie v11
+</code></pre>
+<p>Restart HAProxy</p>
+<pre><code>sudo systemctl restart haproxy
+</code></pre>
+<h3>8.13. Final Contents of HAProxy Config File</h3>
+<pre><code>cat /etc/haproxy/haproxy.cfg
+</code></pre>
+<pre><code>global
+        log /dev/log    local0
+        log /dev/log    local1 notice
+        chroot /var/lib/haproxy
+        stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd lis&gt;
+        stats timeout 30s
+        user haproxy
+        group haproxy
+        daemon
+        # Default SSL material locations
+        ca-base /etc/ssl/certs
+        crt-base /etc/ssl/private
+        # See: https://ssl-config.mozilla.org/#server=haproxy&amp;server-version=2.&gt;
+        ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128&gt;
+        ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SH&gt;
+        ssl-default-bind-options ssl-min-ver TLSv1.2 no-tls-tickets
+defaults
+        log     global
+        mode    http
+        option  httplog
+        option  dontlognull
+        timeout connect 5000
+        timeout client  50000
+        timeout server  50000
+        errorfile 400 /etc/haproxy/errors/400.http
+        errorfile 403 /etc/haproxy/errors/403.http
+        errorfile 408 /etc/haproxy/errors/408.http
+        errorfile 500 /etc/haproxy/errors/500.http
+        errorfile 502 /etc/haproxy/errors/502.http
+        errorfile 503 /etc/haproxy/errors/503.http
+        errorfile 504 /etc/haproxy/errors/504.http
+frontend fe_http
+        bind 178.128.174.77:80
+        bind 178.128.174.77:443 ssl crt /etc/letsencrypt/live/x11.xyz/haproxy.pem
+        redirect scheme https if !{ ssl_fc }
+        acl acl_acme path_beg -i /.well-known/acme-challenge
+        use_backend be_acme if acl_acme
+        default_backend    be_http
+        option   forwardfor
+backend be_acme
+        server self 127.0.0.1:80 check
+backend be_http
+        balance  roundrobin
+        cookie ACTIVESERVER insert indirect nocache
+        server   u11 178.128.34.126:443 check ssl verify none cookie u11
+        server   v11 178.128.165.126:443 check ssl verify none cookie v11
+</code></pre><!-- HTML Footer Start -->
+
+</body>
+</html>
+
+<!-- HTML Footer End -->

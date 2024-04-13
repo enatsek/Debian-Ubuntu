@@ -1,0 +1,1413 @@
+<!-- HTML Header Start -->
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+ 
+ 
+ 
+ 
+ 
+ 
+<style>
+/* base.css */
+body {
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 40px;
+  border: 1px solid transparent;
+}
+
+body blockquote {
+  background-color: initial;
+}
+
+body code {
+  color: inherit;
+}
+
+body code > div {
+  background: none;
+}
+
+body.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+body p,
+body blockquote,
+body ul,
+body ol,
+body dl,
+body table,
+body pre {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+/* github-markdown.css */
+body {
+  color-scheme: dark;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  margin: 0;
+  color: #c9d1d9;
+  background-color: #0d1117;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word
+}
+body .octicon {
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: text-bottom
+}
+body h1:hover .anchor .octicon-link:before,
+body h2:hover .anchor .octicon-link:before,
+body h3:hover .anchor .octicon-link:before,
+body h4:hover .anchor .octicon-link:before,
+body h5:hover .anchor .octicon-link:before,
+body h6:hover .anchor .octicon-link:before {
+  width: 16px;
+  height: 16px;
+  content: ' ';
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>")
+}
+body details,
+body figcaption,
+body figure {
+  display: block
+}
+body summary {
+  display: list-item
+}
+body a {
+  background-color: transparent;
+  color: #58a6ff;
+  text-decoration: none
+}
+body a:active,
+body a:hover {
+  outline-width: 0
+}
+body abbr[title] {
+  border-bottom: none;
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted
+}
+body b,
+body strong {
+  font-weight: 600
+}
+body dfn {
+  font-style: italic
+}
+body h1 {
+  margin: .67em 0;
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 1.8em;
+  border-bottom: 1px solid #21262d
+}
+body mark {
+  background-color: #ff0;
+  color: #c9d1d9
+}
+body small {
+  font-size: 90%
+}
+body sub,
+body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline
+}
+body sub {
+  bottom: -.25em
+}
+body sup {
+  top: -.5em
+}
+body img {
+  border-style: none;
+  max-width: 100%;
+  box-sizing: content-box;
+  background-color: #0d1117
+}
+body code,
+body kbd,
+body pre,
+body samp {
+  font-family: monospace,monospace;
+  font-size: 1em
+}
+body figure {
+  margin: 1em 40px
+}
+body hr {
+  box-sizing: content-box;
+  overflow: hidden;
+  background: 0 0;
+  border-bottom: 1px solid #21262d;
+  height: .25em;
+  padding: 0;
+  margin: 24px 0;
+  background-color: #30363d;
+  border: 0
+}
+body [type=reset],
+body [type=submit],
+body html [type=button] {
+  -webkit-appearance: button
+}
+body [type=button]::-moz-focus-inner,
+body [type=reset]::-moz-focus-inner,
+body [type=submit]::-moz-focus-inner {
+  border-style: none;
+  padding: 0
+}
+body [type=button]:-moz-focusring,
+body [type=reset]:-moz-focusring,
+body [type=submit]:-moz-focusring {
+  outline: 1px dotted ButtonText
+}
+body [type=checkbox],
+body [type=radio] {
+  box-sizing: border-box;
+  padding: 0
+}
+body [type=number]::-webkit-inner-spin-button,
+body [type=number]::-webkit-outer-spin-button {
+  height: auto
+}
+body [type=search] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px
+}
+body [type=search]::-webkit-search-cancel-button,
+body [type=search]::-webkit-search-decoration {
+  -webkit-appearance: none
+}
+body ::-webkit-input-placeholder {
+  color: inherit;
+  opacity: .54
+}
+body ::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit
+}
+body a:hover {
+  text-decoration: underline
+}
+body hr::before {
+  display: table;
+  content: ""
+}
+body hr::after {
+  display: table;
+  clear: both;
+  content: ""
+}
+body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto
+}
+body td,
+body th {
+  padding: 0
+}
+body details summary {
+  cursor: pointer
+}
+body details:not([open]) > :not(summary) {
+  display: none!important
+}
+body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  line-height: 10px;
+  color: #c9d1d9;
+  vertical-align: middle;
+  background-color: #161b22;
+  border: solid 1px rgba(110,118,129,.4);
+  border-bottom-color: rgba(110,118,129,.4);
+  border-radius: 6px;
+  box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
+}
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25
+}
+body h2 {
+  font-weight: 600;
+  font-size: 1.6em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h3 {
+  font-weight: 600;
+  font-size: 1.4em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h4 {
+  font-weight: 600;
+  font-size: 1.2em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h5 {
+  font-weight: 600;
+  font-size: 1.0em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h6 {
+  font-weight: 600;
+  font-size: 1em;
+  color: #8b949e
+}
+body p {
+  margin-top: 0;
+  margin-bottom: 10px
+}
+body blockquote {
+  margin: 0;
+  padding: 0 1em;
+  color: #8b949e;
+  border-left: .25em solid #30363d
+}
+body ol,
+body ul {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 2em
+}
+body ol ol,
+body ul ol {
+  list-style-type: lower-roman
+}
+body ol ol ol,
+body ol ul ol,
+body ul ol ol,
+body ul ul ol {
+  list-style-type: lower-alpha
+}
+body dd {
+  margin-left: 0
+}
+body code,
+body tt {
+  font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  font-size: 12px
+}
+body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  font-size: 12px;
+  word-wrap: normal
+}
+body :-ms-input-placeholder {
+  color: #484f58;
+  opacity: 1
+}
+body ::-ms-input-placeholder {
+  color: #484f58;
+  opacity: 1
+}
+body ::placeholder {
+  color: #484f58;
+  opacity: 1
+}
+body .pl-c {
+  color: #8b949e
+}
+body .pl-c1,
+body .pl-s .pl-v {
+  color: #79c0ff
+}
+body .pl-e,
+body .pl-en {
+  color: #d2a8ff
+}
+body .pl-s .pl-s1,
+body .pl-smi {
+  color: #c9d1d9
+}
+body .pl-ent {
+  color: #7ee787
+}
+body .pl-k {
+  color: #ff7b72
+}
+body .pl-pds,
+body .pl-s,
+body .pl-s .pl-pse .pl-s1,
+body .pl-sr,
+body .pl-sr .pl-cce,
+body .pl-sr .pl-sra,
+body .pl-sr .pl-sre {
+  color: #a5d6ff
+}
+body .pl-smw,
+body .pl-v {
+  color: #ffa657
+}
+body .pl-bu {
+  color: #f85149
+}
+body .pl-ii {
+  color: #f0f6fc;
+  background-color: #8e1519
+}
+body .pl-c2 {
+  color: #f0f6fc;
+  background-color: #b62324
+}
+body .pl-sr .pl-cce {
+  font-weight: 700;
+  color: #7ee787
+}
+body .pl-ml {
+  color: #f2cc60
+}
+body .pl-mh,
+body .pl-mh .pl-en,
+body .pl-ms {
+  font-weight: 700;
+  color: #1f6feb
+}
+body .pl-mi {
+  font-style: italic;
+  color: #c9d1d9
+}
+body .pl-mb {
+  font-weight: 700;
+  color: #c9d1d9
+}
+body .pl-md {
+  color: #ffdcd7;
+  background-color: #67060c
+}
+body .pl-mi1 {
+  color: #aff5b4;
+  background-color: #033a16
+}
+body .pl-mc {
+  color: #ffdfb6;
+  background-color: #5a1e02
+}
+body .pl-mi2 {
+  color: #c9d1d9;
+  background-color: #1158c7
+}
+body .pl-mdr {
+  font-weight: 700;
+  color: #d2a8ff
+}
+body .pl-ba {
+  color: #8b949e
+}
+body .pl-sg {
+  color: #484f58
+}
+body .pl-corl {
+  text-decoration: underline;
+  color: #a5d6ff
+}
+body [data-catalyst] {
+  display: block
+}
+body g-emoji {
+  font-family: "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 1em;
+  font-style: normal!important;
+  font-weight: 400;
+  line-height: 1;
+  vertical-align: -.075em
+}
+body g-emoji img {
+  width: 1em;
+  height: 1em
+}
+body::before {
+  display: table;
+  content: ""
+}
+body::after {
+  display: table;
+  clear: both;
+  content: ""
+}
+body > :first-child {
+  margin-top: 0!important
+}
+body > :last-child {
+  margin-bottom: 0!important
+}
+body a:not([href]) {
+  color: inherit;
+  text-decoration: none
+}
+body .absent {
+  color: #f85149
+}
+body .anchor {
+  float: left;
+  padding-right: 4px;
+  margin-left: -20px;
+  line-height: 1
+}
+body .anchor:focus {
+  outline: 0
+}
+body blockquote,
+body details,
+body dl,
+body ol,
+body p,
+body pre,
+body table,
+body ul {
+  margin-top: 0;
+  margin-bottom: 16px
+}
+body blockquote > :first-child {
+  margin-top: 0
+}
+body blockquote > :last-child {
+  margin-bottom: 0
+}
+body sup > a::before {
+  content: "["
+}
+body sup > a::after {
+  content: "]"
+}
+body h1 .octicon-link,
+body h2 .octicon-link,
+body h3 .octicon-link,
+body h4 .octicon-link,
+body h5 .octicon-link,
+body h6 .octicon-link {
+  color: #c9d1d9;
+  vertical-align: middle;
+  visibility: hidden
+}
+body h1:hover .anchor,
+body h2:hover .anchor,
+body h3:hover .anchor,
+body h4:hover .anchor,
+body h5:hover .anchor,
+body h6:hover .anchor {
+  text-decoration: none
+}
+body h1:hover .anchor .octicon-link,
+body h2:hover .anchor .octicon-link,
+body h3:hover .anchor .octicon-link,
+body h4:hover .anchor .octicon-link,
+body h5:hover .anchor .octicon-link,
+body h6:hover .anchor .octicon-link {
+  visibility: visible
+}
+body h1 code,
+body h1 tt,
+body h2 code,
+body h2 tt,
+body h3 code,
+body h3 tt,
+body h4 code,
+body h4 tt,
+body h5 code,
+body h5 tt,
+body h6 code,
+body h6 tt {
+  padding: 0 .2em;
+  font-size: inherit
+}
+body ol.no-list,
+body ul.no-list {
+  padding: 0;
+  list-style-type: none
+}
+body ol[type="1"] {
+  list-style-type: decimal
+}
+body ol[type=a] {
+  list-style-type: lower-alpha
+}
+body ol[type=i] {
+  list-style-type: lower-roman
+}
+body div > ol:not([type]) {
+  list-style-type: decimal
+}
+body ol ol,
+body ol ul,
+body ul ol,
+body ul ul {
+  margin-top: 0;
+  margin-bottom: 0
+}
+body li > p {
+  margin-top: 16px
+}
+body li + li {
+  margin-top: .25em
+}
+body dl {
+  padding: 0
+}
+body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: 600
+}
+body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px
+}
+body table th {
+  font-weight: 600
+}
+body table td,
+body table th {
+  padding: 6px 13px;
+  border: 1px solid #30363d
+}
+body table tr {
+  background-color: #0d1117;
+  border-top: 1px solid #21262d
+}
+body table tr:nth-child(2n) {
+  background-color: #161b22
+}
+body table img {
+  background-color: transparent
+}
+body img[align=right] {
+  padding-left: 20px
+}
+body img[align=left] {
+  padding-right: 20px
+}
+body .emoji {
+  max-width: none;
+  vertical-align: text-top;
+  background-color: transparent
+}
+body span.frame {
+  display: block;
+  overflow: hidden
+}
+body span.frame > span {
+  display: block;
+  float: left;
+  width: auto;
+  padding: 7px;
+  margin: 13px 0 0;
+  overflow: hidden;
+  border: 1px solid #30363d
+}
+body span.frame span img {
+  display: block;
+  float: left
+}
+body span.frame span span {
+  display: block;
+  padding: 5px 0 0;
+  clear: both;
+  color: #c9d1d9
+}
+body span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both
+}
+body span.align-center > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: center
+}
+body span.align-center span img {
+  margin: 0 auto;
+  text-align: center
+}
+body span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both
+}
+body span.align-right > span {
+  display: block;
+  margin: 13px 0 0;
+  overflow: hidden;
+  text-align: right
+}
+body span.align-right span img {
+  margin: 0;
+  text-align: right
+}
+body span.float-left {
+  display: block;
+  float: left;
+  margin-right: 13px;
+  overflow: hidden
+}
+body span.float-left span {
+  margin: 13px 0 0
+}
+body span.float-right {
+  display: block;
+  float: right;
+  margin-left: 13px;
+  overflow: hidden
+}
+body span.float-right > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: right
+}
+body code,
+body tt {
+  padding: .2em .4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(110,118,129,.4);
+  border-radius: 6px
+}
+body code br,
+body tt br {
+  display: none
+}
+body del code {
+  text-decoration: inherit
+}
+body pre code {
+  font-size: 100%
+}
+body pre > code {
+  padding: 0;
+  margin: 0;
+  word-break: normal;
+  white-space: pre;
+  background: 0 0;
+  border: 0
+}
+body .highlight {
+  margin-bottom: 16px
+}
+body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal
+}
+body .highlight pre,
+body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #161b22;
+  border-radius: 6px
+}
+body pre code,
+body pre tt {
+  display: inline;
+  max-width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0
+}
+body .csv-data td,
+body .csv-data th {
+  padding: 5px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1;
+  text-align: left;
+  white-space: nowrap
+}
+body .csv-data .blob-num {
+  padding: 10px 8px 9px;
+  text-align: right;
+  background: #0d1117;
+  border: 0
+}
+body .csv-data tr {
+  border-top: 0
+}
+body .csv-data th {
+  font-weight: 600;
+  background: #161b22;
+  border-top: 0
+}
+body .footnotes {
+  font-size: 12px;
+  color: #8b949e;
+  border-top: 1px solid #30363d
+}
+body .footnotes ol {
+  padding-left: 16px
+}
+body .footnotes li {
+  position: relative
+}
+body .footnotes li:target::before {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  bottom: -8px;
+  left: -24px;
+  pointer-events: none;
+  content: "";
+  border: 2px solid #1f6feb;
+  border-radius: 6px
+}
+body .footnotes li:target {
+  color: #c9d1d9
+}
+body .footnotes .data-footnote-backref g-emoji {
+  font-family: monospace
+}
+body [hidden] {
+  display: none!important
+}
+body ::-webkit-calendar-picker-indicator {
+  filter: invert(50%)
+}
+
+/* node_modules/highlight.js/styles/github-dark.css */
+pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}/*!
+  Theme: GitHub Dark
+  Description: Dark theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-dark
+  Current colors taken from GitHub's CSS
+*/.hljs{color:#c9d1d9;background:#0d1117}.hljs-doctag,.hljs-keyword,.hljs-meta .hljs-keyword,.hljs-template-tag,.hljs-template-variable,.hljs-type,.hljs-variable.language_{color:#ff7b72}.hljs-title,.hljs-title.class_,.hljs-title.class_.inherited__,.hljs-title.function_{color:#d2a8ff}.hljs-attr,.hljs-attribute,.hljs-literal,.hljs-meta,.hljs-number,.hljs-operator,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-variable{color:#79c0ff}.hljs-meta .hljs-string,.hljs-regexp,.hljs-string{color:#a5d6ff}.hljs-built_in,.hljs-symbol{color:#ffa657}.hljs-code,.hljs-comment,.hljs-formula{color:#8b949e}.hljs-name,.hljs-quote,.hljs-selector-pseudo,.hljs-selector-tag{color:#7ee787}.hljs-subst{color:#c9d1d9}.hljs-section{color:#1f6feb;font-weight:700}.hljs-bullet{color:#f2cc60}.hljs-emphasis{color:#c9d1d9;font-style:italic}.hljs-strong{color:#c9d1d9;font-weight:700}.hljs-addition{color:#aff5b4;background-color:#033a16}.hljs-deletion{color:#ffdcd7;background-color:#67060c}
+
+</style>
+</head>
+<body>
+<div class="document">
+<div class="header"></div><div class="inner">
+<!-- HTML Header End -->
+<!-- Header Start -->
+
+<h1>x386.org: Debian and Ubuntu Documentation</h1>
+<h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
+<!-- Copyright Start -->
+<details>
+   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+
+<hr>
+
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+
+<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+<hr>
+</details>
+<!-- Copyright End -->
+
+<!-- Header End -->
+<h5>SystemdOnDebianUbuntu</h5>
+<h1>systemd Tutorial On Debian and Ubuntu</h1>
+<h2>0. Specs</h2>
+<hr />
+<h3>0.0. Intro</h3>
+<p>systemd is a suite of basic building blocks for a Linux system. It  provides a system and service manager that runs as PID 1 and starts the  rest of the system (from systemd.io site).</p>
+<p>systemd is a software suite that provides an array of system components  for Linux operating systems (from wikipedia).</p>
+<p>systemd is an init system for Linux. It replaces SysV init. There are a  lot of distros that use it as an init system, like Debian, Ubuntu, RHEL.  Also there are a lot of distros that don't use systemd, like Slackware,  Devuan, Alpine, Gentoo.</p>
+<p>A strong alternative of systemd is OpenRC.</p>
+<h3>0.1. Definitions</h3>
+<p><strong>D-Bus (Desktop Bus)</strong>:  A message-oriented middleware mechanism that  allows communication between multiple processes running concurrently on  the same machine (from wikipedia).</p>
+<p><strong>cgroups</strong>: A part built into kernel, that allows setting resource  utilization limits for processes. Like; cpu shares, memory usage, block  I/O per process. Developed by Google.</p>
+<h3>0.2. Sources</h3>
+<p><a href="https://wiki.debian.org/systemd/documentation">https://wiki.debian.org/systemd/documentation</a><br />
+<a href="https://www.digitalocean.com/community/tutorials/systemd-essentials-working-with-services-units-and-the-journal">https://www.digitalocean.com/community/tutorials/systemd-essentials-working-with-services-units-and-the-journal</a><br />
+<a href="https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units">https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units</a><br />
+<a href="https://www.digitalocean.com/community/tutorials/how-to-use-journalctl-to-view-and-manipulate-systemd-logs">https://www.digitalocean.com/community/tutorials/how-to-use-journalctl-to-view-and-manipulate-systemd-logs</a><br />
+<a href="https://www.redhat.com/sysadmin/cgroups-part-one">https://www.redhat.com/sysadmin/cgroups-part-one</a><br />
+<a href="https://en.wikipedia.org/wiki/Systemd">https://en.wikipedia.org/wiki/Systemd</a><br />
+<a href="https://en.wikipedia.org/wiki/D-Bus">https://en.wikipedia.org/wiki/D-Bus</a><br />
+<a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/chap-managing_services_with_systemd">https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/chap-managing_services_with_systemd</a><br />
+<a href="https://www.howtogeek.com/675569/why-linuxs-systemd-is-still-divisive-after-all-these-years/">https://www.howtogeek.com/675569/why-linuxs-systemd-is-still-divisive-after-all-these-years/</a>  <br />
+<a href="https://systemd.io/">https://systemd.io/</a><br />
+<strong>The Debian Administrator’s Handbook</strong> by Raphaël Hertzog and Roland Mas<br />
+<strong>Linux Service Management Made Easy with systemd</strong> by Donald A. Tevault</p>
+<p><br></p>
+<h2>1. systemd Units</h2>
+<hr />
+<p>Units are the resources that systemd knows how to manage and to operate.</p>
+<h3>1.1. Unit Locations</h3>
+<p>Locations of unit files (in increasing precedence):</p>
+<ul>
+<li>/lib/systemd/system</li>
+<li>/run/systemd/system</li>
+<li>/etc/systemd/system</li>
+</ul>
+<h3>1.2. Unit Types:</h3>
+<p><strong>.service</strong>: Contains information on managing a service or application.  Managing includes starting, stopping, automatic starting, dependencies  etc.</p>
+<p><strong>.socket</strong>: Describes a socket for systemd's socket based activation. It  must have an associated .service file for a service.</p>
+<p><strong>.device</strong>: Describes a device that needs systemd management. Not all  devices has a .device file.</p>
+<p><strong>.mount</strong>: Mountpoints needed to be managed by systemd.</p>
+<p><strong>.automount</strong>: Configures a mountpoint to be automatically mounted. Must  have a .mount unit.</p>
+<p><strong>.swap</strong>: Describes swap space on the system.</p>
+<p><strong>.target</strong>: Used to provide syncronization with other units. </p>
+<p><strong>.path</strong>: Defines a path for path based activation. A matching unit is  started depending on the path existence or inexistence.</p>
+<p><strong>.timer</strong>: Defines a timer to be managed by systemd. A matching unit is  started when the timer is reached.</p>
+<p><strong>.snapshot</strong>: Created with systemctl snapshot command. Saves a state of the system. Does not survive among sessions.</p>
+<p><strong>.slice:</strong> Associated with cgroups (Linux Control Group nodes). Allows resources to be restricted.  </p>
+<p><strong>.scope:</strong> Created automatically by systemd from information received from its bus interfaces. Used to manage sets of system processes that are 
+created externally.</p>
+<h3>1.3. Example Unit Files</h3>
+<p>Contents of /lib/systemd/system/apache2.service</p>
+<pre><code>[Unit]
+Description=The Apache HTTP Server
+After=network.target remote-fs.target nss-lookup.target
+Documentation=https://httpd.apache.org/docs/2.4/
+[Service]
+Type=forking
+Environment=APACHE_STARTED_BY_SYSTEMD=true
+ExecStart=/usr/sbin/apachectl start
+ExecStop=/usr/sbin/apachectl graceful-stop
+ExecReload=/usr/sbin/apachectl graceful
+KillMode=mixed
+PrivateTmp=true
+Restart=on-abort
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>Contents of /lib/systemd/system/ssh.service</p>
+<pre><code>[Unit]
+Description=OpenBSD Secure Shell server
+Documentation=man:sshd(8) man:sshd_config(5)
+After=network.target auditd.service
+ConditionPathExists=!/etc/ssh/sshd_not_to_be_run
+[Service]
+EnvironmentFile=-/etc/default/ssh
+ExecStartPre=/usr/sbin/sshd -t
+ExecStart=/usr/sbin/sshd -D $SSHD_OPTS
+ExecReload=/usr/sbin/sshd -t
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+RestartPreventExitStatus=255
+Type=notify
+RuntimeDirectory=sshd
+RuntimeDirectoryMode=0755
+[Install]
+WantedBy=multi-user.target
+Alias=sshd.service
+</code></pre>
+<p>Contents of /lib/systemd/system/ssh.socket</p>
+<pre><code>[Unit]
+Description=OpenBSD Secure Shell server socket
+Before=ssh.service
+Conflicts=ssh.service
+ConditionPathExists=!/etc/ssh/sshd_not_to_be_run
+[Socket]
+ListenStream=22
+Accept=yes
+[Install]
+WantedBy=sockets.target
+</code></pre>
+<p>Contents of /etc/systemd/system/snap-firefox-2356.mount</p>
+<pre><code>[Unit]
+Description=Mount unit for firefox, revision 2356
+After=snapd.mounts-pre.target
+Before=snapd.mounts.target
+Before=local-fs.target
+[Mount]
+What=/var/lib/snapd/snaps/firefox_2356.snap
+Where=/snap/firefox/2356
+Type=squashfs
+Options=nodev,ro,x-gdu.hide,x-gvfs-hide
+LazyUnmount=yes
+[Install]
+WantedBy=snapd.mounts.target
+WantedBy=multi-user.target
+</code></pre>
+<h3>1.4. Unit File Structure</h3>
+<p>Unit files are made of sections. Unit and Install sections can exist in  all types of units. Also there are some other sections which can exist in  certain unit types. They are Socket, Mount, Automount, Swap, Path, Timer,  and Slice.</p>
+<p>Sections contain directives. Some directives are unit type specific and  some are general.</p>
+<p>For a full list of directives see:<br />
+<a href="https://www.freedesktop.org/software/systemd/man/systemd.directives.html">https://www.freedesktop.org/software/systemd/man/systemd.directives.html</a></p>
+<h4>1.4.1. Unit Section Directives (Applies to all unit types)</h4>
+<p><strong>Description:</strong> A short description of the unit.<br />
+<strong>Documentation:</strong> Location of documentation.<br />
+<strong>Requires:</strong> The units that this unit depends. All of them must be  activated for this unit to be activated.<br />
+<strong>Wants:</strong> Similar to Requires, but not strict. Systemd tries to activate  the list of units before activating this unit.<br />
+<strong>BindsTo:</strong> Similar to Requires, also stops this unit when the listed unit stops.
+<strong>Before:</strong> This unit must be started before the listed units. Does not  imply dependency.<br />
+<strong>After:</strong> The list of units must be started before this unit. Does not  imply dependency.<br />
+<strong>Conflicts:</strong> This unit can not be run at the same time with the listed  unit. If this unit starts, other units stop.<br />
+<strong>Condition:</strong> This unit starts if the conditions are met. If conditions are not met, this unit is skipped.<br />
+<strong>Assert:</strong> Similar to condition. But if conditions are not met, a failure is caused.<br />
+<strong>ConditionPathExists:</strong> Unit starts if this path exists. Start the path  with ! to negate.</p>
+<h4>1.4.2. Install Section Directives (Applies to all unit types)</h4>
+<p><strong>WantedBy:</strong> Similar to Wants directive of the Unit section. Mostly used  with targets.<br />
+<strong>RequiredBy:</strong> Similar to WantedBy but is more strict. Causes a failure if the dependency is not met.<br />
+<strong>Alias:</strong> Allows the unit have an alias name. (Like ssh, sshd).<br />
+<strong>Also:</strong> Additional units to install/deinstall when this unit is installed/deinstalled.<br />
+<strong>DefaultInstance:</strong> Only used with template units. Default instance name of the unit enabled from a template.</p>
+<h3>1.4.3. Service Section Directives (Applies to Service unit types)</h3>
+<p><strong>Type:</strong> Could be one of the following</p>
+<ul>
+<li><strong>simple:</strong> Systemd considers that the service starts immediately.</li>
+<li><strong>exec:</strong> Similar to simple, but systemd waits for binary to execute.</li>
+<li><strong>forking:</strong> The service forks a child process and exists.</li>
+<li><strong>oneshot:</strong> The service live for a short time and then exit.</li>
+<li><strong>dbus:</strong> The service will take a name on the D-Bus bus.</li>
+<li><strong>notify:</strong> The service will notify when finishes starting up.</li>
+<li><strong>idle:</strong> This indicates that the service will not be run until all jobs  are dispatched.</li>
+</ul>
+<p><strong>RemainAfterExit:</strong> Commonly used with the oneshot type. Indicates that the service isactive even after the process exits.<br />
+<strong>PIDFile:</strong> For forking type, file to contain the PID of the child process.<br />
+<strong>BusName:</strong> For dbus type, name to acquire as D-Bus name.<br />
+<strong>NotifyAccess:</strong> Takes none, main, exec or none values. Controls which  service status messages are notified. <br />
+<strong>Environment:</strong> Environment values to set.<br />
+<strong>EnvironmentFile:</strong> Read a list of environment values from this file. (-) sign before the file name means, ignore if the file is not found.<br />
+<strong>Killmode:</strong> How to stop the service. process means only to kill the main process, mixed means to kill the main process and the others, none means  just run ExecStop.<br />
+<strong>ExecStart:</strong> Command to start the service. If starts with -, ignore  failure.
+<strong>ExecStartPre:</strong> Additional commands to run before the main process. <br />
+<strong>ExecStartPost:</strong> Additional commands to run after the main process.<br />
+<strong>ExecReload:</strong> Command to reload the service.<br />
+<strong>ExecStop:</strong> Command to stop the service.<br />
+<strong>ExecStopPost:</strong> Additional commands to run after stopping the process.<br />
+<strong>RestartSec:</strong> Amount of time to wait before restart.<br />
+<strong>Restart:</strong> Circumstances to automatically restart the service. Could be: always, on-success, on-failure, on-abnormal, on-abort, on-watchdog etc.<br />
+<strong>RestartPreventExitStatus:</strong> Prevents the service from automatically  restarting if the given exit code is received.<br />
+<strong>RuntimeDirectory:</strong> Directory to run the service (under /run).<br />
+<strong>RuntimeDirectoryMode:</strong> Permissions of the runtime directory (Default  0755).<br />
+<strong>TimeoutSec:</strong> Amount of time to wait before starting or stopping the  service before marking as failed (or killing it).<br />
+<strong>TimeoutStartSec:</strong> Amount of time to wait before starting service before marking as failed (or killing it).<br />
+<strong>TimeoutStopSec:</strong> Amount of time to wait before starting service before marking as failed (or killing it).</p>
+<h4>1.4.3. Socket Section Directives (Applies to Socket unit types)</h4>
+<p><strong>ListenStream:</strong> Address to listen on for a TCP stream.<br />
+<strong>ListenDatagram:</strong> Address to listen on for a UDP stream.<br />
+<strong>ListenSequentialPacket:</strong> Address to listen on for a Unix socket stream.<br />
+<strong>ListenFIFO:</strong> File system FIFO to listen on.<br />
+<strong>Accept:</strong> If yes, a service instance is spawned for each incoming  connection, if no, all listening sockets are passed to the started service unit.<br />
+<strong>SocketUser:</strong> Unix user name for the socket (default root).<br />
+<strong>SocketGroup:</strong> Unix group name for the socket (default root).<br />
+<strong>SocketMode:</strong> System access permissions for the socket (default 0666).<br />
+<strong>Service:</strong> Connected service name (if different than the socket name).</p>
+<h4>1.4.4. Mount Section Directives (Applies to Mount unit types)</h4>
+<p><strong>What:</strong> Path to be mounted.<br />
+<strong>Where:</strong> Path to mount.<br />
+<strong>Type:</strong> The filesystem type of the mount.<br />
+<strong>Options:</strong> A comma-separated list of the mount options.<br />
+<strong>SloppyOptions:</strong> Boolean to determine whether the mount will fail if there  is an unrecognized mount option.<br />
+<strong>DirectoryMode:</strong> Permission mode for the parent dirs of the mount point.<br />
+<strong>TimeoutSec:</strong> Amount of time to wait before the operation is marked as  failed.</p>
+<h4>1.4.5. Automount Section Directives (Applies to Automount unit types)</h4>
+<p><strong>Where:</strong> Path to mount.<br />
+<strong>DirectoryMode:</strong> Permission mode for the parent dirs of the mount point.</p>
+<h4>1.4.6. Swap Section Directives (Applies to Swap unit types)</h4>
+<p><strong>What:</strong> Path of the location of swap (file or device).<br />
+<strong>Priority:</strong> Swap priority in integer form.<br />
+<strong>Options:</strong> Comma separated list of options for /etc/fstab file.<br />
+<strong>TimeoutSec:</strong> Amount of time to wait before the operation is marked as failed.  </p>
+<h4>1.4.7. Path Section Directives (Applies to Path unit types)</h4>
+<p><strong>PathExists:</strong> If this path exists, associated unit will be activated.<br />
+<strong>PathExistsGlob:</strong> Similar to PathExists, supports file glob expressions.<br />
+<strong>PathChanged:</strong> Activates the associated unit when the file in the path is  saved and closed.<br />
+<strong>PathModified:</strong> Similar to PathChanged but also activates the unit when the file is changed.<br />
+<strong>DirectoryNotEmpty:</strong> Activates the associated unit when the specified  directory is not empty.<br />
+<strong>Unit:</strong> Connected unit name (if different than the path name).<br />
+<strong>MakeDirectory:</strong> If true, the directories to watch are created before  watching.<br />
+<strong>DirectoryMode:</strong> Permissions to use if MakeDirectory is true (Default 755)</p>
+<h4>1.4.8. Timer Section Directives (Applies to Timer unit types)</h4>
+<p><strong>OnActiveSec:</strong> Activate the associated unit after this amount of time  after the activation time of the timer unit.<br />
+<strong>OnBootSec:</strong> Activate the associated unit after this amount of the time after the boot.<br />
+<strong>OnStartupSec:</strong> Activate the associated unit after this amount of the time after systemd process started.<br />
+<strong>OnUnitActiveSec:</strong> Activate the associated unit after this amount of the time after the associated unit last activated.<br />
+<strong>OnUnitInactiveSec:</strong> Activate the associated unit after this amount of the time after the associated unit last marked as inactive.<br />
+<strong>OnCalendar:</strong> Absolute time to activate the associated unit.<br />
+<strong>AccuracySec:</strong> Level of accuracy of the timer.<br />
+<strong>Unit:</strong> Associated unit name (if different than the timer name).<br />
+<strong>Persistent:</strong> If true, the time when the service unit was last triggered  is stored on disk. When the timer is activated, the service unit is  triggered immediately if it would have been triggered at least once during the time when the timer was inactive. </p>
+<p><br></p>
+<h2>2. Targets</h2>
+<hr />
+<h3>2.1. Definition and List</h3>
+<p>Similar to SysV init runlevel. Their purpose is to group together other  systemd units through a chain of dependencies.</p>
+<p>A fresh install Ubuntu 22.04 server has the following targets:</p>
+<pre><code>systemctl list-unit-files --type=target
+</code></pre>
+<pre><code>UNIT FILE                     STATE           VENDOR PRESET
+basic.target                  static          -            
+blockdev@.target              static          -            
+bluetooth.target              static          -            
+boot-complete.target          static          -            
+cloud-config.target           static          -            
+cloud-init.target             enabled-runtime enabled      
+cryptsetup-pre.target         static          -            
+cryptsetup.target             static          -            
+ctrl-alt-del.target           alias           -            
+default.target                alias           -            
+emergency.target              static          -            
+exit.target                   disabled        disabled     
+final.target                  static          -            
+first-boot-complete.target    static          -            
+friendly-recovery.target      static          -            
+getty-pre.target              static          -            
+getty.target                  static          -            
+graphical.target              static          -            
+halt.target                   disabled        disabled     
+hibernate.target              static          -            
+hybrid-sleep.target           static          -            
+initrd-fs.target              static          -            
+initrd-root-device.target     static          -            
+initrd-root-fs.target         static          -            
+initrd-switch-root.target     static          -            
+initrd-usr-fs.target          static          -            
+initrd.target                 static          -            
+kexec.target                  disabled        disabled     
+local-fs-pre.target           static          -            
+local-fs.target               static          -            
+multi-user.target             static          -            
+network-online.target         static          -            
+network-pre.target            static          -            
+network.target                static          -            
+nss-lookup.target             static          -            
+nss-user-lookup.target        static          -            
+paths.target                  static          -            
+poweroff.target               disabled        disabled     
+printer.target                static          -            
+reboot.target                 disabled        enabled      
+remote-cryptsetup.target      disabled        enabled      
+remote-fs-pre.target          static          -            
+remote-fs.target              enabled         enabled      
+remote-veritysetup.target     disabled        enabled      
+rescue-ssh.target             static          -            
+rescue.target                 static          -            
+rpcbind.target                static          -            
+runlevel0.target              alias           -            
+runlevel1.target              alias           -            
+runlevel2.target              alias           -            
+runlevel3.target              alias           -            
+runlevel4.target              alias           -            
+runlevel5.target              alias           -            
+runlevel6.target              alias           -            
+shutdown.target               static          -            
+sigpwr.target                 static          -            
+sleep.target                  static          -            
+slices.target                 static          -            
+smartcard.target              static          -            
+snapd.mounts-pre.target       static          -            
+snapd.mounts.target           static          -            
+sockets.target                static          -            
+sound.target                  static          -            
+suspend-then-hibernate.target static          -            
+suspend.target                static          -            
+swap.target                   static          -            
+sysinit.target                static          -            
+system-update-pre.target      static          -            
+system-update.target          static          -            
+time-set.target               static          -            
+time-sync.target              static          -            
+timers.target                 static          -            
+umount.target                 static          -            
+usb-gadget.target             static          -            
+veritysetup-pre.target        static          -            
+veritysetup.target            static          -            
+</code></pre>
+<p>Target configuration files reside in /lib/systemd/system/</p>
+<h3>2.2. Example Target Files</h3>
+<p>network.target</p>
+<pre><code>[Unit]
+Description=Network
+Documentation=man:systemd.special(7)
+Documentation=https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget
+After=network-pre.target
+RefuseManualStart=yes
+</code></pre>
+<p>multi-user.target</p>
+<pre><code>[Unit]
+Description=Multi-User System
+Documentation=man:systemd.special(7)
+Requires=basic.target
+Conflicts=rescue.service rescue.target
+After=basic.target rescue.service rescue.target
+AllowIsolate=yes
+</code></pre>
+<p>graphical.target</p>
+<pre><code>[Unit]
+Description=Graphical Interface
+Documentation=man:systemd.special(7)
+Requires=multi-user.target
+Wants=display-manager.service
+Conflicts=rescue.service rescue.target
+After=multi-user.target rescue.service rescue.target display-manager.service
+AllowIsolate=yes
+</code></pre>
+<p><br></p>
+<h2>3. Unit Management: systemctl Command</h2>
+<hr />
+<p>Start a service</p>
+<pre><code>sudo systemctl start apache2.service
+</code></pre>
+<p>Stop a service</p>
+<pre><code>sudo systemctl stop apache2.service
+</code></pre>
+<p>Reload a service</p>
+<pre><code>sudo systemctl reload apache2.service
+</code></pre>
+<p>Restart a service</p>
+<pre><code>sudo systemctl restart apache2.service
+</code></pre>
+<p>Try to reload if possible, otherwise restart a service</p>
+<pre><code>sudo systemctl reload-or-restart apache2.service
+</code></pre>
+<p>Enable a service (starts at boot)</p>
+<pre><code>sudo systemctl enable apache2.service
+</code></pre>
+<p>Disable a service (does not start at boot)</p>
+<pre><code>sudo systemctl disable apache2.service
+</code></pre>
+<p>Show status of a service</p>
+<pre><code>sudo systemctl status apache2.service
+</code></pre>
+<p>Show if service is active</p>
+<pre><code>systemctl is-active apache2.service
+</code></pre>
+<p>Show if service is enabled</p>
+<pre><code>systemctl is-enabled apache2.service
+</code></pre>
+<p>Show if service is failed</p>
+<pre><code>systemctl is-failed apache2.service
+</code></pre>
+<p>Mask a service (completely unstartable)</p>
+<pre><code>sudo systemctl mask apache2.service
+</code></pre>
+<p>Unmask a service</p>
+<pre><code>sudo systemctl unmask apache2.service
+</code></pre>
+<p>List all active units</p>
+<pre><code>sudo systemctl list-units
+</code></pre>
+<p>Including loaded and attempted to load</p>
+<pre><code>sudo systemctl list-units --all
+</code></pre>
+<p>Including all installed</p>
+<pre><code>sudo systemctl list-unit-files
+</code></pre>
+<p>List services only</p>
+<pre><code>systemctl list-units --type=service
+</code></pre>
+<p>See contents of a unit file</p>
+<pre><code>systemctl cat apache2.service
+</code></pre>
+<p>See dependencies of a unit</p>
+<pre><code>systemctl list-dependencies apache2.service
+</code></pre>
+<p>See dependencies of a unit recursively</p>
+<pre><code>systemctl list-dependencies apache2.service --all
+</code></pre>
+<p>See low level details of a unit</p>
+<pre><code>systemctl show apache2.service
+</code></pre>
+<p>Append or modify settings in a unit file</p>
+<pre><code>sudo systemctl edit apache2.service
+</code></pre>
+<p>Edit entire contents of a unit file</p>
+<pre><code>sudo systemctl edit --full apache2.service
+</code></pre>
+<p>Reload systemd</p>
+<pre><code>sudo systemctl daemon-reload
+</code></pre>
+<p>Show default target (run level) of a system</p>
+<pre><code>systemctl get-default
+</code></pre>
+<p>Set default target</p>
+<pre><code>sudo systemctl set-default graphical.target
+sudo systemctl set-default multi-user.target
+</code></pre>
+<p>List of available targets</p>
+<pre><code>systemctl list-unit-files --type=target
+</code></pre>
+<p>List of units tied to a target</p>
+<pre><code>systemctl list-dependencies multi-user.target
+</code></pre>
+<p>Poweroff and reboot</p>
+<pre><code>sudo systemctl poweroff
+sudo systemctl reboot
+</code></pre>
+<p>Boot into rescue mode</p>
+<pre><code>sudo systemctl rescue
+</code></pre>
+<p>Halt (Does not poweroff the machine)</p>
+<pre><code>sudo systemctl halt
+</code></pre>
+<p>Control systemd of a remote system</p>
+<pre><code>systemctl --host user_name@host_name command
+</code></pre>
+<p><br></p>
+<h2>4. Log Management: journal-ctl Command</h2>
+<hr />
+<p>See all log entries</p>
+<pre><code>journalctl
+</code></pre>
+<p>See all log entries for the current boot</p>
+<pre><code>journalctl -b
+</code></pre>
+<p>See only kernel entries</p>
+<pre><code>journalctl -k
+</code></pre>
+<p>See only kernel entries for the current boot</p>
+<pre><code>journalctl -k -b
+</code></pre>
+<p>See only apache log entries</p>
+<pre><code>journalctl -u apache2.service
+</code></pre>
+<p>See only apache log entries for the current boot</p>
+<pre><code>journalctl -b -u apache2.service
+</code></pre>
+<p>See logs from previous boot</p>
+<pre><code>journalctl -b -1
+</code></pre>
+<p>List boots</p>
+<pre><code>journalctl --list-boots
+</code></pre>
+<p>Logs in a time interval</p>
+<pre><code>journalctl --since &quot;2023-01-10 17:15:00&quot;
+journalctl --since &quot;2023-01-10&quot; --until &quot;2023-01-11 03:00&quot;
+journalctl --since yesterday
+journalctl --since 09:00 --until &quot;1 hour ago&quot;
+journalctl -u apache2.service --since today
+</code></pre>
+<p>Log entries for an executable</p>
+<pre><code>journalctl /usr/bin/bash
+</code></pre>
+<p>Log in json format</p>
+<pre><code>journalctl -b -u apache2 -o json
+journalctl -b -u apache2 -o json-pretty
+</code></pre>
+<p>Most recent 10 entries</p>
+<pre><code>journalctl -n
+</code></pre>
+<p>Most recent 20 entries</p>
+<pre><code>journalctl -n 20
+</code></pre>
+<p>Actively follow logs (like tail -f). Press Ctrl-C to exit.</p>
+<pre><code>journalctl -f
+</code></pre>
+<p>Disk usage</p>
+<pre><code>journalctl --disk-usage
+</code></pre>
+<p>Delete old logs up to size</p>
+<pre><code>sudo journalctl --vacuum-size=1G
+</code></pre>
+<p>Delete old logs up to time</p>
+<pre><code>sudo journalctl --vacuum-time=1years
+</code></pre>
+<p><br></p>
+<h2>5. Other systemd Components</h2>
+<hr />
+<p>systemd has some other components too. Some of them:</p>
+<p><strong>systemd-boot:</strong> UEFI boot manager. Supports basic boot manager  configuration. Integrates with systemctl command. Has the command bootctl.</p>
+<p><strong>systemd-cat:</strong> Adds a record to the systemd log with a pipeline.</p>
+<pre><code>echo &quot;Test&quot; | systemd-cat -p info
+</code></pre>
+<p><strong>systemd-localed:</strong> Manages system locale settings. Has the command  localectl.</p>
+<p><strong>systemd-logind:</strong> Manages user logins. Keeps track of users and sessions.  Handles device access management for users.</p>
+<p><strong>systemd-machined:</strong> Detects and monitors virtual machines and containers.  Has machinectl command.</p>
+<p><strong>systemd-mount:</strong> Handles .mount and .automount units.</p>
+<p><strong>systemd-networkd:</strong> Network configuration management. Configuration files  are in /lib/systemd/network, /run/systemd/network, and /etc/systemd/network in increasing precedence.</p>
+<p><strong>systemd-nspawn:</strong> May be used to run a command or OS in a light-weight  namespace container. In many ways it is similar to chroot</p>
+<p><strong>systemd-resolved:</strong> Provides network name resolution. Has resolvectl  command.</p>
+<p><strong>systemd-sysusers:</strong> Creates system users and groups.</p>
+<p><strong>systemd-timesyncd:</strong> Provides system time synchronization across the  network with a remote NTP server. Has timedatectl command.</p>
+<p><strong>systemd-tmpfiles:</strong> Creates, deletes, and cleans up volatile and temporary  files and directories.</p>
+<p><strong>systemd-udevd:</strong> Manages physical devices.</p>
+<p><br></p>
+<h2>6. Creating a Service</h2>
+<hr />
+<p>We will create a very simple service. Our service will ping an IP address in every 10 minutes. It will create an info log if the ping is OK,  otherwise it will create and error log.</p>
+<p>The application will be a shell script, the script will be put into /usr/local/bin, a unit file will be created, enabled, started and tested.</p>
+<h3>6.1. Create Shell Script</h3>
+<pre><code>nano ipcheck.sh
+</code></pre>
+<p>Fill as below</p>
+<pre><code>#!/bin/bash
+echo &quot;ipcheck.service: Start. $(date)&quot; | systemd-cat -p info
+while true ; do
+  ping -q -w 1 192.168.1.1 &gt; /dev/null
+  if [ $? = 0 ] ; then
+     echo &quot;ipcheck.service: Ping to IP is OK. $(date)&quot; | systemd-cat -p info
+  else
+     echo &quot;ipcheck.service: Error cannot ping IP. $(date)&quot; | systemd-cat -p err
+  fi
+  sleep 600
+done
+</code></pre>
+<h3>6.2. Copy it into /usr/local/bin</h3>
+<p>Make it executable</p>
+<pre><code>chmod +x ipcheck.sh
+</code></pre>
+<p>Copy</p>
+<pre><code>sudo cp ipcheck.sh /usr/local/bin
+</code></pre>
+<h3>6.3. Create Unit File</h3>
+<pre><code>sudo systemctl edit --force --full ipcheck.service
+</code></pre>
+<p>The command will open a nano editor</p>
+<p>Fill it as below, save and exit</p>
+<pre><code>[Unit]
+Description=IPCheck Demo Service
+Wants=network.target
+After=syslog.target network-online.target
+[Service]
+ExecStart=/usr/local/bin/ipcheck.sh
+Restart=on-failure
+RestartSec=20
+KillMode=process
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<h3>6.4. Enable and Start The Service</h3>
+<pre><code>sudo systemctl enable ipcheck.service
+sudo systemctl start ipcheck.service
+</code></pre>
+<h3>6.5. Test it</h3>
+<pre><code>sudo journalctl -n 20
+</code></pre><!-- HTML Footer Start -->
+
+</body>
+</html>
+
+<!-- HTML Footer End -->

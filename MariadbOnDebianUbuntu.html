@@ -1,0 +1,1071 @@
+<!-- HTML Header Start -->
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+ 
+ 
+ 
+ 
+ 
+ 
+<style>
+/* base.css */
+body {
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 40px;
+  border: 1px solid transparent;
+}
+
+body blockquote {
+  background-color: initial;
+}
+
+body code {
+  color: inherit;
+}
+
+body code > div {
+  background: none;
+}
+
+body.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+body p,
+body blockquote,
+body ul,
+body ol,
+body dl,
+body table,
+body pre {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+/* github-markdown.css */
+body {
+  color-scheme: dark;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  margin: 0;
+  color: #c9d1d9;
+  background-color: #0d1117;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word
+}
+body .octicon {
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: text-bottom
+}
+body h1:hover .anchor .octicon-link:before,
+body h2:hover .anchor .octicon-link:before,
+body h3:hover .anchor .octicon-link:before,
+body h4:hover .anchor .octicon-link:before,
+body h5:hover .anchor .octicon-link:before,
+body h6:hover .anchor .octicon-link:before {
+  width: 16px;
+  height: 16px;
+  content: ' ';
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>")
+}
+body details,
+body figcaption,
+body figure {
+  display: block
+}
+body summary {
+  display: list-item
+}
+body a {
+  background-color: transparent;
+  color: #58a6ff;
+  text-decoration: none
+}
+body a:active,
+body a:hover {
+  outline-width: 0
+}
+body abbr[title] {
+  border-bottom: none;
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted
+}
+body b,
+body strong {
+  font-weight: 600
+}
+body dfn {
+  font-style: italic
+}
+body h1 {
+  margin: .67em 0;
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 1.8em;
+  border-bottom: 1px solid #21262d
+}
+body mark {
+  background-color: #ff0;
+  color: #c9d1d9
+}
+body small {
+  font-size: 90%
+}
+body sub,
+body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline
+}
+body sub {
+  bottom: -.25em
+}
+body sup {
+  top: -.5em
+}
+body img {
+  border-style: none;
+  max-width: 100%;
+  box-sizing: content-box;
+  background-color: #0d1117
+}
+body code,
+body kbd,
+body pre,
+body samp {
+  font-family: monospace,monospace;
+  font-size: 1em
+}
+body figure {
+  margin: 1em 40px
+}
+body hr {
+  box-sizing: content-box;
+  overflow: hidden;
+  background: 0 0;
+  border-bottom: 1px solid #21262d;
+  height: .25em;
+  padding: 0;
+  margin: 24px 0;
+  background-color: #30363d;
+  border: 0
+}
+body [type=reset],
+body [type=submit],
+body html [type=button] {
+  -webkit-appearance: button
+}
+body [type=button]::-moz-focus-inner,
+body [type=reset]::-moz-focus-inner,
+body [type=submit]::-moz-focus-inner {
+  border-style: none;
+  padding: 0
+}
+body [type=button]:-moz-focusring,
+body [type=reset]:-moz-focusring,
+body [type=submit]:-moz-focusring {
+  outline: 1px dotted ButtonText
+}
+body [type=checkbox],
+body [type=radio] {
+  box-sizing: border-box;
+  padding: 0
+}
+body [type=number]::-webkit-inner-spin-button,
+body [type=number]::-webkit-outer-spin-button {
+  height: auto
+}
+body [type=search] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px
+}
+body [type=search]::-webkit-search-cancel-button,
+body [type=search]::-webkit-search-decoration {
+  -webkit-appearance: none
+}
+body ::-webkit-input-placeholder {
+  color: inherit;
+  opacity: .54
+}
+body ::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit
+}
+body a:hover {
+  text-decoration: underline
+}
+body hr::before {
+  display: table;
+  content: ""
+}
+body hr::after {
+  display: table;
+  clear: both;
+  content: ""
+}
+body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto
+}
+body td,
+body th {
+  padding: 0
+}
+body details summary {
+  cursor: pointer
+}
+body details:not([open]) > :not(summary) {
+  display: none!important
+}
+body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  line-height: 10px;
+  color: #c9d1d9;
+  vertical-align: middle;
+  background-color: #161b22;
+  border: solid 1px rgba(110,118,129,.4);
+  border-bottom-color: rgba(110,118,129,.4);
+  border-radius: 6px;
+  box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
+}
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25
+}
+body h2 {
+  font-weight: 600;
+  font-size: 1.6em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h3 {
+  font-weight: 600;
+  font-size: 1.4em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h4 {
+  font-weight: 600;
+  font-size: 1.2em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h5 {
+  font-weight: 600;
+  font-size: 1.0em;
+  border-top: 1px solid #21262d;
+  padding-top: .2em;
+}
+body h6 {
+  font-weight: 600;
+  font-size: 1em;
+  color: #8b949e
+}
+body p {
+  margin-top: 0;
+  margin-bottom: 10px
+}
+body blockquote {
+  margin: 0;
+  padding: 0 1em;
+  color: #8b949e;
+  border-left: .25em solid #30363d
+}
+body ol,
+body ul {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 2em
+}
+body ol ol,
+body ul ol {
+  list-style-type: lower-roman
+}
+body ol ol ol,
+body ol ul ol,
+body ul ol ol,
+body ul ul ol {
+  list-style-type: lower-alpha
+}
+body dd {
+  margin-left: 0
+}
+body code,
+body tt {
+  font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  font-size: 12px
+}
+body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  font-size: 12px;
+  word-wrap: normal
+}
+body :-ms-input-placeholder {
+  color: #484f58;
+  opacity: 1
+}
+body ::-ms-input-placeholder {
+  color: #484f58;
+  opacity: 1
+}
+body ::placeholder {
+  color: #484f58;
+  opacity: 1
+}
+body .pl-c {
+  color: #8b949e
+}
+body .pl-c1,
+body .pl-s .pl-v {
+  color: #79c0ff
+}
+body .pl-e,
+body .pl-en {
+  color: #d2a8ff
+}
+body .pl-s .pl-s1,
+body .pl-smi {
+  color: #c9d1d9
+}
+body .pl-ent {
+  color: #7ee787
+}
+body .pl-k {
+  color: #ff7b72
+}
+body .pl-pds,
+body .pl-s,
+body .pl-s .pl-pse .pl-s1,
+body .pl-sr,
+body .pl-sr .pl-cce,
+body .pl-sr .pl-sra,
+body .pl-sr .pl-sre {
+  color: #a5d6ff
+}
+body .pl-smw,
+body .pl-v {
+  color: #ffa657
+}
+body .pl-bu {
+  color: #f85149
+}
+body .pl-ii {
+  color: #f0f6fc;
+  background-color: #8e1519
+}
+body .pl-c2 {
+  color: #f0f6fc;
+  background-color: #b62324
+}
+body .pl-sr .pl-cce {
+  font-weight: 700;
+  color: #7ee787
+}
+body .pl-ml {
+  color: #f2cc60
+}
+body .pl-mh,
+body .pl-mh .pl-en,
+body .pl-ms {
+  font-weight: 700;
+  color: #1f6feb
+}
+body .pl-mi {
+  font-style: italic;
+  color: #c9d1d9
+}
+body .pl-mb {
+  font-weight: 700;
+  color: #c9d1d9
+}
+body .pl-md {
+  color: #ffdcd7;
+  background-color: #67060c
+}
+body .pl-mi1 {
+  color: #aff5b4;
+  background-color: #033a16
+}
+body .pl-mc {
+  color: #ffdfb6;
+  background-color: #5a1e02
+}
+body .pl-mi2 {
+  color: #c9d1d9;
+  background-color: #1158c7
+}
+body .pl-mdr {
+  font-weight: 700;
+  color: #d2a8ff
+}
+body .pl-ba {
+  color: #8b949e
+}
+body .pl-sg {
+  color: #484f58
+}
+body .pl-corl {
+  text-decoration: underline;
+  color: #a5d6ff
+}
+body [data-catalyst] {
+  display: block
+}
+body g-emoji {
+  font-family: "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 1em;
+  font-style: normal!important;
+  font-weight: 400;
+  line-height: 1;
+  vertical-align: -.075em
+}
+body g-emoji img {
+  width: 1em;
+  height: 1em
+}
+body::before {
+  display: table;
+  content: ""
+}
+body::after {
+  display: table;
+  clear: both;
+  content: ""
+}
+body > :first-child {
+  margin-top: 0!important
+}
+body > :last-child {
+  margin-bottom: 0!important
+}
+body a:not([href]) {
+  color: inherit;
+  text-decoration: none
+}
+body .absent {
+  color: #f85149
+}
+body .anchor {
+  float: left;
+  padding-right: 4px;
+  margin-left: -20px;
+  line-height: 1
+}
+body .anchor:focus {
+  outline: 0
+}
+body blockquote,
+body details,
+body dl,
+body ol,
+body p,
+body pre,
+body table,
+body ul {
+  margin-top: 0;
+  margin-bottom: 16px
+}
+body blockquote > :first-child {
+  margin-top: 0
+}
+body blockquote > :last-child {
+  margin-bottom: 0
+}
+body sup > a::before {
+  content: "["
+}
+body sup > a::after {
+  content: "]"
+}
+body h1 .octicon-link,
+body h2 .octicon-link,
+body h3 .octicon-link,
+body h4 .octicon-link,
+body h5 .octicon-link,
+body h6 .octicon-link {
+  color: #c9d1d9;
+  vertical-align: middle;
+  visibility: hidden
+}
+body h1:hover .anchor,
+body h2:hover .anchor,
+body h3:hover .anchor,
+body h4:hover .anchor,
+body h5:hover .anchor,
+body h6:hover .anchor {
+  text-decoration: none
+}
+body h1:hover .anchor .octicon-link,
+body h2:hover .anchor .octicon-link,
+body h3:hover .anchor .octicon-link,
+body h4:hover .anchor .octicon-link,
+body h5:hover .anchor .octicon-link,
+body h6:hover .anchor .octicon-link {
+  visibility: visible
+}
+body h1 code,
+body h1 tt,
+body h2 code,
+body h2 tt,
+body h3 code,
+body h3 tt,
+body h4 code,
+body h4 tt,
+body h5 code,
+body h5 tt,
+body h6 code,
+body h6 tt {
+  padding: 0 .2em;
+  font-size: inherit
+}
+body ol.no-list,
+body ul.no-list {
+  padding: 0;
+  list-style-type: none
+}
+body ol[type="1"] {
+  list-style-type: decimal
+}
+body ol[type=a] {
+  list-style-type: lower-alpha
+}
+body ol[type=i] {
+  list-style-type: lower-roman
+}
+body div > ol:not([type]) {
+  list-style-type: decimal
+}
+body ol ol,
+body ol ul,
+body ul ol,
+body ul ul {
+  margin-top: 0;
+  margin-bottom: 0
+}
+body li > p {
+  margin-top: 16px
+}
+body li + li {
+  margin-top: .25em
+}
+body dl {
+  padding: 0
+}
+body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: 600
+}
+body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px
+}
+body table th {
+  font-weight: 600
+}
+body table td,
+body table th {
+  padding: 6px 13px;
+  border: 1px solid #30363d
+}
+body table tr {
+  background-color: #0d1117;
+  border-top: 1px solid #21262d
+}
+body table tr:nth-child(2n) {
+  background-color: #161b22
+}
+body table img {
+  background-color: transparent
+}
+body img[align=right] {
+  padding-left: 20px
+}
+body img[align=left] {
+  padding-right: 20px
+}
+body .emoji {
+  max-width: none;
+  vertical-align: text-top;
+  background-color: transparent
+}
+body span.frame {
+  display: block;
+  overflow: hidden
+}
+body span.frame > span {
+  display: block;
+  float: left;
+  width: auto;
+  padding: 7px;
+  margin: 13px 0 0;
+  overflow: hidden;
+  border: 1px solid #30363d
+}
+body span.frame span img {
+  display: block;
+  float: left
+}
+body span.frame span span {
+  display: block;
+  padding: 5px 0 0;
+  clear: both;
+  color: #c9d1d9
+}
+body span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both
+}
+body span.align-center > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: center
+}
+body span.align-center span img {
+  margin: 0 auto;
+  text-align: center
+}
+body span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both
+}
+body span.align-right > span {
+  display: block;
+  margin: 13px 0 0;
+  overflow: hidden;
+  text-align: right
+}
+body span.align-right span img {
+  margin: 0;
+  text-align: right
+}
+body span.float-left {
+  display: block;
+  float: left;
+  margin-right: 13px;
+  overflow: hidden
+}
+body span.float-left span {
+  margin: 13px 0 0
+}
+body span.float-right {
+  display: block;
+  float: right;
+  margin-left: 13px;
+  overflow: hidden
+}
+body span.float-right > span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: right
+}
+body code,
+body tt {
+  padding: .2em .4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(110,118,129,.4);
+  border-radius: 6px
+}
+body code br,
+body tt br {
+  display: none
+}
+body del code {
+  text-decoration: inherit
+}
+body pre code {
+  font-size: 100%
+}
+body pre > code {
+  padding: 0;
+  margin: 0;
+  word-break: normal;
+  white-space: pre;
+  background: 0 0;
+  border: 0
+}
+body .highlight {
+  margin-bottom: 16px
+}
+body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal
+}
+body .highlight pre,
+body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #161b22;
+  border-radius: 6px
+}
+body pre code,
+body pre tt {
+  display: inline;
+  max-width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0
+}
+body .csv-data td,
+body .csv-data th {
+  padding: 5px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1;
+  text-align: left;
+  white-space: nowrap
+}
+body .csv-data .blob-num {
+  padding: 10px 8px 9px;
+  text-align: right;
+  background: #0d1117;
+  border: 0
+}
+body .csv-data tr {
+  border-top: 0
+}
+body .csv-data th {
+  font-weight: 600;
+  background: #161b22;
+  border-top: 0
+}
+body .footnotes {
+  font-size: 12px;
+  color: #8b949e;
+  border-top: 1px solid #30363d
+}
+body .footnotes ol {
+  padding-left: 16px
+}
+body .footnotes li {
+  position: relative
+}
+body .footnotes li:target::before {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  bottom: -8px;
+  left: -24px;
+  pointer-events: none;
+  content: "";
+  border: 2px solid #1f6feb;
+  border-radius: 6px
+}
+body .footnotes li:target {
+  color: #c9d1d9
+}
+body .footnotes .data-footnote-backref g-emoji {
+  font-family: monospace
+}
+body [hidden] {
+  display: none!important
+}
+body ::-webkit-calendar-picker-indicator {
+  filter: invert(50%)
+}
+
+/* node_modules/highlight.js/styles/github-dark.css */
+pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}/*!
+  Theme: GitHub Dark
+  Description: Dark theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-dark
+  Current colors taken from GitHub's CSS
+*/.hljs{color:#c9d1d9;background:#0d1117}.hljs-doctag,.hljs-keyword,.hljs-meta .hljs-keyword,.hljs-template-tag,.hljs-template-variable,.hljs-type,.hljs-variable.language_{color:#ff7b72}.hljs-title,.hljs-title.class_,.hljs-title.class_.inherited__,.hljs-title.function_{color:#d2a8ff}.hljs-attr,.hljs-attribute,.hljs-literal,.hljs-meta,.hljs-number,.hljs-operator,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-variable{color:#79c0ff}.hljs-meta .hljs-string,.hljs-regexp,.hljs-string{color:#a5d6ff}.hljs-built_in,.hljs-symbol{color:#ffa657}.hljs-code,.hljs-comment,.hljs-formula{color:#8b949e}.hljs-name,.hljs-quote,.hljs-selector-pseudo,.hljs-selector-tag{color:#7ee787}.hljs-subst{color:#c9d1d9}.hljs-section{color:#1f6feb;font-weight:700}.hljs-bullet{color:#f2cc60}.hljs-emphasis{color:#c9d1d9;font-style:italic}.hljs-strong{color:#c9d1d9;font-weight:700}.hljs-addition{color:#aff5b4;background-color:#033a16}.hljs-deletion{color:#ffdcd7;background-color:#67060c}
+
+</style>
+</head>
+<body>
+<div class="document">
+<div class="header"></div><div class="inner">
+<!-- HTML Header End -->
+<!-- Header Start -->
+
+<h1>x386.org: Debian and Ubuntu Documentation</h1>
+<h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
+<!-- Copyright Start -->
+<details>
+   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+
+<hr>
+
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
+
+<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+<hr>
+</details>
+<!-- Copyright End -->
+
+<!-- Header End -->
+<h5>MariadbOnDebianUbuntu</h5>
+<h1>MariaDB Tutorial on Debian and Ubuntu</h1>
+<h2>0. Specs</h2>
+<hr />
+<p>Mariadb Installation, configuration, simple user and DB management, and  Primary - Replica (Master - Slave) Replication on Debian 12 (also 11) and  Ubuntu 22.04 (also 20.04) Server.</p>
+<p>Based on the book <a href="https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition">Mastering Ubuntu Server 2nd Ed.</a> by Jay LaCroix. This book hes introduced me to Ubuntu Server and I have to thank him for this excellent book. </p>
+<p>Almost (if not all) everything on this tutorial can be applied to Mysql.</p>
+<p>Mariadb is a fork or Mysql, and I prefer using it, besides a lot of other  reasons, I just don't like Or*cle</p>
+<p><strong>Do not ever install Mariadb and Mysql on the same server</strong></p>
+<p><br></p>
+<h2>1. Installation and Securing</h2>
+<h3>1.0. Update repositories</h3>
+<pre><code>sudo apt update
+</code></pre>
+<h3>1.1. Install MariaDB</h3>
+<pre><code>sudo apt install --yes mariadb-server
+</code></pre>
+<h3>1.2. Check if installation is OK</h3>
+<pre><code>systemctl status mariadb
+</code></pre>
+<h3>- 1.3. Secure MariaDB</h3>
+<p>The following command makes some fine tunes regarding Mariadb security.</p>
+<pre><code>sudo mysql_secure_installation
+</code></pre>
+<p>You will be asked some questions.  </p>
+<p><code>Enter current password for root (enter for none):</code>  </p>
+<p>There is no password yet, so press enter.</p>
+<p>The next 2 questions </p>
+<p><code>Switch to unix_socket authentication [Y/n]</code> <br />
+and<br />
+<code>Change the root password? [Y/n]</code>   </p>
+<p>are about securing root account. In Ubuntu and Debian root account is  already protected, so you can answer n.</p>
+<p>For the next questions you can select default answers.</p>
+<h3>1.4. Enter Mariadb shell</h3>
+<p><code>EXIT;</code> to exit</p>
+<pre><code>sudo mariadb
+</code></pre>
+<p><br></p>
+<h2>2. Basic User Management</h2>
+<hr />
+<p><strong>All commands must be run on Mariadb shell</strong></p>
+<pre><code>sudo mariadb
+</code></pre>
+<h3>2.1. Admin User</h3>
+<p>For administrating the db, it is best to create an admin user on mariadb  shell. admin can only login from localhost<br />
+Remember to change password to a good one.</p>
+<pre><code>CREATE USER 'admin'@'localhost' IDENTIFIED BY 'password';
+FLUSH PRIVILEGES;
+</code></pre>
+<h3>2.2. To let admin login from anywhere use:</h3>
+<pre><code>CREATE USER 'admin'@'%' IDENTIFIED BY 'password';
+FLUSH PRIVILEGES;
+</code></pre>
+<h3>2.3. Give admin full access DB server.</h3>
+<p>Can do anything but grant</p>
+<pre><code>GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost';
+FLUSH PRIVILEGES;
+</code></pre>
+<h3>2.4. Following command makes a full admin, with grant permissions</h3>
+<pre><code>GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+</code></pre>
+<h3>2.5. Create a readonly user for DB</h3>
+<pre><code>GRANT SELECT ON *.* TO 'readonlyuser'@'localhost' IDENTIFIED BY 'password';
+</code></pre>
+<h3>2.6. List database users</h3>
+<pre><code>SELECT HOST, USER, PASSWORD FROM mysql.user;
+</code></pre>
+<h3>2.7. Grant a user readonly access for one database</h3>
+<pre><code>GRANT SELECT ON mysampledb.* TO 'appuser'@'localhost' IDENTIFIED BY 'password';
+</code></pre>
+<h3>2.8. Grant a user full access for a database</h3>
+<pre><code>GRANT ALL ON mysampledb.* TO 'appuser'@'localhost' IDENTIFIED BY 'password';
+</code></pre>
+<h3>2.9. Show the grants for a particular user:</h3>
+<pre><code>SHOW GRANTS FOR 'appuser'@'localhost';
+</code></pre>
+<h3>2.10. Remove a user</h3>
+<pre><code>DELETE FROM mysql.user WHERE user='myuser' AND host='localhost';
+</code></pre>
+<p><br></p>
+<h2>3. Database Manipulation</h2>
+<hr />
+<p><strong>All commands must be run on Mariadb shell</strong></p>
+<h3>3.1. Create a database</h3>
+<pre><code>CREATE DATABASE mysampledb;
+</code></pre>
+<h3>3.2. List databases</h3>
+<pre><code>SHOW DATABASES;
+</code></pre>
+<h3>3.3. Enter the workspace of a database</h3>
+<pre><code>USE mysampledb;
+</code></pre>
+<h3>3.4. Create a table</h3>
+<pre><code>CREATE TABLE Employees (Name char(15), Age int(3), Occupation char(15));
+</code></pre>
+<h3>3.5. List columns of a table</h3>
+<pre><code>SHOW COLUMNS IN Employees;
+</code></pre>
+<h3>3.6. Insert a row into a table</h3>
+<pre><code>INSERT INTO Employees VALUES ('Joe Smith', '26', 'Ninja');
+</code></pre>
+<h3>3.7. List contents of a table</h3>
+<pre><code>SELECT * FROM Employees;
+</code></pre>
+<h3>3.8. Remove an entry from a database</h3>
+<pre><code>DELETE FROM Employees WHERE Name = 'Joe Smith';
+</code></pre>
+<h3>3.9. Drop a table</h3>
+<pre><code>DROP TABLE Employees;
+</code></pre>
+<h3>3.10. Drop an entire database:</h3>
+<pre><code>DROP DATABASE mysampledb;
+</code></pre>
+<p><br></p>
+<h2>4. Backup and Restore</h2>
+<hr />
+<h3>4.1. Backup a database</h3>
+<pre><code>sudo mysqldump --databases mysampledb &gt; mysampledb.sql
+</code></pre>
+<h3>4.2. Restore it</h3>
+<pre><code>sudo mariadb &lt; mysampledb.sql
+</code></pre>
+<p><br></p>
+<h2>5. Primary - Replica (Master-Slave) Replication Configuration</h2>
+<h3>5.1. Specs and Preliminary Tasks</h3>
+<pre><code>Primary Server       : 192.168.1.253 
+Replica Server       : 192.168.1.254 
+Replication User     : 'replicate'@'192.168.1.254'
+Rep. User Password   : Pass1234 
+Database instance to replicate: mysampledb
+</code></pre>
+<p>As in the following link, Mariadb Knowledge Base says that; primary and  replica server do not need to have the same version of Mariadb, although  it is preferred to have the primary an older version.<br />
+<a href="https://mariadb.com/kb/en/database-version-on-master-slave-replication/">https://mariadb.com/kb/en/database-version-on-master-slave-replication/</a></p>
+<p>Mariadb versions on Debian and Ubuntu Servers:</p>
+<pre><code>Ubuntu 20.04 : 10.3.38
+Debian 11    : 10.5.19
+Ubuntu 22.04 : 10.6.12
+Debian 12    : 10.11.3
+</code></pre>
+<p>I made the tests with the following pairs.</p>
+<ul>
+<li>Debian 11 Primary - Debian 12 Replica  </li>
+<li>Ubuntu 20.04 Primary - Ubuntu 22.04 Replica  </li>
+<li>
+<p>Ubuntu 22.04 Primary - Debian 12 Replica  </p>
+</li>
+<li>
+<p>Install mariadb on both servers, </p>
+</li>
+<li>Apply steps in 1 on both servers</li>
+<li>Apply step 3.1 to 3.7 on primary server</li>
+</ul>
+<p><strong>Please Remember:</strong></p>
+<p>Replication doesn't mean that you don't have to backup. If you delete   something accidentally, it is automatically deleted at slave too. So if   you are running a production server, backup (at least) daily and weekly.</p>
+<h3>5.2. Primary Server Configuration</h3>
+<h4>5.2.1. Configure primary for bin log</h4>
+<pre><code>sudo nano /etc/mysql/conf.d/mysql.cnf
+</code></pre>
+<p>Change as below:</p>
+<pre><code>[mysql]
+[mysqld]
+log-bin
+binlog-do-db=mysampledb
+server-id=1
+</code></pre>
+<h4>5.2.2. Change bind address to outside</h4>
+<pre><code>sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
+</code></pre>
+<p>Change following line (Around lines 27-30)</p>
+<pre><code>bind-address = 127.0.0.1
+</code></pre>
+<p>to</p>
+<pre><code>bind-address = 0.0.0.0
+</code></pre>
+<h4>5.2.3. Create replication user</h4>
+<p>Run following command on primary mariadb shell</p>
+<pre><code>GRANT REPLICATION SLAVE ON *.* to 'replicate'@'192.168.1.254' identified by 'Pass1234';
+EXIT;
+</code></pre>
+<h4>5.2.4. Restart primary mariadb server</h4>
+<pre><code>sudo systemctl restart mariadb
+</code></pre>
+<h4>5.2.5. Lock Primary server for initial full replication</h4>
+<p>Run on Primary server Mariadb shell</p>
+<pre><code>FLUSH TABLES WITH READ LOCK;
+EXIT;
+</code></pre>
+<h4>5.2.6. Backup the database at the primary server</h4>
+<pre><code>sudo mysqldump --databases mysampledb &gt; mysampledb.sql
+</code></pre>
+<h3>5.3. Replica Server Config</h3>
+<h4>5.3.1. Restore database backed up at primary</h4>
+<pre><code>sudo mariadb &lt; mysampledb.sql
+</code></pre>
+<h4>5.3.2. Update replica server's conf file</h4>
+<pre><code>sudo nano /etc/mysql/conf.d/mysql.cnf
+</code></pre>
+<p>Change as below:</p>
+<pre><code>[mysql]
+[mysqld]
+server-id=2
+</code></pre>
+<p>For more than 1 replicas, give different server-id numbers</p>
+<h4>5.3.3. Restart replica mariadb</h4>
+<pre><code>sudo systemctl restart mariadb
+</code></pre>
+<h4>5.3.4. Run the commands on replica mariadb shell</h4>
+<pre><code>CHANGE MASTER TO MASTER_HOST=&quot;192.168.1.253&quot;, MASTER_USER='replicate', MASTER_PASSWORD='Pass1234';
+</code></pre>
+<p>Check to see if replica is running (on mariadb shell)</p>
+<pre><code>SHOW SLAVE STATUS;
+</code></pre>
+<p>If Slave_IO_State is empty, run (on mariadb shell)</p>
+<pre><code>START SLAVE;
+</code></pre>
+<h3>5.4. Unlock Primary Mariadb</h3>
+<p>Run on master mariadb shell</p>
+<pre><code>UNLOCK TABLES;
+</code></pre>
+<h3>5.5. All set.</h3>
+<p>You can try manipulating the DB on the primary, changes will be applied  on the replica slave in a few seconds.</p><!-- HTML Footer Start -->
+
+</body>
+</html>
+
+<!-- HTML Footer End -->

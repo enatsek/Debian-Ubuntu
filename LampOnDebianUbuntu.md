@@ -3,7 +3,7 @@
 
 ## 0. Specs
 ---
-- L: Debian 12/11 or Ubuntu 22.04/20.04 LTS Server
+- L: Debian 12/11 or Ubuntu 24.04/22.04 LTS Server
 - A: Apache 2 
 - M: MariaDB (Mysql could be another option)
 - P: PHP (Python or Perl could be other options)

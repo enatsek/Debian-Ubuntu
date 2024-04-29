@@ -7,11 +7,11 @@ Adminer is a powerful web based management tool for Mysql, Mariadb and  more. Yo
 
 On my config I wanted to bind Adminer to a specific site config on the  server side and restrict it with only 1 client IP (might be more) to  reach.
 
-My Hostname: adminer.x11.xyz  
+My Hostname: adminer.386387.xyz  
 Lamp is already installed (See [LampOnDebianUbuntu](LampOnDebianUbuntu.html) Tutorial)  
-My Client IP address: 192.168.1.108  
+My Client IP address: 192.168.1.88  
 MariaDB Admin User: dbadmin   Password: PaSswOrD1234  
-Server Versions: Debian 12/11 Ubuntu 22.04/20.04 LTS Server
+Server Versions: Debian 12/11 Ubuntu 24.04/22.04 LTS Server
 
 <br>
 
@@ -47,7 +47,7 @@ exit;
 ---
 ### 3.1. Create a Web Site Config File and Fill it
 ```
-sudo nano /etc/apache2/sites-available/adminer.x11.xyz.conf
+sudo nano /etc/apache2/sites-available/adminer.386387.xyz.conf
 ```
 
 If you have more than 1 IP to reach Adminer, add them to Require IP line  after the first IP.
@@ -57,11 +57,11 @@ If you don't need IP control, remove all the directory stanza (lines 2,3,4)
 ```
 <VirtualHost *:80>
     <Directory /usr/share/adminer/adminer>
-       Require ip 192.168.1.108
+       Require ip 192.168.1.88
     </Directory>   
     Alias /adminer /usr/share/adminer/adminer
-    ServerAdmin webmaster@x11.xyz	
-    ServerName adminer.x11.xyz
+    ServerAdmin webmaster@386387.xyz	
+    ServerName adminer.386387.xyz
     DocumentRoot /var/www/adminer
     ErrorLog ${APACHE_LOG_DIR}/adminer-error.log
     CustomLog ${APACHE_LOG_DIR}/adminer-access.log combined
@@ -80,7 +80,7 @@ If you want, you can put an index.html file to the home directory, but I  prefer
 
 ### 3.2. Enable the Site and Reload Apache
 ```
-sudo a2ensite adminer.x11.xyz.conf
+sudo a2ensite adminer.386387.xyz.conf
 sudo systemctl reload apache2
 ```
 
@@ -90,7 +90,7 @@ sudo systemctl reload apache2
 ---
 Your web based Database Management tool is ready:
 
-<http://adminer.x11.xyz/adminer>
+`http://adminer.386387.xyz/adminer`
 
 You need to select MySQL for MariaDB, server must be localhost (default), username: dbadmin, password: (whatever you gave at the Mariadb script, Database: leave empty to reach all the databases.
 

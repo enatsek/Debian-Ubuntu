@@ -848,11 +848,11 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <hr />
 <p>Adminer is a powerful web based management tool for Mysql, Mariadb and  more. You have to install it on the server which has the DB installed.</p>
 <p>On my config I wanted to bind Adminer to a specific site config on the  server side and restrict it with only 1 client IP (might be more) to  reach.</p>
-<p>My Hostname: adminer.x11.xyz<br />
+<p>My Hostname: adminer.386387.xyz<br />
 Lamp is already installed (See <a href="LampOnDebianUbuntu.html">LampOnDebianUbuntu</a> Tutorial)<br />
-My Client IP address: 192.168.1.108<br />
+My Client IP address: 192.168.1.88<br />
 MariaDB Admin User: dbadmin   Password: PaSswOrD1234<br />
-Server Versions: Debian 12/11 Ubuntu 22.04/20.04 LTS Server</p>
+Server Versions: Debian 12/11 Ubuntu 24.04/22.04 LTS Server</p>
 <p><br></p>
 <h2>1. Install Adminer</h2>
 <hr />
@@ -874,17 +874,17 @@ exit;
 <h2>3. Prepare a Web Site</h2>
 <hr />
 <h3>3.1. Create a Web Site Config File and Fill it</h3>
-<pre><code>sudo nano /etc/apache2/sites-available/adminer.x11.xyz.conf
+<pre><code>sudo nano /etc/apache2/sites-available/adminer.386387.xyz.conf
 </code></pre>
 <p>If you have more than 1 IP to reach Adminer, add them to Require IP line  after the first IP.</p>
 <p>If you don't need IP control, remove all the directory stanza (lines 2,3,4)</p>
 <pre><code>&lt;VirtualHost *:80&gt;
     &lt;Directory /usr/share/adminer/adminer&gt;
-       Require ip 192.168.1.108
+       Require ip 192.168.1.88
     &lt;/Directory&gt;   
     Alias /adminer /usr/share/adminer/adminer
-    ServerAdmin webmaster@x11.xyz   
-    ServerName adminer.x11.xyz
+    ServerAdmin webmaster@386387.xyz    
+    ServerName adminer.386387.xyz
     DocumentRoot /var/www/adminer
     ErrorLog ${APACHE_LOG_DIR}/adminer-error.log
     CustomLog ${APACHE_LOG_DIR}/adminer-access.log combined
@@ -897,14 +897,14 @@ sudo chmod 770 /var/www/adminer
 </code></pre>
 <p>If you want, you can put an index.html file to the home directory, but I  prefer leaving the home directory empty and access to Adminer through its  directory.</p>
 <h3>3.2. Enable the Site and Reload Apache</h3>
-<pre><code>sudo a2ensite adminer.x11.xyz.conf
+<pre><code>sudo a2ensite adminer.386387.xyz.conf
 sudo systemctl reload apache2
 </code></pre>
 <p><br></p>
 <h2>4. Run it</h2>
 <hr />
 <p>Your web based Database Management tool is ready:</p>
-<p><a href="http://adminer.x11.xyz/adminer">http://adminer.x11.xyz/adminer</a></p>
+<p><code>http://adminer.386387.xyz/adminer</code></p>
 <p>You need to select MySQL for MariaDB, server must be localhost (default), username: dbadmin, password: (whatever you gave at the Mariadb script, Database: leave empty to reach all the databases.</p>
 <p><br></p>
 <h2>5. Security</h2>

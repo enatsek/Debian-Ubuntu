@@ -5,7 +5,7 @@
 ---
 Based on [Brian Boucheron's Tutorial](https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lamp-on-ubuntu-18-04)
 
-My server: www.x11.xyz  Debian 12 (or 11) and Ubuntu 22.04 Server (or 20.04)
+My server: www.386387.xyz  Debian 12 (or 11) and Ubuntu 24.04 Server (or 22.04)
 
 Wordpress Mariadb Database Name: wordpress  
 Wordpress Mariadb Database User: wordpressuser  
@@ -26,25 +26,25 @@ sudo mkdir /var/www/wordpress
 
 ### 1.2. Create a configuration file for our web server
 ```
-sudo nano /etc/apache2/sites-available/x11.xyz.conf
+sudo nano /etc/apache2/sites-available/386387.xyz.conf
 ```
 
 Fill as below:
 
 ```
 <VirtualHost *:80>
-        ServerAdmin postmaster@x11.xyz
-        ServerName www.x11.xyz
-        ServerAlias x11.xyz
+        ServerAdmin postmaster@386387.xyz
+        ServerName www.386387.xyz
+        ServerAlias 386387.xyz
         DocumentRoot /var/www/wordpress
-        ErrorLog ${APACHE_LOG_DIR}/x11.xyz-error.log
-        CustomLog ${APACHE_LOG_DIR}/x11.xyz-access.log combined
+        ErrorLog ${APACHE_LOG_DIR}/386387.xyz-error.log
+        CustomLog ${APACHE_LOG_DIR}/386387.xyz-access.log combined
 </VirtualHost>
 ```
 
 ### 1.3. Enable the site
 ```
-sudo a2ensite x11.xyz.conf
+sudo a2ensite 386387.xyz.conf
 ```
 
 ### 1.4. Reload apache
@@ -99,7 +99,7 @@ sudo systemctl restart apache2
 Edit our site config, adding folders to override
 
 ```
-sudo nano /etc/apache2/sites-available/x11.xyz.conf
+sudo nano /etc/apache2/sites-available/386387.xyz.conf
 ```
 Add following lines to just after DocumentRoot line
 
@@ -130,7 +130,7 @@ sudo systemctl restart apache2
 ---
 Wordpress can be installed by Debian packages, but we prefer to download the latest version from the original source
 
-### 5.1. Go to temp directory, download wordpress, extract it
+### 5.1. Go to the temp directory, download wordpress, extract it
 For Debian, you may need to install curl
 
 ```
@@ -216,7 +216,7 @@ define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
 define( 'NONCE_SALT',       'put your unique phrase here' );
 ```
 
- While in the same file, browse up to the section with the following lines:
+While in the same file, browse up to the section with the following lines:
 
 ```
 /** The name of the database for WordPress */
@@ -248,7 +248,7 @@ define('FS_METHOD', 'direct');
 
 ### 7. Wordpress is ready, open in your browser
 ---
-`http://www.x11.xyz`
+`http://www.386387.xyz`
 
 Of course it would be a good idea to add SSL to your site, refer to  [CertbotOnDebianUbuntu](CertbotOnDebianUbuntu.html) Tutorial.
 

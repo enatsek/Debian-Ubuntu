@@ -968,7 +968,7 @@ ChatGPT</p>
 <hr />
 <p>Contains commands for system administrators and users. These commands  must be required required when no other filesystems are mounted (e.g. in
 single user mode). It may also contain commands which are used indirectly by scripts.</p>
-<p>In Debian 12 and Ubuntu 22.04 /bin is a symbolic link to /usr/bin.</p>
+<p>In Debian 12 and Ubuntu 24.04 /bin is a symbolic link to /usr/bin.</p>
 <p>There must be no subdirectories in /bin.</p>
 <p>Command binaries that are not essential enough to place into /bin must be placed in /usr/bin, instead.</p>
 <p><strong>Some example commands:</strong> cat, chgrp, chmod, chown, cp, date, dd, df, dmesg, echo, false, hostname, kill, ln, login, ls, mkdir, mknod, more, mount, mv, ps, pwd, rm, rmdir, sed, sh, stty, su, sync, true, umount, uname.</p>
@@ -1070,7 +1070,7 @@ single user mode). It may also contain commands which are used indirectly by scr
 <p><br></p>
 <h2>6. /lib - Essential Shared Libraries and Kernel Modules</h2>
 <hr />
-<p>In Debian 12 and Ubuntu 22.04 /lib is a symbolic link to /usr/lib.</p>
+<p>In Debian 12 and Ubuntu 24.04 /lib is a symbolic link to /usr/lib.</p>
 <p>Contains shared library images needed to boot the system and run the commands in /bin and /sbin.</p>
 <p>At least one of each of the following filename patterns are required (files or symbolic links):</p>
 <ul>
@@ -1086,10 +1086,13 @@ single user mode). It may also contain commands which are used indirectly by scr
 <h2>7. /lib* - Alternate format essential shared libraries</h2>
 <hr />
 <p>There may be one or more variants of the /lib directory on systems which  support more than one binary format requiring separate libraries.</p>
-<p>By default; Debian 12 and Ubuntu 22.04 has the following directories:</p>
+<p>By default; Debian 12 and Ubuntu 24.04 has the following directories:</p>
 <ul>
 <li>/lib32: symbolic link to /usr/lib32</li>
 <li>/lib64: symbolic link to /usr/lib64</li>
+</ul>
+<p>Debian 12 also has the following directory:</p>
+<ul>
 <li>/libx32: symbolic link to /usr/libx32</li>
 </ul>
 <p>If one or more of these directories exist, the requirements for their contents are the same as the normal /lib directory, except that /lib*/cpp is not required.</p>
@@ -1114,7 +1117,7 @@ single user mode). It may also contain commands which are used indirectly by scr
 <p><br></p>
 <h2>10. /opt - Add-on Application Software Packages</h2>
 <hr />
-<p>This folder is empty on default Debian 12 and Ubuntu 22.04 installations.</p>
+<p>This folder is empty on default Debian 12 and Ubuntu 24.04 installations.</p>
 <p>Reserved for the installations of add-on application software packages.</p>
 <p>The purpose of the /opt directory is to provide a location where software  vendors can install their software and organize it in a way that is separate from the rest of the system's directory structure.</p>
 <p>A package in /opt must locate its static files in a separate /opt/package or /opt/provider directory tree. package is a name that describes the software package; and provider is the provider's LANANA registered name.</p>
@@ -1139,7 +1142,7 @@ single user mode). It may also contain commands which are used indirectly by scr
 <p><br></p>
 <h2>13. /sbin - Essential System Binaries</h2>
 <hr />
-<p>In Debian 12 and Ubuntu 22.04 /sbin is a symbolic link to /usr/bin.</p>
+<p>In Debian 12 and Ubuntu 24.04 /sbin is a symbolic link to /usr/bin.</p>
 <p>Utilities used for system administration (and other root-only commands) are stored in /sbin, /usr/sbin, and /usr/local/sbin. </p>
 <p>/sbin contains binaries essential for booting, restoring, recovering, and/or repairing the system in addition to the binaries in /bin. </p>
 <p>There must be no subdirectories in /sbin.</p>
@@ -1172,7 +1175,7 @@ single user mode). It may also contain commands which are used indirectly by scr
 <p><br></p>
 <h2>14. /srv - Data for Services Provided by This System</h2>
 <hr />
-<p>This directory is empty on default installations of Debian 12 and Ubuntu 22.04.</p>
+<p>This directory is empty on default installations of Debian 12 and Ubuntu 24.04.</p>
 <p>Contains site-specific data that is served by the system. This directory  provides a location for data that is served by various services running on the system, separate from other files associated with the operating system.</p>
 <p>Unlike directories such as /usr or /var, which may contain data related to installed packages, the /srv directory is not intended for distribution packages. It is for locally administered data associated with specific services.</p>
 <p><br></p>
@@ -1230,10 +1233,13 @@ single user mode). It may also contain commands which are used indirectly by scr
 <p>Applications may use a single subdirectory under /usr/libexec.</p>
 <p>Applications which use /usr/libexec in this way must not also use /usr/lib  to store internal binaries, though they may use /usr/lib for the other purposes documented here.</p>
 <h3>16.5. /usr/lib* - Alternate Format Libraries</h3>
-<p>By default; Debian 12 and Ubuntu 22.04 has the following directories:</p>
+<p>By default; Debian 12 and Ubuntu 24.04 has the following directories:</p>
 <ul>
 <li>/usr/lib32: symbolic link to /usr/lib32</li>
 <li>/usr/lib64: symbolic link to /usr/lib64</li>
+</ul>
+<p>Debian 12 also has the following directory:</p>
+<ul>
 <li>/usr/libx32: symbolic link to /usr/libx32</li>
 </ul>
 <p>/usr/lib<em> performs the same role as /usr/lib for an alternate binary format, except that the symbolic links /usr/lib</em>/sendmail and /usr/lib*/X11 are not required.</p>

@@ -131,7 +131,7 @@ ChatGPT
 Contains commands for system administrators and users. These commands  must be required required when no other filesystems are mounted (e.g. in
 single user mode). It may also contain commands which are used indirectly by scripts.
 
-In Debian 12 and Ubuntu 22.04 /bin is a symbolic link to /usr/bin.
+In Debian 12 and Ubuntu 24.04 /bin is a symbolic link to /usr/bin.
 
 There must be no subdirectories in /bin.
 
@@ -270,7 +270,7 @@ It is recommended that, apart from autosave and lock files, programs should refr
 
 ## 6. /lib - Essential Shared Libraries and Kernel Modules
 ---
-In Debian 12 and Ubuntu 22.04 /lib is a symbolic link to /usr/lib.
+In Debian 12 and Ubuntu 24.04 /lib is a symbolic link to /usr/lib.
 
 Contains shared library images needed to boot the system and run the commands in /bin and /sbin.
 
@@ -291,10 +291,13 @@ The following directory (or symbolic link to directory) must be in /lib, if the 
 ---
 There may be one or more variants of the /lib directory on systems which  support more than one binary format requiring separate libraries.
 
-By default; Debian 12 and Ubuntu 22.04 has the following directories:
+By default; Debian 12 and Ubuntu 24.04 has the following directories:
 
 - /lib32: symbolic link to /usr/lib32
 - /lib64: symbolic link to /usr/lib64
+
+Debian 12 also has the following directory:
+
 - /libx32: symbolic link to /usr/libx32
 
 If one or more of these directories exist, the requirements for their contents are the same as the normal /lib directory, except that /lib*/cpp is not required.
@@ -328,7 +331,7 @@ This directory must not be used by installation programs: a suitable temporary d
 
 ## 10. /opt - Add-on Application Software Packages
 ---
-This folder is empty on default Debian 12 and Ubuntu 22.04 installations.
+This folder is empty on default Debian 12 and Ubuntu 24.04 installations.
 
 Reserved for the installations of add-on application software packages.
 
@@ -372,7 +375,7 @@ Process identifier (PID) files, which were originally placed in /etc, must be pl
 
 ## 13. /sbin - Essential System Binaries
 ---
-In Debian 12 and Ubuntu 22.04 /sbin is a symbolic link to /usr/bin.
+In Debian 12 and Ubuntu 24.04 /sbin is a symbolic link to /usr/bin.
 
 Utilities used for system administration (and other root-only commands) are stored in /sbin, /usr/sbin, and /usr/local/sbin. 
 
@@ -412,7 +415,7 @@ The following files (or symbolic links to files) must be in /sbin if the  corres
 
 ## 14. /srv - Data for Services Provided by This System
 ---
-This directory is empty on default installations of Debian 12 and Ubuntu 22.04.
+This directory is empty on default installations of Debian 12 and Ubuntu 24.04.
 
 Contains site-specific data that is served by the system. This directory  provides a location for data that is served by various services running on the system, separate from other files associated with the operating system.
 
@@ -492,10 +495,13 @@ Applications may use a single subdirectory under /usr/libexec.
 Applications which use /usr/libexec in this way must not also use /usr/lib  to store internal binaries, though they may use /usr/lib for the other purposes documented here.
 
 ### 16.5. /usr/lib* - Alternate Format Libraries
-By default; Debian 12 and Ubuntu 22.04 has the following directories:
+By default; Debian 12 and Ubuntu 24.04 has the following directories:
 
 - /usr/lib32: symbolic link to /usr/lib32
 - /usr/lib64: symbolic link to /usr/lib64
+
+Debian 12 also has the following directory:
+
 - /usr/libx32: symbolic link to /usr/libx32
 
 /usr/lib* performs the same role as /usr/lib for an alternate binary format, except that the symbolic links /usr/lib*/sendmail and /usr/lib*/X11 are not required.

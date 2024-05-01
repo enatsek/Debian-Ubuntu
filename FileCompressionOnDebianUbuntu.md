@@ -28,6 +28,8 @@ tar -xzvf archive.tar.gz
 ```
 
 ### 0.2. Create Test Environment
+All commands are tested on Debian 11 & 12 and Ubuntu Server 22.04 & 24.04 LTS
+
 Create a temporary test directory
 
 ```

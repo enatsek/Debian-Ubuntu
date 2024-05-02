@@ -13,9 +13,9 @@ Our aim is to create and use a .deb package. Creating a new Debian package is an
 This tutorial is a simple one, it does not cover every detail. Its aim is to help you create a simple package.
 
 ### 0.1. Configuration
-**Workstation:** Debian 12 or Ubuntu 22.04 LTS
+**Workstation:** Debian 12 or Ubuntu 24.04 LTS
 
-**Test Servers:** Ubuntu 22.04 LTS, Ubuntu 20.04 LTS, Ubuntu 18.04 LTS,  Debian 9, Debian 10, Debian 11, Debian 12
+**Test Servers:** Ubuntu 24.04 LTS, Ubuntu 22.04 LTS, Ubuntu 20.04 LTS, Debian 12, Debian 11, Debian 10, Debian 12
 
 ### 0.2. Sources
 <https://www.debian.org/doc/debian-policy/>  

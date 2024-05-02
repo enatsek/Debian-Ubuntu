@@ -10,20 +10,20 @@
 - Based on the valuable documents at: [Server-World](https://www.server-world.info/en/note?os=Ubuntu_18.04&p=samba&f=4)
 
 ### 0.2. Configuration
-- Domain Name: X386.ORG  
-- Domain Netbios Name: X386  
+- Domain Name: 386387.XYZ  
+- Domain Netbios Name: 386387  
 - First DC:  
-    - srv1.x386.org   
-    - 192.168.1.216   
-    - Debian 12/11 or Ubuntu 22.04/20.04 LTS Server
+    - srv1.386387.xyz   
+    - 192.168.1.221   
+    - Debian 12/11 or Ubuntu 24.04/22.04 LTS Server
 - Second DC:    
-    - srv2.x386.org 
-    - 192.168.1.217 
-    - Debian 12/11 or Ubuntu 22.04/20.04 LTS Server
+    - srv2.386387.xyz 
+    - 192.168.1.222 
+    - Debian 12/11 or Ubuntu 24.04/22.04 LTS Server
 - File Server: 
-    - filesrv.x386.org 
-    - 192.168.1.218 
-    - Debian 12/11 or Ubuntu 22.04/20.04 LTS Server
+    - filesrv.386387.xyz 
+    - 192.168.1.223 
+    - Debian 12/11 or Ubuntu 24.04/22.04 LTS Server
 - Windows workstations can connect to the domain
 
 
@@ -71,13 +71,13 @@
 //filesrv/XAll      ALL RW
 ```
 
-On my tests I used distros uniformly. That is all servers were Debian 11, Debian 12, Ubuntu 20.04, or Ubuntu 22.04. I believe the system would work with nonuniform distros too, but I haven't tested it.
+On my tests I used distros uniformly. That is all servers were Debian 11, Debian 12, Ubuntu 22.04, or Ubuntu 24.04. I believe the system would work with nonuniform distros too, but I haven't tested it.
 
 ### 0.3. Phases
 - Add First DC (srv1.x36.org)
-- Add Additional DC (srv2.x386.org)
+- Add Additional DC (srv2.386387.xyz)
 - AD User Management
-- Add a Linux File Server to the Domain (filesrv.x386.org)
+- Add a Linux File Server to the Domain (filesrv.386387.xyz)
 - Add a Windows Computer to the Domain
 
 ### 0.4. Preliminary Tasks
@@ -104,7 +104,7 @@ Hostname must be in the format of name.example.com (lowercase this time)  and du
 
 ```
 127.0.0.1       localhost
-192.168.1.216	srv1.x386.org srv1
+192.168.1.221	srv1.386387.xyz srv1
 ```
  
 #### 0.4.3. Mixed Environment
@@ -115,7 +115,7 @@ But actually it is not necessary.
 I'd advice installing all DCs as Linux  and use any Windxws workstation to manage AD. You can install RSAT Management Tools to a Windxws workstation and use AD Manager programs (including DNS and WINS server) from there.
 
 #### 0.4.4. Default Values 
-Remember to replace all the occurences of X386, x386, X386.ORG, and  x386.org with yours, regarding the cases. 
+Remember to replace all the occurences of 386387, x386, 386387.XYZ, and  386387.xyz with yours, regarding the cases. 
 
 <br>
 
@@ -123,17 +123,17 @@ Remember to replace all the occurences of X386, x386, X386.ORG, and  x386.org wi
 ---
 ### 1.0. Specs
 ```
-Domain Name:  X386
-Realm:        X386.ORG	
-Hostname:     srv1.x386.org
-IP:           192.168.1.216
+Domain Name:  386387
+Realm:        386387.XYZ	
+Hostname:     srv1.386387.xyz
+IP:           192.168.1.221
 ```
 
 ### 1.1. Set Hostname
 Set hostname as fully qualified (if you haven't done it before)
 
 ```
-sudo hostnamectl set-hostname srv1.x386.org
+sudo hostnamectl set-hostname srv1.386387.xyz
 ```
 
 Update /etc/hosts file
@@ -146,7 +146,7 @@ Change the start of the file as below:
 
 ```
 127.0.0.1       localhost
-192.168.1.216   srv1.x386.org srv1 
+192.168.1.221   srv1.386387.xyz srv1 
 ```
 
 ### 1.2. Install required packages
@@ -158,11 +158,11 @@ sudo apt -y install samba krb5-config winbind smbclient
 Answers to parameter questions:  
 
 - Default Kerberos version 5 realm:
-   - X386.ORG
+   - 386387.XYZ
 - Kerberos servers for your realm:
-   - srv1.x386.org
+   - srv1.386387.xyz
 - Administrative server for your Kerberos realm:
-   - srv1.x386.org
+   - srv1.386387.xyz
 
 ### 1.2. Run Samba Config
 
@@ -181,9 +181,9 @@ sudo samba-tool domain provision
 Answers to parameter questions:
 
 - Realm:
-   - X386.ORG
+   - 386387.XYZ
 - Domain: 
-   - X386
+   - 386387
 - Server Role (dc, member, standalone) [dc]: 
    - Just press enter
 - DNS backend (SAMBA_INTERNAL,...
@@ -214,7 +214,7 @@ sudo nano /etc/resolv.conf
 Fill as below
 
 ```
-domain x386.org
+domain 386387.xyz
 nameserver 127.0.0.1
 ```
 
@@ -241,19 +241,19 @@ sudo samba-tool user create exforge
 ---
 ## 2.0. Specs
 ```
-Domain Name:      X386
-Realm:            X386.ORG	
-Hostname:         srv2.x386.org
-IP:               192.168.1.217
-Org. DC Hostname: srv1.x386.org
-Org. DC IP:       192.168.1.216
+Domain Name:      386387
+Realm:            386387.XYZ	
+Hostname:         srv2.386387.xyz
+IP:               192.168.1.222
+Org. DC Hostname: srv1.386387.xyz
+Org. DC IP:       192.168.1.221
 ```
 
 ### 2.1. Set Hostname
 Set hostname as fully qualified (if you haven't done it before)
 
 ```
-sudo hostnamectl set-hostname srv2.x386.org
+sudo hostnamectl set-hostname srv2.386387.xyz
 ```
 
 Update /etc/hosts file
@@ -266,7 +266,7 @@ Change the start of the file as below:
 
 ```
 127.0.0.1       localhost
-192.168.1.217   srv2.x386.org srv2 
+192.168.1.222   srv2.386387.xyz srv2 
 ```
 
 ### 2.2. Install kerberos and edit configuration
@@ -285,7 +285,7 @@ Change the beginning of the file as below
 
 ```
 [libdefaults]
-        default_realm = X386.ORG
+        default_realm = 386387.XYZ
         dns_lookup_realm = false
         dns_lookup_kdc = true
 ```
@@ -307,8 +307,8 @@ sudo nano /etc/resolv.conf
 Add following lines
 
 ```
-domain x386.org
-nameserver 192.168.1.216
+domain 386387.xyz
+nameserver 192.168.1.221
 ```
 
 ### 2.5. Get Kerberos ticket
@@ -335,7 +335,7 @@ Rename and remove default samba config, create a new one
 
 ```
 sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.org 
-sudo samba-tool domain join X386.ORG DC -U "srv1\administrator" \
+sudo samba-tool domain join 386387.XYZ DC -U "srv1\administrator" \
    --dns-backend=SAMBA_INTERNAL 
 ```
 
@@ -458,11 +458,12 @@ sudo samba-tool group listmembers "Domain Users"
 #### 3.2.3. Add a domain group.
 ```
 sudo samba-tool group add TestUsers
+sudo samba-tool group add TestUsers2
 ```
  
 #### 3.2.4. Delete a domain group.
 ```
-sudo samba-tool group delete TestUsers
+sudo samba-tool group delete TestUsers2
 ```
 
 #### 3.2.5. Add/remove a member from a domain group.
@@ -627,7 +628,7 @@ sudo samba-tool group addmembers All Marketing,Sales,Production,IT,SysAdmin
 Set hostname as fully qualified (if you haven't done it before)
 
 ```
-sudo hostnamectl set-hostname filesrv.x386.org
+sudo hostnamectl set-hostname filesrv.386387.xyz
 ```
 
 Update /etc/hosts file
@@ -640,7 +641,7 @@ Change the start of the file as below:
 
 ```
 127.0.0.1       localhost
-192.168.1.218   filesrv.x386.org filesrv 
+192.168.1.223   filesrv.386387.xyz filesrv 
 ```
  
 Remove resolv.conf and create a new one
@@ -653,9 +654,9 @@ sudo nano /etc/resolv.conf
 Add following lines
 
 ```
-domain x386.org
-nameserver 192.168.1.216
-nameserver 192.168.1.217
+domain 386387.xyz
+nameserver 192.168.1.221
+nameserver 192.168.1.222
 ```
 
 ### 5.2. Install necessary packages
@@ -668,11 +669,11 @@ sudo apt -y install winbind libpam-winbind libnss-winbind krb5-config \
 Answers to parameter questions (if asked):
 
 - Default Kerberos version 5 realm:
-   - X386.ORG
+   - 386387.XYZ
 - Kerberos servers for your realm:
-   - srv1.x386.org
+   - srv1.386387.xyz
 - Administrative server for your Kerberos realm:
-   - srv1.x386.org
+   - srv1.386387.xyz
 
 ### 5.3. Configure Winbind
 #### 5.3.1. Samba config
@@ -683,13 +684,13 @@ sudo nano /etc/samba/smb.conf
 Change/add following lines under [global] stanza
 
 ```
-   workgroup = X386
-   realm = X386.ORG
+   workgroup = 386387
+   realm = 386387.XYZ
    security = ads
    idmap config * : backend = tdb
    idmap config * : range = 3000-7999
-   idmap config X386 : backend = rid
-   idmap config X386 : range = 10000-999999
+   idmap config 386387 : backend = rid
+   idmap config 386387 : range = 10000-999999
    template homedir = /home/%U
    template shell = /bin/bash
    winbind use default domain = true
@@ -814,7 +815,7 @@ Add following lines under [global]  stanza
    winbind separator = +         
    encrypt passwords = yes         
    dns proxy = no         
-   wins server = 192.168.1.216         
+   wins server = 192.168.1.221         
    wins proxy = no  
 ```
 

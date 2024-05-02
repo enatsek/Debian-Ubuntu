@@ -5,22 +5,18 @@
 
 ## 0. Specs
 ---
-Apache 2 Installation, configuration, sample sites, enablement of PHP,  SSL etc on Ubuntu 22.04 (and 20.04) and Debian 12 (and 11) Servers 
+Apache 2 Installation, configuration, sample sites, enablement of PHP,  SSL etc on Ubuntu 24.04 (and 22.04) and Debian 12 (and 11) Servers 
 
 Based on the book [Mastering Ubuntu Server 2nd Ed.](https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition) by Jay LaCroix. This book hes introduced me to Ubuntu Server and I have to thank him for this excellent book. 
 
-srv1.x11.xyz, srv2.x11.xyz and srv3.x11.xyz all have the ip of my server
+srv1.386387.xyz, srv2.386387.xyz and srv3.386387.xyz all have the ip of my server
 
 
 ## 1. Apache Installation
 ---
-### 1.0. Update Repositories
-```
-sudo apt update
-```
-
 ### 1.1. Install
 ```
+sudo apt update
 sudo apt install apache2 --yes
 ```
 
@@ -66,20 +62,20 @@ Sample content for 2 virtual hosts
 
 ```
 <VirtualHost *:80>
-    ServerAdmin webmaster@x11.xyz	
-    ServerName srv1.x11.xyz
+    ServerAdmin webmaster@386387.xyz	
+    ServerName srv1.386387.xyz
     ServerAlias srv1
     DocumentRoot /var/www/srv1
-    ErrorLog ${APACHE_LOG_DIR}/srv1.x11.xyz-error.log
-    CustomLog ${APACHE_LOG_DIR}/srv1.x11.xyz-access.log combined
+    ErrorLog ${APACHE_LOG_DIR}/srv1.386387.xyz-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv1.386387.xyz-access.log combined
 </VirtualHost>
 <VirtualHost *:80>
-    ServerAdmin webmaster@x11.xyz	
-    ServerName srv2.x11.xyz
+    ServerAdmin webmaster@386387.xyz	
+    ServerName srv2.386387.xyz
     ServerAlias srv2
     DocumentRoot /var/www/srv2
-    ErrorLog ${APACHE_LOG_DIR}/srv2.x11.xyz-error.log
-    CustomLog ${APACHE_LOG_DIR}/srv2.x11.xyz-access.log combined
+    ErrorLog ${APACHE_LOG_DIR}/srv2.386387.xyz-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv2.386387.xyz-access.log combined
 </VirtualHost>
 ```
 
@@ -162,7 +158,7 @@ sudo mkdir /etc/apache2/certs
 ### 3.4. Create self signed certificate files for srv1
 ```
 sudo openssl req -x509 -nodes -days 730 -newkey rsa:2048 -keyout \
-/etc/apache2/certs/srv1.key -out /etc/apache2/certs/srv1.crt
+   /etc/apache2/certs/srv1.key -out /etc/apache2/certs/srv1.crt
 ```
 
 You need to answer all the questions, default values OK for a test site
@@ -182,11 +178,11 @@ Fill as below:
 ```
 <IfModule mod_ssl.c>
     <VirtualHost *:443>
-        ServerName srv1.x11.xyz:443
-        ServerAdmin webmaster@x11.xyz
+        ServerName srv1.386387.xyz:443
+        ServerAdmin webmaster@386387.xyz
         DocumentRoot /var/www/srv1
-        ErrorLog ${APACHE_LOG_DIR}/srv1.x11.xyz-error.log
-        CustomLog ${APACHE_LOG_DIR}/srv.x11.xyz-access.log combined
+        ErrorLog ${APACHE_LOG_DIR}/srv1.386387.xyz-error.log
+        CustomLog ${APACHE_LOG_DIR}/srv.386387.xyz-access.log combined
         SSLEngine on
         SSLCertificateFile	/etc/apache2/certs/srv1.crt
         SSLCertificateKeyFile	/etc/apache2/certs/srv1.key
@@ -216,7 +212,7 @@ sudo systemctl reload apache2
 
 ## 4. Auto http-->https redirect
 ---
-### 4.1. http://srv1.x11.xyz automatically redirects to https://srv1.x11.xyz
+### 4.1. http://srv1.386387.xyz automatically redirects to https://srv1.386387.xyz
 
 First we need to enable rewrite mode
 
@@ -233,14 +229,14 @@ last 3 lines to be added
 
 ```
 <VirtualHost *:80>
-    ServerAdmin webmaster@x11.xyz
-    ServerName srv1.x11.xyz
+    ServerAdmin webmaster@386387.xyz
+    ServerName srv1.386387.xyz
     DocumentRoot /var/www/srv1
     ErrorLog ${APACHE_LOG_DIR}/srv1-error.log
     CustomLog ${APACHE_LOG_DIR}/srv1-access.log combined
     #redirection
     RewriteEngine on
-    RewriteCond %{SERVER_NAME} =srv1.x11.xyz
+    RewriteCond %{SERVER_NAME} =srv1.386387.xyz
     RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 </VirtualHost>
 ```
@@ -284,7 +280,7 @@ phpinfo();
 ```
 
 Test your page  
-http://srv1.x11.xyz/info.php
+http://srv1.386387.xyz/info.php
 
 <br>
 
@@ -293,35 +289,35 @@ http://srv1.x11.xyz/info.php
 ### 6.1. 3 different sites on 1 server in 1 conf file
 ```
 <VirtualHost *:80>
-    ServerAdmin webmaster@x11.xyz	
-    ServerName srv1.x11.xyz
+    ServerAdmin webmaster@386387.xyz	
+    ServerName srv1.386387.xyz
     DocumentRoot /var/www/srv1
-    ErrorLog ${APACHE_LOG_DIR}/srv1.x11.xyz-error.log
-    CustomLog ${APACHE_LOG_DIR}/srv1.x11.xyz-access.log combined
+    ErrorLog ${APACHE_LOG_DIR}/srv1.386387.xyz-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv1.386387.xyz-access.log combined
 </VirtualHost>
 
 <VirtualHost *:80>
-    ServerAdmin webmaster@x11.xyz	
-    ServerName srv2.x11.xyz
+    ServerAdmin webmaster@386387.xyz	
+    ServerName srv2.386387.xyz
     DocumentRoot /var/www/srv2
-    ErrorLog ${APACHE_LOG_DIR}/srv2.x11.xyz-error.log
-    CustomLog ${APACHE_LOG_DIR}/srv2.x11.xyz-access.log combined
+    ErrorLog ${APACHE_LOG_DIR}/srv2.386387.xyz-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv2.386387.xyz-access.log combined
 </VirtualHost>
 
 <VirtualHost *:80>
-    ServerAdmin webmaster@x11.xyz	
-    ServerName srv3.x11.xyz
+    ServerAdmin webmaster@386387.xyz	
+    ServerName srv3.386387.xyz
     DocumentRoot /var/www/srv3
-    ErrorLog ${APACHE_LOG_DIR}/srv3.x11.xyz-error.log
-    CustomLog ${APACHE_LOG_DIR}/srv3.x11.xyz-access.log combined
+    ErrorLog ${APACHE_LOG_DIR}/srv3.386387.xyz-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv3.386387.xyz-access.log combined
 </VirtualHost>
 ```
 
 ### 6.2. A server with only local access, to be used for configuration
 ```
 <VirtualHost 127.0.0.1:80>
-    ServerAdmin webmaster@x11.xyz	
-    ServerName srv3.x11.xyz
+    ServerAdmin webmaster@386387.xyz	
+    ServerName srv3.386387.xyz
     DocumentRoot /var/www/localhost
     ErrorLog ${APACHE_LOG_DIR}/localhost-error.log
     CustomLog ${APACHE_LOG_DIR}/localhost-access.log combined
@@ -337,8 +333,8 @@ sudo a2enmod rewrite
 
 ```
 <VirtualHost *:80>
-    ServerAdmin webmaster@x11.xyz	
-    ServerName srv1.x11.xyz
+    ServerAdmin webmaster@386387.xyz	
+    ServerName srv1.386387.xyz
     DocumentRoot /var/www/srv1
     # Force redirect to HTTPS unless the request is for Let's Encrypt
     RewriteEngine On
@@ -358,15 +354,15 @@ Rewrite module is needed again.
 
 ```
 <VirtualHost *:80>
-   ServerAdmin webmaster@x11.xyz	
-   ServerName srv1.x11.xyz
-   ServerAlias www.x11.xyz
+   ServerAdmin webmaster@386387.xyz	
+   ServerName srv1.386387.xyz
+   ServerAlias www.386387.xyz
    DocumentRoot /var/www/srv1
    ErrorLog ${APACHE_LOG_DIR}/srv1-error.log
    CustomLog ${APACHE_LOG_DIR}/srv1-access.log combined
    RewriteEngine on
-   RewriteCond %{SERVER_NAME} =srv1.x11.xyz [OR]
-   RewriteCond %{SERVER_NAME} =www.x11.xyz
+   RewriteCond %{SERVER_NAME} =srv1.386387.xyz [OR]
+   RewriteCond %{SERVER_NAME} =www.386387.xyz
    RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 </VirtualHost>
 ```
@@ -378,8 +374,8 @@ Rewrite module is needed again.
         Require ip 195.174.209.24
         Require ip 138.199.28.46
     </Directory>
-    ServerAdmin postmaster@x11.xyz
-    ServerName srv1.x11.xyz
+    ServerAdmin postmaster@386387.xyz
+    ServerName srv1.386387.xyz
     DocumentRoot /var/www/srv1
     ErrorLog ${APACHE_LOG_DIR}/srv1-error.log
     CustomLog ${APACHE_LOG_DIR}/srv1-access.log combined
@@ -410,8 +406,8 @@ And our configuration:
     RewriteEngine On
     RewriteRule ^/reverse$ /reverse/ [R,L]
     RewriteRule ^/reverse/(.*) http://localhost:11334/$1 [P,L]
-    ServerAdmin webmaster@x11.xyz
-    ServerName srv1.x11.xyz
+    ServerAdmin webmaster@386387.xyz
+    ServerName srv1.386387.xyz
     DocumentRoot /var/www/srv1
     ErrorLog ${APACHE_LOG_DIR}/srv1-error.log
     CustomLog ${APACHE_LOG_DIR}/srv1-access.log combined

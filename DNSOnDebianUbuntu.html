@@ -853,12 +853,12 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <p>My Specs: (Change the values to your ones)</p>
 <ul>
 <li>Both DNS Servers can be Debian 12/11 or Ubuntu 22.04/20.04 Server</li>
-<li>Domain Name: x11.xyz (Change it to your domain name)</li>
-<li>Primary DNS Server: ns1.x11.xyz   192.168.1.224</li>
-<li>Replica DNS Server: ns2.x11.xyz   192.168.1.225</li>
+<li>Domain Name: 386387.xyz (Change it to your domain name)</li>
+<li>Primary DNS Server: ns1.386387.xyz   192.168.1.221</li>
+<li>Replica DNS Server: ns2.386387.xyz   192.168.1.222</li>
 <li>Some sample servers to add as DNS records:</li>
-<li>filesrv.x11.xyz: 192.168.1.171</li>
-<li>mail.x11.xyz: 192.168.1.172</li>
+<li>filesrv.386387.xyz: 192.168.1.171</li>
+<li>mail.386387.xyz: 192.168.1.172</li>
 <li>mailsrv as a canonical name for mail</li>
 <li>mail as a mail server for the domain</li>
 <li>Google DNS server 8.8.8.8 is used as forwarder DNSs</li>
@@ -871,11 +871,9 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <p><br></p>
 <h2>1. Primary DNS Server</h2>
 <hr />
-<h3>1.0. Update Repositories</h3>
-<pre><code>sudo apt update
-</code></pre>
 <h3>1.1. Install bind9 (DNS Server)</h3>
-<pre><code>sudo apt -y install bind9
+<pre><code>sudo apt update
+sudo apt -y install bind9
 </code></pre>
 <h3>1.2. Edit main config file</h3>
 <pre><code>sudo nano /etc/bind/named.conf.options
@@ -885,7 +883,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
    # Cache Directory
    directory &quot;/var/cache/bind&quot;;
    # Allow replica to transfer zone files
-   allow-transfer { localhost; 192.168.1.225; };
+   allow-transfer { localhost; 192.168.1.222; };
    # Allow queries from any hosts
    allow-query { any; };
    # Use Google DNS as forwarder
@@ -903,22 +901,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 </code></pre>
 <p>Fill as below</p>
 <pre><code># Forward zone
-zone &quot;x11.xyz&quot; IN {
+zone &quot;386387.xyz&quot; IN {
    type master;
-   file &quot;/etc/bind/forward.x11.xyz&quot;;
+   file &quot;/etc/bind/forward.386387.xyz&quot;;
 };
 # Reverse zone
 zone &quot;1.168.192.in-addr.arpa&quot; IN {
    type master;
-   file &quot;/etc/bind/reverse.x11.xyz&quot;;
+   file &quot;/etc/bind/reverse.386387.xyz&quot;;
 };
 </code></pre>
 <h3>1.4. Fill the Forward File We Just Defined</h3>
-<pre><code>sudo nano /etc/bind/forward.x11.xyz
+<pre><code>sudo nano /etc/bind/forward.386387.xyz
 </code></pre>
 <p>Fill as below:</p>
 <pre><code>$TTL 1D
-@ IN SOA ns1.x11.xyz hostmaster.x11.xyz (
+@ IN SOA ns1.386387.xyz hostmaster.386387.xyz (
    2022060501 ; serial
    8H ; Refresh
    4H ; Retry
@@ -928,21 +926,21 @@ zone &quot;1.168.192.in-addr.arpa&quot; IN {
 ; Name Server of the domain
 @               IN NS     ns1.
 ; Mail server of the domain
-@               IN MX 10  mail.x11.xyz.
+@               IN MX 10  mail.386387.xyz.
 ; A Records for Hosts
-ns1             IN A      192.168.1.224
-ns2             IN A      192.168.1.225
+ns1             IN A      192.168.1.221
+ns2             IN A      192.168.1.222
 filesrv         IN A      192.168.1.171
 mail            IN A      192.168.1.172
 # CNAME Record
-mailsrv         IN CNAME  mail.x11.xyz.
+mailsrv         IN CNAME  mail.386387.xyz.
 </code></pre>
 <h3>1.5. Fill the Reverse File We Just Defined</h3>
-<pre><code>sudo nano /etc/bind/reverse.x11.xyz
+<pre><code>sudo nano /etc/bind/reverse.386387.xyz
 </code></pre>
 <p>Fill as below</p>
 <pre><code>$TTL 1D
-@    IN   SOA    x11.xyz hostmaster.x11.xyz (
+@    IN   SOA    386387.xyz hostmaster.386387.xyz (
    2022060501 ; Serial
    8H ; Refresh
    4H ; Retry
@@ -950,34 +948,32 @@ mailsrv         IN CNAME  mail.x11.xyz.
    1D ; Minimum TTL
 )
 ;Your Name Server Info
-@    IN    NS     ns1.x11.xyz.
-ns1  IN    A      192.168.1.224
+@    IN    NS     ns1.386387.xyz.
+ns1  IN    A      192.168.1.221
 ;Reverse Lookup for Your DNS Server
-224  IN    PTR    ns1.x11.xyz.
+224  IN    PTR    ns1.386387.xyz.
 ;PTR Records IP address to HostName
-225  IN    PTR    ns2.x11.xyz.
-171  IN    PTR    filesrv.x11.xyz.
-172  IN    PTR    mail.x11.xyz.
+225  IN    PTR    ns2.386387.xyz.
+171  IN    PTR    filesrv.386387.xyz.
+172  IN    PTR    mail.386387.xyz.
 </code></pre>
 <h3>1.6. Check Configuration Files</h3>
 <pre><code>sudo named-checkconf /etc/bind/named.conf.options
 sudo named-checkconf /etc/bind/named.conf.local
-sudo named-checkzone x11.xyz /etc/bind/forward.x11.xyz
-sudo named-checkzone x11.xyz /etc/bind/reverse.x11.xyz
+sudo named-checkzone 386387.xyz /etc/bind/forward.386387.xyz
+sudo named-checkzone 386387.xyz /etc/bind/reverse.386387.xyz
 </code></pre>
 <p><br></p>
 <h2>2. Replica DNS Server</h2>
 <hr />
-<h3>2.0. Update Repositories</h3>
-<pre><code>sudo apt update
-</code></pre>
 <h3>2.1. Install bind9 (DNS Server)</h3>
-<pre><code>sudo apt -y install bind9
+<pre><code>sudo apt update
+sudo apt -y install bind9
 </code></pre>
 <h3>2.2. Edit Main Config File</h3>
 <pre><code>sudo nano /etc/bind/named.conf.options
 </code></pre>
-<p>Fill as below</p>
+<p>Change as below</p>
 <pre><code>options {
    # Cache Directory
    directory &quot;/var/cache/bind&quot;;
@@ -998,15 +994,15 @@ sudo named-checkzone x11.xyz /etc/bind/reverse.x11.xyz
 <pre><code>sudo nano /etc/bind/named.conf.local
 </code></pre>
 <p>Fill as below</p>
-<pre><code>zone &quot;x11.xyz&quot; IN {
+<pre><code>zone &quot;386387.xyz&quot; IN {
    type slave;
-   masters { 192.168.1.224; };
-   file &quot;/var/lib/bind/forward.x11.xyz&quot;;
+   masters { 192.168.1.221; };
+   file &quot;/var/lib/bind/forward.386387.xyz&quot;;
 };
 zone &quot;1.168.192.in-addr.arpa&quot; IN {
    type slave;
-   masters { 192.168.1.224; };
-   file &quot;/var/lib/bind/reverse.x11.xyz&quot;;
+   masters { 192.168.1.221; };
+   file &quot;/var/lib/bind/reverse.386387.xyz&quot;;
 };
 </code></pre>
 <p>This time local zone file is placed at /var/lib and it will be populated automatically</p>
@@ -1021,7 +1017,7 @@ sudo named-checkconf /etc/bind/named.conf.local
 <pre><code>sudo systemctl restart bind9
 </code></pre>
 <p>Your name servers must be working now. You can query them from any host  in the network with dig command:</p>
-<pre><code>dig @192.168.1.224 mail.x11.xyz
+<pre><code>dig @192.168.1.221 mail.386387.xyz
 </code></pre>
 <h3>3.2. Notes</h3>
 <p><strong>Remember</strong></p>

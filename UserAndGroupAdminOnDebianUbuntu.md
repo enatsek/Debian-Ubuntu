@@ -3,7 +3,7 @@
 
 ## 0. Specs
 ---
-Aimed for Debian 12/11 and Ubuntu 22.04/20.04 Servers
+Aimed for Debian 12/11 and Ubuntu 24.04/22.04 Servers
 
 But works fine on Debian, Ubuntu and derivatives' desktops (Ubuntu, Kubuntu, Xubuntu,  Lubuntu, MX, Mint etc) too.
 

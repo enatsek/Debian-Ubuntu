@@ -3,10 +3,10 @@
 
 ## 0. Specs
 ---
-- 2 Servers with IPs 192.168.1.211 and 192.168.1.212
-- Servers may be Debian 11/12 or Ubuntu 20.04/22.04
+- Servers may be Debian 11/12 or Ubuntu 22.04/24.04
 - Floating IP Address: 192.168.1.240
 - Floating IP address will point to the first server
+- SMTP server IP is 192.168.1.150 (optional)
 
 If the first server goes off for any reason, then floating IP address will point to second server. It will return to the first server again when it goes back online.
 
@@ -18,7 +18,7 @@ The servers must be in the same network.
 
 Based on the book [Mastering Ubuntu Server 2nd Ed.](https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition) by Jay LaCroix. 
 
-I tested the tutorial with Debian 11, Debian 12, Ubuntu 20.04 and Ubuntu 22.04 pairs.
+I tested the tutorial with Debian 11, Debian 12, Ubuntu 22.04 and Ubuntu 24.04 pairs.
 
 
 You may establish a full cluster of LAMP stack by:

@@ -847,17 +847,17 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h2>0. Specs</h2>
 <hr />
 <ul>
-<li>2 Servers with IPs 192.168.1.211 and 192.168.1.212</li>
-<li>Servers may be Debian 11/12 or Ubuntu 20.04/22.04</li>
+<li>Servers may be Debian 11/12 or Ubuntu 22.04/24.04</li>
 <li>Floating IP Address: 192.168.1.240</li>
 <li>Floating IP address will point to the first server</li>
+<li>SMTP server IP is 192.168.1.150 (optional)</li>
 </ul>
 <p>If the first server goes off for any reason, then floating IP address will point to second server. It will return to the first server again when it goes back online.</p>
 <p>This looks like clustering only at the network level.</p>
 <p>All the necessary services on the first server must be installed on the second server too. (Web server, DB server, mail server etc)</p>
 <p>The servers must be in the same network.</p>
 <p>Based on the book <a href="https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition">Mastering Ubuntu Server 2nd Ed.</a> by Jay LaCroix. </p>
-<p>I tested the tutorial with Debian 11, Debian 12, Ubuntu 20.04 and Ubuntu 22.04 pairs.</p>
+<p>I tested the tutorial with Debian 11, Debian 12, Ubuntu 22.04 and Ubuntu 24.04 pairs.</p>
 <p>You may establish a full cluster of LAMP stack by:</p>
 <ol>
 <li>Installing Apache on both servers</li>

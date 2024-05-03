@@ -3,9 +3,9 @@
 
 ## 0. Specs
 ---
-Mariadb Installation, configuration, simple user and DB management, and  Primary - Replica (Master - Slave) Replication on Debian 12 (also 11) and  Ubuntu 22.04 (also 20.04) Server.
+Mariadb Installation, configuration, simple user and DB management, and  Primary - Replica (Master - Slave) Replication on Debian 12 (also 11) and  Ubuntu 24.04 (also 22.04) Server.
 
-Based on the book [Mastering Ubuntu Server 2nd Ed.](https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition) by Jay LaCroix. This book hes introduced me to Ubuntu Server and I have to thank him for this excellent book. 
+Based on the book [Mastering Ubuntu Server 2nd Ed.](https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition) by Jay LaCroix. This book has introduced me to Ubuntu Server and I have to thank him for this excellent book. 
 
 Almost (if not all) everything on this tutorial can be applied to Mysql.
 
@@ -16,13 +16,9 @@ Mariadb is a fork or Mysql, and I prefer using it, besides a lot of other  reaso
 <br>
 
 ## 1. Installation and Securing
-### 1.0. Update repositories
-```
-sudo apt update
-```
-
 ### 1.1. Install MariaDB
 ```
+sudo apt update
 sudo apt install --yes mariadb-server
 ```
 
@@ -72,7 +68,7 @@ sudo mariadb
 ```
 
 ### 2.1. Admin User
-For administrating the db, it is best to create an admin user on mariadb  shell. admin can only login from localhost  
+For administrating the db, it is best to create an admin user on mariadb shell. admin can only login from localhost  
 Remember to change password to a good one.
 
 ```
@@ -205,9 +201,9 @@ sudo mariadb < mysampledb.sql
 ## 5. Primary - Replica (Master-Slave) Replication Configuration
 ### 5.1. Specs and Preliminary Tasks
 ```
-Primary Server       : 192.168.1.253 
-Replica Server       : 192.168.1.254 
-Replication User     : 'replicate'@'192.168.1.254'
+Primary Server       : 192.168.1.216 
+Replica Server       : 192.168.1.221 
+Replication User     : 'replicate'@'192.168.1.221'
 Rep. User Password   : Pass1234 
 Database instance to replicate: mysampledb
 ```
@@ -219,21 +215,21 @@ As in the following link, Mariadb Knowledge Base says that; primary and  replica
 Mariadb versions on Debian and Ubuntu Servers:
 
 ```
-Ubuntu 20.04 : 10.3.38
 Debian 11    : 10.5.19
 Ubuntu 22.04 : 10.6.12
 Debian 12    : 10.11.3
+Ubuntu 24.04 : 10.11.7
 ```
 
 I made the tests with the following pairs.
   
 - Debian 11 Primary - Debian 12 Replica  
-- Ubuntu 20.04 Primary - Ubuntu 22.04 Replica  
+- Ubuntu 22.04 Primary - Ubuntu 24.04 Replica  
 - Ubuntu 22.04 Primary - Debian 12 Replica  
    
 - Install mariadb on both servers, 
 - Apply steps in 1 on both servers
-- Apply step 3.1 to 3.7 on primary server
+- Apply steps 3.1 to 3.7 on primary server
 
 **Please Remember:**
 
@@ -276,7 +272,7 @@ bind-address = 0.0.0.0
 Run following command on primary mariadb shell
 
 ```
-GRANT REPLICATION SLAVE ON *.* to 'replicate'@'192.168.1.254' identified by 'Pass1234';
+GRANT REPLICATION SLAVE ON *.* to 'replicate'@'192.168.1.221' identified by 'Pass1234';
 EXIT;
 ```
 
@@ -297,6 +293,8 @@ EXIT;
 ```
 sudo mysqldump --databases mysampledb > mysampledb.sql
 ```
+
+At this step, you need to copy the backup file (mysampledb.sql) to the replica server.
 
 ### 5.3. Replica Server Config
 #### 5.3.1. Restore database backed up at primary
@@ -326,7 +324,7 @@ sudo systemctl restart mariadb
 
 #### 5.3.4. Run the commands on replica mariadb shell
 ```
-CHANGE MASTER TO MASTER_HOST="192.168.1.253", MASTER_USER='replicate', MASTER_PASSWORD='Pass1234';
+CHANGE MASTER TO MASTER_HOST="192.168.1.216", MASTER_USER='replicate', MASTER_PASSWORD='Pass1234';
 ```
 
 Check to see if replica is running (on mariadb shell)

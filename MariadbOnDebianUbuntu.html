@@ -846,18 +846,16 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h1>MariaDB Tutorial on Debian and Ubuntu</h1>
 <h2>0. Specs</h2>
 <hr />
-<p>Mariadb Installation, configuration, simple user and DB management, and  Primary - Replica (Master - Slave) Replication on Debian 12 (also 11) and  Ubuntu 22.04 (also 20.04) Server.</p>
-<p>Based on the book <a href="https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition">Mastering Ubuntu Server 2nd Ed.</a> by Jay LaCroix. This book hes introduced me to Ubuntu Server and I have to thank him for this excellent book. </p>
+<p>Mariadb Installation, configuration, simple user and DB management, and  Primary - Replica (Master - Slave) Replication on Debian 12 (also 11) and  Ubuntu 24.04 (also 22.04) Server.</p>
+<p>Based on the book <a href="https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition">Mastering Ubuntu Server 2nd Ed.</a> by Jay LaCroix. This book has introduced me to Ubuntu Server and I have to thank him for this excellent book. </p>
 <p>Almost (if not all) everything on this tutorial can be applied to Mysql.</p>
 <p>Mariadb is a fork or Mysql, and I prefer using it, besides a lot of other  reasons, I just don't like Or*cle</p>
 <p><strong>Do not ever install Mariadb and Mysql on the same server</strong></p>
 <p><br></p>
 <h2>1. Installation and Securing</h2>
-<h3>1.0. Update repositories</h3>
-<pre><code>sudo apt update
-</code></pre>
 <h3>1.1. Install MariaDB</h3>
-<pre><code>sudo apt install --yes mariadb-server
+<pre><code>sudo apt update
+sudo apt install --yes mariadb-server
 </code></pre>
 <h3>1.2. Check if installation is OK</h3>
 <pre><code>systemctl status mariadb
@@ -886,7 +884,7 @@ and<br />
 <pre><code>sudo mariadb
 </code></pre>
 <h3>2.1. Admin User</h3>
-<p>For administrating the db, it is best to create an admin user on mariadb  shell. admin can only login from localhost<br />
+<p>For administrating the db, it is best to create an admin user on mariadb shell. admin can only login from localhost<br />
 Remember to change password to a good one.</p>
 <pre><code>CREATE USER 'admin'@'localhost' IDENTIFIED BY 'password';
 FLUSH PRIVILEGES;
@@ -968,24 +966,24 @@ FLUSH PRIVILEGES;
 <p><br></p>
 <h2>5. Primary - Replica (Master-Slave) Replication Configuration</h2>
 <h3>5.1. Specs and Preliminary Tasks</h3>
-<pre><code>Primary Server       : 192.168.1.253 
-Replica Server       : 192.168.1.254 
-Replication User     : 'replicate'@'192.168.1.254'
+<pre><code>Primary Server       : 192.168.1.216 
+Replica Server       : 192.168.1.221 
+Replication User     : 'replicate'@'192.168.1.221'
 Rep. User Password   : Pass1234 
 Database instance to replicate: mysampledb
 </code></pre>
 <p>As in the following link, Mariadb Knowledge Base says that; primary and  replica server do not need to have the same version of Mariadb, although  it is preferred to have the primary an older version.<br />
 <a href="https://mariadb.com/kb/en/database-version-on-master-slave-replication/">https://mariadb.com/kb/en/database-version-on-master-slave-replication/</a></p>
 <p>Mariadb versions on Debian and Ubuntu Servers:</p>
-<pre><code>Ubuntu 20.04 : 10.3.38
-Debian 11    : 10.5.19
+<pre><code>Debian 11    : 10.5.19
 Ubuntu 22.04 : 10.6.12
 Debian 12    : 10.11.3
+Ubuntu 24.04 : 10.11.7
 </code></pre>
 <p>I made the tests with the following pairs.</p>
 <ul>
 <li>Debian 11 Primary - Debian 12 Replica  </li>
-<li>Ubuntu 20.04 Primary - Ubuntu 22.04 Replica  </li>
+<li>Ubuntu 22.04 Primary - Ubuntu 24.04 Replica  </li>
 <li>
 <p>Ubuntu 22.04 Primary - Debian 12 Replica  </p>
 </li>
@@ -993,7 +991,7 @@ Debian 12    : 10.11.3
 <p>Install mariadb on both servers, </p>
 </li>
 <li>Apply steps in 1 on both servers</li>
-<li>Apply step 3.1 to 3.7 on primary server</li>
+<li>Apply steps 3.1 to 3.7 on primary server</li>
 </ul>
 <p><strong>Please Remember:</strong></p>
 <p>Replication doesn't mean that you don't have to backup. If you delete   something accidentally, it is automatically deleted at slave too. So if   you are running a production server, backup (at least) daily and weekly.</p>
@@ -1019,7 +1017,7 @@ server-id=1
 </code></pre>
 <h4>5.2.3. Create replication user</h4>
 <p>Run following command on primary mariadb shell</p>
-<pre><code>GRANT REPLICATION SLAVE ON *.* to 'replicate'@'192.168.1.254' identified by 'Pass1234';
+<pre><code>GRANT REPLICATION SLAVE ON *.* to 'replicate'@'192.168.1.221' identified by 'Pass1234';
 EXIT;
 </code></pre>
 <h4>5.2.4. Restart primary mariadb server</h4>
@@ -1033,6 +1031,7 @@ EXIT;
 <h4>5.2.6. Backup the database at the primary server</h4>
 <pre><code>sudo mysqldump --databases mysampledb &gt; mysampledb.sql
 </code></pre>
+<p>At this step, you need to copy the backup file (mysampledb.sql) to the replica server.</p>
 <h3>5.3. Replica Server Config</h3>
 <h4>5.3.1. Restore database backed up at primary</h4>
 <pre><code>sudo mariadb &lt; mysampledb.sql
@@ -1050,7 +1049,7 @@ server-id=2
 <pre><code>sudo systemctl restart mariadb
 </code></pre>
 <h4>5.3.4. Run the commands on replica mariadb shell</h4>
-<pre><code>CHANGE MASTER TO MASTER_HOST=&quot;192.168.1.253&quot;, MASTER_USER='replicate', MASTER_PASSWORD='Pass1234';
+<pre><code>CHANGE MASTER TO MASTER_HOST=&quot;192.168.1.216&quot;, MASTER_USER='replicate', MASTER_PASSWORD='Pass1234';
 </code></pre>
 <p>Check to see if replica is running (on mariadb shell)</p>
 <pre><code>SHOW SLAVE STATUS;

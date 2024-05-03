@@ -11,9 +11,9 @@ All the changes in one server will be updated to others momentarily. At least 3 
 **At least 2 of the cluster nodes must be online always**. If you fall  to 1 you may have problems. If you shut down all of the nodes, your cluster stops and you need some work to (hopefully) start again. !!!
 
 ### 0.2. My Configuration
-srv1 -> 192.168.1.214 Debian 12/11 Ubuntu 22.04/20.04 LTS Server  
-srv2 -> 192.168.1.215 Debian 12/11 Ubuntu 22.04/20.04 LTS Server  
-srv3 -> 192.168.1.216 Debian 12/11 Ubuntu 22.04/20.04 LTS Server  
+srv1 -> 192.168.1.221 Debian 12/11 Ubuntu 24.04/22.04 LTS Server  
+srv2 -> 192.168.1.222 Debian 12/11 Ubuntu 24.04/22.04 LTS Server  
+srv3 -> 192.168.1.223 Debian 12/11 Ubuntu 24.04/22.04 LTS Server  
 
 All the nodes must have the same version of Mariadb. That is, they must  have the same Linux distros.
 
@@ -102,7 +102,7 @@ innodb_autoinc_lock_mode = 2
 # Name of the cluster, you can change it
 wsrep_cluster_name    = "x386_cluster"
 # List of cluster nodes
-wsrep_cluster_address = "gcomm://192.168.1.214,192.168.1.215,192.168.1.216"
+wsrep_cluster_address = "gcomm://192.168.1.221,192.168.1.222,192.168.1.223"
 # Galera plugin path
 wsrep_provider = /usr/lib/galera/libgalera_smm.so
 # If a node does not respond in 10 second, it is assumed to be offline
@@ -391,7 +391,7 @@ sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
 Change the wsrep_cluster_address parameter to contain only the safe node. That is, if the 3rd node is the safe node as belowÇ
 
 ```
-wsrep_cluster_address = "gcomm://192.168.1.216"
+wsrep_cluster_address = "gcomm://192.168.1.223"
 ```
 
 Enable mariadb 
@@ -441,7 +441,7 @@ sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
 Change the wsrep_cluster_address parameter to original
 
 ```
-wsrep_cluster_address = "gcomm://192.168.1.214,192.168.1.215,192.168.1.216"
+wsrep_cluster_address = "gcomm://192.168.1.221,192.168.1.222,192.168.1.223"
 ```
 
 Restart mariadb

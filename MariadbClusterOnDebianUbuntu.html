@@ -851,9 +851,9 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <p>All the changes in one server will be updated to others momentarily. At least 3 nodes are advised for Mariadb cluster, there is no upper limit.</p>
 <p><strong>At least 2 of the cluster nodes must be online always</strong>. If you fall  to 1 you may have problems. If you shut down all of the nodes, your cluster stops and you need some work to (hopefully) start again. !!!</p>
 <h3>0.2. My Configuration</h3>
-<p>srv1 -&gt; 192.168.1.214 Debian 12/11 Ubuntu 22.04/20.04 LTS Server<br />
-srv2 -&gt; 192.168.1.215 Debian 12/11 Ubuntu 22.04/20.04 LTS Server<br />
-srv3 -&gt; 192.168.1.216 Debian 12/11 Ubuntu 22.04/20.04 LTS Server  </p>
+<p>srv1 -&gt; 192.168.1.221 Debian 12/11 Ubuntu 24.04/22.04 LTS Server<br />
+srv2 -&gt; 192.168.1.222 Debian 12/11 Ubuntu 24.04/22.04 LTS Server<br />
+srv3 -&gt; 192.168.1.223 Debian 12/11 Ubuntu 24.04/22.04 LTS Server  </p>
 <p>All the nodes must have the same version of Mariadb. That is, they must  have the same Linux distros.</p>
 <h3>0.3. Resources</h3>
 <p><a href="https://www.howtoforge.com/how-to-setup-mariadb-galera-multi-master-synchronous-replication-using-debian-10/">https://www.howtoforge.com/how-to-setup-mariadb-galera-multi-master-synchronous-replication-using-debian-10/</a><br />
@@ -908,7 +908,7 @@ innodb_autoinc_lock_mode = 2
 # Name of the cluster, you can change it
 wsrep_cluster_name    = &quot;x386_cluster&quot;
 # List of cluster nodes
-wsrep_cluster_address = &quot;gcomm://192.168.1.214,192.168.1.215,192.168.1.216&quot;
+wsrep_cluster_address = &quot;gcomm://192.168.1.221,192.168.1.222,192.168.1.223&quot;
 # Galera plugin path
 wsrep_provider = /usr/lib/galera/libgalera_smm.so
 # If a node does not respond in 10 second, it is assumed to be offline
@@ -1079,7 +1079,7 @@ sudo reboot
 <pre><code>sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
 </code></pre>
 <p>Change the wsrep_cluster_address parameter to contain only the safe node. That is, if the 3rd node is the safe node as belowÇ</p>
-<pre><code>wsrep_cluster_address = &quot;gcomm://192.168.1.216&quot;
+<pre><code>wsrep_cluster_address = &quot;gcomm://192.168.1.223&quot;
 </code></pre>
 <p>Enable mariadb </p>
 <pre><code>sudo systemctl enable mariadb
@@ -1105,7 +1105,7 @@ sudo systemctl start mariadb
 <pre><code>sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
 </code></pre>
 <p>Change the wsrep_cluster_address parameter to original</p>
-<pre><code>wsrep_cluster_address = &quot;gcomm://192.168.1.214,192.168.1.215,192.168.1.216&quot;
+<pre><code>wsrep_cluster_address = &quot;gcomm://192.168.1.221,192.168.1.222,192.168.1.223&quot;
 </code></pre>
 <p>Restart mariadb</p>
 <pre><code>sudo systemctl restart mariadb

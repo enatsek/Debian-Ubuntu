@@ -4,7 +4,7 @@
 ## 0. Specs
 ---
 ### 0.0. Notes
-Debian 12 and Ubuntu 22.04 LTS Server has packages for different versions of Postgresql (15 and 14). 
+Debian 12 and Ubuntu 24.04 LTS Server has packages for different versions of Postgresql (15 and 16). 
 
 For the ease of following the tutorials, I prepared different versions  for Debian and Ubuntu.
 

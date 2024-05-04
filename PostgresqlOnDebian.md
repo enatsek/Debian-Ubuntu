@@ -12,12 +12,12 @@ For the ease of following the tutorials, I prepared different versions  for Debi
 Server:      
 
 - Debian 12   
-- IP: 192.168.1.174
+- IP: 192.168.1.196
 
 Workstation: 
 
 - Debian 12   
-- IP: 192.168.1.231
+- IP: 192.168.1.181
 
 ### 0.2. Resources
 <https://www.postgresql.org/docs>  
@@ -239,7 +239,7 @@ sudo cp pg_hba.conf pg_hba.conf.backup
 ### 3.1. Scenario
 - Leave postgres user as it is (will be used as DB admin)
 - Create a database named test1
-- Create a user (role) rwuser with read and write permission at all the  test1 tables. Can access only from 1 IP (192.168.1.231). 
+- Create a user (role) rwuser with read and write permission at all the  test1 tables. Can access only from 1 IP (192.168.1.181). 
 - Create a user (role) rouser with read only permissons at all the test1  tables.
 - Can access from a network (192.168.1.1/24).
 
@@ -304,7 +304,7 @@ sudo nano /etc/postgresql/15/main/pg_hba.conf
 Add following lines to the file
 
 ```
-host    test1           rwuser          192.168.1.231/32        scram-sha-256
+host    test1           rwuser          192.168.1.181/32        scram-sha-256
 host    test1           rouser          192.168.1.0/24          scram-sha-256
 ```
 
@@ -314,7 +314,7 @@ Restart our cluster
 sudo pg_ctlcluster restart 15 main
 ```
 
-### 3.5. Connection test from Workstation (192.168.1.231)
+### 3.5. Connection test from Workstation (192.168.1.181)
 **!! Run on workstation !!**
 
 Install Postgres Client to the workstation
@@ -327,7 +327,7 @@ sudo apt install postgresql-client --yes
 Connect with rwuser and test adding data (test must be successfull)
 
 ```
-psql -h 192.168.1.174 -U rwuser test1
+psql -h 192.168.1.196 -U rwuser test1
 ```
 
 Run on psql shell
@@ -341,7 +341,7 @@ Connect with rouser and test reading and adding data
 (reading test must be successfull, adding test must fail)
 
 ```
-psql -h 192.168.1.174 -U rouser test1
+psql -h 192.168.1.196 -U rouser test1
 ```
 
 Run on psql shell
@@ -498,13 +498,13 @@ You can run SQL commands at psql shell. You can also run psql commands,  some of
 
 <br>
 
-## 6. Bonus: Postgres 15 and Postgres 14 together
+## 6. Bonus: Postgres 15 and Postgres 16 together
 ---
 For testing purposes we will install Postgresql 14 on the same server. 
 
 That way we will have different postgres clusters with different versions.
 
-Debian 12 has Postgres 15 in its repositories. For Postgres 14 we need to add Postgres repositories.
+Debian 12 has Postgres 15 in its repositories. For Postgres 16 we need to add Postgres repositories.
 
 ### 6.1. Add Postgresql Repositories
 We are going to need, gpg and curl. Let's install them:
@@ -527,10 +527,10 @@ sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt \
        $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 ```
 
-### 6.2. Install Postgresql 14
+### 6.2. Install Postgresql 16
 ```
 sudo apt update
-sudo apt install postgresql-14
+sudo apt install postgresql-16
 ```
 
 ### 6.3. List clusters:
@@ -542,9 +542,9 @@ Output will be like below, now we have 3 clusters namely 14-main, 15-main, and 1
 
 ```
 Ver Cluster   Port Status Owner    Data directory                   Log file
-14  main      5434 online postgres /var/lib/postgresql/14/main      /var/..
 15  main      5432 online postgres /var/lib/postgresql/15/main      /var/..
 15  secondary 5433 online postgres /var/lib/postgresql/15/secondary /var/..
+16  main      5434 online postgres /var/lib/postgresql/16/main      /var/..
 ```
 
 ### 6.4. Connecting to the clusters with psql
@@ -560,9 +560,16 @@ Connect to the second cluster (15-secondary), remember it runs on port  5433
 sudo -u postgres psql -p 5433
 ```
 
-Connect to the third cluster (14-main), remember it runs on port 5434
+Connect to the third cluster (16-main), remember it runs on port 5434
 
 ```
 sudo -u postgres psql -p 5434
 ```
 
+
+### 6.5. Upgrade Cluster
+Upgrade 15 secondary cluster to Postgresql 16 
+
+```
+sudo pg_upgradecluster 15 secondary -v 16
+```

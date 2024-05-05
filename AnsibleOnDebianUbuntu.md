@@ -13,7 +13,7 @@ This tutorial is about using Ansible on Debian and Ubuntu servers, but I  believ
 I am not an expert of Ansible. Actually I prepared this tutorial while I  was learning it. 
 
 ### 0.1. Workstation: 
-wrk -> Debian 12 or Ubuntu 22.04 LTS Desktop
+wrk -> Debian 12 or Ubuntu 24.04 LTS Desktop
 
 **Hint:** You can use server editions, because Ansible does not need any graphical UI.
 
@@ -22,8 +22,8 @@ Local Virtual Servers:
 
 debian12 -> Debian 12 Server  
 debian11 -> Debian 11 Server  
+ubuntu24 -> Ubuntu 24.04 LTS Server  
 ubuntu22 -> Ubuntu 22.04 LTS Server  
-ubuntu20 -> Ubuntu 20.04 LTS Server  
         
 ### 0.3. Resources:
 Book: 978-1-4842-1660-6 Ansible From Beginner to Pro by Michael Heap  
@@ -78,7 +78,7 @@ sudo su ansible
 Create SSH keys, leave passfield empty
 
 ```
-ssh-keygen
+ssh-keygen -t rsa
 ```
 
 Copy ansible user's SSH key to the servers
@@ -86,8 +86,8 @@ Copy ansible user's SSH key to the servers
 ```
 ssh-copy-id -i ~/.ssh/id_rsa.pub debian12
 ssh-copy-id -i ~/.ssh/id_rsa.pub debian11
+ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu24
 ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu22
-ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu20
 ```
 
 Now we can ssh to servers with ansible user without password
@@ -173,7 +173,7 @@ I prefer placing all ansible files on /home/ansible/ansible
 mkdir /home/ansible/ansible
 ```
 
-And a subdirectory for playbook (explained later)
+And a subdirectory for playbooks (explained later)
 
 ```
 mkdir /home/ansible/ansible/playbooks
@@ -207,8 +207,8 @@ debian12
 debian11
 
 [ubuntu]
+ubuntu24
 ubuntu22
-ubuntu20
 ```
 
 As in our example, you can group hosts
@@ -270,8 +270,8 @@ nano /home/ansible/ansible/inventory/inventory1
 Contents:
 
 ```
+ubuntu24
 ubuntu22
-ubuntu20
 ```
 
 ```
@@ -282,7 +282,7 @@ Contents:
 
 ```
 debian12
-debian10
+debian11
 ```
 
 ```
@@ -303,7 +303,7 @@ Fill as below:
 
 ```
 #!/usr/bin/env python3
-print('{"ubuntu": {"hosts" : ["ubuntu22", "ubuntu20"]}}')
+print('{"ubuntu": {"hosts" : ["ubuntu24", "ubuntu22"]}}')
 ```
 
 ```
@@ -325,8 +325,8 @@ debian12
 debian11
 
 [ubuntu]
+ubuntu24
 ubuntu22
-ubuntu20
 
 [ubuntuanddebian:children]
 ubuntu
@@ -346,8 +346,8 @@ debian12
 debian11
 
 [ubuntu]
+ubuntu24
 ubuntu22
-ubuntu20
 
 [ubuntu:vars]
 role="dbserver"

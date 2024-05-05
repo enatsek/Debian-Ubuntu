@@ -852,14 +852,14 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <p>This tutorial is about using Ansible on Debian and Ubuntu servers, but I  believe you can apply most of the examples to other distributions.</p>
 <p>I am not an expert of Ansible. Actually I prepared this tutorial while I  was learning it. </p>
 <h3>0.1. Workstation:</h3>
-<p>wrk -&gt; Debian 12 or Ubuntu 22.04 LTS Desktop</p>
+<p>wrk -&gt; Debian 12 or Ubuntu 24.04 LTS Desktop</p>
 <p><strong>Hint:</strong> You can use server editions, because Ansible does not need any graphical UI.</p>
 <h3>0.2. Servers:</h3>
 <p>Local Virtual Servers:</p>
 <p>debian12 -&gt; Debian 12 Server<br />
 debian11 -&gt; Debian 11 Server<br />
-ubuntu22 -&gt; Ubuntu 22.04 LTS Server<br />
-ubuntu20 -&gt; Ubuntu 20.04 LTS Server  </p>
+ubuntu24 -&gt; Ubuntu 24.04 LTS Server<br />
+ubuntu22 -&gt; Ubuntu 22.04 LTS Server  </p>
 <h3>0.3. Resources:</h3>
 <p>Book: 978-1-4842-1660-6 Ansible From Beginner to Pro by Michael Heap<br />
 Book: 978-1-78899-756-0 Mastering Ubuntu Server Second Edition by Jay LaCroix<br />
@@ -892,13 +892,13 @@ sudo passwd ansible
 <pre><code>sudo su ansible
 </code></pre>
 <p>Create SSH keys, leave passfield empty</p>
-<pre><code>ssh-keygen
+<pre><code>ssh-keygen -t rsa
 </code></pre>
 <p>Copy ansible user's SSH key to the servers</p>
 <pre><code>ssh-copy-id -i ~/.ssh/id_rsa.pub debian12
 ssh-copy-id -i ~/.ssh/id_rsa.pub debian11
+ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu24
 ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu22
-ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu20
 </code></pre>
 <p>Now we can ssh to servers with ansible user without password</p>
 <h3>1.4. On all servers, configure ansible user to sudo without password</h3>
@@ -952,7 +952,7 @@ forks = 5
 <p>I prefer placing all ansible files on /home/ansible/ansible</p>
 <pre><code>mkdir /home/ansible/ansible
 </code></pre>
-<p>And a subdirectory for playbook (explained later)</p>
+<p>And a subdirectory for playbooks (explained later)</p>
 <pre><code>mkdir /home/ansible/ansible/playbooks
 </code></pre>
 <h3>2.3. Inventory File</h3>
@@ -972,8 +972,8 @@ debian12
 debian11
 
 [ubuntu]
+ubuntu24
 ubuntu22
-ubuntu20
 </code></pre>
 <p>As in our example, you can group hosts</p>
 <h3>2.4. A simple test</h3>
@@ -1011,14 +1011,14 @@ mkdir /home/ansible/ansible/inventory
 nano /home/ansible/ansible/inventory/inventory1
 </code></pre>
 <p>Contents:</p>
-<pre><code>ubuntu22
-ubuntu20
+<pre><code>ubuntu24
+ubuntu22
 </code></pre>
 <pre><code>nano /home/ansible/ansible/inventory/inventory2
 </code></pre>
 <p>Contents:</p>
 <pre><code>debian12
-debian10
+debian11
 </code></pre>
 <pre><code>ansible all -i /home/ansible/ansible/inventory -m ping
 </code></pre>
@@ -1030,7 +1030,7 @@ nano /home/ansible/ansible/inventory.py
 </code></pre>
 <p>Fill as below:</p>
 <pre><code>#!/usr/bin/env python3
-print('{&quot;ubuntu&quot;: {&quot;hosts&quot; : [&quot;ubuntu22&quot;, &quot;ubuntu20&quot;]}}')
+print('{&quot;ubuntu&quot;: {&quot;hosts&quot; : [&quot;ubuntu24&quot;, &quot;ubuntu22&quot;]}}')
 </code></pre>
 <pre><code>chmod +x /home/ansible/ansible/inventory.py
 ansible all -i /home/ansible/ansible/inventory.py -m ping
@@ -1045,8 +1045,8 @@ debian12
 debian11
 
 [ubuntu]
+ubuntu24
 ubuntu22
-ubuntu20
 
 [ubuntuanddebian:children]
 ubuntu
@@ -1061,8 +1061,8 @@ debian12
 debian11
 
 [ubuntu]
+ubuntu24
 ubuntu22
-ubuntu20
 
 [ubuntu:vars]
 role=&quot;dbserver&quot;

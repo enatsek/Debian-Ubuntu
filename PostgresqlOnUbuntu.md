@@ -4,18 +4,18 @@
 ## 0. Specs
 ---
 ### 0.0. Notes
-Debian 12 and Ubuntu 22.04 LTS Server has packages for different versions of Postgresql (15 and 14). 
+Debian 12 and Ubuntu 24.04 LTS Server has packages for different versions of Postgresql (15 and 16). 
 
 For the ease of following the tutorials, I prepared different versions  for Debian and Ubuntu.
 
 ### 0.1. Infrastructure
 Server:
-- Ubuntu 22.04 LTS Server 
-- IP: 192.168.1.182
+- Ubuntu 24.04 LTS Server 
+- IP: 192.168.1.221
 
 Workstation: 
-- Ubuntu 22.04 LTS Server 
-- IP: 192.168.1.232
+- Ubuntu 24.04 LTS Server 
+- IP: 192.168.1.182
 
 ### 0.2. Resources
 <https://www.postgresql.org/docs>  
@@ -69,7 +69,7 @@ sudo apt update
 
 Install necessary packages
 
-Ubuntu 22.04 installs Postgresql version 14
+Ubuntu 24.04 installs Postgresql version 16
 
 ```
 sudo apt install --yes postgresql
@@ -94,44 +94,44 @@ Sample output:
 
 ```
 Ver Cluster Port Status Owner    Data directory              Log file
-14  main    5432 online postgres /var/lib/postgresql/14/main /var/log/...
+16  main    5432 online postgres /var/lib/postgresql/16/main /var/log/...
 ```
 
-Values of Ver anf Cluster is important for us. We'll use them for  pg_ctlcluster command. Ours are 14 and main.
+Values of Ver anf Cluster is important for us. We'll use them for  pg_ctlcluster command. Ours are 16 and main.
 
 pg_ctlcluster is a wrapper command for the original pg_ctl command of  postgres.
 
 See the status of a cluster:
 
 ```
-sudo pg_ctlcluster 14 main status
+sudo pg_ctlcluster 16 main status
 ```
 
 Start a cluster
 
 ```
-sudo pg_ctlcluster 14 main start
+sudo pg_ctlcluster 16 main start
 ```
 
 Stop a cluster
 
 ```
-sudo pg_ctlcluster 14 main stop
+sudo pg_ctlcluster 16 main stop
 ```
 
 There are 3 modes of stop: smart (wait for connections to stop), fast  (stop all connections), immediate (immediately). immediate option may  cause database to crash. Default mode is fast.
 
 ```
-sudo pg_ctlcluster 14 main stop -m smart
-sudo pg_ctlcluster 14 main stop -m fast
-sudo pg_ctlcluster 14 main stop -m immediate
+sudo pg_ctlcluster 16 main stop -m smart
+sudo pg_ctlcluster 16 main stop -m fast
+sudo pg_ctlcluster 16 main stop -m immediate
 ```
 
 Restart, reload a cluster
 
 ```
-sudo pg_ctlcluster 14 main restart
-sudo pg_ctlcluster 14 main reload
+sudo pg_ctlcluster 16 main restart
+sudo pg_ctlcluster 16 main reload
 ```
 
 ### 2.3. Adding and Deleting Clusters
@@ -139,34 +139,34 @@ There might be more than 1 clusters on a server. At the first sight it  may not 
 
 Currently we only have main cluster. We will add a second one with the  name second. 
 
-Create another Postgres 14 cluster with the name second
+Create another Postgres 16 cluster with the name second
 
 ```
-sudo pg_createcluster 14 second
+sudo pg_createcluster 16 second
 ```
 
 Start it
 
 ```
-sudo pg_ctlcluster 14 second start
+sudo pg_ctlcluster 16 second start
 ```
 
-Create another Postgres 14 cluster with the name third and start it
+Create another Postgres 16 cluster with the name third and start it
 
 ```
-sudo pg_createcluster 14 third --start
+sudo pg_createcluster 16 third --start
 ```
 
 Delete (drop) third cluster
 
 ```
-sudo pg_dropcluster 14 third --stop
+sudo pg_dropcluster 16 third --stop
 ```
 
 Rename second cluster to secondary
 
 ```
-sudo pg_renamecluster 14 second secondary
+sudo pg_renamecluster 16 second secondary
 ```
 
 List clusters:
@@ -179,14 +179,14 @@ Sample output:
 
 ```
 Ver Cluster   Port Status Owner    Data directory                   Log file
-14  main      5432 online postgres /var/lib/postgresql/14/main      /var/log/...
-14  secondary 5433 online postgres /var/lib/postgresql/14/secondary /var/log/...
+16  main      5432 online postgres /var/lib/postgresql/16/main      /var/log/...
+16  secondary 5433 online postgres /var/lib/postgresql/16/secondary /var/log/...
 ```
 
-Here we can understand that, our 14 main cluster listens on port 5432  (default postgres listening port), and 14 secondary cluster listens on  port 5433.
+Here we can understand that, our 16 main cluster listens on port 5432  (default postgres listening port), and 16 secondary cluster listens on  port 5433.
 
 Directory of configuration files for both clusters:  
-/var/lib/postgresql/14/main/ and /var/lib/postgresql/14/secondary.
+/var/lib/postgresql/16/main/ and /var/lib/postgresql/16/secondary.
 
 ### 2.4. Service vs Cluster Management
 Postgres and its clusters can be managed by systemctl command too.
@@ -197,10 +197,10 @@ Stop postgres (all the clusters):
 sudo systemctl stop postgresql
 ```
 
-Stop 14-main postgres cluster
+Stop 16-main postgres cluster
 
 ```
-sudo systemctl stop postgresql@14-main
+sudo systemctl stop postgresql@16-main
 ```
 
 Other systemctl options (like restart, stop, enable, disable, reload) can be used too.
@@ -214,7 +214,7 @@ sudo -u postgres psql
 
 Type exit to quit from postgres shell
 
-As you may guess, you logged in to 14 Main cluster. To login 14 secondary cluster:
+As you may guess, you logged in to 16 Main cluster. To login 16 secondary cluster:
 
 ```
 sudo -u postgres psql -p 5433
@@ -230,7 +230,7 @@ We will implement a scenario for user management.
 
 ### 3.0. Backup Configuration Files
 ```
-cd /etc/postgresql/14/main/
+cd /etc/postgresql/16/main/
 sudo cp postgresql.conf postgresql.conf.backup
 sudo cp pg_hba.conf pg_hba.conf.backup
 ```
@@ -238,7 +238,7 @@ sudo cp pg_hba.conf pg_hba.conf.backup
 ### 3.1. Scenario
 - Leave postgres user as it is (will be used as DB admin)
 - Create a database named test1
-- Create a user (role) rwuser with read and write permission at all the  test1 tables. Can access only from 1 IP (192.168.1.232). 
+- Create a user (role) rwuser with read and write permission at all the  test1 tables. Can access only from 1 IP (192.168.1.182). 
 - Create a user (role) rouser with read only permissons at all the test1  tables.
 - Can access from a network (192.168.1.1/24).
 
@@ -279,7 +279,7 @@ exit
 Edit postgres.conf file to allow network connections
 
 ```
-sudo nano /etc/postgresql/14/main/postgresql.conf
+sudo nano /etc/postgresql/16/main/postgresql.conf
 ```
 Uncomment and change the line below (around line 60)
 
@@ -296,24 +296,24 @@ listen_addresses = '*'                  # what IP address(es) to listen on;
 Edit pg_hba.conf file to allow rwuser and rouser to allow connections  from specified ip/networks.
 
 ```
-sudo nano /etc/postgresql/14/main/pg_hba.conf
+sudo nano /etc/postgresql/16/main/pg_hba.conf
 ```
 
 Add following lines to the file
 
 ```
-host    test1           rwuser          192.168.1.232/32        scram-sha-256
+host    test1           rwuser          192.168.1.182/32        scram-sha-256
 host    test1           rouser          192.168.1.0/24          scram-sha-256
 ```
 
 Restart our cluster
 
 ```
-sudo pg_ctlcluster restart 14 main
+sudo pg_ctlcluster restart 16 main
 ```
 
-### 3.5. Connection test from Workstation (192.168.1.232)
-**!! Run on workstation !!**
+### 3.5. Connection test from Workstation (192.168.1.182)
+**!! Run on the workstation !!**
 
 Install Postgres Client to the workstation
 
@@ -325,7 +325,7 @@ sudo apt install postgresql-client --yes
 Connect with rwuser and test adding data (test must be successfull)
 
 ```
-psql -h 192.168.1.182 -U rwuser test1
+psql -h 192.168.1.221 -U rwuser test1
 ```
 
 Run on psql shell
@@ -339,7 +339,7 @@ Connect with rouser and test reading and adding data
 (reading test must be successfull, adding test must fail)
 
 ```
-psql -h 192.168.1.182 -U rouser test1
+psql -h 192.168.1.221 -U rouser test1
 ```
 
 Run on psql shell
@@ -373,14 +373,14 @@ Move to /tmp directory
 cd /tmp
 ```
 
-Backup test1 database on 14 main cluster to test1.pg file
+Backup test1 database on 16 main cluster to test1.pg file
 
 ```
 sudo -u postgres pg_dump test1 > /tmp/test1.pg
 ```
 
-Backup postgres database on 14 secondary cluster to sdb.pg  
-We need to specify the port of 14 secondary cluster
+Backup postgres database on 16 secondary cluster to sdb.pg  
+We need to specify the port of 16 secondary cluster
 
 ```
 sudo -u postgres pg_dump -p 5433 postgres > /tmp/sdb.pg
@@ -393,7 +393,7 @@ You can restore a database dump with psql command:
 psql dbname < dumpfile
 ```
 
-Restore test1 database back on 14 main cluster
+Restore test1 database back on 16 main cluster
 
 ```
 sudo -u postgres psql test1 < /tmp/test1.pg
@@ -402,7 +402,7 @@ sudo -u postgres psql test1 < /tmp/test1.pg
 Lets restore test1 db to secondary cluster  
 We need an empty test1 database. 
 
-Create test1 database on 14 secondary
+Create test1 database on 16 secondary
 
 ```
 sudo -u postgres createdb -p 5433 test1
@@ -428,13 +428,13 @@ When we backup a cluster, all clusterwide data including users and  access right
 
 Cluster dump is made by `pg_dumpall` command. This command too has the  same connection parameters as psql command. 
 
-Backup 14 main cluster to main.pg file
+Backup 16 main cluster to main.pg file
 
 ```
 sudo -u postgres pg_dumpall > /tmp/main.pg
 ```
 
-Restore main.pg file to 14 secondary cluster
+Restore main.pg file to 16 secondary cluster
 
 ```
 sudo -u postgres psql -p 5433 -f /tmp/main.pg
@@ -494,13 +494,13 @@ You can run SQL commands at psql shell. You can also run psql commands,  some of
 
 <br>
 
-## 6. Bonus: Postgres 14 and Postgres 15 together
+## 6. Bonus: Postgres 16 and Postgres 15 together
 ---
 For testing purposes we will install Postgresql 15 on the same server. 
 
 That way we will have different postgres clusters with different versions.
 
-Ubuntu 22.04 has Postgres 14 in its repositories. For Postgres 15 we need to add a PPA.
+Ubuntu 24.04 has Postgres 16 in its repositories. For Postgres 15 we need to add a PPA.
 
 ### 6.1. Add Postgresql PPA
 Add keys
@@ -531,23 +531,23 @@ sudo apt install postgresql-15
 pg_lsclusters
 ```
 
-Output will be like below, now we have 3 clusters namely 14-main, 14-secondary, and 15-main running on the same computer:
+Output will be like below, now we have 3 clusters namely 16-main, 16-secondary, and 15-main running on the same computer:
 
 ```
 Ver Cluster   Port Status Owner    Data directory                   Log file
-14  main      5432 online postgres /var/lib/postgresql/14/main      /var/log/...
-14  secondary 5433 online postgres /var/lib/postgresql/14/secondary /var/log/...
-15  main      5433 online postgres /var/lib/postgresql/15/main      /var/log/...
+16  main      5432 online postgres /var/lib/postgresql/14/main      /var/log/...
+16  secondary 5433 online postgres /var/lib/postgresql/14/secondary /var/log/...
+15  main      5434 online postgres /var/lib/postgresql/15/main      /var/log/...
 ```
 
 ### 6.4. Connecting to the clusters with psql
-Connect to the first cluster (14-main), remember it runs on port 5432
+Connect to the first cluster (16-main), remember it runs on port 5432
 
 ```
 sudo -u postgres psql -p 5432
 ```
 
-Connect to the second cluster (14-secondary), remember it runs on port  5433
+Connect to the second cluster (16-secondary), remember it runs on port  5433
 
 ```
 sudo -u postgres psql -p 5433

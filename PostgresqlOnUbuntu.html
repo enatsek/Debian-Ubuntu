@@ -847,15 +847,15 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h2>0. Specs</h2>
 <hr />
 <h3>0.0. Notes</h3>
-<p>Debian 12 and Ubuntu 22.04 LTS Server has packages for different versions of Postgresql (15 and 14). </p>
+<p>Debian 12 and Ubuntu 24.04 LTS Server has packages for different versions of Postgresql (15 and 16). </p>
 <p>For the ease of following the tutorials, I prepared different versions  for Debian and Ubuntu.</p>
 <h3>0.1. Infrastructure</h3>
 <p>Server:
-- Ubuntu 22.04 LTS Server 
-- IP: 192.168.1.182</p>
+- Ubuntu 24.04 LTS Server 
+- IP: 192.168.1.221</p>
 <p>Workstation: 
-- Ubuntu 22.04 LTS Server 
-- IP: 192.168.1.232</p>
+- Ubuntu 24.04 LTS Server 
+- IP: 192.168.1.182</p>
 <h3>0.2. Resources</h3>
 <p><a href="https://www.postgresql.org/docs">https://www.postgresql.org/docs</a><br />
 <a href="https://www.postgresqltutorial.com">https://www.postgresqltutorial.com</a><br />
@@ -892,7 +892,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <pre><code>sudo apt update
 </code></pre>
 <p>Install necessary packages</p>
-<p>Ubuntu 22.04 installs Postgresql version 14</p>
+<p>Ubuntu 24.04 installs Postgresql version 16</p>
 <pre><code>sudo apt install --yes postgresql
 </code></pre>
 <p>Check status</p>
@@ -905,64 +905,64 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 </code></pre>
 <p>Sample output:</p>
 <pre><code>Ver Cluster Port Status Owner    Data directory              Log file
-14  main    5432 online postgres /var/lib/postgresql/14/main /var/log/...
+16  main    5432 online postgres /var/lib/postgresql/16/main /var/log/...
 </code></pre>
-<p>Values of Ver anf Cluster is important for us. We'll use them for  pg_ctlcluster command. Ours are 14 and main.</p>
+<p>Values of Ver anf Cluster is important for us. We'll use them for  pg_ctlcluster command. Ours are 16 and main.</p>
 <p>pg_ctlcluster is a wrapper command for the original pg_ctl command of  postgres.</p>
 <p>See the status of a cluster:</p>
-<pre><code>sudo pg_ctlcluster 14 main status
+<pre><code>sudo pg_ctlcluster 16 main status
 </code></pre>
 <p>Start a cluster</p>
-<pre><code>sudo pg_ctlcluster 14 main start
+<pre><code>sudo pg_ctlcluster 16 main start
 </code></pre>
 <p>Stop a cluster</p>
-<pre><code>sudo pg_ctlcluster 14 main stop
+<pre><code>sudo pg_ctlcluster 16 main stop
 </code></pre>
 <p>There are 3 modes of stop: smart (wait for connections to stop), fast  (stop all connections), immediate (immediately). immediate option may  cause database to crash. Default mode is fast.</p>
-<pre><code>sudo pg_ctlcluster 14 main stop -m smart
-sudo pg_ctlcluster 14 main stop -m fast
-sudo pg_ctlcluster 14 main stop -m immediate
+<pre><code>sudo pg_ctlcluster 16 main stop -m smart
+sudo pg_ctlcluster 16 main stop -m fast
+sudo pg_ctlcluster 16 main stop -m immediate
 </code></pre>
 <p>Restart, reload a cluster</p>
-<pre><code>sudo pg_ctlcluster 14 main restart
-sudo pg_ctlcluster 14 main reload
+<pre><code>sudo pg_ctlcluster 16 main restart
+sudo pg_ctlcluster 16 main reload
 </code></pre>
 <h3>2.3. Adding and Deleting Clusters</h3>
 <p>There might be more than 1 clusters on a server. At the first sight it  may not make sense, but for example if you need of 2 different admins for  2 different databases this solution could be very useful.</p>
 <p>Currently we only have main cluster. We will add a second one with the  name second. </p>
-<p>Create another Postgres 14 cluster with the name second</p>
-<pre><code>sudo pg_createcluster 14 second
+<p>Create another Postgres 15 cluster with the name second</p>
+<pre><code>sudo pg_createcluster 16 second
 </code></pre>
 <p>Start it</p>
-<pre><code>sudo pg_ctlcluster 14 second start
+<pre><code>sudo pg_ctlcluster 16 second start
 </code></pre>
-<p>Create another Postgres 14 cluster with the name third and start it</p>
-<pre><code>sudo pg_createcluster 14 third --start
+<p>Create another Postgres 16 cluster with the name third and start it</p>
+<pre><code>sudo pg_createcluster 16 third --start
 </code></pre>
 <p>Delete (drop) third cluster</p>
-<pre><code>sudo pg_dropcluster 14 third --stop
+<pre><code>sudo pg_dropcluster 16 third --stop
 </code></pre>
 <p>Rename second cluster to secondary</p>
-<pre><code>sudo pg_renamecluster 14 second secondary
+<pre><code>sudo pg_renamecluster 16 second secondary
 </code></pre>
 <p>List clusters:</p>
 <pre><code>pg_lsclusters
 </code></pre>
 <p>Sample output:</p>
 <pre><code>Ver Cluster   Port Status Owner    Data directory                   Log file
-14  main      5432 online postgres /var/lib/postgresql/14/main      /var/log/...
-14  secondary 5433 online postgres /var/lib/postgresql/14/secondary /var/log/...
+16  main      5432 online postgres /var/lib/postgresql/16/main      /var/log/...
+16  secondary 5433 online postgres /var/lib/postgresql/16/secondary /var/log/...
 </code></pre>
-<p>Here we can understand that, our 14 main cluster listens on port 5432  (default postgres listening port), and 14 secondary cluster listens on  port 5433.</p>
+<p>Here we can understand that, our 16 main cluster listens on port 5432  (default postgres listening port), and 16 secondary cluster listens on  port 5433.</p>
 <p>Directory of configuration files for both clusters:<br />
-/var/lib/postgresql/14/main/ and /var/lib/postgresql/14/secondary.</p>
+/var/lib/postgresql/16/main/ and /var/lib/postgresql/16/secondary.</p>
 <h3>2.4. Service vs Cluster Management</h3>
 <p>Postgres and its clusters can be managed by systemctl command too.</p>
 <p>Stop postgres (all the clusters):</p>
 <pre><code>sudo systemctl stop postgresql
 </code></pre>
-<p>Stop 14-main postgres cluster</p>
-<pre><code>sudo systemctl stop postgresql@14-main
+<p>Stop 16-main postgres cluster</p>
+<pre><code>sudo systemctl stop postgresql@16-main
 </code></pre>
 <p>Other systemctl options (like restart, stop, enable, disable, reload) can be used too.</p>
 <h3>2.5. Login to Postgres shell</h3>
@@ -970,7 +970,7 @@ sudo pg_ctlcluster 14 main reload
 <pre><code>sudo -u postgres psql
 </code></pre>
 <p>Type exit to quit from postgres shell</p>
-<p>As you may guess, you logged in to 14 Main cluster. To login 14 secondary cluster:</p>
+<p>As you may guess, you logged in to 16 Main cluster. To login 16 secondary cluster:</p>
 <pre><code>sudo -u postgres psql -p 5433
 </code></pre>
 <p><br></p>
@@ -979,7 +979,7 @@ sudo pg_ctlcluster 14 main reload
 <p>After installing Postgres, postgres user is able to login psql shell with Linux authentication. No other users are defined and noone can login  remotely.</p>
 <p>We will implement a scenario for user management.</p>
 <h3>3.0. Backup Configuration Files</h3>
-<pre><code>cd /etc/postgresql/14/main/
+<pre><code>cd /etc/postgresql/16/main/
 sudo cp postgresql.conf postgresql.conf.backup
 sudo cp pg_hba.conf pg_hba.conf.backup
 </code></pre>
@@ -987,7 +987,7 @@ sudo cp pg_hba.conf pg_hba.conf.backup
 <ul>
 <li>Leave postgres user as it is (will be used as DB admin)</li>
 <li>Create a database named test1</li>
-<li>Create a user (role) rwuser with read and write permission at all the  test1 tables. Can access only from 1 IP (192.168.1.232). </li>
+<li>Create a user (role) rwuser with read and write permission at all the  test1 tables. Can access only from 1 IP (192.168.1.182). </li>
 <li>Create a user (role) rouser with read only permissons at all the test1  tables.</li>
 <li>Can access from a network (192.168.1.1/24).</li>
 </ul>
@@ -1009,11 +1009,11 @@ sudo -u postgres createuser --pwprompt rouser
 INSERT INTO Employees VALUES ('Joe Smith', '26', 'Ninja');
 GRANT ALL ON ALL TABLES IN SCHEMA public to rwuser;
 GRANT SELECT ON ALL TABLES IN SCHEMA public to rouser;
-exit
+\q
 </code></pre>
 <h3>3.4. Configure Postgres to allow remote connections</h3>
 <p>Edit postgres.conf file to allow network connections</p>
-<pre><code>sudo nano /etc/postgresql/14/main/postgresql.conf
+<pre><code>sudo nano /etc/postgresql/16/main/postgresql.conf
 </code></pre>
 <p>Uncomment and change the line below (around line 60)</p>
 <pre><code>#listen_addresses = 'localhost'         # what IP address(es) to listen on;
@@ -1022,36 +1022,36 @@ exit
 <pre><code>listen_addresses = '*'                  # what IP address(es) to listen on;
 </code></pre>
 <p>Edit pg_hba.conf file to allow rwuser and rouser to allow connections  from specified ip/networks.</p>
-<pre><code>sudo nano /etc/postgresql/14/main/pg_hba.conf
+<pre><code>sudo nano /etc/postgresql/16/main/pg_hba.conf
 </code></pre>
 <p>Add following lines to the file</p>
-<pre><code>host    test1           rwuser          192.168.1.232/32        scram-sha-256
+<pre><code>host    test1           rwuser          192.168.1.182/32        scram-sha-256
 host    test1           rouser          192.168.1.0/24          scram-sha-256
 </code></pre>
 <p>Restart our cluster</p>
-<pre><code>sudo pg_ctlcluster restart 14 main
+<pre><code>sudo pg_ctlcluster restart 16 main
 </code></pre>
-<h3>3.5. Connection test from Workstation (192.168.1.232)</h3>
+<h3>3.5. Connection test from Workstation (192.168.1.182)</h3>
 <p><strong>!! Run on workstation !!</strong></p>
 <p>Install Postgres Client to the workstation</p>
 <pre><code>sudo apt update
 sudo apt install postgresql-client --yes    
 </code></pre>
 <p>Connect with rwuser and test adding data (test must be successfull)</p>
-<pre><code>psql -h 192.168.1.182 -U rwuser test1
+<pre><code>psql -h 192.168.1.221 -U rwuser test1
 </code></pre>
 <p>Run on psql shell</p>
 <pre><code>INSERT INTO Employees VALUES ('John Doe', '33', 'Kedi');
-exit
+\q
 </code></pre>
 <p>Connect with rouser and test reading and adding data<br />
 (reading test must be successfull, adding test must fail)</p>
-<pre><code>psql -h 192.168.1.182 -U rouser test1
+<pre><code>psql -h 192.168.1.221 -U rouser test1
 </code></pre>
 <p>Run on psql shell</p>
 <pre><code>SELECT * from Employees;
 INSERT INTO Employees VALUES ('Halim Selim', '41', 'Hirsiz');
-exit
+\q
 </code></pre>
 <p>If you try to use psql from another workstation in 192.168.1.0/24  network, you will see that rwuser cannot connect and rouser can connect.</p>
 <p><br></p>
@@ -1067,23 +1067,23 @@ exit
 <p>Move to /tmp directory</p>
 <pre><code>cd /tmp
 </code></pre>
-<p>Backup test1 database on 14 main cluster to test1.pg file</p>
+<p>Backup test1 database on 16 main cluster to test1.pg file</p>
 <pre><code>sudo -u postgres pg_dump test1 &gt; /tmp/test1.pg
 </code></pre>
-<p>Backup postgres database on 14 secondary cluster to sdb.pg<br />
-We need to specify the port of 14 secondary cluster</p>
+<p>Backup postgres database on 16 secondary cluster to sdb.pg<br />
+We need to specify the port of 16 secondary cluster</p>
 <pre><code>sudo -u postgres pg_dump -p 5433 postgres &gt; /tmp/sdb.pg
 </code></pre>
 <h3>4.2. Restore a database</h3>
 <p>You can restore a database dump with psql command:</p>
 <pre><code>psql dbname &lt; dumpfile
 </code></pre>
-<p>Restore test1 database back on 14 main cluster</p>
+<p>Restore test1 database back on 16 main cluster</p>
 <pre><code>sudo -u postgres psql test1 &lt; /tmp/test1.pg
 </code></pre>
-<p>Lets restore test1 db to secondary cluster<br />
+<p>Let's restore test1 db to secondary cluster<br />
 We need an empty test1 database. </p>
-<p>Create test1 database on 14 secondary</p>
+<p>Create test1 database on 16 secondary</p>
 <pre><code>sudo -u postgres createdb -p 5433 test1
 </code></pre>
 <p>Create users rwuser and rouser on secondary cluster.   </p>
@@ -1097,10 +1097,10 @@ sudo -u postgres createuser -p 5433 --pwprompt rouser
 <h3>4.3. Backup and Restore Whole Cluster</h3>
 <p>When we backup a cluster, all clusterwide data including users and  access rights are backed up too. But remember, you have to change the  configuration files by yourself.</p>
 <p>Cluster dump is made by <code>pg_dumpall</code> command. This command too has the  same connection parameters as psql command. </p>
-<p>Backup 14 main cluster to main.pg file</p>
+<p>Backup 16 main cluster to main.pg file</p>
 <pre><code>sudo -u postgres pg_dumpall &gt; /tmp/main.pg
 </code></pre>
-<p>Restore main.pg file to 14 secondary cluster</p>
+<p>Restore main.pg file to 16 secondary cluster</p>
 <pre><code>sudo -u postgres psql -p 5433 -f /tmp/main.pg
 </code></pre>
 <p><br></p>
@@ -1137,11 +1137,11 @@ failed: FATAL:  role &quot;exforge&quot; does not exist
 <li>\?    psql command help-</li>
 </ul>
 <p><br></p>
-<h2>6. Bonus: Postgres 14 and Postgres 15 together</h2>
+<h2>6. Bonus: Postgres 16 and Postgres 15 together</h2>
 <hr />
 <p>For testing purposes we will install Postgresql 15 on the same server. </p>
 <p>That way we will have different postgres clusters with different versions.</p>
-<p>Ubuntu 22.04 has Postgres 14 in its repositories. For Postgres 15 we need to add a PPA.</p>
+<p>Ubuntu 24.04 has Postgres 16 in its repositories. For Postgres 15 we need to add a PPA.</p>
 <h3>6.1. Add Postgresql PPA</h3>
 <p>Add keys</p>
 <pre><code>curl -fSsL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
@@ -1151,41 +1151,31 @@ failed: FATAL:  role &quot;exforge&quot; does not exist
 <p>Add PPA</p>
 <pre><code>echo deb [arch=amd64,arm64,ppc64el \
     signed-by=/usr/share/keyrings/postgresql.gpg] \
-    http://apt.postgresql.org/pub/repos/apt/ jammy-pgdg main \
+    http://apt.postgresql.org/pub/repos/apt/ noble-pgdg main \
     | sudo tee -a /etc/apt/sources.list.d/postgresql.list
 </code></pre>
 <h3>6.2. Install Postgresql 15</h3>
 <pre><code>sudo apt update
-sudo apt install postgresql-15
+sudo apt install -y postgresql-15
 </code></pre>
 <h3>6.3. List clusters:</h3>
 <pre><code>pg_lsclusters
 </code></pre>
-<p>Output will be like below, now we have 3 clusters namely 14-main, 14-secondary, and 15-main running on the same computer:</p>
+<p>Output will be like below, now we have 3 clusters namely 16-main, 16-secondary, and 15-main running on the same computer:</p>
 <pre><code>Ver Cluster   Port Status Owner    Data directory                   Log file
-14  main      5432 online postgres /var/lib/postgresql/14/main      /var/log/...
-14  secondary 5433 online postgres /var/lib/postgresql/14/secondary /var/log/...
-15  main      5433 online postgres /var/lib/postgresql/15/main      /var/log/...
+15  main      5434 online postgres /var/lib/postgresql/15/main      /var/log/...
+16  main      5432 online postgres /var/lib/postgresql/16/main      /var/log/...
+16  secondary 5433 online postgres /var/lib/postgresql/16/secondary /var/log/...
 </code></pre>
 <h3>6.4. Connecting to the clusters with psql</h3>
-<p>Connect to the first cluster (14-main), remember it runs on port 5432</p>
+<p>Connect to the first cluster (16-main), remember it runs on port 5432</p>
 <pre><code>sudo -u postgres psql -p 5432
 </code></pre>
-<p>Connect to the second cluster (14-secondary), remember it runs on port  5433</p>
+<p>Connect to the second cluster (16-secondary), remember it runs on port  5433</p>
 <pre><code>sudo -u postgres psql -p 5433
 </code></pre>
 <p>Connect to the third cluster (15-main), remember it runs on port 5434</p>
 <pre><code>sudo -u postgres psql -p 5434
-</code></pre>
-<h3>6.5. Drop Postgres 15 Main cluster</h3>
-<pre><code>sudo pg_dropcluster 15 main
-</code></pre>
-<p>If it is still running, a stop parameter is required</p>
-<pre><code>sudo pg_dropcluster --stop 15 main
-</code></pre>
-<h3>6.6. Upgrade Cluster</h3>
-<p>Upgrade 14 secondary cluster to Postgresql 15 </p>
-<pre><code>sudo pg_upgradecluster 14 secondary -v 15
 </code></pre><!-- HTML Footer Start -->
 
 </body>

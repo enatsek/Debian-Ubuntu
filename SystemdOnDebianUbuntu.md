@@ -269,90 +269,103 @@ For a full list of directives see:
 ### 2.1. Definition and List
 Similar to SysV init runlevel. Their purpose is to group together other  systemd units through a chain of dependencies.
 
-A fresh install Ubuntu 22.04 server has the following targets:
+A fresh install Ubuntu 24.04 server has the following targets:
 
 ```
 systemctl list-unit-files --type=target
 ```
 
 ```
-UNIT FILE                     STATE           VENDOR PRESET
-basic.target                  static          -            
-blockdev@.target              static          -            
-bluetooth.target              static          -            
-boot-complete.target          static          -            
-cloud-config.target           static          -            
-cloud-init.target             enabled-runtime enabled      
-cryptsetup-pre.target         static          -            
-cryptsetup.target             static          -            
-ctrl-alt-del.target           alias           -            
-default.target                alias           -            
-emergency.target              static          -            
-exit.target                   disabled        disabled     
-final.target                  static          -            
-first-boot-complete.target    static          -            
-friendly-recovery.target      static          -            
-getty-pre.target              static          -            
-getty.target                  static          -            
-graphical.target              static          -            
-halt.target                   disabled        disabled     
-hibernate.target              static          -            
-hybrid-sleep.target           static          -            
-initrd-fs.target              static          -            
-initrd-root-device.target     static          -            
-initrd-root-fs.target         static          -            
-initrd-switch-root.target     static          -            
-initrd-usr-fs.target          static          -            
-initrd.target                 static          -            
-kexec.target                  disabled        disabled     
-local-fs-pre.target           static          -            
-local-fs.target               static          -            
-multi-user.target             static          -            
-network-online.target         static          -            
-network-pre.target            static          -            
-network.target                static          -            
-nss-lookup.target             static          -            
-nss-user-lookup.target        static          -            
-paths.target                  static          -            
-poweroff.target               disabled        disabled     
-printer.target                static          -            
-reboot.target                 disabled        enabled      
-remote-cryptsetup.target      disabled        enabled      
-remote-fs-pre.target          static          -            
-remote-fs.target              enabled         enabled      
-remote-veritysetup.target     disabled        enabled      
-rescue-ssh.target             static          -            
-rescue.target                 static          -            
-rpcbind.target                static          -            
-runlevel0.target              alias           -            
-runlevel1.target              alias           -            
-runlevel2.target              alias           -            
-runlevel3.target              alias           -            
-runlevel4.target              alias           -            
-runlevel5.target              alias           -            
-runlevel6.target              alias           -            
-shutdown.target               static          -            
-sigpwr.target                 static          -            
-sleep.target                  static          -            
-slices.target                 static          -            
-smartcard.target              static          -            
-snapd.mounts-pre.target       static          -            
-snapd.mounts.target           static          -            
-sockets.target                static          -            
-sound.target                  static          -            
-suspend-then-hibernate.target static          -            
-suspend.target                static          -            
-swap.target                   static          -            
-sysinit.target                static          -            
-system-update-pre.target      static          -            
-system-update.target          static          -            
-time-set.target               static          -            
-time-sync.target              static          -            
-timers.target                 static          -            
-umount.target                 static          -            
-usb-gadget.target             static          -            
-veritysetup-pre.target        static          -            
-veritysetup.target            static          -            
+UNIT FILE                     STATE    PRESET  
+basic.target                  static   -       
+blockdev@.target              static   -       
+bluetooth.target              static   -       
+boot-complete.target          static   -       
+cloud-config.target           static   -       
+cloud-init.target             static   -       
+cryptsetup-pre.target         static   -       
+cryptsetup.target             static   -       
+ctrl-alt-del.target           alias    -       
+default.target                alias    -       
+emergency.target              static   -       
+exit.target                   disabled disabled
+factory-reset.target          static   -       
+final.target                  static   -       
+first-boot-complete.target    static   -       
+friendly-recovery.target      static   -       
+getty-pre.target              static   -       
+getty.target                  static   -       
+graphical.target              static   -       
+halt.target                   disabled disabled
+hibernate.target              static   -       
+hybrid-sleep.target           static   -       
+initrd-fs.target              static   -       
+initrd-root-device.target     static   -       
+initrd-root-fs.target         static   -       
+initrd-switch-root.target     static   -       
+initrd-usr-fs.target          static   -       
+initrd.target                 static   -       
+integritysetup-pre.target     static   -       
+integritysetup.target         static   -       
+kexec.target                  disabled disabled
+local-fs-pre.target           static   -       
+local-fs.target               static   -       
+multi-user.target             static   -       
+network-online.target         static   -       
+network-pre.target            static   -       
+network.target                static   -       
+nss-lookup.target             static   -       
+nss-user-lookup.target        static   -       
+paths.target                  static   -       
+poweroff.target               disabled disabled
+printer.target                static   -       
+reboot.target                 disabled enabled 
+remote-cryptsetup.target      disabled enabled 
+remote-fs-pre.target          static   -       
+remote-fs.target              enabled  enabled 
+remote-veritysetup.target     disabled enabled 
+rescue-ssh.target             static   -       
+rescue.target                 static   -       
+rpcbind.target                static   -       
+runlevel0.target              alias    -       
+runlevel1.target              alias    -       
+runlevel2.target              alias    -       
+runlevel3.target              alias    -       
+runlevel4.target              alias    -       
+runlevel5.target              alias    -       
+runlevel6.target              alias    -       
+shutdown.target               static   -       
+sigpwr.target                 static   -       
+sleep.target                  static   -       
+slices.target                 static   -       
+smartcard.target              static   -       
+snapd.mounts-pre.target       static   -       
+snapd.mounts.target           static   -       
+sockets.target                static   -       
+soft-reboot.target            static   -       
+sound.target                  static   -       
+storage-target-mode.target    static   -       
+slices.target                 static   -       
+smartcard.target              static   -       
+snapd.mounts-pre.target       static   -       
+snapd.mounts.target           static   -       
+sockets.target                static   -       
+soft-reboot.target            static   -       
+sound.target                  static   -       
+storage-target-mode.target    static   -       
+suspend-then-hibernate.target static   -       
+suspend.target                static   -       
+swap.target                   static   -       
+sysinit.target                static   -       
+system-update-pre.target      static   -       
+system-update.target          static   -       
+time-set.target               static   -       
+time-sync.target              static   -       
+timers.target                 static   -       
+umount.target                 static   -       
+usb-gadget.target             static   -       
+veritysetup-pre.target        static   -       
+veritysetup.target            static   -       
 ```
 
 Target configuration files reside in /lib/systemd/system/
@@ -795,11 +808,13 @@ Fill it as below, save and exit
 Description=IPCheck Demo Service
 Wants=network.target
 After=syslog.target network-online.target
+
 [Service]
 ExecStart=/usr/local/bin/ipcheck.sh
 Restart=on-failure
 RestartSec=20
 KillMode=process
+
 [Install]
 WantedBy=multi-user.target
 ```

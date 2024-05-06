@@ -848,10 +848,10 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h3>Info</h3>
 <p>/etc directory is a crucial part of the filesystem hierarchy. It stands for "et cetera" and is used to store system-wide configuration files and directories. </p>
 <p>These configuration files control various aspects of the operating system, services, and installed applications (virtually everything) on Linux.</p>
-<p>I tried to cover all the files and folders under /etc/ for efault install Debian 12 (without GUI) and Ubuntu 22.04 Server edition. I added some (IMHO) important packages too. </p>
+<p>I tried to cover all the files and folders under /etc/ for efault install Debian 12 (without GUI) and Ubuntu 24.04 Server edition. I added some (IMHO) important packages too. </p>
 <h3>Sources</h3>
 <p>ChatGPT (I tested everything that it says).<br />
-<a href="https://chat.openai.com/">https://chat.openai.com/</a></p>
+<a href="https://chatgpt.com/">https://chatgpt.com/</a></p>
 <p>Debian and Ubuntu man pages<br />
 <a href="https://manpages.debian.org/">https://manpages.debian.org/</a><br />
 <a href="https://manpages.ubuntu.com/">https://manpages.ubuntu.com/</a></p>
@@ -862,6 +862,18 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <p>Used by the system to prevent multiple simultaneous changes to the system password database.</p>
 <p>The lckpwdf() and ulckpwdf() functions enable modification access to the password databases through this lock file. </p>
 <p>A process first uses lckpwdf() to lock the lock file, thereby gaining exclusive rights to modify the /etc/passwd or /etc/shadow password database. </p>
+<p><br></p>
+<h2>/etc/.updated</h2>
+<hr />
+<p>File does not exists in default Debian installations. 
+File exists in default Ubuntu installations.</p>
+<p>This file is updated by systemd-update-done.service when it updates /usr directory to place a timestamp.</p>
+<p>Sample content on Ubuntu:</p>
+<pre><code># This file was created by systemd-update-done. Its only 
+# purpose is to hold a timestamp of the time this directory
+# was updated. See man:systemd-update-done.service(8).
+TIMESTAMP_NSEC=1713865027000000000
+</code></pre>
 <p><br></p>
 <h2>/etc/adduser.conf</h2>
 <hr />
@@ -1202,6 +1214,7 @@ SOCKETDIR=&quot;/var/run/screen&quot;
 </code></pre>
 <p><br></p>
 <h2>/etc/ca-certificates.conf and /etc/ca-certificates/ Folder</h2>
+<hr />
 <p>File and Folder exist in in default Debian &amp; Ubuntu installations.</p>
 <p>/etc/ca-certificates/ folder includes only an empty update.d Folder.</p>
 <p>/etc/ca-certificates.conf list the certificates to use or ignore to be installed in /etc/ssl/certs.</p>
@@ -1244,6 +1257,13 @@ Folder exists in default Ubuntu installations.</p>
 <li>templates/: Template files used by cloud-init to generate configuration files dynamically during the boot process. </li>
 </ul>
 <p><br></p>
+<h2>/etc/credstore/ and /etc/credstore.encrypted/ Folders</h2>
+<hr />
+<p>Folders do not exist in default Debian installations. 
+Folders exist in default Ubuntu installations. 
+Folders are empty in default Ubuntu installations.</p>
+<p>Used by systemd to store and load credentials (and encrypted credentials) of systemd services. </p>
+<p><br></p>
 <h2>/etc/console-setup Folder</h2>
 <hr />
 <p>Folder exists in default Debian &amp; Ubuntu installations.</p>
@@ -1251,6 +1271,7 @@ Folder exists in default Ubuntu installations.</p>
 These settings affect the text mode console (TTY) during system boot and when accessing the system without a graphical user interface.</p>
 <p><br></p>
 <h2>/etc/crontab and /etc/cron.*/ Folders</h2>
+<hr />
 <p>File and folders exist in default Debian &amp; Ubuntu installations.</p>
 <p>/etc/crontab file defines system-wide cron jobs that run at specified  intervals according to a predefined schedule.</p>
 <p>Sample content:</p>
@@ -1384,8 +1405,8 @@ Filename: /var/cache/debconf/passwords.dat
 <p>File contents on Debian 12</p>
 <pre><code>12.4
 </code></pre>
-<p>File contents on Ubuntu 22.04</p>
-<pre><code>bookworm/sid
+<p>File contents on Ubuntu 24.04</p>
+<pre><code>trixie/sid
 </code></pre>
 <p><br></p>
 <h2>/etc/default/ Folder</h2>
@@ -1508,6 +1529,63 @@ send domain-name &quot;example.com&quot;;
 
 # Set the default route metric
 default route metric 100;
+</code></pre>
+<p><br></p>
+<h2>/etc/dhcpcd.conf</h2>
+<hr />
+<p>File does not exist in default Debian installations.<br />
+File exists in default Ubuntu installations.</p>
+<p>Configuration file used by dhcpcd, a common DHCP (Dynamic Host Configuration Protocol) client for Linux systems. This file is where you configure how the dhcpcd service manages DHCP on your system. </p>
+<p>Sample Contents:</p>
+<pre><code># A sample configuration for dhcpcd.
+# See dhcpcd.conf(5) for details.
+
+# Allow users of this group to interact with dhcpcd via the control socket.
+#controlgroup wheel
+
+# Inform the DHCP server of our hostname for DDNS.
+#hostname
+
+# Use the hardware address of the interface for the Client ID.
+#clientid
+# or
+# Use the same DUID + IAID as set in DHCPv6 for DHCPv4 ClientID as per RFC4361.
+# Some non-RFC compliant DHCP servers do not reply with this set.
+# In this case, comment out duid and enable clientid above.
+duid
+
+# Persist interface configuration when dhcpcd exits.
+persistent
+
+# vendorclassid is set to blank to avoid sending the default of
+# dhcpcd-&lt;version&gt;:&lt;os&gt;:&lt;machine&gt;:&lt;platform&gt;
+vendorclassid
+
+# A list of options to request from the DHCP server.
+option domain_name_servers, domain_name, domain_search
+option classless_static_routes
+# Respect the network MTU. This is applied to DHCP routes.
+option interface_mtu
+
+# Request a hostname from the network
+option host_name
+
+# Most distributions have NTP support.
+#option ntp_servers
+
+# Rapid commit support.
+# Safe to enable by default because it requires the equivalent option set
+# on the server to actually work.
+option rapid_commit
+
+
+# A ServerID is required by RFC2131.
+require dhcp_server_identifier
+
+# Generate SLAAC address using the Hardware Address of the interface
+#slaac hwaddr
+# OR generate Stable Private IPv6 Addresses based from the DUID
+slaac private
 </code></pre>
 <p><br></p>
 <h2>/etc/dictionaries-common/ Folder</h2>
@@ -1645,6 +1723,7 @@ Folder does not exist in default Ubuntu installations.</p>
 <p>Belongs to PAM (Pluggable Authentication Module), and only programs compiled with PAM support are able to use it (primarily login systems, which subsequently start the shell or user environment).</p>
 <p>Used for setting variables for programs which are usually not started from a shell.</p>
 <p>Default Debian file is empty, default Ubuntu file contains PATH environment variable.</p>
+<p><br></p>
 <h2>/etc/ethertypes</h2>
 <hr />
 <p>File exists in default Debian &amp; Ubuntu installations.</p>
@@ -1716,6 +1795,19 @@ LoWPAN      A0ED        # LoWPAN encapsulation
 /build          buildhost[0-9].local.domain(rw)
 </code></pre>
 <p><br></p>
+<h2>/etc/fonts/ Folder</h2>
+<hr />
+<p>Folder does not exist in default Debian installations. 
+Folder exists in default Debian installations.</p>
+<p>Contains configuration files for the font system. As much as I know, server editions do not need fonts, but I guess Ubuntu needs it for some dependency issues.</p>
+<p>Some files and folders:</p>
+<ul>
+<li>fonts.conf: This file defines basic configurations, such as where to find fonts, default font settings, and other general font-related parameters. You are not expected to modify this file.</li>
+<li>local.conf: Configuration file for local changes at /etc/fonts/local.conf. This allows users to customize font settings without modifying the main configuration file.</li>
+<li>conf.d/: Included by fonts.conf to allow additional configurations.</li>
+<li>conf.avail/: Represents a set of potential configurations that can be enabled or disabled based on system or user preferences. These configurations become active when they are linked from /etc/fonts/conf.d. </li>
+</ul>
+<p><br></p>
 <h2>/etc/fstab</h2>
 <hr />
 <p>File exists in default Debian &amp; Ubuntu installations.</p>
@@ -1780,6 +1872,19 @@ Folder exists in default Ubuntu installations.</p>
 <p>The getaddrinfo function is used in programming to perform hostname resolution. </p>
 <p>It is used to translate a hostname or service name into a set of network addresses. This function is often used when writing network applications to determine the IP addresses associated with a domain name.</p>
 <p>Both config files (in Debian &amp; Ubuntu) are fully commented.</p>
+<p><br></p>
+<h2>/etc/gnutls/ Folder</h2>
+<hr />
+<p>File does not exist in default Debian installations. 
+File exists in default Ubuntu installations.</p>
+<p>Contains configuration files for GnuTLS library. GnuTLS is widely used in Linux systems for handling secure network protocols and is part of the broader GNU project.</p>
+<p>Default Ubuntu installations has only 1 file named <code>config</code> with the following content:</p>
+<pre><code>[overrides]
+disabled-version = tls1.0
+disabled-version = tls1.1
+disabled-version = dtls0.9
+disabled-version = dtls1.0
+</code></pre>
 <p><br></p>
 <h2>/etc/groff/ Folder</h2>
 <hr />
@@ -2016,11 +2121,11 @@ Folder exists in default Ubuntu installations.</p>
 <p>Debian 12 /etc/issue.net</p>
 <pre><code>Debian GNU/Linux 12 
 </code></pre>
-<p>Ubuntu 22.04 /etc/issue</p>
-<pre><code>Ubuntu 22.04.3 LTS \n \l
+<p>Ubuntu 24.04 /etc/issue</p>
+<pre><code>Ubuntu 24.04 LTS \n \l
 </code></pre>
-<p>Ubuntu 22.04 /etc/issue.net</p>
-<pre><code>Ubuntu 22.04.3 LTS 
+<p>Ubuntu 24.04 /etc/issue.net</p>
+<pre><code>Ubuntu 22.04 LTS 
 </code></pre>
 <p><br></p>
 <h2>/etc/kernel/ Folder</h2>
@@ -2195,6 +2300,12 @@ sonames=libbd_swap.so.2
 sonames=libbd_s390.so.2
 </code></pre>
 <p><br></p>
+<h2>/etc/libibverbs.d/ Folder</h2>
+<hr />
+<p>Folder doesn't exist in default Debian installations.<br />
+Folder exists in default Ubuntu installations.</p>
+<p>Contains configuration files for the libibverbs library. The libibverbs library is a key component of the software stack used to interact with Remote Direct Memory Access (RDMA) technologies. It provides an interface for applications to use RDMA capabilities, enabling high-performance data transfers with low latency, often used in data centers, high-performance computing, and storage systems.</p>
+<p><br></p>
 <h2>/etc/libnl-3/ Folder</h2>
 <hr />
 <p>Folder doesn't exist in default Debian installations.<br />
@@ -2253,6 +2364,21 @@ en_US.UTF-8 UTF-8
 # es_BO ISO-8859-1
 # es_BO.UTF-8 UTF-8
 </code></pre>
+<p><br></p>
+<h2>/etc/locale.conf</h2>
+<hr />
+<p>File does not exist in default Debian installations. 
+File exists in default Ubuntu installations.</p>
+<p>Defines system-wide locale settings. Locale settings determine the language, regional formats, and other internationalization aspects of the operating system, affecting how dates, times, numbers, currencies, and other regional-specific information are presented.</p>
+<p>Sample contents:</p>
+<pre><code>LANG=en_US.UTF-8
+LC_TIME=en_GB.UTF-8
+LC_NUMERIC=de_DE.UTF-8
+</code></pre>
+<ul>
+<li>LANG: This sets the default language and encoding for the system. It is the primary locale setting.</li>
+<li>LC_*: These override specific categories of locale, like LC_TIME for time and date formats, LC_NUMERIC for numeric formats, etc. If not specified, these default to the value of LANG.</li>
+</ul>
 <p><br></p>
 <h2>/etc/localtime</h2>
 <hr />
@@ -2370,9 +2496,9 @@ File exists in default Ubuntu installations.</p>
 <p>Contains information about the distribution's release, version, and certain other details in a standardized format, allowing applications and scripts to identify the Linux distribution and its characteristics.</p>
 <p>Sample content from Ubuntu:</p>
 <pre><code>DISTRIB_ID=Ubuntu
-DISTRIB_RELEASE=22.04
-DISTRIB_CODENAME=jammy
-DISTRIB_DESCRIPTION=&quot;Ubuntu 22.04.3 LTS&quot;
+DISTRIB_RELEASE=24.04
+DISTRIB_CODENAME=noble
+DISTRIB_DESCRIPTION=&quot;Ubuntu 24.04 LTS&quot;
 </code></pre>
 <p><br></p>
 <h2>/etc/lvm/ Folder</h2>
@@ -2777,7 +2903,7 @@ defaults {
 # set cutfromcursor
 </code></pre>
 <p><br></p>
-<h2>/etc/needrestart Folder</h2>
+<h2>/etc/needrestart/ Folder</h2>
 <hr />
 <p>Folder doesn't exist in default Debian installations.<br />
 Folder exists in default Ubuntu installations.</p>
@@ -2888,19 +3014,6 @@ Folder exists in default Ubuntu installations.</p>
 <li>no-carrier.d/: Scripts placed here are executed when network interfaces lose carrier, meaning they go offline or lose connectivity. </li>
 <li>off.d/: Scripts placed here are executed when a network interface is brought down or deactivated. </li>
 <li>routable.d/: Scripts placed here are executed when a network interface becomes routable, that is it has an IP address assigned and can communicate with other devices on the network.</li>
-</ul>
-<p><br></p>
-<h2>/etc/NetworkManager/ Folder</h2>
-<hr />
-<p>Folder doesn't exist in default Debian installations.<br />
-Folder exists in default Ubuntu installations.</p>
-<p>Configuration files for NetworkManager service.</p>
-<p>NetworkManager is a network management tool used to manage network connections mainly on desktop Linux systems.</p>
-<p>Some folders:</p>
-<ul>
-<li>conf.d/: Contains configuration snippets that can be used to override or extend the default configuration of NetworkManager.</li>
-<li>dispatcher.d/: Contains scripts that are executed when network events like interface up/down, connection change, or DHCP lease change occur.</li>
-<li>system-connections/: Configuration files for network connections managed by NetworkManager.</li>
 </ul>
 <p><br></p>
 <h2>/etc/networks</h2>
@@ -3057,19 +3170,21 @@ HOME_URL=&quot;https://www.debian.org/&quot;
 SUPPORT_URL=&quot;https://www.debian.org/support&quot;
 BUG_REPORT_URL=&quot;https://bugs.debian.org/&quot;
 </code></pre>
-<p>Sample content for Ubuntu 22.04</p>
-<pre><code>PRETTY_NAME=&quot;Ubuntu 22.04.3 LTS&quot;
+<p>Sample content for Ubuntu 24.04</p>
+<pre><code>PRETTY_NAME=&quot;Ubuntu 24.04 LTS&quot;
 NAME=&quot;Ubuntu&quot;
-VERSION_ID=&quot;22.04&quot;
-VERSION=&quot;22.04.3 LTS (Jammy Jellyfish)&quot;
-VERSION_CODENAME=jammy
+VERSION_ID=&quot;24.04&quot;
+VERSION=&quot;24.04 LTS (Noble Numbat)&quot;
+VERSION_CODENAME=noble
 ID=ubuntu
 ID_LIKE=debian
 HOME_URL=&quot;https://www.ubuntu.com/&quot;
 SUPPORT_URL=&quot;https://help.ubuntu.com/&quot;
 BUG_REPORT_URL=&quot;https://bugs.launchpad.net/ubuntu/&quot;
-PRIVACY_POLICY_URL=&quot;https://www.ubuntu.com/legal/terms-and-policies/privacy-pol&gt;
-UBUNTU_CODENAME=jammy
+PRIVACY_POLICY_URL=&quot;https://www.ubuntu.com/legal/terms-and-policies/privacy-policy&quot;
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+
 </code></pre>
 <p><br></p>
 <h2>/etc/overlayroot.conf</h2>
@@ -3078,14 +3193,6 @@ UBUNTU_CODENAME=jammy
 File exists in default Ubuntu installations.</p>
 <p>Default configuration of Ubuntu is in a disabled state.</p>
 <p>Used with systems that utilize overlay file systems, often used in LiveCDs, embedded systems, or diskless workstations to keep the root filesystem read-only by overlaying a temporary writable filesystem on top of it.</p>
-<p><br></p>
-<h2>/etc/PackageKit/</h2>
-<hr />
-<p>Folder doesn't exist in default Debian installations.<br />
-Folder exists in default Ubuntu installations.</p>
-<p>Contains configuration files for PackageKit utility.</p>
-<p>PackageKit is a system designed to make installing and updating software easier.</p>
-<p>PackageKit isn't meant to replace apt, instead provides a common set of abstractions that can be used by standard GUI and text mode package managers. </p>
 <p><br></p>
 <h2>/etc/pam.conf and /etc/pam.d/ Folder</h2>
 <hr />
@@ -3152,6 +3259,14 @@ proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
 Folder exists in default Ubuntu installations.</p>
 <p>Contains certificates (fwupd/ folder) and metadata (fwupd-metadata folder) used by the fwupd (Firmware Update Daemon) utility</p>
 <p>fwupd is a utility for managing firmware updates on Linux systems.</p>
+<p><br></p>
+<h2>/etc/plymouth/ Folder</h2>
+<hr />
+<p>Folder doesn't exist in default Debian installations.<br />
+Folder exists in default Ubuntu installations. 
+Folder is empty in default Ubuntu installations. </p>
+<p>Its purpose is to contain configuration files, themes, and scripts for Plymouth project, which is a boot splash screen system for Linux distributions. </p>
+<p>Plymouth is often used in distributions like Ubuntu, Fedora, and others to give a more polished and visually consistent user experience when starting or shutting down the system.</p>
 <p><br></p>
 <h2>/etc/pm/ Folder</h2>
 <hr />
@@ -3593,6 +3708,13 @@ File exists in default Ubuntu installations.</p>
 <p>Although Debian &amp; Ubuntu doesn't have SELinux by default; they have the configuration folder and 1 file (semanage.conf) in that folder.</p>
 <p>It is possible that this folder exists because of a dependency issue.</p>
 <p><br></p>
+<h2>/etc/sensors3.conf and /etc/sensors.d/ Folder</h2>
+<hr />
+<p>File and folder don't exist in default Debian installations.<br />
+File and folder exist in default Ubuntu installations.</p>
+<p>/etc/sensors3.conf is the configuration file for the libsensors library. /etc/sensors.d/ folder is used for including additional configuration snippets. Files placed in theis directory will be read as part of the main sensors3.d file.</p>
+<p>The libsensors library is a core component of the lm_sensors package, which is widely used in Linux systems for hardware monitoring.</p>
+<p><br></p>
 <h2>/etc/services</h2>
 <hr />
 <p>File exists in default Debian &amp; Ubuntu installations.</p>
@@ -3647,6 +3769,11 @@ sunrpc      111/tcp     portmapper  # RPC 4.0 portmapper
 sunrpc      111/udp     portmapper
 auth        113/tcp     authentication tap ident
 </code></pre>
+<p><br></p>
+<h2>/etc/sgml Folder</h2>
+<p>Folder doesn't exist in default Debian installations.<br />
+Folder exists in default Ubuntu installations.</p>
+<p>Contains resources, configurations, and catalog files for SGML (Standard Generalized Markup Language). SGML is a standardized markup language that serves as the basis for other markup languages like XML (eXtensible Markup Language) and HTML (HyperText Markup Language).</p>
 <p><br></p>
 <h2>/etc/shadow &amp; /etc/shadow-</h2>
 <hr />
@@ -3916,6 +4043,57 @@ oid_section = new_oids
 <p>/etc/sudoers.d/ folder is included by /etc/suoders. </p>
 <p>Thus, instead of modifying the main /etc/sudoers file directly, administrators can place individual configuration files in this directory, and sudo will include them when parsing sudoers rules.</p>
 <p><br></p>
+<h2>/etc/supercat/ Folder</h2>
+<hr />
+<p>Folder doesn't exist in default Debian installations.<br />
+Folder exists in default Ubuntu installations.</p>
+<p>Contains configuration files for supercat tool.</p>
+<p>Supercat is a program that colorizes text based on matching regular expressions/strings/characters.</p>
+<p>Sample contents for /etc/supercat/spcrc-crontab</p>
+<pre><code># ============ this file is to colorize crontabs ==========
+#        1         2         3         4         5
+#2345678901234567890123456789012345678901234567890123456789
+# HTML COLOR         COL A N T STRING or REGULAR EXPRESSION
+#################### ### # # # ############################
+#Where:
+#  HTML COLOR - Standard HTML Color name for HTML output
+#  COL        - Console color name from the list
+#                 red, yel, cya, grn, mag, blk, whi, blu
+#  A          - Attribute from the list
+#                 ' ' : normal
+#                 'b' : bold
+#                 'u' : underline
+#                 'r' : reverse video
+#                 'k' : blink
+#  N          - number of matches
+#                 ' ' : all
+#                 '0' : all
+#                 '1' - '9' : number of matches
+#  T          - type of matching to perform
+#                 'c' : characters
+#                 's' : string
+#                 'r' : regex - case   sensitive
+#                 'R' : regex - case insensitive
+#                 't' : regex with Unix time conversion
+#                 ' ' : default ('r' regex)
+#        1         2         3         4         5
+#2345678901234567890123456789012345678901234567890123456789
+# HTML COLOR         COL A N T STRING or REGULAR EXPRESSION
+#################### ### # # # ############################
+#                                        dom is blue + bold
+Blue                 blu b 5   \s+(\S+)
+#                                     month is green + bold
+Green                grn b 4   \s+(\S+)
+#                              dow is green + reverse video
+Green                grn r 3   \s+(\S+)
+#                                        hour is red + bold
+Red                  red b 2   \s+(\S+)
+#                             minute is red + reverse video
+Red                  red r 1   \s*(\S+)
+#                                      comments are magenta
+Magenta              mag       (^#.*)
+</code></pre>
+<p><br></p>
 <h2>/etc/sv/ Folder</h2>
 <hr />
 <p>Folder exists in default Debian installations.<br />
@@ -3972,6 +4150,57 @@ net.ipv6.conf.default.disable_ipv6 = 1
 <pre><code>sudo sysctl -p
 </code></pre>
 <p>/etc/sysctl.d/ folder is used for including additional configuration parameters. Files placed in this directory will be read as part of the main sysctl.conf file.</p>
+<p><br></p>
+<h2>/etc/sysstat/ Folder</h2>
+<p>Folder doesn't exist in default Debian installations.<br />
+Folder exists in default Ubuntu installations.</p>
+<p>Contains configuration files for sysstat tool. Sysstat is a collection of system performance monitoring tool which is  designed to monitor various aspects of system performance, such as CPU usage, memory usage, disk activity, network traffic, and more. </p>
+<p>Sample contents for /etc/sysstat/sysstat:</p>
+<pre><code># sysstat configuration file. See sysstat(5) manual page.
+
+# How long to keep log files (in days).
+# Used by sa2(8) script
+# If value is greater than 28, then use sadc's option -D to prevent older
+# data files from being overwritten. See sadc(8) and sysstat(5) manual pages.
+HISTORY=7
+
+# Compress (using xz, gzip or bzip2) sa and sar files older than (in days):
+COMPRESSAFTER=10
+
+# Parameters for the system activity data collector (see sadc(8) manual page)
+# which are used for the generation of log files.
+# By default contains the `-S DISK' option responsible for generating disk
+# statisitcs. Use `-S XALL' to collect all available statistics.
+SADC_OPTIONS=&quot;-S DISK&quot;
+
+# Directory where sa and sar files are saved. The directory must exist.
+SA_DIR=/var/log/sysstat
+
+# Compression program to use.
+ZIP=&quot;xz&quot;
+
+# By default sa2 script generates yesterday's summary, since the cron job
+# usually runs right after midnight. If you want sa2 to generate the summary
+# of the same day (for example when cron job runs at 23:53) set this variable.
+#YESTERDAY=no
+
+# By default sa2 script generates reports files (the so called sarDD files).
+# Set this variable to false to disable reports generation.
+#REPORTS=false
+
+# Tell sa2 to wait for a random delay in the range 0 .. ${DELAY_RANGE} before
+# executing. This delay is expressed in seconds, and is aimed at preventing
+# a massive I/O burst at the same time on VM sharing the same storage area.
+# Set this variable to 0 to make sa2 generate reports files immediately.
+DELAY_RANGE=0
+
+# The sa1 and sa2 scripts generate system activity data and report files in
+# the /var/log/sysstat directory. By default the files are created with umask 0&gt;
+# and are therefore readable for all users. Change this variable to restrict
+# the permissions on the files (e.g. use 0027 to adhere to more strict
+# security standards).
+UMASK=0022
+</code></pre>
 <p><br></p>
 <h2>/etc/systemd/ Folder</h2>
 <hr />
@@ -4244,6 +4473,24 @@ File &amp; folder exist in default Ubuntu installations.</p>
 <p>usb_modeswitch is a mode switching tool for USB devices providing multiple states or modes. It is used to handle USB devices that present themselves as USB storage but actually contain modem firmware.</p>
 <p>/etc/usb_modeswitch.d/ contains additional configuration files that are included in /usr/sbin/usb_modeswitch_dispatcher.</p>
 <p><br></p>
+<h2>/etc/vconsole.conf</h2>
+<hr />
+<p>File doesn't exist in default Debian installations.<br />
+File exists in default Ubuntu installations.</p>
+<p>Used to configure the virtual console settings, specifically for managing the console's keyboard layout, font, and other related settings.</p>
+<p>Sample contents on Ubuntu 24.04:</p>
+<pre><code># KEYBOARD CONFIGURATION FILE
+
+# Consult the keyboard(5) manual page.
+
+XKBMODEL=&quot;pc105&quot;
+XKBLAYOUT=&quot;tr&quot;
+XKBVARIANT=&quot;&quot;
+XKBOPTIONS=&quot;&quot;
+
+BACKSPACE=&quot;guess&quot;
+</code></pre>
+<p><br></p>
 <h2>/etc/vim/ Folder</h2>
 <hr />
 <p>Folder exists in default Debian &amp; Ubuntu installations.</p>
@@ -4254,6 +4501,33 @@ File &amp; folder exist in default Ubuntu installations.</p>
 <li>vimrc: Main system-wide Vim configuration file. Sets default options and key bindings for all users of Vim on the system.</li>
 <li>vimrc.tiny: Configuration options specifically for the "tiny" version of Vim, which is a minimized version of Vim with fewer features.</li>
 </ul>
+<p><br></p>
+<h2>/etc/vmware-tools/ Folder</h2>
+<hr />
+<p>Folder doesn't exist in default Debian installations.<br />
+Folder exists in default Ubuntu installations.</p>
+<p>Contains configuration files for VMware Tools.</p>
+<p>VMware Tools is a suite of utilities and services designed to enhance the performance and manageability of virtual machines (VMs) running on VMware platforms.</p>
+<p>The folder contains configuration files, scripts, logging and debugging information.</p>
+<p>Sample contents for /etc/vmware-tools/tools.conf file on Ubuntu:</p>
+<pre><code>[logging]
+# Turns on logging globally. It can still be disabled for each domain.
+# log = true
+
+# Disables core dumps on fatal errors; they're enabled by default.
+# enableCoreDump = false
+
+# Defines the &quot;vmsvc&quot; domain, logging to file
+# vmsvc.level = message
+vmsvc.handler = file
+# Setup file rotation - keep 3 files
+vmsvc.maxOldLogFiles = 3
+# Max log file size kept: 1 MB
+vmsvc.maxLogSize = 1
+
+# Defines the &quot;vmtoolsd&quot; domain, and disable logging for it.
+# vmtoolsd.level = none
+</code></pre>
 <p><br></p>
 <h2>/etc/vtrgb</h2>
 <hr />
@@ -4309,6 +4583,13 @@ user.Beagle.*                   skip            # ignore Beagle index data
 <p>Contains configuration files for XDG (X Desktop Group) Base Directory Specification. </p>
 <p>This specification defines a set of standard directories for storing user specific configuration, cache, and data files for desktop applications.</p>
 <p>Although Debian and Ubuntu server installations don't have GUI (and hence X Desktop) by default, it seems that they need this folder for compatibility and dependancy issues.</p>
+<p><br></p>
+<h2>/etc/xml/ Folder</h2>
+<hr />
+<p>Folder doesn't exist in default Debian installations.<br />
+Folder exists in default Ubuntu installations.</p>
+<p>Used to manage XML-related configurations, catalogs, and resources. It's often associated with the system-wide setup for XML parsers and applications that deal with XML files. </p>
+<p>This folder plays a significant role in defining how XML-related software operates, specifying catalog files, and defining XML entities and namespaces.</p>
 <p><br></p>
 <h2>/etc/zsh_command_not_found</h2>
 <hr />

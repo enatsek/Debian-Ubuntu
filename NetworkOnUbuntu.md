@@ -4,14 +4,14 @@
 ## 0. Specs
 ---
 ### 0.0. Info
-Network configuration examples on Ubuntu 20.04 LTS and 22.04 LTS Servers.
+Network configuration examples on Ubuntu 22.04 LTS and 24.04 LTS Servers.
 
 Tried to be as thorough much as possible: single nic, multi nics, multi networks.
 
 Debian and Ubuntu network configurations are very different so there are different tutorials for Debian and Ubuntu.
 
 ### 0.1. Configuration Files
-Ubuntu 20.04 and 22.04 LTS Servers use Systemd-Networkd and Netplan over it for network configuration.
+Ubuntu 22.04 and 24.04 LTS Servers use Systemd-Networkd and Netplan over it for network configuration.
 
 Configuration files reside as yaml files in /etc/netplan dir. A good practice would be to have one configuration file there.
 
@@ -30,7 +30,7 @@ ChatGPT
 Our nic is enp0s3
 
 ```
-sudo nano /etc/netplan/00-installer-config.yaml
+sudo nano /etc/netplan/50-cloud-init.yaml
 ```
 
 Fill as below:
@@ -52,7 +52,7 @@ sudo netplan apply
 Our nic is enp0s3
 
 ```
-sudo nano /etc/netplan/00-installer-config.yaml
+sudo nano /etc/netplan/50-cloud-init.yaml
 ```
 
 Fill as below:
@@ -64,7 +64,7 @@ network:
   ethernets:
     enp0s3:
       addresses:
-        - 192.168.1.216/24
+        - 192.168.1.221/24
       nameservers:
         search:
           - "x386.org"
@@ -84,7 +84,7 @@ sudo netplan apply
 Our nic is enp0s3
 
 ```
-sudo nano /etc/netplan/00-installer-config.yaml
+sudo nano /etc/netplan/50-cloud-init.yaml
 ```
 
 Fill as below:
@@ -96,7 +96,7 @@ network:
   ethernets:
     enp0s3:
       addresses:
-        - 192.168.1.216/24
+        - 192.168.1.221/24
         - 10.1.1.1/8
       nameservers:
         search:
@@ -117,7 +117,7 @@ sudo netplan apply
 Our nics are enp0s3 enp0s8
 
 ```
-sudo nano /etc/netplan/00-installer-config.yaml
+sudo nano /etc/netplan/50-cloud-init.yaml
 ```
 
 Fill as below:
@@ -129,7 +129,7 @@ network:
   ethernets:
     enp0s3:
       addresses:
-        - 192.168.1.216/24
+        - 192.168.1.221/24
       nameservers:
         search:
           - "x386.org"
@@ -177,7 +177,7 @@ Configure NICs
 - (enp0s8): 10.1.1.216/8
 
 ```
-sudo nano /etc/netplan/00-installer-config.yaml
+sudo nano /etc/netplan/50-cloud-init.yaml
 ```
 
 Fill as below:
@@ -232,7 +232,7 @@ sudo sysctl -p
 We have 1 NIC (enp0s3 - 192.168.1.X network).
 
 ```
-sudo nano /etc/netplan/00-installer-config.yaml
+sudo nano /etc/netplan/50-cloud-init.yaml
 ```
 
 Fill as below:
@@ -268,7 +268,7 @@ sudo netplan apply
 We have 1 NIC (enp0s3 - 192.168.1.X network).
 
 ```
-sudo nano /etc/netplan/00-installer-config.yaml
+sudo nano /etc/netplan/50-cloud-init.yaml
 ```
 
 Fill as below:

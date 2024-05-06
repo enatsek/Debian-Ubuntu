@@ -847,11 +847,11 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h2>0. Specs</h2>
 <hr />
 <h3>0.0. Info</h3>
-<p>Network configuration examples on Ubuntu 20.04 LTS and 22.04 LTS Servers.</p>
+<p>Network configuration examples on Ubuntu 22.04 LTS and 24.04 LTS Servers.</p>
 <p>Tried to be as thorough much as possible: single nic, multi nics, multi networks.</p>
 <p>Debian and Ubuntu network configurations are very different so there are different tutorials for Debian and Ubuntu.</p>
 <h3>0.1. Configuration Files</h3>
-<p>Ubuntu 20.04 and 22.04 LTS Servers use Systemd-Networkd and Netplan over it for network configuration.</p>
+<p>Ubuntu 22.04 and 24.04 LTS Servers use Systemd-Networkd and Netplan over it for network configuration.</p>
 <p>Configuration files reside as yaml files in /etc/netplan dir. A good practice would be to have one configuration file there.</p>
 <p>This configuration file consists all network configuration including the name servers.</p>
 <h3>0.2. Sources</h3>
@@ -863,7 +863,7 @@ ChatGPT</p>
 <hr />
 <h3>1.1. DHCP Configuration</h3>
 <p>Our nic is enp0s3</p>
-<pre><code>sudo nano /etc/netplan/00-installer-config.yaml
+<pre><code>sudo nano /etc/netplan/50-cloud-init.yaml
 </code></pre>
 <p>Fill as below:</p>
 <pre><code>network:
@@ -877,7 +877,7 @@ ChatGPT</p>
 </code></pre>
 <h3>1.2. Static IP Configuration</h3>
 <p>Our nic is enp0s3</p>
-<pre><code>sudo nano /etc/netplan/00-installer-config.yaml
+<pre><code>sudo nano /etc/netplan/50-cloud-init.yaml
 </code></pre>
 <p>Fill as below:</p>
 <pre><code>network:
@@ -886,7 +886,7 @@ ChatGPT</p>
   ethernets:
     enp0s3:
       addresses:
-        - 192.168.1.216/24
+        - 192.168.1.221/24
       nameservers:
         search:
           - &quot;x386.org&quot;
@@ -901,7 +901,7 @@ ChatGPT</p>
 </code></pre>
 <h3>1.3. Static IP Configuration with 2 IPs</h3>
 <p>Our nic is enp0s3</p>
-<pre><code>sudo nano /etc/netplan/00-installer-config.yaml
+<pre><code>sudo nano /etc/netplan/50-cloud-init.yaml
 </code></pre>
 <p>Fill as below:</p>
 <pre><code>network:
@@ -910,7 +910,7 @@ ChatGPT</p>
   ethernets:
     enp0s3:
       addresses:
-        - 192.168.1.216/24
+        - 192.168.1.221/24
         - 10.1.1.1/8
       nameservers:
         search:
@@ -926,7 +926,7 @@ ChatGPT</p>
 </code></pre>
 <h3>1.4. Static IP Configuration with 2 NICs</h3>
 <p>Our nics are enp0s3 enp0s8</p>
-<pre><code>sudo nano /etc/netplan/00-installer-config.yaml
+<pre><code>sudo nano /etc/netplan/50-cloud-init.yaml
 </code></pre>
 <p>Fill as below:</p>
 <pre><code>network:
@@ -935,7 +935,7 @@ ChatGPT</p>
   ethernets:
     enp0s3:
       addresses:
-        - 192.168.1.216/24
+        - 192.168.1.221/24
       nameservers:
         search:
           - &quot;x386.org&quot;
@@ -968,7 +968,7 @@ ChatGPT</p>
 <p>Configure NICs
 - (enp0s3): 192.168.1.216/24
 - (enp0s8): 10.1.1.216/8</p>
-<pre><code>sudo nano /etc/netplan/00-installer-config.yaml
+<pre><code>sudo nano /etc/netplan/50-cloud-init.yaml
 </code></pre>
 <p>Fill as below:</p>
 <pre><code>network:
@@ -1005,7 +1005,7 @@ ChatGPT</p>
 </code></pre>
 <h3>2.2. Configuration of the First Host</h3>
 <p>We have 1 NIC (enp0s3 - 192.168.1.X network).</p>
-<pre><code>sudo nano /etc/netplan/00-installer-config.yaml
+<pre><code>sudo nano /etc/netplan/50-cloud-init.yaml
 </code></pre>
 <p>Fill as below:</p>
 <pre><code>network:
@@ -1032,7 +1032,7 @@ ChatGPT</p>
 </code></pre>
 <h3>2.3. Configuration of the Second Host</h3>
 <p>We have 1 NIC (enp0s3 - 192.168.1.X network).</p>
-<pre><code>sudo nano /etc/netplan/00-installer-config.yaml
+<pre><code>sudo nano /etc/netplan/50-cloud-init.yaml
 </code></pre>
 <p>Fill as below:</p>
 <pre><code>network:

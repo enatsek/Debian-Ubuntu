@@ -17,11 +17,11 @@ Unfortunately (or maybe fortunately) there were a lot of wrong information from 
 
 The AI still needs a lot of work before becoming really useful.
 
-
+<br>
 
 ## 1. Services
 ---
-Debian 12 and Ubuntu 22.04 Server has the following systemd services by  default:
+Debian 12 and Ubuntu 24.04 Server has the following systemd services by  default:
 
 - systemd-journald
 - systemd-logind
@@ -291,7 +291,7 @@ MACAddressPolicy=persistent
 - MACAddressPolicy: Set to persistent to use a stable MAC address.
 
 ### 1.3.3. Important Notes
-Please remember that; Debian 12 does not use systemd-networkd; and Ubuntu  22.04 uses Netplan for network configuration. Netplan generates networkd  configuration files on /run/systemd/network directory; you are not supposed to change those files.
+Please remember that; Debian 12 does not use systemd-networkd; and Ubuntu 24.04 uses Netplan for network configuration. Netplan generates networkd  configuration files on /run/systemd/network directory; you are not supposed to change those files.
 
 
 
@@ -625,7 +625,7 @@ For binfmt_misc to work, the kernel must be compiled with support for  CONFIG_BI
 ### 1.8.2. Configuration
 The configuration files are in /etc/binfmt.d/. 
 
-Each configuration file defines rules for handling specific binary formats. This directory is empty at default Debian 12 and Ubuntu 22.04 installations.
+Each configuration file defines rules for handling specific binary formats. This directory is empty at default Debian 12 and Ubuntu 24.04 installations.
 
 Configuration files follow a simple key-value format. Each rule defines the binary format and specifies the interpreter to use.
 

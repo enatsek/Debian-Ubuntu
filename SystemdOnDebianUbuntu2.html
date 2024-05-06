@@ -854,9 +854,10 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <p>For this tutorial I tried another approach. Instead of searching information from the internet and the books; I asked questions to ChatGPT and collected the answers.</p>
 <p>Unfortunately (or maybe fortunately) there were a lot of wrong information from ChatGPP. I checked every answer before I prepare this tutorial.</p>
 <p>The AI still needs a lot of work before becoming really useful.</p>
+<p><br></p>
 <h2>1. Services</h2>
 <hr />
-<p>Debian 12 and Ubuntu 22.04 Server has the following systemd services by  default:</p>
+<p>Debian 12 and Ubuntu 24.04 Server has the following systemd services by  default:</p>
 <ul>
 <li>systemd-journald</li>
 <li>systemd-logind</li>
@@ -1100,7 +1101,7 @@ MACAddressPolicy=persistent
 <li>MACAddressPolicy: Set to persistent to use a stable MAC address.</li>
 </ul>
 <h3>1.3.3. Important Notes</h3>
-<p>Please remember that; Debian 12 does not use systemd-networkd; and Ubuntu  22.04 uses Netplan for network configuration. Netplan generates networkd  configuration files on /run/systemd/network directory; you are not supposed to change those files.</p>
+<p>Please remember that; Debian 12 does not use systemd-networkd; and Ubuntu 24.04 uses Netplan for network configuration. Netplan generates networkd  configuration files on /run/systemd/network directory; you are not supposed to change those files.</p>
 <h2>1.4. systemd-resolved</h2>
 <p>This service is not active in a default Debian 12 installation.</p>
 <p>Provides network name resolution services on Linux systems. It is responsible for DNS resolution and provides a local DNS stub resolver and caching daemon. </p>
@@ -1380,7 +1381,7 @@ L /var/my_symlink - /var/my_target_file
 <p>For binfmt_misc to work, the kernel must be compiled with support for  CONFIG_BINFMT_MISC.</p>
 <h3>1.8.2. Configuration</h3>
 <p>The configuration files are in /etc/binfmt.d/. </p>
-<p>Each configuration file defines rules for handling specific binary formats. This directory is empty at default Debian 12 and Ubuntu 22.04 installations.</p>
+<p>Each configuration file defines rules for handling specific binary formats. This directory is empty at default Debian 12 and Ubuntu 24.04 installations.</p>
 <p>Configuration files follow a simple key-value format. Each rule defines the binary format and specifies the interpreter to use.</p>
 <pre><code># /etc/binfmt.d/my_format.conf
 #

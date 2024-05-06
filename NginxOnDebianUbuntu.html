@@ -847,7 +847,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h2>0. Specs</h2>
 <hr />
 <p>Basic Nginx configuration, installation, SSL, LEMP stack, sample site  configurations, </p>
-<p>Server: Debian 12/11 or Ubuntu 22.04/20.04 LTS Server</p>
+<p>Server: Debian 12/11 or Ubuntu 24.04/22.04 LTS Server</p>
 <p>srv1, srv2, srv3, srv4 all has the server's IP address.</p>
 <p>Sources:
 <strong>Mastering Ubuntu Server 4th Ed.</strong> by Jay LaCroix<br />
@@ -884,7 +884,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <pre><code>sudo systemctl reload nginx
 </code></pre>
 <h3>1.3. Site enable and disable scripts</h3>
-<p>You may remember Ubuntu (and Debian) Apache installations has a2ensite  and a2dissite scripts. We will create very (actually very very) simple  nginx scripts like them. </p>
+<p>You may remember Debian &amp; Ubuntu Apache installations has a2ensite  and a2dissite scripts. We will create very (actually very very) simple  nginx scripts like them. </p>
 <h4>1.3.1. Create ~/bin Directory</h4>
 <p>This directory is in the search list of the executable files. You may  already have it. If it is so, skip this step.</p>
 <pre><code>mkdir ~/bin
@@ -956,7 +956,7 @@ ngdissite default
 <p><br></p>
 <h2>2. SSL Configuration</h2>
 <hr />
-<p>We will test SSL configuration with self signed certificates. Later on  the tutorial, we are going to test getting certificates with certbot tool  too.</p>
+<p>We will test SSL configuration with self signed certificates. Later on  the tutorial, we are going to test getting certificates with certbot tool too.</p>
 <h3>2.1. Create a Self Signed Certificate</h3>
 <p>Create a place for the certificates</p>
 <pre><code>sudo mkdir /etc/nginx/certs
@@ -1000,7 +1000,7 @@ ngdissite default
 <pre><code>sudo systemctl reload nginx
 </code></pre>
 <h3>2.3. SSL Site is Ready</h3>
-<p>https://srv1/</p>
+<p><code>https://srv1/</code></p>
 <p>Your firefox will complain as "Warning: Potential Security Risk Ahead",  because our certificate is a self signed one. You can click "Advanced" and "Accept the Risk and Continue" to reach the SSL site.</p>
 <p><br></p>
 <h2>3. LEMP Stack</h2>
@@ -1100,7 +1100,7 @@ exit
 ?&gt;
 </code></pre>
 <p>Now go to below address to see if it is working:<br />
-https://srv1/test.php</p>
+<code>https://srv1/test.php</code></p>
 <p><br></p>
 <h2>4. Sample Configs</h2>
 <hr />
@@ -1194,37 +1194,37 @@ server {
 <p>This section is performed on a VPS on internet. To get free Let's Encrypt certificates, our hostname must be in a DNS in internet. </p>
 <h3>5.0. Specs</h3>
 <ul>
-<li>Server   : Debian 12/11 or Ubuntu 22.04/20.04 LTS Server</li>
-<li>Hostname : x11.xyz</li>
+<li>Server   : Debian 12/11 or Ubuntu 24.04/22.04 LTS Server</li>
+<li>Hostname : 386387.xyz</li>
 </ul>
 <p>Server is fresh install.</p>
-<p>Remember to change all the occurences of x11.xyz and www.x11.xyz with  your server names.</p>
+<p>Remember to change all the occurences of 386387.xyz and www.386387.xyz with  your server names.</p>
 <h3>5.1. Install Nginx</h3>
 <pre><code>sudo apt update
 sudo apt install nginx --yes
 </code></pre>
 <h3>5.2. Create ngensite and ngdissite scripts as in 1.3.</h3>
 <p>Refer to 1.3.</p>
-<h3>5.3. Disable default Site and Create a New One Named as x11.xyz</h3>
+<h3>5.3. Disable default Site and Create a New One Named as x386387.xyz</h3>
 <pre><code>ngdissite default
-sudo nano /etc/nginx/sites-available/x11.xyz
+sudo nano /etc/nginx/sites-available/386387.xyz
 </code></pre>
 <p>Fill it as below</p>
 <pre><code>server {
    listen 80;
    listen [::]:80;
-   root /var/www/x11.xyz;
+   root /var/www/386387.xyz;
    index index.html index.htm index.nginx-debian.html;
-   server_name x11.xyz www.x11.xyz;
+   server_name 386387.xyz www.386387.xyz;
    location / {
       try_files $uri $uri/ =404;
    }
    server_tokens off;
 }
 </code></pre>
-<p>Create /var/www/x11.xyz folder. Put some test HTMLs into it.</p>
+<p>Create /var/www/386387.xyz folder. Put some test HTMLs into it.</p>
 <p>Enable the new conf</p>
-<pre><code>ngensite x11.xyz
+<pre><code>ngensite 386387.xyz
 </code></pre>
 <p>Reload nginx</p>
 <pre><code>sudo systemctl reload nginx
@@ -1235,24 +1235,24 @@ sudo nano /etc/nginx/sites-available/x11.xyz
 <pre><code>sudo apt install certbot --yes
 </code></pre>
 <p>Run certbot to get certificates. For authentication method question;  select the option 2 (Place files ...), and enter root directory (/var/www/x11.xyz for my server).  Enter an email address and accept TOS.</p>
-<pre><code>sudo certbot certonly -d x11.xyz -d www.x11.xyz
+<pre><code>sudo certbot certonly -d 386387.xyz -d www.386387.xyz
 </code></pre>
-<p>Certificates are installed to /etc/letsencrypt/live/x11.xyz/</p>
+<p>Certificates are installed to /etc/letsencrypt/live/386387.xyz/</p>
 <p>Certificates will auto renew, you can check the process with:</p>
 <pre><code>sudo certbot renew --dry-run
 </code></pre>
 <h3>5.5. Create a conf for the SSL site</h3>
-<pre><code>sudo nano /etc/nginx/sites-available/x11.xyz-ssl
+<pre><code>sudo nano /etc/nginx/sites-available/386387.xyz-ssl
 </code></pre>
 <p>Fill as below:</p>
 <pre><code>server {
    listen 443 ssl;
    listen [::]:443 ssl;
-   root /var/www/x11.xyz;
+   root /var/www/386387.xyz;
    index index.html index.htm index.nginx-debian.html;
    server_name x11.xyz www.x11.xyz;
-   ssl_certificate /etc/letsencrypt/live/x11.xyz/fullchain.pem;
-   ssl_certificate_key /etc/letsencrypt/live/x11.xyz/privkey.pem;
+   ssl_certificate /etc/letsencrypt/live/386387.xyz/fullchain.pem;
+   ssl_certificate_key /etc/letsencrypt/live/386387.xyz/privkey.pem;
    ssl_session_timeout 5m;
    location / {
       try_files $uri $uri/ =404;
@@ -1261,18 +1261,18 @@ sudo nano /etc/nginx/sites-available/x11.xyz
 }
 </code></pre>
 <p>Enable it</p>
-<pre><code>ngensite x11.xyz-ssl
+<pre><code>ngensite 386387.xyz-ssl
 </code></pre>
 <h3>5.5. Update HTTP conf</h3>
 <p>Our http conf must redirect to https site with the exception of certbot  renew process</p>
-<pre><code>sudo nano /etc/nginx/sites-available/x11.xyz
+<pre><code>sudo nano /etc/nginx/sites-available/386387.xyz
 </code></pre>
 <p>Change as below</p>
 <pre><code>server {
    listen 80;
    listen [::]:80;
    index index.html index.htm index.nginx-debian.html;
-   server_name x11.xyz www.x11.xyz;
+   server_name 386387.xyz www.386387.xyz;
    location ^~ /.well-known/acme-challenge {
        allow all; 
        root /var/www/x11.xyz;
@@ -1287,7 +1287,7 @@ sudo nano /etc/nginx/sites-available/x11.xyz
 <pre><code>sudo systemctl reload nginx
 </code></pre>
 <p>Your HTTPS site is ready:</p>
-<p><a href="https://x11.xyz/">https://x11.xyz/</a></p>
+<p><a href="https://386387.xyz/">https://386387.xyz/</a></p>
 <p><br></p>
 <h2>6. Nginx and Apache Together</h2>
 <hr />
@@ -1317,7 +1317,7 @@ sudo apt install nginx --yes
 <pre><code>server {
    listen 80;
    listen [::]:80;
-   server_name .x11.xyz;
+   server_name .386387.xyz;
    index index.html index.htm index.nginx-debian.html;
    root /var/www/html;
    location ~ \.php {

@@ -5,7 +5,7 @@
 ---
 Basic Nginx configuration, installation, SSL, LEMP stack, sample site  configurations, 
 
-Server: Debian 12/11 or Ubuntu 22.04/20.04 LTS Server
+Server: Debian 12/11 or Ubuntu 24.04/22.04 LTS Server
 
 srv1, srv2, srv3, srv4 all has the server's IP address.
 
@@ -71,7 +71,7 @@ sudo systemctl reload nginx
 ```
  
 ### 1.3. Site enable and disable scripts
-You may remember Ubuntu (and Debian) Apache installations has a2ensite  and a2dissite scripts. We will create very (actually very very) simple  nginx scripts like them. 
+You may remember Debian & Ubuntu Apache installations has a2ensite  and a2dissite scripts. We will create very (actually very very) simple  nginx scripts like them. 
 
 #### 1.3.1. Create ~/bin Directory
 This directory is in the search list of the executable files. You may  already have it. If it is so, skip this step.
@@ -183,7 +183,7 @@ sudo systemctl reload nginx
 
 ## 2. SSL Configuration
 ---
-We will test SSL configuration with self signed certificates. Later on  the tutorial, we are going to test getting certificates with certbot tool  too.
+We will test SSL configuration with self signed certificates. Later on  the tutorial, we are going to test getting certificates with certbot tool too.
 
 ### 2.1. Create a Self Signed Certificate
 Create a place for the certificates
@@ -253,7 +253,7 @@ sudo systemctl reload nginx
 ```
 
 ### 2.3. SSL Site is Ready
-https://srv1/
+`https://srv1/`
 
 Your firefox will complain as "Warning: Potential Security Risk Ahead",  because our certificate is a self signed one. You can click "Advanced" and "Accept the Risk and Continue" to reach the SSL site.
 
@@ -378,7 +378,7 @@ Fill it as below
 ```
 
 Now go to below address to see if it is working:  
-https://srv1/test.php
+`https://srv1/test.php`
 
 <br>
 
@@ -487,12 +487,12 @@ server {
 This section is performed on a VPS on internet. To get free Let's Encrypt certificates, our hostname must be in a DNS in internet. 
 
 ### 5.0. Specs
-- Server   : Debian 12/11 or Ubuntu 22.04/20.04 LTS Server
-- Hostname : x11.xyz
+- Server   : Debian 12/11 or Ubuntu 24.04/22.04 LTS Server
+- Hostname : 386387.xyz
 
 Server is fresh install.
 
-Remember to change all the occurences of x11.xyz and www.x11.xyz with  your server names.
+Remember to change all the occurences of 386387.xyz and www.386387.xyz with  your server names.
 
 ### 5.1. Install Nginx
 ```
@@ -503,10 +503,10 @@ sudo apt install nginx --yes
 ### 5.2. Create ngensite and ngdissite scripts as in 1.3.
 Refer to 1.3.
 
-### 5.3. Disable default Site and Create a New One Named as x11.xyz
+### 5.3. Disable default Site and Create a New One Named as x386387.xyz
 ```
 ngdissite default
-sudo nano /etc/nginx/sites-available/x11.xyz
+sudo nano /etc/nginx/sites-available/386387.xyz
 ```
 
 Fill it as below
@@ -515,9 +515,9 @@ Fill it as below
 server {
    listen 80;
    listen [::]:80;
-   root /var/www/x11.xyz;
+   root /var/www/386387.xyz;
    index index.html index.htm index.nginx-debian.html;
-   server_name x11.xyz www.x11.xyz;
+   server_name 386387.xyz www.386387.xyz;
    location / {
       try_files $uri $uri/ =404;
    }
@@ -525,12 +525,12 @@ server {
 }
 ```
 
-Create /var/www/x11.xyz folder. Put some test HTMLs into it.
+Create /var/www/386387.xyz folder. Put some test HTMLs into it.
 
 Enable the new conf
 
 ```
-ngensite x11.xyz
+ngensite 386387.xyz
 ```
 
 Reload nginx
@@ -551,10 +551,10 @@ sudo apt install certbot --yes
 Run certbot to get certificates. For authentication method question;  select the option 2 (Place files ...), and enter root directory (/var/www/x11.xyz for my server).  Enter an email address and accept TOS.
 
 ```
-sudo certbot certonly -d x11.xyz -d www.x11.xyz
+sudo certbot certonly -d 386387.xyz -d www.386387.xyz
 ```
 
-Certificates are installed to /etc/letsencrypt/live/x11.xyz/
+Certificates are installed to /etc/letsencrypt/live/386387.xyz/
 
 Certificates will auto renew, you can check the process with:
 
@@ -564,7 +564,7 @@ sudo certbot renew --dry-run
 
 ### 5.5. Create a conf for the SSL site
 ```
-sudo nano /etc/nginx/sites-available/x11.xyz-ssl
+sudo nano /etc/nginx/sites-available/386387.xyz-ssl
 ```
 
 Fill as below:
@@ -573,11 +573,11 @@ Fill as below:
 server {
    listen 443 ssl;
    listen [::]:443 ssl;
-   root /var/www/x11.xyz;
+   root /var/www/386387.xyz;
    index index.html index.htm index.nginx-debian.html;
    server_name x11.xyz www.x11.xyz;
-   ssl_certificate /etc/letsencrypt/live/x11.xyz/fullchain.pem;
-   ssl_certificate_key /etc/letsencrypt/live/x11.xyz/privkey.pem;
+   ssl_certificate /etc/letsencrypt/live/386387.xyz/fullchain.pem;
+   ssl_certificate_key /etc/letsencrypt/live/386387.xyz/privkey.pem;
    ssl_session_timeout 5m;
    location / {
       try_files $uri $uri/ =404;
@@ -589,14 +589,14 @@ server {
 Enable it
 
 ```
-ngensite x11.xyz-ssl
+ngensite 386387.xyz-ssl
 ```
 
 ### 5.5. Update HTTP conf
 Our http conf must redirect to https site with the exception of certbot  renew process
 
 ```
-sudo nano /etc/nginx/sites-available/x11.xyz
+sudo nano /etc/nginx/sites-available/386387.xyz
 ```
 
 Change as below
@@ -606,7 +606,7 @@ server {
    listen 80;
    listen [::]:80;
    index index.html index.htm index.nginx-debian.html;
-   server_name x11.xyz www.x11.xyz;
+   server_name 386387.xyz www.386387.xyz;
    location ^~ /.well-known/acme-challenge {
        allow all; 
        root /var/www/x11.xyz;
@@ -626,7 +626,7 @@ sudo systemctl reload nginx
 
 Your HTTPS site is ready:
 
-<https://x11.xyz/>
+<https://386387.xyz/>
 
 <br>
 
@@ -671,7 +671,7 @@ Fill as below
 server {
    listen 80;
    listen [::]:80;
-   server_name .x11.xyz;
+   server_name .386387.xyz;
    index index.html index.htm index.nginx-debian.html;
    root /var/www/html;
    location ~ \.php {

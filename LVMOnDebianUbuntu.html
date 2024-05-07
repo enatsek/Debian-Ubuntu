@@ -856,8 +856,8 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <ul>
 <li>Debian 11</li>
 <li>Debian 12</li>
-<li>Ubuntu 20.04 LTS Server</li>
 <li>Ubuntu 22.04 LTS Server</li>
+<li>Ubuntu 24.04 LTS Server</li>
 </ul>
 <h3>0.3. Sources</h3>
 <p><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/configuring_and_managing_logical_volumes/index">Red Hat Documentation</a><br />
@@ -1180,7 +1180,7 @@ sudo mount /dev/myvg/mylv /mnt/point
 sudo apt -y install lvm2
 </code></pre>
 <h3>5.2. Add 20 GB Disk</h3>
-<p>Output of "lsblk -i" command before adding the disk:</p>
+<p>Output of <code>lsblk -i</code> command before adding the disk:</p>
 <pre><code>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -1189,7 +1189,7 @@ sda      8:0    0 22.9G  0 disk
 </code></pre>
 <p>For physical servers, you need to add a disk to the hardware. For virtual servers you have to define it and attach it to the VM.</p>
 <p>I'm adding a 20 GB disk to my VM.</p>
-<p>Output of "lsblk -i" command after adding the disk:</p>
+<p>Output of <code>lsblk -i</code> command after adding the disk:</p>
 <pre><code>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -1270,7 +1270,7 @@ Create a directory for files</p>
 </code></pre>
 <h3>5.8. Add 30 GB disk</h3>
 <p>I'm adding a 30 GB disk to my VM.</p>
-<p>Output of "lsblk -i" command after adding the disk:</p>
+<p>Output of <code>lsblk -i</code> command after adding the disk:</p>
 <pre><code>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda           8:0    0 22.9G  0 disk 
@@ -1318,7 +1318,7 @@ tmpfs                  5.0M     0  5.0M   0% /run/lock
 </code></pre>
 <h3>5.13. Add 50 GB disk</h3>
 <p>I'm adding a 50 GB disk to my VM.</p>
-<p>Output of "lsblk -i" command after adding the disk:</p>
+<p>Output of <code>lsblk -i</code> command after adding the disk:</p>
 <pre><code>NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda           8:0    0 22.9G  0 disk 
 |-sda1        8:1    0   22G  0 part /
@@ -1359,7 +1359,7 @@ sudo pvremove /dev/sdc
 </code></pre>
 <h3>5.18. Remove 20 GB and 30 GB disks from the system and check everything</h3>
 <p>At this step we physically remove (or unattach 20 GB and 30 GB disks)</p>
-<p>Output of "lsblk -i command" after removing the disks</p>
+<p>Output of <code>lsblk -i</code> command after removing the disks</p>
 <pre><code>NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda           8:0    0 22.9G  0 disk 
 |-sda1        8:1    0   22G  0 part /
@@ -1374,10 +1374,10 @@ sdb           8:16   0   50G  0 disk
 </code></pre>
 <p><br></p>
 <h2>6. Case Study 2 - LVM and Snapshot</h2>
-<p>When we take a snapshot, we create a place to save the original states of  the files that are changed after the snapshot.</p>
+<p>When we take a snapshot, we create a place to save the original states of the files that are changed after the snapshot.</p>
 <p>That way, those original states can be used to revert to the snapshot.</p>
-<p>Because only the originals of the changed data is backed up, snapshots  do not require a lot of place.</p>
-<p>If a snapshot is full, the snapshot becomes invalid because it can no  longer track changes on the origin volume. </p>
+<p>Because only the originals of the changed data is backed up, snapshots do not require a lot of place.</p>
+<p>If a snapshot is full, the snapshot becomes invalid because it can no longer track changes on the original volume. </p>
 <p>Snapshots are resizable.</p>
 <h3>6.0. Specs</h3>
 <p>We have a system installed with LVM. </p>
@@ -1404,7 +1404,7 @@ sdb           8:16   0   50G  0 disk
 <li>Revert to the snapshot</li>
 </ol>
 <h3>6.1. Add 20 GB disk</h3>
-<p>Output of "lsblk -i" command before adding the disk:</p>
+<p>Output of <code>lsblk -i</code> command before adding the disk:</p>
 <pre><code>NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda               8:0    0   20G  0 disk 
 |-sda1            8:1    0  487M  0 part /boot
@@ -1415,8 +1415,8 @@ sda               8:0    0   20G  0 disk
 </code></pre>
 <p><strong>Note:</strong> </p>
 <p>When installing LVM at the install time, Debian lets you choose the VG name, as I choose it as myvg. Debian chooses the LV name as root.</p>
-<p>Ubuntu doesn't let us choosing VG and LV names, they are given as ubuntu-vg and ubuntu-lv.</p>
-<p>So the outputs would be different for Ubuntu and Debian. The above output  is from Debian.</p>
+<p>Ubuntu doesn't let us choosing VG and LV names, they are given as ubuntu-vg and root.</p>
+<p>At this section, you need to change myvg to your Volume Group name (ubuntu-vg for Ubuntu) for all the commands.</p>
 <p>Output of "pvs" before adding the disk</p>
 <pre><code>  PV         VG   Fmt  Attr PSize   PFree
   /dev/sda5  myvg lvm2 a--  &lt;19.52g    0 
@@ -1437,7 +1437,7 @@ tmpfs                   97M     0   97M   0% /run/user/1000
 </code></pre>
 <p>For physical servers, you need to add a disk to the hardware. For virtual servers you have to define it and attach it to the VM.</p>
 <p>I'm adding a 20 GB disk to my VM.</p>
-<p>Output of "lsblk -i" command after adding the disk:</p>
+<p>Output of <code>lsblk -i</code> command after adding the disk:</p>
 <pre><code>NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda               8:0    0   20G  0 disk 
 |-sda1            8:1    0  487M  0 part /boot
@@ -1464,7 +1464,7 @@ sdb               8:16   0   20G  0 disk
 <h3>6.5. Extend the Filesystem</h3>
 <pre><code>sudo resize2fs /dev/myvg/root
 </code></pre>
-<p>Output of "df -h" after expanding the disk</p>
+<p>Output of <code>df -h</code> after expanding the disk</p>
 <pre><code>Filesystem             Size  Used Avail Use% Mounted on
 udev                   458M     0  458M   0% /dev
 tmpfs                   97M  548K   96M   1% /run
@@ -1476,7 +1476,7 @@ tmpfs                   97M     0   97M   0% /run/user/1000
 </code></pre>
 <h3>6.6. Add 30 GB disk</h3>
 <p>I'm adding a 30 GB disk to my VM.</p>
-<p>Output of "lsblk -i" command after adding the disk:</p>
+<p>Output of <code>lsblk -i</code> command after adding the disk:</p>
 <pre><code>sda               8:0    0   20G  0 disk 
 |-sda1            8:1    0  487M  0 part /boot
 |-sda2            8:2    0    1K  0 part 
@@ -1534,8 +1534,8 @@ sudo reboot
 <p><br></p>
 <h2>7. Case Study 3 - Export and Import of LVM</h2>
 <hr />
-<p>It is possible to export and import Volume Groups with their Logical  Volumes.</p>
-<p>LVs are unmounted, VG is deactivated and exported, physical disks are  moved, VG is imported and activated, and finally LVs are mounted.</p>
+<p>It is possible to export and import Volume Groups with their Logical Volumes.</p>
+<p>LVs are unmounted, VG is deactivated and exported, physical disks are moved, VG is imported and activated, and finally LVs are mounted.</p>
 <h3>7.0. Specs</h3>
 <p>We have 2 systems installed without LVM, srva and srvb. We will install  a LV on srva, fill it with data, and we will move the LV to srvb.</p>
 <ul>
@@ -1629,7 +1629,7 @@ sudo reboot
 sudo apt -y install lvm2
 </code></pre>
 <h3>7.2. Add 20 GB disk to srva</h3>
-<p>Output of "lsblk -i" command before adding the disk:</p>
+<p>Output of <code>lsblk -i</code> command before adding the disk:</p>
 <pre><code>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -1638,7 +1638,7 @@ sda      8:0    0 22.9G  0 disk
 </code></pre>
 <p>For physical servers, you need to add a disk to the hardware. For virtual  servers you have to define it and attach it to the VM.</p>
 <p>I'm adding a 20 GB disk to my VM.</p>
-<p>Output of "lsblk -i" command after adding the disk:</p>
+<p>Output of <code>lsblk -i</code> command after adding the disk:</p>
 <pre><code>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -1706,7 +1706,7 @@ sudo umount /mnt/mylv2
 <pre><code>sudo vgexport myvg
 </code></pre>
 <p>Now it is time to unplug the 20 GB disk.</p>
-<p>Output of "lsblk -i" command after removing the disk:</p>
+<p>Output of <code>lsblk -i</code> command after removing the disk:</p>
 <pre><code>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -1719,7 +1719,7 @@ sudo apt -y install lvm2
 </code></pre>
 <h3>7.13. Plug the disk to srvb</h3>
 <ul>
-<li>Output of "lsblk -i" command before adding the disk:</li>
+<li>Output of <code>lsblk -i</code> command before adding the disk:</li>
 </ul>
 <pre><code>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
@@ -1729,7 +1729,7 @@ sda      8:0    0 22.9G  0 disk
 </code></pre>
 <p>For physical servers, you need to add a disk to the hardware. For virtual  servers you have to define it and attach it to the VM.</p>
 <p>I'm adding a 20 GB disk to my VM.</p>
-<p>Output of "lsblk -i" command after adding the disk:</p>
+<p>Output of <code>lsblk -i</code> command after adding the disk:</p>
 <pre><code>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -1751,7 +1751,7 @@ sudo mount /dev/myvg/mylv2 /mnt/mylv2
 </code></pre>
 <p>Check the contents of the LVs</p>
 <pre><code>ls -al /mnt/mylv1
-ls -all /mnt/mylv2
+ls -al /mnt/mylv2
 </code></pre>
 <p><br></p>
 <h2>8. Uncovered Subjects</h2>

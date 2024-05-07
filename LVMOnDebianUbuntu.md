@@ -17,8 +17,8 @@ Tested on the following environments:
 
 - Debian 11
 - Debian 12
-- Ubuntu 20.04 LTS Server
 - Ubuntu 22.04 LTS Server
+- Ubuntu 24.04 LTS Server
 
 ### 0.3. Sources
 [Red Hat Documentation](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/configuring_and_managing_logical_volumes/index)  
@@ -537,7 +537,7 @@ sudo apt -y install lvm2
 ```
 
 ### 5.2. Add 20 GB Disk
-Output of "lsblk -i" command before adding the disk:
+Output of `lsblk -i` command before adding the disk:
 
 ```
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -551,7 +551,7 @@ sda      8:0    0 22.9G  0 disk
 
 I'm adding a 20 GB disk to my VM.
 
-Output of "lsblk -i" command after adding the disk:
+Output of `lsblk -i` command after adding the disk:
 
 ```
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -686,7 +686,7 @@ ls -al /mnt/mylv/tmp
 ### 5.8. Add 30 GB disk
 I'm adding a 30 GB disk to my VM.
 
-Output of "lsblk -i" command after adding the disk:
+Output of `lsblk -i` command after adding the disk:
 
 ```
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -763,7 +763,7 @@ ls -al /mnt/mylv/tmp
 ### 5.13. Add 50 GB disk
 I'm adding a 50 GB disk to my VM.
 
-Output of "lsblk -i" command after adding the disk:
+Output of `lsblk -i` command after adding the disk:
 
 ```
 NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -829,7 +829,7 @@ sudo pvremove /dev/sdc
 ### 5.18. Remove 20 GB and 30 GB disks from the system and check everything
 At this step we physically remove (or unattach 20 GB and 30 GB disks)
 
-Output of "lsblk -i command" after removing the disks
+Output of `lsblk -i` command after removing the disks
 
 ```
 NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -852,13 +852,13 @@ ls -al /mnt/mylv/tmp
 <br>
 
 ## 6. Case Study 2 - LVM and Snapshot
-When we take a snapshot, we create a place to save the original states of  the files that are changed after the snapshot.
+When we take a snapshot, we create a place to save the original states of the files that are changed after the snapshot.
 
 That way, those original states can be used to revert to the snapshot.
 
-Because only the originals of the changed data is backed up, snapshots  do not require a lot of place.
+Because only the originals of the changed data is backed up, snapshots do not require a lot of place.
 
-If a snapshot is full, the snapshot becomes invalid because it can no  longer track changes on the origin volume. 
+If a snapshot is full, the snapshot becomes invalid because it can no longer track changes on the original volume. 
 
 Snapshots are resizable.
 
@@ -887,7 +887,7 @@ The steps:
 13. Revert to the snapshot
 
 ### 6.1. Add 20 GB disk
-Output of "lsblk -i" command before adding the disk:
+Output of `lsblk -i` command before adding the disk:
 
 ```
 NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -903,9 +903,9 @@ sda               8:0    0   20G  0 disk
 
 When installing LVM at the install time, Debian lets you choose the VG name, as I choose it as myvg. Debian chooses the LV name as root.
 
-Ubuntu doesn't let us choosing VG and LV names, they are given as ubuntu-vg and ubuntu-lv.
+Ubuntu doesn't let us choosing VG and LV names, they are given as ubuntu-vg and root.
 
-So the outputs would be different for Ubuntu and Debian. The above output  is from Debian.
+At this section, you need to change myvg to your Volume Group name (ubuntu-vg for Ubuntu) for all the commands.
 
 Output of "pvs" before adding the disk
 
@@ -938,7 +938,7 @@ For physical servers, you need to add a disk to the hardware. For virtual server
 
 I'm adding a 20 GB disk to my VM.
 
-Output of "lsblk -i" command after adding the disk:
+Output of `lsblk -i` command after adding the disk:
 
 ```
 NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -981,7 +981,7 @@ sudo lvextend -l +100%FREE  myvg/root
 sudo resize2fs /dev/myvg/root
 ```
 
-Output of "df -h" after expanding the disk
+Output of `df -h` after expanding the disk
 
 ```
 Filesystem             Size  Used Avail Use% Mounted on
@@ -997,7 +997,7 @@ tmpfs                   97M     0   97M   0% /run/user/1000
 ### 6.6. Add 30 GB disk
 I'm adding a 30 GB disk to my VM.
 
-Output of "lsblk -i" command after adding the disk:
+Output of `lsblk -i` command after adding the disk:
 
 ```
 sda               8:0    0   20G  0 disk 
@@ -1094,9 +1094,9 @@ Our snapshot LV is gone after the merge.
 
 ## 7. Case Study 3 - Export and Import of LVM
 ---
-It is possible to export and import Volume Groups with their Logical  Volumes.
+It is possible to export and import Volume Groups with their Logical Volumes.
 
-LVs are unmounted, VG is deactivated and exported, physical disks are  moved, VG is imported and activated, and finally LVs are mounted.
+LVs are unmounted, VG is deactivated and exported, physical disks are moved, VG is imported and activated, and finally LVs are mounted.
 
 ### 7.0. Specs
 We have 2 systems installed without LVM, srva and srvb. We will install  a LV on srva, fill it with data, and we will move the LV to srvb.
@@ -1129,7 +1129,7 @@ sudo apt -y install lvm2
 ```
 
 ### 7.2. Add 20 GB disk to srva
-Output of "lsblk -i" command before adding the disk:
+Output of `lsblk -i` command before adding the disk:
 
 ```
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -1143,7 +1143,7 @@ For physical servers, you need to add a disk to the hardware. For virtual  serve
 
 I'm adding a 20 GB disk to my VM.
 
-Output of "lsblk -i" command after adding the disk:
+Output of `lsblk -i` command after adding the disk:
 
 ```
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -1256,7 +1256,7 @@ sudo vgexport myvg
 
 Now it is time to unplug the 20 GB disk.
 
-Output of "lsblk -i" command after removing the disk:
+Output of `lsblk -i` command after removing the disk:
 
 ```
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -1273,7 +1273,7 @@ sudo apt -y install lvm2
 ```
 
 ### 7.13. Plug the disk to srvb
-- Output of "lsblk -i" command before adding the disk:
+- Output of `lsblk -i` command before adding the disk:
 
 ```
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -1287,7 +1287,7 @@ For physical servers, you need to add a disk to the hardware. For virtual  serve
 
 I'm adding a 20 GB disk to my VM.
 
-Output of "lsblk -i" command after adding the disk:
+Output of `lsblk -i` command after adding the disk:
 
 ```
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
@@ -1321,7 +1321,7 @@ Check the contents of the LVs
 
 ```
 ls -al /mnt/mylv1
-ls -all /mnt/mylv2
+ls -al /mnt/mylv2
 ```
 
 <br>

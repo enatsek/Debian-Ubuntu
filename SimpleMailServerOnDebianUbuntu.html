@@ -851,11 +851,11 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 IMAP: Dovecot<br />
 No virtual domains, only Linux users will have email accounts<br />
 Tried to be as simple as possible</p>
-<p>Hostname: mail.x11.xyz<br />
-Mail Domain: x11.xyz<br />
-Operating System: Debian 12/11 or Ubuntu 22.04/20.04 LTS Server<br />
-My User Name:  exforge</p>
-<p>An MX record must be created at the DNS Server with the value of  mail.x11.xyz</p>
+<p>Hostname: mail.386387.xyz<br />
+Mail Domain: 386387.xyz<br />
+Operating System: Debian 12/11 or Ubuntu 24.04/22.04 LTS Server<br />
+My User Name: exforge</p>
+<p>An MX record must be created at the DNS Server with the value of  mail.386387.xyz</p>
 <p><br></p>
 <h2>1. Install and Configure Postfix</h2>
 <h3>1.0. Update Repositories</h3>
@@ -875,10 +875,10 @@ My User Name:  exforge</p>
 <pre><code>mail_owner = postfix
 </code></pre>
 <p>around line 94-98: uncomment and change hostname</p>
-<pre><code>myhostname = mail.x11.xyz
+<pre><code>myhostname = mail.386387.xyz
 </code></pre>
 <p>around line 102-106: uncomment and change domainname</p>
-<pre><code>mydomain = x11.xyz
+<pre><code>mydomain = 386387.xyz
 </code></pre>
 <p>around line 123-127: uncomment</p>
 <pre><code>myorigin = $mydomain
@@ -915,16 +915,16 @@ My User Name:  exforge</p>
 <p>To:</p>
 <pre><code>smtpd_banner = $myhostname ESMTP
 </code></pre>
-<p>around line 650 - 659: add</p>
+<p>around line 650 - 659: add/change</p>
 <pre><code>sendmail_path = /usr/sbin/postfix
 </code></pre>
-<p>around line 655 - 664: add</p>
+<p>around line 655 - 664: add/change</p>
 <pre><code>newaliases_path = /usr/bin/newaliases
 </code></pre>
-<p>around line 660 - 669: add</p>
+<p>around line 660 - 669: add/change</p>
 <pre><code>mailq_path = /usr/bin/mailq
 </code></pre>
-<p>around line 666 - 675: add</p>
+<p>around line 666 - 675: add/change</p>
 <pre><code>setgid_group = postdrop
 </code></pre>
 <p>around line 670 - 679: comment out</p>
@@ -976,7 +976,7 @@ smtpd_recipient_restrictions = permit_mynetworks, permit_auth_destination, permi
 <p>around line 10: uncomment and change ( allow plain text auth )</p>
 <pre><code>disable_plaintext_auth = no
 </code></pre>
-<p>around line 100: add</p>
+<p>around line 100: add/change</p>
 <pre><code>auth_mechanisms = plain login
 </code></pre>
 <h3>2.4. Dovecot mail config</h3>
@@ -1002,7 +1002,7 @@ unix_listener /var/spool/postfix/private/auth {
 <p><br></p>
 <hr />
 <p><strong>Break Time</strong></p>
-<p>At this point we have a very basic mail config, all our linux users at  mail.x11.xyz have mail addresses. They can access smtp at port 25 and imap at port 143. But unfortunately there is no encryption. </p>
+<p>At this point we have a very basic mail config, all our linux users at  mail.386387.xyz have mail addresses. They can access smtp at port 25 and imap at port 143. But unfortunately there is no encryption. </p>
 <p>At the next step we will add SSL encrytpion and that will change our smtp  port to 587.</p>
 <p>We will use Certbot tool of Let's Encrypt to have a free certificate</p>
 <hr />
@@ -1014,9 +1014,9 @@ unix_listener /var/spool/postfix/private/auth {
 </code></pre>
 <h3>3.2. Run certbot to get certificates.</h3>
 <p>Enter an email address and accept # TOS.</p>
-<pre><code>sudo certbot certonly --standalone -d mail.x11.xyz
+<pre><code>sudo certbot certonly --standalone -d mail.386387.xyz
 </code></pre>
-<p>Certificates are installed to /etc/letsencrypt/live/mail.x11.xyz/</p>
+<p>Certificates are installed to /etc/letsencrypt/live/mail.386387.xyz/</p>
 <h3>3.3. Add certificates to Postfix main config</h3>
 <pre><code>sudo nano /etc/postfix/main.cf 
 </code></pre>
@@ -1024,8 +1024,8 @@ unix_listener /var/spool/postfix/private/auth {
 <pre><code>smtpd_use_tls = yes
 smtp_tls_mandatory_protocols = !SSLv2, !SSLv3
 smtpd_tls_mandatory_protocols = !SSLv2, !SSLv3
-smtpd_tls_cert_file = /etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
-smtpd_tls_key_file = /etc/letsencrypt/live/mail.x11.xyz/privkey.pem
+smtpd_tls_cert_file = /etc/letsencrypt/live/mail.386387.xyz/fullchain.pem
+smtpd_tls_key_file = /etc/letsencrypt/live/mail.386387.xyz/privkey.pem
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 </code></pre>
 <h3>3.4. Postfix master config</h3>
@@ -1038,13 +1038,13 @@ smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
   -o smtpd_sasl_auth_enable=yes
   -o smtpd_tls_auth_only=yes
 </code></pre>
-<p><strong>For Ubuntu 22.04, 20.04, and Debian 11</strong><br />
+<p><strong>For Ubuntu 22.04 and Debian 11</strong><br />
 Around line 29-33: uncomment like below</p>
 <pre><code>smtps     inet  n       -       y       -       -       smtpd
   -o syslog_name=postfix/smtps
   -o smtpd_tls_wrappermode=yes
 </code></pre>
-<p><strong>For Debian 12</strong> 
+<p><strong>For Ubuntu 24.04 and Debian 12</strong> 
 Around line 36: insert below lines</p>
 <pre><code>smtps     inet  n       -       y       -       -       smtpd
   -o syslog_name=postfix/smtps
@@ -1055,8 +1055,8 @@ Around line 36: insert below lines</p>
 </code></pre>
 <p>Around line 12: Specify certificates (change as below)<br />
 Remember to change domain names to yours:  </p>
-<pre><code>ssl_cert = &lt;/etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
-ssl_key = &lt;/etc/letsencrypt/live/mail.x11.xyz/privkey.pem
+<pre><code>ssl_cert = &lt;/etc/letsencrypt/live/mail.386387.xyz/fullchain.pem
+ssl_key = &lt;/etc/letsencrypt/live/mail.386387.xyz/privkey.pem
 </code></pre>
 <h3>3.6. Restart Postfix and Dovecot</h3>
 <pre><code>sudo systemctl restart postfix dovecot 
@@ -1064,24 +1064,22 @@ ssl_key = &lt;/etc/letsencrypt/live/mail.x11.xyz/privkey.pem
 <p><br></p>
 <h2>4. Client Mail Settings</h2>
 <hr />
-<p>For Linux User exforge at mail.x11.xyz  </p>
+<p>For Linux User exforge at mail.386387.xyz  </p>
 <ul>
 <li>Replace all occurences of:</li>
 <li>exforge --&gt; your user name</li>
-<li>mail.x11.xyz --&gt; your server name</li>
-<li>x11.xyz --&gt; your domain</li>
+<li>mail.386387.xyz --&gt; your server name</li>
+<li>386387.xyz --&gt; your domain</li>
 </ul>
 <p><strong>Thunderbird Config:</strong></p>
 <ul>
 <li>Your name: Exforge</li>
-<li>Email address: exforge@x11.xyz</li>
+<li>Email address: exforge@386387.xyz</li>
 <li>Password: (Your Linux Password)</li>
-<li>Incoming: IMAP  mail.x11.xyz      143  STARTTLS  Normal password</li>
-<li>Outgoing: SMTP  mail.x11.xyz      465  SSL/TLS   Normal password</li>
+<li>Incoming: IMAP  mail.386387.xyz   143  STARTTLS  Normal password</li>
+<li>Outgoing: SMTP  mail.386387.xyz   465  SSL/TLS   Normal password</li>
 <li>Username: Incoming: exforge       Outgoing: exforge</li>
 </ul>
-<p>My config screenshot:</p>
-<p><a href="https://imgur.com/a/RVIAy3o">https://imgur.com/a/RVIAy3o</a></p>
 <p><br></p>
 <h2>5. Account Management</h2>
 <hr />

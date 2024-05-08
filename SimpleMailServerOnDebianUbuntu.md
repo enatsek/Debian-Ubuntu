@@ -10,12 +10,12 @@ IMAP: Dovecot
 No virtual domains, only Linux users will have email accounts  
 Tried to be as simple as possible
 
-Hostname: mail.x11.xyz  
-Mail Domain: x11.xyz  
-Operating System: Debian 12/11 or Ubuntu 22.04/20.04 LTS Server  
-My User Name:  exforge
+Hostname: mail.386387.xyz  
+Mail Domain: 386387.xyz  
+Operating System: Debian 12/11 or Ubuntu 24.04/22.04 LTS Server  
+My User Name: exforge
 
-An MX record must be created at the DNS Server with the value of  mail.x11.xyz
+An MX record must be created at the DNS Server with the value of  mail.386387.xyz
 
 <br>
 
@@ -51,13 +51,13 @@ mail_owner = postfix
 around line 94-98: uncomment and change hostname
 
 ```
-myhostname = mail.x11.xyz
+myhostname = mail.386387.xyz
 ```
 
 around line 102-106: uncomment and change domainname
 
 ```
-mydomain = x11.xyz
+mydomain = 386387.xyz
 ```
 
 around line 123-127: uncomment
@@ -129,25 +129,25 @@ To:
 smtpd_banner = $myhostname ESMTP
 ```
 
-around line 650 - 659: add
+around line 650 - 659: add/change
 
 ```
 sendmail_path = /usr/sbin/postfix
 ```
 
-around line 655 - 664: add
+around line 655 - 664: add/change
 
 ```
 newaliases_path = /usr/bin/newaliases
 ```
 
-around line 660 - 669: add
+around line 660 - 669: add/change
 
 ```
 mailq_path = /usr/bin/mailq
 ```
 
-around line 666 - 675: add
+around line 666 - 675: add/change
 
 ```
 setgid_group = postdrop
@@ -235,7 +235,7 @@ around line 10: uncomment and change ( allow plain text auth )
 disable_plaintext_auth = no
 ```
 
-around line 100: add
+around line 100: add/change
 
 ```
 auth_mechanisms = plain login
@@ -278,7 +278,7 @@ sudo systemctl restart dovecot
 ---
 **Break Time**
 
-At this point we have a very basic mail config, all our linux users at  mail.x11.xyz have mail addresses. They can access smtp at port 25 and imap at port 143. But unfortunately there is no encryption. 
+At this point we have a very basic mail config, all our linux users at  mail.386387.xyz have mail addresses. They can access smtp at port 25 and imap at port 143. But unfortunately there is no encryption. 
 
 At the next step we will add SSL encrytpion and that will change our smtp  port to 587.
 
@@ -299,10 +299,10 @@ sudo apt -y install certbot
 Enter an email address and accept # TOS.
 
 ```
-sudo certbot certonly --standalone -d mail.x11.xyz
+sudo certbot certonly --standalone -d mail.386387.xyz
 ```
 
-Certificates are installed to /etc/letsencrypt/live/mail.x11.xyz/
+Certificates are installed to /etc/letsencrypt/live/mail.386387.xyz/
 
 ### 3.3. Add certificates to Postfix main config
 ```
@@ -315,8 +315,8 @@ Add to the end
 smtpd_use_tls = yes
 smtp_tls_mandatory_protocols = !SSLv2, !SSLv3
 smtpd_tls_mandatory_protocols = !SSLv2, !SSLv3
-smtpd_tls_cert_file = /etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
-smtpd_tls_key_file = /etc/letsencrypt/live/mail.x11.xyz/privkey.pem
+smtpd_tls_cert_file = /etc/letsencrypt/live/mail.386387.xyz/fullchain.pem
+smtpd_tls_key_file = /etc/letsencrypt/live/mail.386387.xyz/privkey.pem
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
 ```
 
@@ -335,7 +335,7 @@ submission inet n       -       y       -       -       smtpd
   -o smtpd_tls_auth_only=yes
 ```
 
-**For Ubuntu 22.04, 20.04, and Debian 11**  
+**For Ubuntu 22.04 and Debian 11**  
 Around line 29-33: uncomment like below
 
 ```
@@ -344,7 +344,7 @@ smtps     inet  n       -       y       -       -       smtpd
   -o smtpd_tls_wrappermode=yes
 ```
 
-**For Debian 12** 
+**For Ubuntu 24.04 and Debian 12** 
 Around line 36: insert below lines
 
 ```
@@ -362,8 +362,8 @@ Around line 12: Specify certificates (change as below)
 Remember to change domain names to yours:  
 
 ```
-ssl_cert = </etc/letsencrypt/live/mail.x11.xyz/fullchain.pem
-ssl_key = </etc/letsencrypt/live/mail.x11.xyz/privkey.pem
+ssl_cert = </etc/letsencrypt/live/mail.386387.xyz/fullchain.pem
+ssl_key = </etc/letsencrypt/live/mail.386387.xyz/privkey.pem
 ```
 
 ### 3.6. Restart Postfix and Dovecot
@@ -375,25 +375,23 @@ sudo systemctl restart postfix dovecot
 
 ## 4. Client Mail Settings
 ---
-For Linux User exforge at mail.x11.xyz  
+For Linux User exforge at mail.386387.xyz  
 
 - Replace all occurences of:
    - exforge --> your user name
-   - mail.x11.xyz --> your server name
-   - x11.xyz --> your domain
+   - mail.386387.xyz --> your server name
+   - 386387.xyz --> your domain
 
 **Thunderbird Config:**
 
 - Your name: Exforge
-- Email address: exforge@x11.xyz
+- Email address: exforge@386387.xyz
 - Password: (Your Linux Password)
-- Incoming: IMAP  mail.x11.xyz  	143  STARTTLS  Normal password
-- Outgoing: SMTP  mail.x11.xyz  	465  SSL/TLS   Normal password
+- Incoming: IMAP  mail.386387.xyz  	143  STARTTLS  Normal password
+- Outgoing: SMTP  mail.386387.xyz  	465  SSL/TLS   Normal password
 - Username: Incoming: exforge    	Outgoing: exforge
     
-My config screenshot:
 
-<https://imgur.com/a/RVIAy3o>
 
 <br>
 

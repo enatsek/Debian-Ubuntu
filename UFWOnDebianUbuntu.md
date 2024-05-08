@@ -5,7 +5,7 @@
 ---
 Basic UFW (Uncomplicated Firewall) tutorial. Enabling, adding, deleting  rules, syntax etc.
 
-Prepared for Debian 12/11 and Ubuntu 22.04/20.04 LTS Server
+Prepared for Debian 12/11 and Ubuntu 24.04/22.04 LTS Server
 
 Sources:  
 <https://www.netfilter.org/>  
@@ -19,17 +19,17 @@ Sources:
 ## 1. Firewall Architecture 
 ---
 ### 1.1. Netfilter
-Netfilter represents a set of hooks for network packets, it is integrated to the Linux kernel. It supplies a framework for packet filtering, NAT, and port translation.
+Netfilter represents a set of hooks for network packets, it is integrated into the Linux kernel. It supplies a framework for packet filtering, NAT, and port translation.
 
 It is the first (deepest) layer for Linux firewalls.
 
 ### 1.2. Nftables and Iptables
 Nftables, which is the successor of Iptables, is the second layer of  Linux firewalls. It can be considered as a generic firewall. It allows  defining rulesets based on network packets.
 
-We can use nftables (or iptables, at the older Linux distros) to supply  firewall functionality, but because it is very complex; linux distros  supply higher level firewall tools for easy manipulation.
+We can use nftables (or iptables, at the older Linux distros) to supply firewall functionality, but because it is very complex; linux distros supply higher level firewall tools for easy manipulation.
 
 ### 1.3. Ufw
-Ufw is the higher level firewall program supplied by Ubuntu (Canonical).  Other distros can supply other higher level firewalls (like firewalld and  firewall-cmd from Red Hat).
+Ufw is the higher level firewall program supplied by Ubuntu (Canonical). Other distros can supply other higher level firewalls (like firewalld and  firewall-cmd from Red Hat).
 
 <br>
 
@@ -150,7 +150,8 @@ sudo ufw allow in on enp0s3 proto tcp from any to any port 22
 - **proto:** if we want to specify TCP or UDP protocol 
 - **tcp:** used with proto, could be tcp or udp
 - **from:** used to specify from address 
-- **any:** means all IPs, could be IP address or network too-# to: used to specify to address
+- **any:** means all IPs, could be IP address or network
+- **to:** used to specify to address
 - **port:** used to specify port number
 - **22:** port number, could be any port number
 
@@ -291,11 +292,12 @@ sudo ufw deny out proto tcp from any to any port 25
 ### 4.5. Additional Mariadb Exception
 Add one more deny exception for Mariadb
 
-```
-Before going on let's see our rules
-```
 
+Before going on let's see our rules
+
+```
 sudo ufw status numbered
+```
 
 ```
 Status: active
@@ -429,3 +431,4 @@ Status: active
 [ 6] 80/tcp (v6) on enp0s3      ALLOW IN    Anywhere (v6)             
 [ 7] 443/tcp (v6) on enp0s3     ALLOW IN    Anywhere (v6)                 
 ```
+

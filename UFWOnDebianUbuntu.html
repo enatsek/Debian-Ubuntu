@@ -847,7 +847,7 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h2>0. Specs</h2>
 <hr />
 <p>Basic UFW (Uncomplicated Firewall) tutorial. Enabling, adding, deleting  rules, syntax etc.</p>
-<p>Prepared for Debian 12/11 and Ubuntu 22.04/20.04 LTS Server</p>
+<p>Prepared for Debian 12/11 and Ubuntu 24.04/22.04 LTS Server</p>
 <p>Sources:<br />
 <a href="https://www.netfilter.org/">https://www.netfilter.org/</a><br />
 <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-22-04">https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-22-04</a><br />
@@ -858,13 +858,13 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h2>1. Firewall Architecture</h2>
 <hr />
 <h3>1.1. Netfilter</h3>
-<p>Netfilter represents a set of hooks for network packets, it is integrated to the Linux kernel. It supplies a framework for packet filtering, NAT, and port translation.</p>
+<p>Netfilter represents a set of hooks for network packets, it is integrated into the Linux kernel. It supplies a framework for packet filtering, NAT, and port translation.</p>
 <p>It is the first (deepest) layer for Linux firewalls.</p>
 <h3>1.2. Nftables and Iptables</h3>
 <p>Nftables, which is the successor of Iptables, is the second layer of  Linux firewalls. It can be considered as a generic firewall. It allows  defining rulesets based on network packets.</p>
-<p>We can use nftables (or iptables, at the older Linux distros) to supply  firewall functionality, but because it is very complex; linux distros  supply higher level firewall tools for easy manipulation.</p>
+<p>We can use nftables (or iptables, at the older Linux distros) to supply firewall functionality, but because it is very complex; linux distros supply higher level firewall tools for easy manipulation.</p>
 <h3>1.3. Ufw</h3>
-<p>Ufw is the higher level firewall program supplied by Ubuntu (Canonical).  Other distros can supply other higher level firewalls (like firewalld and  firewall-cmd from Red Hat).</p>
+<p>Ufw is the higher level firewall program supplied by Ubuntu (Canonical). Other distros can supply other higher level firewalls (like firewalld and  firewall-cmd from Red Hat).</p>
 <p><br></p>
 <h2>2. Ufw Basics</h2>
 <hr />
@@ -935,7 +935,8 @@ sudo ufw allow in proto tcp from any to any port 80
 <li><strong>proto:</strong> if we want to specify TCP or UDP protocol </li>
 <li><strong>tcp:</strong> used with proto, could be tcp or udp</li>
 <li><strong>from:</strong> used to specify from address </li>
-<li><strong>any:</strong> means all IPs, could be IP address or network too-# to: used to specify to address</li>
+<li><strong>any:</strong> means all IPs, could be IP address or network</li>
+<li><strong>to:</strong> used to specify to address</li>
 <li><strong>port:</strong> used to specify port number</li>
 <li><strong>22:</strong> port number, could be any port number</li>
 </ul>
@@ -1019,9 +1020,9 @@ sudo ufw allow in proto tcp from any to any port 443
 </code></pre>
 <h3>4.5. Additional Mariadb Exception</h3>
 <p>Add one more deny exception for Mariadb</p>
-<pre><code>Before going on let's see our rules
+<p>Before going on let's see our rules</p>
+<pre><code>sudo ufw status numbered
 </code></pre>
-<p>sudo ufw status numbered</p>
 <pre><code>Status: active
      To                         Action      From
      --                         ------      ----

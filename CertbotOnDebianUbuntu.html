@@ -846,29 +846,29 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h1>Auto Free SSL Certificates for Apache2 Tutorial on Debian and Ubuntu</h1>
 <h2>0. Specs</h2>
 <hr />
-<p>Automation of SSL and certificate renewal for Apache 2 on Debian 12 (also  11) and Ubuntu 22.04 (also 20.04) servers.</p>
-<p>My server's hostname is srv1.x11.xyz. You have to change it to yours.</p>
+<p>Automation of SSL and certificate renewal for Apache 2 on Debian 11/12 and Ubuntu 22.04/24.04 servers.</p>
+<p>My server's hostname is srv1.386387.xyz. You have to change it to yours.</p>
 <p>Sources:<br />
 <a href="https://certbot.eff.org/">https://certbot.eff.org/</a><br />
 <a href="https://123qwe.com/">https://123qwe.com/</a></p>
 <p><br></p>
 <h2>1. Preliminary Work</h2>
 <hr />
-<p>My server's name is srv1.x11.xyz and I have installed Apache2 and enabled the following site configuration:</p>
+<p>My server's name is srv1.386387.xyz and I have installed Apache2 and enabled the following site configuration:</p>
 <pre><code>sudo apt update
 sudo apt install apache2 -y
-sudo nano /etc/apache2/sites-available/srv1.x11.xyz.conf
+sudo nano /etc/apache2/sites-available/srv1.386387.xyz.conf
 </code></pre>
 <p>Fill as below:</p>
 <pre><code>&lt;VirtualHost *:80&gt;
-    ServerAdmin webmaster@x11.xyz   
-    ServerName srv1.x11.xyz
+    ServerAdmin webmaster@386387.xyz    
+    ServerName srv1.386387.xyz
     DocumentRoot /var/www/srv1
-    ErrorLog ${APACHE_LOG_DIR}/srv1.x11.xyz-error.log
-    CustomLog ${APACHE_LOG_DIR}/srv1.x11.xyz-access.log combined
+    ErrorLog ${APACHE_LOG_DIR}/srv1.386387.xyz-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv1.386387.xyz-access.log combined
 &lt;/VirtualHost&gt;
 </code></pre>
-<pre><code>sudo a2ensite srv1.x11.xyz.conf
+<pre><code>sudo a2ensite srv1.386387.xyz.conf
 sudo systemctl reload apache2
 </code></pre>
 <p>HTML files are placed to /var/www/srv1 and also some apache mods are  enabled to allow ssl and redirection.</p>
@@ -885,43 +885,43 @@ sudo apt install certbot -y
 </code></pre>
 <h3>2.2. Get Certificates</h3>
 <p>Run certbot to get certificates. For authentication method question;  select the option 2 (Place files ...), and enter root directory (/var/www/srv1 for my server). Enter an email address and accept TOS.</p>
-<pre><code>sudo certbot certonly -d srv1.x11.xyz
+<pre><code>sudo certbot certonly -d srv1.386387.xyz
 </code></pre>
-<p>Certificates are installed to /etc/letsencrypt/live/srv1.x11.xyz/</p>
+<p>Certificates are installed to /etc/letsencrypt/live/srv1.386387.xyz/</p>
 <h3>2.3. SSL Site Configuration</h3>
 <p>Create conf file for the SSL site</p>
-<pre><code>sudo nano /etc/apache2/sites-available/srv1.x11.xyz-ssl.conf
+<pre><code>sudo nano /etc/apache2/sites-available/srv1.386387.xyz-ssl.conf
 </code></pre>
 <p>Fill as below:</p>
 <pre><code>&lt;VirtualHost *:443&gt;
- ServerName srv1.x11.xyz
+ ServerName srv1.386387.xyz
  DocumentRoot /var/www/srv1
- ErrorLog ${APACHE_LOG_DIR}/srv1.x11.xyz-error.log
- CustomLog ${APACHE_LOG_DIR}/srv1.x11.xyz-access.log combined
+ ErrorLog ${APACHE_LOG_DIR}/srv1.386387.xyz-error.log
+ CustomLog ${APACHE_LOG_DIR}/srv1.386387.xyz-access.log combined
  SSLEngine on
- SSLCertificateFile /etc/letsencrypt/live/srv1.x11.xyz/fullchain.pem
- SSLCertificateKeyFile /etc/letsencrypt/live/srv1.x11.xyz/privkey.pem
+ SSLCertificateFile /etc/letsencrypt/live/srv1.386387.xyz/fullchain.pem
+ SSLCertificateKeyFile /etc/letsencrypt/live/srv1.386387.xyz/privkey.pem
 &lt;/VirtualHost&gt;
 </code></pre>
 <p>Enable the SSL site</p>
-<pre><code>sudo a2ensite srv1.x11.xyz-ssl.conf
+<pre><code>sudo a2ensite srv1.386387.xyz-ssl.conf
 </code></pre>
 <p>Reload Apache2</p>
 <pre><code>sudo systemctl reload apache2
 </code></pre>
-<p>Our SSL site is ready, and we can reach it by https://srv1.x11.xyz. But we need to do some fine tuning work, at the next section.</p>
+<p>Our SSL site is ready, and we can reach it by https://srv1.386387.xyz. But we need to do some fine tuning work, at the next section.</p>
 <p><br></p>
 <h2>3. Fine Tunings</h2>
 <hr />
 <h3>3.1. Redirect HTTP Site</h3>
-<p>https://srv1.x11.xyz goes to SSL site, but http://srv1.x11.xyz goes to  non-ssl site. </p>
+<p>https://srv1.386387.xyz goes to SSL site, but http://srv1.386387.xyz goes to  non-ssl site. </p>
 <p>We need to redirect every site access to http to https, with only 1  exception. Certbot tries to renew the certificate in every 2 months and  makes a challenge access to /.well-known/acme-challenge/ folder. So we # need to redirect everything except this folder.</p>
 <p>Edit http site configuration and change as below:</p>
-<pre><code>sudo nano /etc/apache2/sites-available/srv1.x11.xyz.conf
+<pre><code>sudo nano /etc/apache2/sites-available/srv1.386387.xyz.conf
 </code></pre>
 <pre><code>&lt;VirtualHost *:80&gt;
-    ServerAdmin webmaster@x11.xyz   
-    ServerName srv1.x11.xyz
+    ServerAdmin webmaster@386387.xyz    
+    ServerName srv1.386387.xyz
     DocumentRoot /var/www/srv1
     # Redirection BEGIN
     # Force redirect to HTTPS unless the request is for Let's Encrypt
@@ -930,8 +930,8 @@ sudo apt install certbot -y
     RewriteCond %{HTTPS} off
     RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301]
     # Redirection END
-    ErrorLog ${APACHE_LOG_DIR}/srv1.x11.xyz-error.log
-    CustomLog ${APACHE_LOG_DIR}/srv1.x11.xyz-access.log combined
+    ErrorLog ${APACHE_LOG_DIR}/srv1.386387.xyz-error.log
+    CustomLog ${APACHE_LOG_DIR}/srv1.386387.xyz-access.log combined
 &lt;/VirtualHost&gt;
 </code></pre>
 <p>Reload Apache</p>

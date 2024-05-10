@@ -22,11 +22,11 @@ This tutorial aims to bring you (and me) to a moderate level of  Virtualization 
 **virt-manager** is a GUI for managing VMs. I use it on my workstation for simple tasks.
 
 ### 0.2. Infrastructure
-- Server (Host): Debian (12/11) or Ubuntu (22.04/20.04) Server
-   - IP: 192.168.1.161 
+- Server (Host): Debian (12/11) or Ubuntu (24.04/22.04) Server
+   - IP: 192.168.1.121 
    - Name: elma
    - NIC: enp3s0f0
-- Workstation: Debian 12 or Ubuntu 22.04 LTS Desktop
+- Workstation: Debian 12 or Ubuntu 24.04 LTS Desktop
 - Network: 192.168.1.0/24 which is supplied by my internet modem
 
 ### 0.3. (Very) Basic Terminology
@@ -82,7 +82,7 @@ First we need to disable netfilter, which is enabled on bridges by  default.
 sudo nano /etc/sysctl.d/bridge.conf
 ```
 
-File is empty, add following lines
+File is empty, add the following lines
 
 ```
 net.bridge.bridge-nf-call-ip6tables=0
@@ -94,7 +94,7 @@ net.bridge.bridge-nf-call-arptables=0
 sudo nano /etc/udev/rules.d/99-bridge.rules
 ```
 
-File is empty, add following line
+File is empty, the add following line
 
 ```
 ACTION=="add", SUBSYSTEM=="module", KERNEL=="br_netfilter", RUN+="/sbin/sysctl -p /etc/sysctl.d/bridge.conf"
@@ -131,20 +131,20 @@ Backup your network configuration file
 If that file does not exist, there must be another file there with yaml  extension. Proceed with that file.
 
 ```
-sudo cp /etc/netplan/00-installer-config.yaml{,.backup}
+sudo cp /etc/netplan/50-cloud-init.yaml{,.backup}
 ```
 
 Edit your network config file
 
 ```
-sudo nano /etc/netplan/00-installer-config.yaml
+sudo nano /etc/netplan/50-cloud-init.yaml
 ```
 
 Remove its content , fill it as below, beware of changing enp3s0f0 to  your interface name. If you have more than 1 interfaces, add them too.
  
 Also you should add an IP address and default gateway from your local  network. 
 
-Mine are 192.168.1.161 and 192.168.1.1
+Mine are 192.168.1.121 and 192.168.1.1
 
 ```
 network:
@@ -156,7 +156,7 @@ network:
     br0:
       interfaces: [enp3s0f0]
       addresses:
-      - 192.168.1.161/24
+      - 192.168.1.121/24
       routes:
       - to: default
         via: 192.168.1.1
@@ -232,7 +232,7 @@ Remove its content , fill it as below, beware of changing enp3s0f0 to  your inte
 
 Also you should add an IP address and default gateway from your local  network. 
 
-Mine are 192.168.1.161 and 192.168.1.1
+Mine are 192.168.1.121 and 192.168.1.1
 
 ```
 auto lo
@@ -244,7 +244,7 @@ iface enp3s0f0 inet manual
 #set up bridge and give it a static ip
 auto br0
 iface br0 inet static
-        address 192.168.1.161
+        address 192.168.1.121
         netmask 255.255.255.0
         network 192.168.1.0
         broadcast 192.168.1.255
@@ -394,7 +394,7 @@ sudo apt install cloud-image-utils --yes
 A search for "ubuntu cloud image" in duckduck2 gives the following  address:  
 <https://cloud-images.ubuntu.com/>
 
-Following jammy and current, download kvm image jammy-server-cloudimg-amd64.img, and put it in the server's /srv/isos folder.
+Following noble and current, download kvm image noble-server-cloudimg-amd64.img, and put it in the server's /srv/isos folder.
 
 Similarly a search for "debian cloud images" in duckduck2 gives the  following address:  
 <https://cloud.debian.org/images/cloud/>
@@ -407,7 +407,7 @@ We will create new images from the images we downloaded. Image sizes will be inc
 Ubuntu image:
 
 ```
-sudo qemu-img create -b /srv/isos/jammy-server-cloudimg-amd64.img \
+sudo qemu-img create -b /srv/isos/noble-server-cloudimg-amd64.img \
     -F qcow2 -f qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 20G
 ```
 
@@ -454,12 +454,12 @@ Create our ubuntu server's cloud-init file
 sudo nano /srv/init/ubuntu-cloud-init.cfg
 ```
 
-Fill as below:
+Fill as below (Remember updating password with the hash you get):
 
 ```
 #cloud-config
-hostname: ubuntu22
-fqdn: ubuntu22.x386.org
+hostname: ubuntu24
+fqdn: ubuntu24.x386.org
 manage_etc_hosts: true
 groups: exforge
 users:
@@ -551,7 +551,7 @@ For Ubuntu server:
 
 ```
 sudo cloud-localds --network-config /srv/init/ubuntu-network-init.cfg \
-   /srv/kvm/ubuntu22-seed.qcow2 \
+   /srv/kvm/ubuntu24-seed.qcow2 \
    /srv/init/ubuntu-cloud-init.cfg
 ```
 
@@ -567,14 +567,14 @@ sudo cloud-localds --network-config /srv/init/debian-network-init.cfg \
 Ubuntu Server:
 
 ```
-virt-install --name ubuntu22 \
+virt-install --name ubuntu24 \
   --connect qemu:///system \
   --virt-type kvm --memory 2048 --vcpus 2 \
   --boot hd,menu=on \
-  --disk path=/srv/kvm/ubuntu22-seed.qcow2,device=cdrom \
+  --disk path=/srv/kvm/ubuntu24-seed.qcow2,device=cdrom \
   --disk path=/srv/kvm/ubuntusrv-cloudimg.qcow2,device=disk \
   --graphics vnc,port=5902,listen=0.0.0.0 \
-  --os-variant ubuntu22.04 \
+  --os-variant ubuntu24.04 \
   --network bridge=br0 \
   --noautoconsole \
   --install no_install=yes
@@ -615,7 +615,7 @@ virt-install --name debian12 \
 - It might take a few minutes for cloud-init to finish. You can connect to your VM from your workstation.
 
 ```
-virt-viewer --connect qemu+ssh://exforge@elma/system ubuntu22
+virt-viewer --connect qemu+ssh://exforge@elma/system ubuntu24
 virt-viewer --connect qemu+ssh://exforge@elma/system debian12
 ```
 
@@ -697,7 +697,7 @@ virsh reboot NAME
 virsh destroy NAME
 virsh undefine NAME
 virsh undefine NAME --remove-all-storage
-virsh reboot ubuntu22
+virsh reboot ubuntu24
 ```
 
 ### 5.4. Pause and resume a VM
@@ -766,7 +766,7 @@ Activate immediately and keep the changes after the next shutdown and  start
 
 ```
 virsh setmem NAME 1536M --live --config
-virsh setmem ubuntu22 2536M --live --config
+virsh setmem ubuntu24 2536M --live --config
 ```
 
 **Beware of Shutdown and Start. Reboots do not count.**
@@ -803,7 +803,7 @@ There is no way (AFAIK) to change maximum live value, you can change  maximum co
 
 ```
 virsh setvcpus NAME NUMBER --maximum --config
-virsh setvcpus ubuntu22 3 --maximum --config
+virsh setvcpus ubuntu24 3 --maximum --config
 ```
 
 To change current vcpu count for the current state (all options are valid)
@@ -812,23 +812,23 @@ To change current vcpu count for the current state (all options are valid)
 virsh setvcpus NAME NUMBER
 virsh setvcpus NAME NUMBER --current
 virsh setvcpus NAME NUMBER --live
-virsh setvcpus ubuntu22 3 
-virsh setvcpus ubuntu22 3 --current
-virsh setvcpus ubuntu22 3 --live
+virsh setvcpus ubuntu24 3 
+virsh setvcpus ubuntu24 3 --current
+virsh setvcpus ubuntu24 3 --live
 ```
 
 To change current vcpu count for the config state
 
 ```
 virsh setvcpus NAME NUMBER --config
-virsh setvcpus ubuntu22 3 --config
+virsh setvcpus ubuntu24 3 --config
 ```
 
 To do it both together
 
 ```
 virsh setvcpus NAME NUMBER --config --live
-virsh setvcpus ubuntu22 3 --config --live
+virsh setvcpus ubuntu24 3 --config --live
 ```
 
 You can both increase and decrease the vcpu count. But beware that  decreasing vcpu count of a running VM could be dangerous.
@@ -855,7 +855,7 @@ Take a live snapshot
 
 ```
 virsh snapshot-create-as VMNAME --name SNAPSHOTNAME --description DESCRIPTION
-virsh snapshot-create-as ubuntu22 --name ss1-ubuntu22 --description "First Snapshot of Ubuntu22"
+virsh snapshot-create-as ubuntu24 --name ss1-ubuntu24 --description "First Snapshot of Ubuntu24"
 ```
 
 The snapshot becomes the current one and everything after is built onto  this snapshot. If you want to revert to that snapshot:
@@ -895,19 +895,19 @@ virsh snapshot-list VMNAME
 ```
 
 ### 5.10. Attach Another Disk to a VM
-Suppose that, for our ubuntu22 VM, we need another disk of 20GB size.  Because, we need to keep some data on another disk. 
+Suppose that, for our ubuntu24 VM, we need another disk of 20GB size.  Because, we need to keep some data on another disk. 
 
 We need to create a new image and attach it to the VM.
 
 Create a 20GB image in qcow2 format:
 
 ```
-sudo qemu-img create -f qcow2 /srv/kvm/ubuntu22-disk2.qcow2 20G
+sudo qemu-img create -f qcow2 /srv/kvm/ubuntu24-disk2.qcow2 20G
 ```
 
 Now our image is ready to be attached to our VM. Before attaching it to  the VM, we have to decide its name on the VM.
 
-VM disks are named as vda, vdb, vdc ... so on. We have to give it a name  that follows the last disk name. Because my ubuntu22 VM has only one  disk, name for the second one will be vdb. To see your disks on your VM, type the following command (On your VM):
+VM disks are named as vda, vdb, vdc ... so on. We have to give it a name  that follows the last disk name. Because my ubuntu24 VM has only one  disk, name for the second one will be vdb. To see your disks on your VM, type the following command (On your VM):
 
 ```
 lsblk -o name -d | grep vd
@@ -915,10 +915,10 @@ lsblk -o name -d | grep vd
 
 Most probably you will only have vda, in that case you can use the name  vdb. Otherwise use a name just after the last disk name.
 
-Add the new image as a second disk to my ubuntu22 VM:
+Add the new image as a second disk to my ubuntu24 VM:
 
 ```
-virsh attach-disk ubuntu22 /srv/kvm/ubuntu22-disk2.qcow2 vdb --persistent
+virsh attach-disk ubuntu24 /srv/kvm/ubuntu24-disk2.qcow2 vdb --persistent
 ```
 
 The disk is added persistently, that is it is added alive and it will be  there after shutdown and and start. If you want to add the disk for the # session only, you can change --persistent to --live. Also, if you want to  add the disk after shutdown and start you can change --persistent to --config.
@@ -928,7 +928,7 @@ Needless to say that, you are going to have to mount the new disk before  using 
 In any case, if you want to detach the added disk, solution is easy:
 
 ```
-virsh detach-disk ubuntu22 vdb --persistent
+virsh detach-disk ubuntu24 vdb --persistent
 ```
 
 As in virsh attach-disk, you can change --persistent option to --live or  --config.
@@ -958,7 +958,7 @@ qemu-img info FILENAME
 
 FILENAME is the name of the file which is the image for the VM.
 
-For my ubuntu22 VM's image info:
+For my ubuntu24 VM's image info:
 
 ```
 qemu-img info /srv/kvm/ubuntusrv-cloudimg.qcow2
@@ -972,7 +972,7 @@ qemu-img create -f FORMAT FILENAME SIZE
 Remember, at 5.10. we created an empty disk image to add as another disk  to a VM:
 
 ```
-sudo qemu-img create -f qcow2 /srv/kvm/ubuntu22-disk2.qcow2 20G
+sudo qemu-img create -f qcow2 /srv/kvm/ubuntu24-disk2.qcow2 20G
 ```
 
 An image also can be created by backing from another image. In that way,  we will have another image from an image, differentiating its format and  size:
@@ -1005,7 +1005,7 @@ There are a lot of formats for images. For us, the 2 most important ones  are ra
 qemu-img convert -f SOURCEFORMAT -O DESTINATIONFORMAT SOURCEFILE DESTFILE
 ```
 
-I have Virtualbox installed on my workstation (Ubuntu 22.04 LTS). There  is a Windows 10 installed on it for testing purposes. I'll copy its image  (obviously in vdi format) to my server to /srv/kvm directory, convert it to qcow2 and run it on my server using KVM. 
+I have Virtualbox installed on my workstation (Ubuntu 24.04 LTS). There  is a Windows 10 installed on it for testing purposes. I'll copy its image  (obviously in vdi format) to my server to /srv/kvm directory, convert it to qcow2 and run it on my server using KVM. 
 
 
 Copy Windows 10 image to the server
@@ -1089,7 +1089,7 @@ mkdir /tmp/kvmbackup
 We need the definition file of our VM and the image file it is using.  "virsh dumpxml" command creates the definition file in xml format, we can  save it with the VM's name.
 
 ```
-virsh dumpxml ubuntu22 > /tmp/kvmbackup/ubuntu22.xml
+virsh dumpxml ubuntu24 > /tmp/kvmbackup/ubuntu24.xml
 ```
 
 This file contains all the necessary metadata information about our VM.
@@ -1101,22 +1101,22 @@ We need to copy all the images.
 Images used by the VM is listed in the xml file. Let's find them:
 
 ```
-grep "source file" /tmp/kvmbackup/ubuntu22.xml
+grep "source file" /tmp/kvmbackup/ubuntu24.xml
 ```
 
-For my ubuntu22 VM, output is listed below:
+For my ubuntu24 VM, output is listed below:
 
 ```
-      <source file='/srv/kvm/ubuntu22-seed.qcow2'/>
+      <source file='/srv/kvm/ubuntu24-seed.qcow2'/>
       <source file='/srv/kvm/ubuntusrv-cloudimg.qcow2'/>
 ```
 
-That means I need to prepare 2 files: /srv/kvm/ubuntu22-seed.qcow2 and /srv/kvm/ubuntusrv-cloudimg.qcow2 .
+That means I need to prepare 2 files: /srv/kvm/ubuntu24-seed.qcow2 and /srv/kvm/ubuntusrv-cloudimg.qcow2 .
 
 Lets copy them to our backup locations.
 
 ```
-cp /srv/kvm/ubuntu22-seed.qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 \
+cp /srv/kvm/ubuntu24-seed.qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 \
    /tmp/kvmbackup
 ```
 
@@ -1125,10 +1125,10 @@ cp /srv/kvm/ubuntu22-seed.qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 \
 Let's package them
 
 ```
-tar -cf /tmp/ubuntu22.tar -C /tmp/kvmbackup .
+tar -cf /tmp/ubuntu24.tar -C /tmp/kvmbackup .
 ```
 
-Now we have /tmp/ubuntu22.tar, it has all the necessary data to import our VM anywhere.
+Now we have /tmp/ubuntu24.tar, it has all the necessary data to import our VM anywhere.
 
 You have to copy this file to another server, before importing there.
 
@@ -1137,7 +1137,7 @@ Assuming we have another virtualization server and we have copied  ubuntu20.tar 
 
 **Beware:** Before importing your VM to another server, you have to remove it on the original server, otherwise you would have 2 guests with the same IP and that may cause unexpected (and unpleasant) results.
 
-ubuntu22.tar is copied to the server's /tmp directory as /tmp/ubuntu22.tar
+ubuntu24.tar is copied to the server's /tmp directory as /tmp/ubuntu24.tar
 
 Create a place for our import files
 
@@ -1148,26 +1148,26 @@ mkdir /tmp/import
 Extract tar file there
 
 ```
-tar -xf /tmp/ubuntu22.tar -C /tmp/import
+tar -xf /tmp/ubuntu24.tar -C /tmp/import
 ```
 
 Now we need to move our image files to their directories as in the  original server. If you have a different directory structure on your new  server, and you want to copy files to different directories you have to  edit the xml file and change directories there.
 
 ```
-sudo cp /tmp/import/ubuntu22-seed.qcow2 \
+sudo cp /tmp/import/ubuntu24-seed.qcow2 \
     /tmp/import/ubuntusrv-cloudimg.qcow2 /srv/kvm
 ```
  
-It is time to define our server. Remember the xml file? We will use it  to define our ubuntu22 server.
+It is time to define our server. Remember the xml file? We will use it  to define our ubuntu24 server.
 
 ```
-virsh define /tmp/import/ubuntu22.xml
+virsh define /tmp/import/ubuntu24.xml
 ```
 
 Now we can start it
 
 ```
-virsh start ubuntu22
+virsh start ubuntu24
 ```
 
 <br>
@@ -1193,7 +1193,7 @@ sudo apt-get --yes install libguestfs-tools
 Works online (While the VM is running) Mount my VMs disk on my host's /mnt directory:
 
 ```
-sudo guestmount -d ubuntu22 -i --ro /mnt
+sudo guestmount -d ubuntu24 -i --ro /mnt
 ```
 
 /mnt directory holds all the files of my VM. If you remove --ro, you can  mount it with write permissions. But be very careful.

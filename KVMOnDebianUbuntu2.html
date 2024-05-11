@@ -852,14 +852,14 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <p>This tutorial specializes on KVM Networking.</p>
 <h3>0.1. Infrastructure</h3>
 <ul>
-<li>Server (Host): Debian (12/11) or Ubuntu (22.04/20.04) Server</li>
-<li>IP: 192.168.1.161 </li>
+<li>Server (Host): Debian (12/11) or Ubuntu (24.04/22.04) Server</li>
+<li>IP: 192.168.1.121 </li>
 <li>Name: elma</li>
 <li>NIC1: enp3s0f0</li>
 <li>NIC2: enx00e04c534458</li>
 <li>Network1: 192.168.1.0/24 which is supplied by my internet modem (1st  interface)</li>
 <li>Network2: 10.1.1.0/24 with an external switch (2nd interface)</li>
-<li>Workstation: Debian 12 or Ubuntu 22.04 LTS Desktop</li>
+<li>Workstation: Debian 12 or Ubuntu 24.04 LTS Desktop</li>
 </ul>
 <h3>0.2. Resources</h3>
 <p>ISBN: 978-1-78829-467-6 <strong>KVM Virtualization Cookbook</strong> by Konstantin Ivanov</p>
@@ -926,7 +926,7 @@ virsh net-dumpxml host-bridge
   bridges:
     br0:
       interfaces: [ enp3s0f0 ]
-      addresses: [192.168.1.161/24]
+      addresses: [192.168.1.121/24]
       routes:
       - to: default
         via: 192.168.1.1
@@ -972,7 +972,7 @@ iface enp3s0f0 inet manual
 #set up bridge and give it a static ip
 auto br0
 iface br0 inet static
-        address 192.168.1.161
+        address 192.168.1.121
         netmask 255.255.255.0
         network 192.168.1.0
         broadcast 192.168.1.255
@@ -1022,7 +1022,7 @@ virsh net-start NETWORKNAME
 <pre><code>virsh net-autostart host-bridge2
 virsh net-autostart NETWORKNAME
 </code></pre>
-<p>Now we have 2 bridges. If we want a VM in 192.168.0.0/24 network we use  br0, if we want it in 10.1.1.0/24 then we use br1.</p>
+<p>Now we have 2 bridges. If we want a VM in 192.168.1.0/24 network we use  br0, if we want it in 10.1.1.0/24 then we use br1.</p>
 <h3>1.3. Stopping and Removing KVM Networks</h3>
 <p>Stop a KVM Network</p>
 <pre><code>virsh net-destroy NETWORKNAME
@@ -1046,9 +1046,9 @@ virsh net-undefine host-bridge2
 <p>Random MAC Address Generator:</p>
 <p><a href="https://www.browserling.com/tools/random-mac">https://www.browserling.com/tools/random-mac</a></p>
 <h3>2.1. Bridged Networks</h3>
-<p>I believe you already have an idea of bridged networks. It is like the  host is sharing its interface and network with the VM. VM is in the same # network as the host. If there is a DHCP Server on the network the host  resides, the VM can use it to get an IP.</p>
-<p>If you are going to use a server which directly serves information or a  service to the users, most probably you'll use a Bridged Network.</p>
-<p>To use a bridged network, first you need to create the bridge in the host machine's network configuration, and then prepare an XML file and add # the network to the KVM with <code>virsh net-define</code> command, as we did in 1.2.</p>
+<p>I believe you already have an idea of bridged networks. It is like the  host is sharing its interface and network with the VM. VM is in the same network as the host. If there is a DHCP Server on the network the host  resides, the VM can use it to get an IP.</p>
+<p>If you are going to use a server which directly serves information or a service to the users, most probably you'll use a Bridged Network.</p>
+<p>To use a bridged network, first you need to create the bridge in the host machine's network configuration, and then prepare an XML file and add the network to the KVM with <code>virsh net-define</code> command, as we did in 1.2.</p>
 <p>A sample Bridged Network XML File:</p>
 <pre><code>&lt;network&gt;
   &lt;name&gt;host-bridge2&lt;/name&gt;
@@ -1064,8 +1064,8 @@ virsh net-undefine host-bridge2
 <li>Replace br1 with your bridge name in netplan file.</li>
 </ul>
 <h3>2.2. NAT Network</h3>
-<p>A NAT (Network Address Translation) Network is similar to (actually the  same as) your home network behind your internet router. Your host's  interface stands like your internet router and VMs are like your home  devices. </p>
-<p>When VMs want to access to the network, they use host's IP  address, but the other devices on the network cannot access to your VMs.</p>
+<p>A NAT (Network Address Translation) Network is similar to (actually the same as) your home network behind your internet router. Your host's interface stands like your internet router and VMs are like your home devices. </p>
+<p>When VMs want to access to the network, they use host's IP address, but the other devices on the network cannot access to your VMs.</p>
 <p>This type of network is useful when you don't want anyone to access your  VMs, but you want your VMs to access everywhere. </p>
 <p>An example of NAT Network XML File:</p>
 <pre><code>&lt;network&gt;
@@ -1091,13 +1091,13 @@ virsh net-undefine host-bridge2
 <li>Replace d589efd6-7d61-4f92-976b-bde62956cca7 with your generated uuid.</li>
 <li>Replace brnat with your chosen bridge name.</li>
 <li>Replace 52:54:00:6e:a9:d8 with your generated MAC address.</li>
-<li>Our nat bridge will have 192.168.122.1/24 IP and a DHCP server will  announce addresses between 192.168.122.101 and 192.168.10.254. Change  these values as you like.</li>
+<li>Our nat bridge will have 192.168.122.1/24 IP and a DHCP server will announce addresses between 192.168.122.101 and 192.168.10.254. Change these values as you like.</li>
 </ul>
 <h3>2.3. Isolated Network</h3>
-<p>An Isolated Network, as the name implies, is isolated. Noone can go out,  noone can come in. </p>
-<p>The VMs in the isolated network cannot reach outside, and the devices  outside cannot reach the VMs in the isolated network. Only the devices in  the isolated network can reach to each other.</p>
-<p>Although it is very useful for testing purposes, there might be some  situations that isolated network could be very useful in the production. </p>
-<p>Consider you have a web server and a database server. The DB server can  only be accessed by the web server and the web server will be accessed by  everyone. You can put the DB server in an isolated network and define 2  interfaces for the web server as 1 in a bridged network and the other one  in the isolated network. That way, noone other than the web server can  access the DB server.</p>
+<p>An Isolated Network, as the name implies, is isolated. Noone can go out, noone can come in. </p>
+<p>The VMs in the isolated network cannot reach outside, and the devices outside cannot reach the VMs in the isolated network. Only the devices in the isolated network can reach to each other.</p>
+<p>Although it is very useful for testing purposes, there might be some situations that isolated network could be very useful in the production. </p>
+<p>Consider you have a web server and a database server. The DB server can only be accessed by the web server and the web server will be accessed by everyone. You can put the DB server in an isolated network and define 2 interfaces for the web server as 1 in a bridged network and the other one in the isolated network. That way, noone other than the web server can access the DB server.</p>
 <p>An example of Isolated Network XML File:</p>
 <pre><code>&lt;network&gt;
   &lt;name&gt;isolated&lt;/name&gt;
@@ -1186,8 +1186,8 @@ virsh net-undefine host-bridge2
 <p>On Debian 11, --os-variant ubuntu22.04 gives an error. In that case,  change it as --os-variant ubuntu20.04.</p>
 <p>Now you can connect VM1 and VM2 from your workstation and install them. </p>
 <h3>3.4. Considerations for Isolated Networks</h3>
-<p>If a VM is in an isolated network, and if it has no connections to other # networks, it cannot connect to the internet. That means, VM1 can connect  to the internet and VM2 cannot connect to the internet. </p>
-<p>Actually, when we put it in an isolated network, we accepted that it  won't connect to other networks. But we need internet to install or update applications.</p>
+<p>If a VM is in an isolated network, and if it has no connections to the other networks, it cannot connect to the internet. That means, VM1 can connect  to the internet and VM2 cannot connect to the internet. </p>
+<p>Actually, when we put it in an isolated network, we accepted that it won't connect to other networks. But we need internet to install or update applications.</p>
 <p>I have a not so bad solution for this situation. Install squid proxy to  the host, make it listen to Isolated Network IP of host (192.168.20.1),  allow all IPs to access it. Configure your VMs to use "apt" command  through a proxy.</p>
 <p>I won't go in the details of installing and configuring squid proxy here, there are tons of materials on the internet about it. </p>
 <p>Configure your VM to use apt commands through a proxy:</p>
@@ -1207,8 +1207,8 @@ virsh net-undefine host-bridge2
 <h3>4.1. Specs:</h3>
 <ul>
 <li>Both interfaces of host are connected to my internet router.</li>
-<li>Our host has a bridged network on 192.168.1.0/24 (192.168.1.161-NIC 1)</li>
-<li>Our host has a standart network on 192.168.1.0/24 (192.168.1.162-NIC 2) </li>
+<li>Our host has a bridged network on 192.168.1.0/24 (192.168.1.121-NIC 1)</li>
+<li>Our host has a standart network on 192.168.1.0/24 (192.168.1.122-NIC 2) </li>
 <li>Our VM will have 1 interface on bridged network. </li>
 <li>The first nic will be used by VMs and the second nic will be used to  access the host.</li>
 </ul>
@@ -1229,7 +1229,7 @@ virsh net-undefine host-bridge2
       dhcp4: false
       dhcp6: false
     enx00e04c534458:
-      addresses: [192.168.1.162/24]
+      addresses: [192.168.1.122/24]
       routes:
       - to: 192.168.1.0/24
         via: 192.168.1.1
@@ -1240,7 +1240,7 @@ virsh net-undefine host-bridge2
   bridges:
     br0:
       interfaces: [ enp3s0f0 ]
-      addresses: [192.168.1.161/24]
+      addresses: [192.168.1.121/24]
       routes:
       - to: default
         via: 192.168.1.1
@@ -1269,7 +1269,7 @@ auto enp3s0f0
 iface enp3s0f0 inet manual
 auto br0
 iface br0 inet static
-        address 192.168.1.161
+        address 192.168.1.121
         netmask 255.255.255.0
         network 192.168.1.0
         broadcast 192.168.1.255
@@ -1281,7 +1281,7 @@ iface br0 inet static
         dns-nameservers 8.8.8.8
 auto enx00e04c534458
 iface enx00e04c534458 inet static
-        address 192.168.1.162
+        address 192.168.1.122
         netmask 255.255.255.0
         network 192.168.1.0
         gateway 192.168.1.1
@@ -1312,7 +1312,7 @@ Fill as below:
 virsh net-autostart host-bridge
 </code></pre>
 <h3>4.4. Create a VM on the Bridged Network</h3>
-<p>Now, if we create a VM on br0 bridge, it will use the first interface of # the host, and we will keep using the second interface at 192.168.0.202</p>
+<p>Now, if we create a VM on br0 bridge, it will use the first interface of # the host, and we will keep using the second interface at 192.168.1.202</p>
 <pre><code>sudo virt-install --name vm3 \
     --connect qemu:///system  --virt-type kvm \
     --memory 1024 --vcpus 1 \

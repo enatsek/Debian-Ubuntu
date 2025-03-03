@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>KeepalivedOnDebianUbuntu</h5>
 <h1>keepalived Clustering on Debian and Ubuntu</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <ul>
 <li>Servers may be Debian 11/12 or Ubuntu 22.04/24.04</li>
@@ -866,7 +873,11 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <li>Establishing Master-Master Replication for Mariadb on 1st and 2nd servers</li>
 </ol>
 <p><br></p>
-<h2>1. Install keepalived</h2>
+</details>
+<details>
+<summary>
+1. Install keepalived
+</summary>
 <hr />
 <p>Install on both the first and the second servers</p>
 <pre><code>sudo apt update
@@ -874,7 +885,11 @@ sudo apt -y install keepalived
 </code></pre>
 <p>After the installation, tries to start but cannot because there is no config.</p>
 <p><br></p>
-<h2>2. First Server Config</h2>
+</details>
+<details>
+<summary>
+2. First Server Config
+</summary>
 <hr />
 <h3>2.1. Config</h3>
 <p>Config file location is /etc/keepalived directory, initially empty</p>
@@ -946,19 +961,28 @@ vrrp_instance VI_1 {
 </ul>
 </li>
 </ul>
-<h2>3. Second Server Config</h2>
+</details>
+<details>
+<summary>
+3. Second Server Config
+</summary>
 <hr />
 <p>Almost the same as step 2. Just give a smaller number (say 90) for priority.</p>
 <p>If you want to add more servers, give them numbers less then 90</p>
 <p><br></p>
-<h2>4. Start keepalived</h2>
+</details>
+<details>
+<summary>
+4. Start keepalived
+</summary>
 <hr />
 <p>Run on both servers</p>
 <pre><code>sudo systemctl start keepalived
 </code></pre>
 <p>You can check the status of your cluster</p>
 <pre><code>systemctl status -l keepalived
-</code></pre><!-- HTML Footer Start -->
+</code></pre>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

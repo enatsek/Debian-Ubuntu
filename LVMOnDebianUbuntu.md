@@ -1,7 +1,10 @@
 ##### LVMOnDebianUbuntu 
 # Logical Volume Manager on Debian and Ubuntu Server
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 ### 0.1. Info
 LVM, or Logical Volume Manager allows for more flexible and dynamic  management of disk space compared to traditional partitioning schemes. 
@@ -25,8 +28,12 @@ Tested on the following environments:
 ChatGPT
 
 <br>
+</details>
 
-## 1. Layers of LVM
+<details markdown='1'>
+<summary>
+1. Layers of LVM
+</summary>
 ---
 ### 1.0. Abstract
 - Physical Volumes (PV) are defined from disks or partitions.
@@ -112,8 +119,12 @@ lvcreate --type striped -i 2 -I 4M -L 200G -n striped_lv myvg
 ```
 
 <br>
+</details>
 
-## 2. Physical Volume Commands
+<details markdown='1'>
+<summary>
+2. Physical Volume Commands
+</summary>
 ---
 ### 2.1. pvs
 Provides physical volume information in a configurable form, displaying one line per physical volume
@@ -216,8 +227,12 @@ sudo pvck /dev/sdb1
 ```
 
 <br>
+</details>
 
-## 3. Volume Group Commands
+<details markdown='1'>
+<summary>
+3. Volume Group Commands
+</summary>
 ---
 ### 3.1. vgs
 Provides volume group information in a configurable form, displaying one line per volume group
@@ -345,8 +360,12 @@ sudo vgck --updatemetadata myvg -v
 - vgsplit: Move PVs into a new or existing volume group
 
 <br>
+</details>
 
-## 4. Logical Volume Commands
+<details markdown='1'>
+<summary>
+4. Logical Volume Commands
+</summary>
 ---
 ### 4.1. lvs
 Provides logical volume information in a configurable form, displaying one line per logical volume
@@ -498,9 +517,13 @@ sudo lvrename myvg mylv mynewlv2
 - lvresize: Resize a logical volume.
 
 <br>
+</details>
 
-## 5. Case Study 1 - Installing LVM and Manipulating Disks, PVs, VGs, LVs
+<details markdown='1'>
+<summary>
+5. Case Study 1 - Installing LVM and Manipulating Disks, PVs, VGs, LVs
 ---
+</summary>
 ### 5.0. Specs
 We have a system installed without LVM. 
 
@@ -850,8 +873,12 @@ ls -al /mnt/mylv/tmp
 ```
 
 <br>
+</details>
 
-## 6. Case Study 2 - LVM and Snapshot
+<details markdown='1'>
+<summary>
+6. Case Study 2 - LVM and Snapshot
+</summary>
 When we take a snapshot, we create a place to save the original states of the files that are changed after the snapshot.
 
 That way, those original states can be used to revert to the snapshot.
@@ -1091,8 +1118,12 @@ sudo reboot
 Our snapshot LV is gone after the merge.
 
 <br>
+</details>
 
-## 7. Case Study 3 - Export and Import of LVM
+<details markdown='1'>
+<summary>
+7. Case Study 3 - Export and Import of LVM
+</summary>
 ---
 It is possible to export and import Volume Groups with their Logical Volumes.
 
@@ -1325,8 +1356,12 @@ ls -al /mnt/mylv2
 ```
 
 <br>
+</details>
 
-## 8. Uncovered Subjects
+<details markdown='1'>
+<summary>
+8. Uncovered Subjects
+</summary>
 ---
 The following subjects are not covered in this tutorial:
 
@@ -1339,3 +1374,6 @@ The following subjects are not covered in this tutorial:
 - Controlling All
 ocation
 - LVM object tags
+
+</details>
+

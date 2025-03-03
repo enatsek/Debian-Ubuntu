@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,32 +836,34 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>CertbotOnDebianUbuntu</h5>
 <h1>Auto Free SSL Certificates for Apache2 Tutorial on Debian and Ubuntu</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <p>Automation of SSL and certificate renewal for Apache 2 on Debian 11/12 and Ubuntu 22.04/24.04 servers.</p>
 <p>My server's hostname is srv1.386387.xyz. You have to change it to yours.</p>
 <p>Sources:<br />
-<a href="https://certbot.eff.org/">https://certbot.eff.org/</a><br />
-<a href="https://123qwe.com/">https://123qwe.com/</a></p>
+<a href="https://certbot.eff.org/">certbot.eff.org</a><br />
+<a href="https://123qwe.com/">123qwe.com</a></p>
 <p><br></p>
-<h2>1. Preliminary Work</h2>
+</details>
+<details>
+<summary>
+1. Preliminary Work
+</summary>
 <hr />
 <p>My server's name is srv1.386387.xyz and I have installed Apache2 and enabled the following site configuration:</p>
 <pre><code>sudo apt update
@@ -877,7 +888,11 @@ sudo a2enmod rewrite
 sudo systemctl restart apache2
 </code></pre>
 <p><br></p>
-<h2>2. Certbot</h2>
+</details>
+<details>
+<summary>
+2. Certbot
+</summary>
 <hr />
 <h3>2.1. Install Certbot</h3>
 <pre><code>sudo apt update
@@ -911,7 +926,11 @@ sudo apt install certbot -y
 </code></pre>
 <p>Our SSL site is ready, and we can reach it by https://srv1.386387.xyz. But we need to do some fine tuning work, at the next section.</p>
 <p><br></p>
-<h2>3. Fine Tunings</h2>
+</details>
+<details>
+<summary>
+3. Fine Tunings
+</summary>
 <hr />
 <h3>3.1. Redirect HTTP Site</h3>
 <p>https://srv1.386387.xyz goes to SSL site, but http://srv1.386387.xyz goes to  non-ssl site. </p>
@@ -957,7 +976,8 @@ systemctl reload dovecot
 </code></pre>
 <p>Make the script executable</p>
 <pre><code>sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
-</code></pre><!-- HTML Footer Start -->
+</code></pre>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

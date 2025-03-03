@@ -6,4 +6,4 @@ I am learning Debian and Ubuntu Linux and Python 3 all myself, with the help of 
 
 Please consider that all these documents are prepared for self reference, and they are a bit informal. I’ll be glad if they can help anyone around the world.
 
-If you cannot bother yourself to read Licence and Privacy Policy pages, here is a very brief version of them: You can freely use documents on this site and we do not keep any of your personal data.
+If you cannot bother yourself to read Licence and Privacy Policy pages, here is a very brief version of them: You can freely use documents on this site and we do not keep any of your personal data, never.

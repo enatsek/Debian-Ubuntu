@@ -1,7 +1,10 @@
 ##### NetworkOnDebian 
 # Network Configuration On Debian 
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 ### 0.0. Info
 Network configuration examples on Debian 11 and 12.
@@ -85,14 +88,18 @@ sudo systemctl restart networking
 ```
 
 ### 0.5. Sources
-<https://www.mybluelinux.com/debian-permanent-static-routes/>  
-<https://wiki.debian.org/NetworkConfiguration>  
-<https://www.debian.org/doc/manuals/debian-handbook/sect.network-config>  
+[www.mybluelinux.com](https://www.mybluelinux.com/debian-permanent-static-routes/)  
+[Debian Wiki](https://wiki.debian.org/NetworkConfiguration)  
+[www.debian.org](https://www.debian.org/doc/manuals/debian-handbook/sect.network-config)  
 ChatGPT
 
 <br>
+</details>
 
-## 1. Example Configurations
+<details markdown='1'>
+<summary>
+1. Example Configurations
+</summary>
 ---
 ### 1.1. DHCP Configuration
 Our nic is enp0s3
@@ -203,8 +210,12 @@ sudo systemctl restart networking
 ```
 
 <br>
+</details>
 
-## 2. Case Study - Multiple Networks
+<details markdown='1'>
+<summary>
+2. Case Study - Multiple Networks
+</summary>
 ---
 ### 2.0. Specs
 We have 2 separate networks (192.168.1.X and 10.X.X.X). Some hosts from one network need to reach to the hosts from the other network.
@@ -479,8 +490,12 @@ ping 192.168.1.197
 For a host to connect to another host on the other network, routing must be defined on the both hosts.
 
 <br>
+</details>
 
-## 3. NIC Bonding
+<details markdown='1'>
+<summary>
+3. NIC Bonding
+</summary>
 ---
 Network interface card bonding simply means using 2 (or more) NICs together to achive redundancy and/or increased throughput. 
 
@@ -816,3 +831,6 @@ Check the status of the bond
 ```
 sudo cat /proc/net/bonding/bond0
 ```
+
+</details>
+

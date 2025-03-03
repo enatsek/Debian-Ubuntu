@@ -1,7 +1,10 @@
 ##### WordpressOnDebianUbuntu 
 # Install Wordpress  On Debian and Ubuntu
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 Based on [Brian Boucheron's Tutorial](https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lamp-on-ubuntu-18-04)
 
@@ -15,9 +18,12 @@ Wordpress website location: /var/www/wordpress
 LAMP stack must be installed; see [LampOnDebianUbuntu](LampOnDebianUbuntu.html)  Tutorial
 
 <br>
+</details>
 
-
-## 1. Configure a Website (If you haven't done already)
+<details markdown='1'>
+<summary>
+1. Configure a Website (If you haven't done already)
+</summary>
 ---
 ### 1.1. Make room for our website
 ```
@@ -53,9 +59,12 @@ sudo systemctl reload apache2
 ```
 
 <br>
+</details>
 
-
-## 2. Create MariaDB DB User for Wordpress
+<details markdown='1'>
+<summary>
+2. Create MariaDB DB User for Wordpress
+</summary>
 ---
 ### 2.1. Login to MariaDB
 ```
@@ -76,8 +85,12 @@ EXIT;
 ```
 
 <br>
+</details>
 
-## 3. Install Additional PHP Extensions
+<details markdown='1'>
+<summary>
+3. Install Additional PHP Extensions
+</summary>
 ```
 sudo apt update
 sudo apt install php-curl php-gd php-mbstring php-xml php-xmlrpc \
@@ -91,9 +104,12 @@ sudo systemctl restart apache2
 ```
 
 <br>
+</details>
 
-
-## 4. Adjust Apache for Wordpress
+<details markdown='1'>
+<summary>
+4. Adjust Apache for Wordpress
+</summary>
 ---
 ### 4.1. Enable wordpress' .htaccess files
 Edit our site config, adding folders to override
@@ -125,8 +141,12 @@ sudo systemctl restart apache2
 ```
 
 <br>
+</details>
 
-## 5. Download Wordpress
+<details markdown='1'>
+<summary>
+5. Download Wordpress
+</summary>
 ---
 Wordpress can be installed by Debian packages, but we prefer to download the latest version from the original source
 
@@ -159,8 +179,12 @@ sudo cp -a /tmp/wordpress/. /var/www/wordpress
 ```
 
 <br>
+</details>
 
-## 6. Configure Wordpress Directory
+<details markdown='1'>
+<summary>
+6. Configure Wordpress Directory
+</summary>
 ---
 ### 6.1. Set ownerships and permissions
 Owned by www-data:www-data
@@ -245,10 +269,16 @@ define('FS_METHOD', 'direct');
 ```
 
 <br>
+</details>
 
-### 7. Wordpress is ready, open in your browser
+<details markdown='1'>
+<summary>
+7. Wordpress is ready, open in your browser
+</summary>
 ---
 `http://www.386387.xyz`
 
 Of course it would be a good idea to add SSL to your site, refer to  [CertbotOnDebianUbuntu](CertbotOnDebianUbuntu.html) Tutorial.
+
+</details>
 

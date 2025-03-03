@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,35 +836,37 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>UFWOnDebianOnUbuntu</h5>
 <h1>Basic UFW (Uncomplicated Firewall) Tutorial On Ubuntu and Debian</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <p>Basic UFW (Uncomplicated Firewall) tutorial. Enabling, adding, deleting  rules, syntax etc.</p>
 <p>Prepared for Debian 12/11 and Ubuntu 24.04/22.04 LTS Server</p>
 <p>Sources:<br />
-<a href="https://www.netfilter.org/">https://www.netfilter.org/</a><br />
-<a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-22-04">https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-22-04</a><br />
-<a href="https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands">https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands</a><br />
-<a href="https://help.ubuntu.com/community/UFW">https://help.ubuntu.com/community/UFW</a><br />
-<a href="https://manpages.ubuntu.com/manpages/jammy/en/man8/ufw.8.html">https://manpages.ubuntu.com/manpages/jammy/en/man8/ufw.8.html</a>  </p>
+<a href="https://www.netfilter.org/">www.netfilter.org</a><br />
+<a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-22-04">www.digitalocean.com</a><br />
+<a href="https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands">www.digitalocean.com</a><br />
+<a href="https://help.ubuntu.com/community/UFW">help.ubuntu.com</a><br />
+<a href="https://manpages.ubuntu.com/manpages/jammy/en/man8/ufw.8.html">manpages.ubuntu.com</a>  </p>
 <p><br></p>
-<h2>1. Firewall Architecture</h2>
+</details>
+<details>
+<summary>
+1. Firewall Architecture 
+</summary>
 <hr />
 <h3>1.1. Netfilter</h3>
 <p>Netfilter represents a set of hooks for network packets, it is integrated into the Linux kernel. It supplies a framework for packet filtering, NAT, and port translation.</p>
@@ -866,7 +877,11 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h3>1.3. Ufw</h3>
 <p>Ufw is the higher level firewall program supplied by Ubuntu (Canonical). Other distros can supply other higher level firewalls (like firewalld and  firewall-cmd from Red Hat).</p>
 <p><br></p>
-<h2>2. Ufw Basics</h2>
+</details>
+<details>
+<summary>
+2. Ufw Basics
+</summary>
 <hr />
 <h3>2.1. Installation</h3>
 <p>ufw is installed and inactive by default on Ubuntu server. For Debian :</p>
@@ -922,7 +937,11 @@ sudo ufw allow in proto tcp from any to any port 80
 <pre><code>sudo ufw show raw
 </code></pre>
 <p><br></p>
-<h2>3. Allowing and Denying in Detail</h2>
+</details>
+<details>
+<summary>
+3. Allowing and Denying in Detail
+</summary>
 <hr />
 <h3>3.1. Long Format</h3>
 <pre><code>sudo ufw allow in on enp0s3 proto tcp from any to any port 22
@@ -984,7 +1003,11 @@ sudo ufw allow 6000:6007/udp
 <pre><code>sudo ufw allow ssh
 </code></pre>
 <p><br></p>
-<h2>4. Case Study 1</h2>
+</details>
+<details>
+<summary>
+4. Case Study 1
+</summary>
 <hr />
 <h3>4.0. Specs</h3>
 <ul>
@@ -1080,7 +1103,11 @@ the following:</p>
 [10] 25/tcp (v6)                DENY OUT    Anywhere (v6)              (out)
 </code></pre>
 <p><br></p>
-<h2>5. Case Study 2</h2>
+</details>
+<details>
+<summary>
+5. Case Study 2
+</summary>
 <hr />
 <h3>5.0. Specs</h3>
 <ul>
@@ -1118,7 +1145,8 @@ sudo ufw allow in on enp0s3 proto tcp from any to any port 443
 [ 5] 22/tcp (v6) on enp0s8      ALLOW IN    Anywhere (v6)             
 [ 6] 80/tcp (v6) on enp0s3      ALLOW IN    Anywhere (v6)             
 [ 7] 443/tcp (v6) on enp0s3     ALLOW IN    Anywhere (v6)                 
-</code></pre><!-- HTML Footer Start -->
+</code></pre>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

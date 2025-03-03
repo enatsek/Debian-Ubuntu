@@ -1,7 +1,11 @@
 ##### SystemdOnDebianUbuntu 
 # systemd Tutorial On Debian and Ubuntu
+</details>
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 ### 0.0. Intro 
 systemd is a suite of basic building blocks for a Linux system. It  provides a system and service manager that runs as PID 1 and starts the  rest of the system (from systemd.io site).
@@ -18,22 +22,26 @@ A strong alternative of systemd is OpenRC.
 **cgroups**: A part built into kernel, that allows setting resource  utilization limits for processes. Like; cpu shares, memory usage, block  I/O per process. Developed by Google.
 
 ### 0.2. Sources
-<https://wiki.debian.org/systemd/documentation>  
-<https://www.digitalocean.com/community/tutorials/systemd-essentials-working-with-services-units-and-the-journal>  
-<https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units>  
-<https://www.digitalocean.com/community/tutorials/how-to-use-journalctl-to-view-and-manipulate-systemd-logs>  
-<https://www.redhat.com/sysadmin/cgroups-part-one>  
-<https://en.wikipedia.org/wiki/Systemd>  
-<https://en.wikipedia.org/wiki/D-Bus>  
-<https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/chap-managing_services_with_systemd>  
-<https://www.howtogeek.com/675569/why-linuxs-systemd-is-still-divisive-after-all-these-years/>    
-<https://systemd.io/>  
+[wiki.debian.org](https://wiki.debian.org/systemd/documentation)  
+[www.digitalocean.com](https://www.digitalocean.com/community/tutorials/systemd-essentials-working-with-services-units-and-the-journal)  
+[www.digitalocean.com](https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units)  
+[www.digitalocean.com](https://www.digitalocean.com/community/tutorials/how-to-use-journalctl-to-view-and-manipulate-systemd-logs)  
+[www.redhat.com](https://www.redhat.com/sysadmin/cgroups-part-one)  
+[wikipedia.org](https://en.wikipedia.org/wiki/Systemd)  
+[wikipedia.org](https://en.wikipedia.org/wiki/D-Bus)  
+[access.redhat.com](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/chap-managing_services_with_systemd)  
+[www.howtogeek.com](https://www.howtogeek.com/675569/why-linuxs-systemd-is-still-divisive-after-all-these-years/)    
+[systemd.io](https://systemd.io/)  
 **The Debian Administrator’s Handbook** by Raphaël Hertzog and Roland Mas  
 **Linux Service Management Made Easy with systemd** by Donald A. Tevault
 
 <br>
+</details>
 
-## 1. systemd Units
+<details markdown='1'>
+<summary>
+1. systemd Units
+</summary>
 ---
 Units are the resources that systemd knows how to manage and to operate.
 
@@ -263,8 +271,12 @@ For a full list of directives see:
 **Persistent:** If true, the time when the service unit was last triggered  is stored on disk. When the timer is activated, the service unit is  triggered immediately if it would have been triggered at least once during the time when the timer was inactive. 
 
 <br>
+</details>
 
-## 2. Targets
+<details markdown='1'>
+<summary>
+2. Targets
+</summary>
 ---
 ### 2.1. Definition and List
 Similar to SysV init runlevel. Their purpose is to group together other  systemd units through a chain of dependencies.
@@ -408,8 +420,12 @@ AllowIsolate=yes
 ```
 
 <br>
+</details>
 
-## 3. Unit Management: systemctl Command
+<details markdown='1'>
+<summary>
+3. Unit Management: systemctl Command
+</summary>
 ---
 Start a service
 
@@ -606,8 +622,12 @@ systemctl --host user_name@host_name command
 ```
 
 <br>
+</details>
 
-## 4. Log Management: journal-ctl Command
+<details markdown='1'>
+<summary>
+4. Log Management: journal-ctl Command
+</summary>
 ---
 See all log entries
 
@@ -717,8 +737,12 @@ sudo journalctl --vacuum-time=1years
 ```
 
 <br>
+</details>
 
-## 5. Other systemd Components
+<details markdown='1'>
+<summary>
+5. Other systemd Components
+</summary>
 ---
 systemd has some other components too. Some of them:
 
@@ -753,8 +777,12 @@ echo "Test" | systemd-cat -p info
 **systemd-udevd:** Manages physical devices.
 
 <br>
+</details>
 
-## 6. Creating a Service
+<details markdown='1'>
+<summary>
+6. Creating a Service
+</summary>
 ---
 We will create a very simple service. Our service will ping an IP address in every 10 minutes. It will create an info log if the ping is OK,  otherwise it will create and error log.
 
@@ -830,5 +858,7 @@ sudo systemctl start ipcheck.service
 sudo journalctl -n 20
 ```
 
+</details>
+</summary>
 
 

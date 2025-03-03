@@ -1,14 +1,10 @@
 # Tutorials
 
-- [**PackagesOnDebian:**](PackagesOnDebian.html) Default software packages on Debian Server
-
-- [**PackagesOnUbuntu:**](PackagesOnUbuntu.html) Default software packages on Ubuntu Server
-
 - [**EtcOnDebianUbuntu:**](EtcOnDebianUbuntu.html) Contents of /etc/ folder on Debian & Ubuntu.
 
 - [**RegexOnDebianUbuntu:**](RegexOnDebianUbuntu.html) Regular Expressions tutorial.
 
-- [**NetworkOnUbuntu:**](NetworkOnUbuntu.html)Ubuntu basic network configuration tutorial.
+- [**NetworkOnUbuntu:**](NetworkOnUbuntu.html) Ubuntu basic network configuration tutorial.
 
 - [**NetworkOnDebian:**](NetworkOnDebian.html) Debian basic network configuration tutorial.
 
@@ -30,7 +26,7 @@
 
 - [**NginxOnDebianUbuntu:**](NginxOnDebianUbuntu.html) Installing and configuring Nginx on Debian and Ubuntu server. With sample configuration and SSL support.
 
-- [**OtherLinuxesOnDebianUbuntu:**](OtherLinuxesOnDebianUbuntu.html) Basic management of Debian, Ubuntu, Red Hat, OpenSuse, Alpine and Devuan distributions.
+- [**OtherLinuxesOnDebianUbuntu:**](OtherLinuxesOnDebianUbuntu.html) Basic management of Debian, Ubuntu, Red Hat, Alpine and Devuan distributions.
 
 - [**PostgresqlOnUbuntu:**](PostgresqlOnUbuntu.html) Postgresql installation and basic configuration on Ubuntu. Includes some user management, cluster management, backup and restore.
 

@@ -1,7 +1,11 @@
 ##### FHSOnDebianUbuntu 
 # Filesystem Hierarchy Standard on Debian and Ubuntu
+</details>
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 ### 0.1. Introduction 
 
@@ -125,8 +129,12 @@ In addition to the directory structure described in the FHS, the following direc
 ChatGPT
 
 <br>
+</details>
 
-## 1. /bin - Essential Command Binaries
+<details markdown='1'>
+<summary>
+1. /bin - Essential Command Binaries
+</summary>
 ---
 Contains commands for system administrators and users. These commands  must be required required when no other filesystems are mounted (e.g. in
 single user mode). It may also contain commands which are used indirectly by scripts.
@@ -140,8 +148,12 @@ Command binaries that are not essential enough to place into /bin must be placed
 **Some example commands:** cat, chgrp, chmod, chown, cp, date, dd, df, dmesg, echo, false, hostname, kill, ln, login, ls, mkdir, mknod, more, mount, mv, ps, pwd, rm, rmdir, sed, sh, stty, su, sync, true, umount, uname.
 
 <br>
+</details>
 
-## 2. /boot - Static Files of the Boot Loader
+<details markdown='1'>
+<summary>
+2. /boot - Static Files of the Boot Loader
+</summary>
 ---
 Contains everything required for the boot process except configuration files not needed at boot time and the map installer. Stores data that is used before the kernel begins executing user-mode programs. This may include saved master boot sectors and sector map files.
 
@@ -154,8 +166,12 @@ The operating system kernel must be located in either / or /boot.
 Certain architectures may have other requirements for /boot related to limitations or expectations specific to that architecture. 
 
 <br>
+</details>
 
-## 3. /dev - Device Files
+<details markdown='1'>
+<summary>
+3. /dev - Device Files
+</summary>
 ---
 The /dev directory is the location of special or device files.
 
@@ -168,8 +184,12 @@ The devices in the /dev directory are created dynamically during the boot proces
 - /dev/null
 
 <br>
+</details>
 
-## 4. /etc - Host-specific System Configuration
+<details markdown='1'>
+<summary>
+4. /etc - Host-specific System Configuration
+</summary>
 ---
 The /etc hierarchy contains configuration files.
 
@@ -253,8 +273,12 @@ Generic configuration files defining high-level parameters of the XML systems ar
 Files with names *.conf indicate generic configuration files.
 
 <br>
+</details>
 
-## 5. /home - User Home Directories
+<details markdown='1'>
+<summary>
+5. /home - User Home Directories
+</summary>
 ---
 Home directories of users are stored here.
 
@@ -267,8 +291,12 @@ To find a user's home directory, use a library function such as getpwent, getpwe
 It is recommended that, apart from autosave and lock files, programs should refrain from creating non dot files or directories in a home directory without user consent.
 
 <br>
+</details>
 
-## 6. /lib - Essential Shared Libraries and Kernel Modules
+<details markdown='1'>
+<summary>
+6. /lib - Essential Shared Libraries and Kernel Modules
+</summary>
 ---
 In Debian 12 and Ubuntu 24.04 /lib is a symbolic link to /usr/lib.
 
@@ -286,8 +314,12 @@ The following directory (or symbolic link to directory) must be in /lib, if the 
 - /lib/modules:    Loadable kernel modules
 
 <br>
+</details>
 
-## 7. /lib* - Alternate format essential shared libraries
+<details markdown='1'>
+<summary>
+7. /lib* - Alternate format essential shared libraries
+</summary>
 ---
 There may be one or more variants of the /lib directory on systems which  support more than one binary format requiring separate libraries.
 
@@ -303,8 +335,12 @@ Debian 12 also has the following directory:
 If one or more of these directories exist, the requirements for their contents are the same as the normal /lib directory, except that /lib*/cpp is not required.
 
 <br>
+</details>
 
-## 8. /media - Mount Point for Removable Media
+<details markdown='1'>
+<summary>
+8. /media - Mount Point for Removable Media
+</summary>
 ---
 Contains subdirectories which are used as mount points for removable media such as floppy disks, cdroms and zip disks.
 
@@ -318,8 +354,12 @@ The following directories, or symbolic links to directories, must be in  /media,
 On systems where more than one device exists for mounting a certain type of media, mount directories can be created by appending a digit to the name of those available above starting with '0', but the unqualified name must also exist.
 
 <br>
+</details>
 
-## 9. /mnt - Mount Point for Mounting a Filesystem Temporarily
+<details markdown='1'>
+<summary>
+9. /mnt - Mount Point for Mounting a Filesystem Temporarily
+</summary>
 ---
 System administrators may temporarily mount a filesystem here.
 
@@ -328,8 +368,12 @@ The content of this directory is a local issue and should not affect the manner 
 This directory must not be used by installation programs: a suitable temporary directory not in use by the system must be used instead.
 
 <br>
+</details>
 
-## 10. /opt - Add-on Application Software Packages
+<details markdown='1'>
+<summary>
+10. /opt - Add-on Application Software Packages
+</summary>
 ---
 This folder is empty on default Debian 12 and Ubuntu 24.04 installations.
 
@@ -346,8 +390,12 @@ Package files that are variable (change in normal operation) must be installed i
 Host-specific configuration files must be installed in /etc/opt.
 
 <br>
+</details>
 
-## 11. /root - Home directory for the root user
+<details markdown='1'>
+<summary>
+11. /root - Home directory for the root user
+</summary>
 ---
 Recommended home directory for the root user.
 
@@ -358,8 +406,12 @@ It is not recommended to use the root account for tasks that can be performed by
 For this reason, it is recommended that subdirectories for mail and other applications not appear in the root account's home directory.
 
 <br>
+</details>
 
-## 12. /run - Data Relevant to Running Processes
+<details markdown='1'>
+<summary>
+12. /run - Data Relevant to Running Processes
+</summary>
 ---
 Contains system information data describing the system since it was booted.
 
@@ -372,8 +424,12 @@ Programs may have a subdirectory of /run; this is encouraged for programs that u
 Process identifier (PID) files, which were originally placed in /etc, must be placed in /run. The naming convention for PID files is {program-name}.pid. For example, the crond PID file is named /run/crond.pid.
 
 <br>
+</details>
 
-## 13. /sbin - Essential System Binaries
+<details markdown='1'>
+<summary>
+13. /sbin - Essential System Binaries
+</summary>
 ---
 In Debian 12 and Ubuntu 24.04 /sbin is a symbolic link to /usr/bin.
 
@@ -412,8 +468,12 @@ The following files (or symbolic links to files) must be in /sbin if the  corres
 - /sbin/update: Daemon to periodically flush filesystem buffers
 
 <br>
+</details>
 
-## 14. /srv - Data for Services Provided by This System
+<details markdown='1'>
+<summary>
+14. /srv - Data for Services Provided by This System
+</summary>
 ---
 This directory is empty on default installations of Debian 12 and Ubuntu 24.04.
 
@@ -422,8 +482,12 @@ Contains site-specific data that is served by the system. This directory  provid
 Unlike directories such as /usr or /var, which may contain data related to installed packages, the /srv directory is not intended for distribution packages. It is for locally administered data associated with specific services.
 
 <br>
+</details>
 
-## 15. /tmp - Temporary Files
+<details markdown='1'>
+<summary>
+15. /tmp - Temporary Files
+</summary>
 ---
 Provides a location for temporary files that are used by programs and users during the course of their activities. 
 
@@ -434,8 +498,12 @@ Many applications and system processes use the /tmp directory for temporary file
 /tmp directory is typically world-writable, allowing any user on the system to create, modify, or delete files within it. This openness facilitates the sharing of temporary files among users and processes.
 
 <br>
+</details>
 
-## 16. /usr - Secondary hierarchy
+<details markdown='1'>
+<summary>
+16. /usr - Secondary hierarchy
+</summary>
 ---
 Stands for "Unix System Resources".
 
@@ -596,7 +664,7 @@ Sites that require both American and British spelling may link words to  /usr/sh
 Word lists for other languages may be added using the English name for that language, e.g., /usr/share/dict/french, /usr/share/dict/danish, etc. 
 
 #### 16.8.3. /usr/share/man - Online Manuals
-The primary {<mandir} of the system is /usr/share/man. /usr/share/man contains manual information for commands and data under the / and /usr filesystems.
+The primary **mandir** of the system is /usr/share/man. /usr/share/man contains manual information for commands and data under the / and /usr filesystems.
 
 
 #### 16.8.4. /usr/share/misc - Miscellaneous Architecture-independent Data
@@ -642,8 +710,12 @@ Source codes may be placed in this subdirectory, only for reference purposes.
 Generally, source should not be built within this hierarchy.
 
 <br>
+</details>
 
-## 17. /var - Variable Data
+<details markdown='1'>
+<summary>
+17. /var - Variable Data
+</summary>
 ---
 Contains variable data files. This includes spool directories and files,  administrative and logging data, and transient and temporary files.
 
@@ -677,8 +749,12 @@ The following directories, or symbolic links to directories, must be in /var, if
 - /var/yp: Network Information Service (NIS) database files
 
 <br>
+</details>
 
-## 18. Special to Linux
+<details markdown='1'>
+<summary>
+18. Special to Linux
+</summary>
 ---
 There are two more directory standarts specific to Linux:
 
@@ -698,3 +774,7 @@ The sys filesystem is the location where information about devices, drivers, and
 The /sys directory exposes information about various kernel parameters and configurations. You can read and modify certain kernel parameters through the files in this directory.
 
 /sys is a virtual filesystem, which means that it doesn't exist on a physical storage device like a hard drive.
+
+</details>
+</summary>
+

@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,30 +836,32 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>UserAndGroupAdminOnDebianUbuntu</h5>
 <h1>User and Group Administration on Debian and Ubuntu</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <p>Aimed for Debian 12/11 and Ubuntu 24.04/22.04 Servers</p>
 <p>But works fine on Debian, Ubuntu and derivatives' desktops (Ubuntu, Kubuntu, Xubuntu,  Lubuntu, MX, Mint etc) too.</p>
 <p>Based on the book <a href="https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition">Mastering Ubuntu Server 2nd Ed.</a> by Jay LaCroix. </p>
 <p><br></p>
-<h2>1. User Add and Delete</h2>
+</details>
+<details>
+<summary>
+1. User Add and Delete
+</summary>
 <hr />
 <h3>1.1. Add a new user jdoe and create home folder</h3>
 <pre><code>sudo useradd -d /home/jdoe -m jdoe
@@ -865,7 +876,11 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <pre><code>sudo userdel -r jdoe
 </code></pre>
 <p><br></p>
-<h2>2. Files of User Information</h2>
+</details>
+<details>
+<summary>
+2. Files of User Information
+</summary>
 <hr />
 <h3>2.1. /etc/passwd file</h3>
 <pre><code>exforge:x:1000:1000:Exforge,,,:/home/exforge:/bin/bash
@@ -884,7 +899,11 @@ username:pwHash:DatesSinceLastPwChange:MinDaysToChangePw:
 <h3>2.4. Default contents for home folders:</h3>
 <p>Contents of /etc/skel folder is distributed to created user's home directory</p>
 <p><br></p>
-<h2>3. root user</h2>
+</details>
+<details>
+<summary>
+3. root user
+</summary>
 <hr />
 <h3>3.1. root is locked by default in Ubuntu. It is optional in  Debian.</h3>
 <p>To give a pw to (and unlock) root</p>
@@ -900,7 +919,11 @@ username:pwHash:DatesSinceLastPwChange:MinDaysToChangePw:
 <pre><code>sudo su - username
 </code></pre>
 <p><br></p>
-<h2>4. Batch user add</h2>
+</details>
+<details>
+<summary>
+4. Batch user add
+</summary>
 <hr />
 <h3>4.1. Create a text file for users</h3>
 <pre><code>touch users.txt
@@ -924,7 +947,12 @@ user3:password:::User3:/home/user3:/bin/bash
 <h3>4.5. It is a good idea to change passwords of the users</h3>
 <pre><code>sudo passwd user1
 </code></pre>
-<h2>5. Group Management</h2>
+<p><br></p>
+</details>
+<details>
+<summary>
+5. Group Management
+</summary>
 <hr />
 <h3>5.1. List of groups</h3>
 <pre><code>groups
@@ -958,7 +986,11 @@ sudo usermod -a -G admins myuser
 <pre><code>sudo gpasswd -d &lt;username&gt; &lt;grouptoremove&gt;
 </code></pre>
 <p><br></p>
-<h2>6. User manipulation</h2>
+</details>
+<details>
+<summary>
+6. User manipulation
+</summary>
 <hr />
 <h2>6.1. Change username</h2>
 <p>First change home directory</p>
@@ -977,7 +1009,11 @@ sudo usermod -a -G admins myuser
 <pre><code>sudo chage -l &lt;username&gt;
 </code></pre>
 <p><br></p>
-<h2>7. sudo Group</h2>
+</details>
+<details>
+<summary>
+7. sudo Group
+</summary>
 <hr />
 <p>Members of sudo group can use sudo command</p>
 <h3>7.1. Configuration of sudo group members</h3>
@@ -1005,7 +1041,8 @@ ansible ALL=(ALL) NOPASSWD: ALL
 </code></pre>
 <h3>7.2. List granted sudo privileges</h3>
 <pre><code>sudo -l
-</code></pre><!-- HTML Footer Start -->
+</code></pre>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

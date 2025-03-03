@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>DNSOnDebianUbuntu</h5>
 <h1>Installation and Configuration of DNS Servers on Debian and Ubuntu</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <p>There will be 2 DNS Servers, 1 Primary (Master) and 1 Replica (Slave). </p>
 <p>For every domain on the internet, at least 2 DNS Servers are needed. So if you want to run your own DNS Server, you need at least 2 servers.</p>
@@ -865,11 +872,15 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 </ul>
 <p>I tested the tutorial with Debian 11, Debian 12, Ubuntu 20.04 and Ubuntu 22.04 pairs.</p>
 <p>Sources:<br />
-<a href="https://www.linuxtechi.com/install-configure-bind-9-dns-server-ubuntu-debian/">https://www.linuxtechi.com/install-configure-bind-9-dns-server-ubuntu-debian/</a><br />
-<a href="https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition">https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition</a><br />
+<a href="https://www.linuxtechi.com/install-configure-bind-9-dns-server-ubuntu-debian/">www.linuxtechi.com</a><br />
+<a href="https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition">Mastering Ubuntu Server</a><br />
 <a href="https://bind9.readthedocs.io">https://bind9.readthedocs.io</a></p>
 <p><br></p>
-<h2>1. Primary DNS Server</h2>
+</details>
+<details>
+<summary>
+1. Primary DNS Server
+</summary>
 <hr />
 <h3>1.1. Install bind9 (DNS Server)</h3>
 <pre><code>sudo apt update
@@ -964,7 +975,11 @@ sudo named-checkzone 386387.xyz /etc/bind/forward.386387.xyz
 sudo named-checkzone 386387.xyz /etc/bind/reverse.386387.xyz
 </code></pre>
 <p><br></p>
-<h2>2. Replica DNS Server</h2>
+</details>
+<details>
+<summary>
+2. Replica DNS Server
+</summary>
 <hr />
 <h3>2.1. Install bind9 (DNS Server)</h3>
 <pre><code>sudo apt update
@@ -1011,7 +1026,11 @@ zone &quot;1.168.192.in-addr.arpa&quot; IN {
 sudo named-checkconf /etc/bind/named.conf.local
 </code></pre>
 <p><br></p>
-<h2>3. Final Touch</h2>
+</details>
+<details>
+<summary>
+3. Final Touch
+</summary>
 <hr />
 <h3>3.1. Restart DNS on both primary and replica</h3>
 <pre><code>sudo systemctl restart bind9
@@ -1022,7 +1041,8 @@ sudo named-checkconf /etc/bind/named.conf.local
 <h3>3.2. Notes</h3>
 <p><strong>Remember</strong></p>
 <p>When you change the zone file on your primary server, remember to increase the number given before serial. </p>
-<p>You can change DNS server settings of your computers (including the DNS Servers) to the new DNS servers.</p><!-- HTML Footer Start -->
+<p>You can change DNS server settings of your computers (including the DNS Servers) to the new DNS servers.</p>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

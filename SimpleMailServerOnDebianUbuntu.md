@@ -1,7 +1,10 @@
 ##### SimpleMailServerOnDebianUbuntu 
 # Mail Server with SMTP and IMAP on Debian and Ubuntu
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 Based on the valuable documents at: [server-world.info](https://www.server-world.info/en/note?os=Ubuntu_18.04&p=mail&f=1)
 
@@ -18,8 +21,13 @@ My User Name: exforge
 An MX record must be created at the DNS Server with the value of  mail.386387.xyz
 
 <br>
+</details>
 
-## 1. Install and Configure Postfix
+<details markdown='1'>
+<summary>
+1. Install and Configure Postfix
+</summary>
+---
 ### 1.0. Update Repositories
 ```
 sudo apt update
@@ -205,8 +213,12 @@ sudo systemctl restart postfix
 ```
 
 <br>
+</details>
 
-## 2. Install and Configure Dovecot
+<details markdown='1'>
+<summary>
+2. Install and Configure Dovecot
+</summary>
 ---
 ### 2.1. Install Dovecot core, pop3 and imap deamons
 ```
@@ -276,7 +288,12 @@ sudo systemctl restart dovecot
 <br>
 
 ---
+</details>
+
+<details markdown='1'>
+<summary>
 **Break Time**
+</summary>
 
 At this point we have a very basic mail config, all our linux users at  mail.386387.xyz have mail addresses. They can access smtp at port 25 and imap at port 143. But unfortunately there is no encryption. 
 
@@ -287,8 +304,12 @@ We will use Certbot tool of Let's Encrypt to have a free certificate
 ---
 
 <br>
+</details>
 
-## 3. Add SSL/TLS to Postfix and Dovecot
+<details markdown='1'>
+<summary>
+3. Add SSL/TLS to Postfix and Dovecot
+</summary>
 ---
 ### 3.1. Install Certbot to get TLS certificates
 ```
@@ -372,8 +393,12 @@ sudo systemctl restart postfix dovecot
 ```
 
 <br>
+</details>
 
-## 4. Client Mail Settings
+<details markdown='1'>
+<summary>
+4. Client Mail Settings
+</summary>
 ---
 For Linux User exforge at mail.386387.xyz  
 
@@ -394,8 +419,12 @@ For Linux User exforge at mail.386387.xyz
 
 
 <br>
+</details>
 
-## 5. Account Management
+<details markdown='1'>
+<summary>
+5. Account Management
+</summary>
 ---
 ### 5.1. Users
 All Linux users already have mail accounts with their login names and passwords.
@@ -448,6 +477,7 @@ sudo newaliases
 ```
 sudo systemctl restart postfix dovecot
 ```
+</details>
 
 
 

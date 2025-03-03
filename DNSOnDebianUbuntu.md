@@ -1,7 +1,10 @@
 ##### DNSOnDebianUbuntu 
 # Installation and Configuration of DNS Servers on Debian and Ubuntu 
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 There will be 2 DNS Servers, 1 Primary (Master) and 1 Replica (Slave). 
 
@@ -27,13 +30,17 @@ My Specs: (Change the values to your ones)
 I tested the tutorial with Debian 11, Debian 12, Ubuntu 20.04 and Ubuntu 22.04 pairs.
 
 Sources:  
-<https://www.linuxtechi.com/install-configure-bind-9-dns-server-ubuntu-debian/>  
-<https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition>  
-<https://bind9.readthedocs.io>
+[www.linuxtechi.com](https://www.linuxtechi.com/install-configure-bind-9-dns-server-ubuntu-debian/)  
+[Mastering Ubuntu Server](https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition)  
+[https://bind9.readthedocs.io](https://bind9.readthedocs.io)
 
 <br>
+</details>
 
-## 1. Primary DNS Server
+<details markdown='1'>
+<summary>
+1. Primary DNS Server
+</summary>
 ---
 ### 1.1. Install bind9 (DNS Server)
 ```
@@ -152,8 +159,12 @@ sudo named-checkzone 386387.xyz /etc/bind/reverse.386387.xyz
 ```
 
 <br>
+</details>
 
-## 2. Replica DNS Server
+<details markdown='1'>
+<summary>
+2. Replica DNS Server
+</summary>
 ---
 ### 2.1. Install bind9 (DNS Server)
 ```
@@ -216,8 +227,12 @@ sudo named-checkconf /etc/bind/named.conf.local
 ```
 
 <br>
+</details>
 
-## 3. Final Touch
+<details markdown='1'>
+<summary>
+3. Final Touch
+</summary>
 ---
 ### 3.1. Restart DNS on both primary and replica
 ```
@@ -236,4 +251,6 @@ dig @192.168.1.221 mail.386387.xyz
 When you change the zone file on your primary server, remember to increase the number given before serial. 
 
 You can change DNS server settings of your computers (including the DNS Servers) to the new DNS servers.
+
+</details>
 

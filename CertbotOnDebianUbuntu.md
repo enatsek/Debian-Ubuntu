@@ -1,19 +1,26 @@
 ##### CertbotOnDebianUbuntu 
 # Auto Free SSL Certificates for Apache2 Tutorial on Debian and Ubuntu
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 Automation of SSL and certificate renewal for Apache 2 on Debian 11/12 and Ubuntu 22.04/24.04 servers.
 
 My server's hostname is srv1.386387.xyz. You have to change it to yours.
 
 Sources:  
-<https://certbot.eff.org/>  
-<https://123qwe.com/>
+[certbot.eff.org](https://certbot.eff.org/)  
+[123qwe.com](https://123qwe.com/)
 
 <br>
+</details>
 
-## 1. Preliminary Work
+<details markdown='1'>
+<summary>
+1. Preliminary Work
+</summary>
 ---
 My server's name is srv1.386387.xyz and I have installed Apache2 and enabled the following site configuration:
 
@@ -49,8 +56,12 @@ sudo systemctl restart apache2
 ```
 
 <br>
+</details>
 
-## 2. Certbot
+<details markdown='1'>
+<summary>
+2. Certbot
+</summary>
 ---
 ### 2.1. Install Certbot
 ```
@@ -103,8 +114,12 @@ sudo systemctl reload apache2
 Our SSL site is ready, and we can reach it by https://srv1.386387.xyz. But we need to do some fine tuning work, at the next section.
 
 <br>
+</details>
 
-## 3. Fine Tunings
+<details markdown='1'>
+<summary>
+3. Fine Tunings
+</summary>
 ---
 ### 3.1. Redirect HTTP Site
 https://srv1.386387.xyz goes to SSL site, but http://srv1.386387.xyz goes to  non-ssl site. 
@@ -176,4 +191,4 @@ Make the script executable
 ```
 sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
 ```
-
+</details>

@@ -7,6 +7,8 @@ Our website address is: https://x386.org. We are a single individual.
 
 ## What personal data we collect and why we collect it
 
+Shortly, we do not collect any data from you, nada.
+
 We do not keep comments, there is no contact form, you can only contact me with email. We do not keep cookies or logs, not even error logs. We respect privacy. So, **we do not keep your private data**.
 
 ## Who we share your data with

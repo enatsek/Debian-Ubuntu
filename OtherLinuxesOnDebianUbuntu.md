@@ -1,7 +1,10 @@
 ##### OtherLinuxesOnDebianUbuntu  
 # Other Linuxes for Debian and Ubuntu Admins
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 ### 0.1. Information
 Although my tutorials (and my learning curve) contain Debian and Ubuntu Linux distributions; Time to time, an admin may need to handle other Linuxes too. 
@@ -26,14 +29,18 @@ Main Distributions:
 - Devuan 4, 5
 
 ### 0.2. Resources:
-<https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9>  
-<https://wiki.alpinelinux.org/wiki/Main_Page>  
-<https://wiki.debian.org/>  
-<https://www.geeksforgeeks.org/how-to-retrieve-data-from-mysql-database-using-php/>  
+[access.redhat.com](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9)  
+[wiki.alpinelinux.org](https://wiki.alpinelinux.org/wiki/Main_Page)  
+[wiki.debian.org](https://wiki.debian.org/)  
+[www.geeksforgeeks.org](https://www.geeksforgeeks.org/how-to-retrieve-data-from-mysql-database-using-php/)  
 
 <br>
+</details>
 
-## 1. Debian 12 & 11
+<details markdown='1'>
+<summary>
+1. Debian 12 & 11
+</summary>
 ---
 ### 1.1. Package Management
 Commands require root or sudo.
@@ -275,8 +282,12 @@ sudo systemctl disable apache2
 ```
 
 <br>
+</details>
 
-## 2. Ubuntu 24.04 LTS & 22.04 LTS
+<details markdown='1'>
+<summary>
+2. Ubuntu 24.04 LTS & 22.04 LTS
+</summary>
 ---
 ### 2.1. Package Management
 Commands require root or sudo.
@@ -423,8 +434,13 @@ sudo systemctl disable apache2
 ```
 
 <br>
+</details>
 
-## 3. RHEL (Centos, Alma, Rocky) 9.x, 8.x
+<details markdown='1'>
+<summary>
+3. RHEL (Centos, Alma, Rocky) 9.x, 8.x
+</summary>
+---
 Centos (upto 8.x version), Alma and Rocky Linux are compatible  with Red Hat. That is, they are same other than brandings and names. So if something works in RHEL, it works in Centos, Alma, and Rocky too.
 
 RHEL gives free licenses for testing purposes, I have 2 VMs running for testing purposes (versions 8.x and 9.x).
@@ -569,10 +585,13 @@ sudo systemctl enable httpd
 sudo systemctl disable httpd
 ```
 
-
 <br>
+</details>
 
-## 4. Alpine Linux 3.17 & 3.18
+<details markdown='1'>
+<summary>
+4. Alpine Linux 3.17 3.18 & 3.19
+</summary>
 ---
 ### 4.1. Package Management
 Commands require root or sudo.
@@ -727,8 +746,12 @@ sudo rc-update del apache2 default
 ```
 
 <br>
+</details>
 
-## 5. Devuan 5 & 4
+<details markdown='1'>
+<summary>
+5. Devuan 5 & 4
+</summary>
 ---
 Devuan is a derivative of Debian without systemd. Devuan 5 & 4 are based  on Debian 12 & 11.
 
@@ -890,3 +913,6 @@ sudo service apache2 restart
 sudo update-rc.d apache2 defaults
 sudo update-rc.d apache2 remove
 ```
+
+</details>
+

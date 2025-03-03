@@ -1,7 +1,10 @@
 ##### LampOnDebianUbuntu 
 # LAMP Stack On Debian and Ubuntu 
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 - L: Debian 12/11 or Ubuntu 24.04/22.04 LTS Server
 - A: Apache 2 
@@ -13,8 +16,12 @@ Sources:
 [geeksforgeeks](https://www.geeksforgeeks.org/how-to-retrieve-data-from-mysql-database-using-php/)
 
 <br>
+</details>
 
-## 1. Install Packages
+<details markdown='1'>
+<summary>
+1. Install Packages
+</summary>
 ---
 ### 1.0. Update Repositories
 ```
@@ -75,9 +82,12 @@ sudo systemctl restart apache2
 ```
 
 <br>
+</details>
 
-
-## 2. Test LAMP Stack
+<details markdown='1'>
+<summary>
+2. Test LAMP Stack
+</summary>
 ---
 
 We'll create a test database, a table in that database, add some rows to the table on Mariadb. We will also create a test PHP file with the PHP code to retrieve the data from the database and display it as HTML. 
@@ -165,6 +175,7 @@ Fill as below
 Now, from your workstation's browser, load the page (replace srv with your server's IP or name: 
 
 `http:/srv/test.php`
+</details>
 
 
 

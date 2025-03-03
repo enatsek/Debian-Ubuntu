@@ -1,7 +1,10 @@
 ##### PostgresqlOnUbuntu 
 # Postgresql Tutorial On Ubuntu
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 ### 0.0. Notes
 Debian 12 and Ubuntu 24.04 LTS Server has packages for different versions of Postgresql (15 and 16). 
@@ -18,14 +21,18 @@ Workstation:
 - IP: 192.168.1.182
 
 ### 0.2. Resources
-<https://www.postgresql.org/docs>  
-<https://www.postgresqltutorial.com>  
+[www.postgresql.org](https://www.postgresql.org/docs)  
+[www.postgresqltutorial.com](https://www.postgresqltutorial.com)  
 **PostgreSQL 14 Administration Cookbook** by Simon Riggs & Gianni Ciolli  
 **Learn PostgreSQL** by Luca Ferrari & Enrico Pirozzi 
 
 <br>
+</details>
 
-## 1. Introduction
+<details markdown='1'>
+<summary>
+1. Introduction
+</summary>
 ---
 ### 1.1. Terminology:
 **Cluster**: A PostgreSQL Instance. Can contain many databases
@@ -57,8 +64,12 @@ WAL (Write Ahead Logs): Database change log, mainly used for recovering.
 Ubuntu postgresql package installs postgresql-client by default
 
 <br>
+</details>
 
-## 2. Installation and Basic Management
+<details markdown='1'>
+<summary>
+2. Installation and Basic Management
+</summary>
 ---
 ### 2.1. Installation
 Update repositories
@@ -139,7 +150,7 @@ There might be more than 1 clusters on a server. At the first sight it  may not 
 
 Currently we only have main cluster. We will add a second one with the  name second. 
 
-Create another Postgres 16 cluster with the name second
+Create another Postgres 15 cluster with the name second
 
 ```
 sudo pg_createcluster 16 second
@@ -221,8 +232,12 @@ sudo -u postgres psql -p 5433
 ```
 
 <br>
+</details>
 
-## 3. User and Connection Management
+<details markdown='1'>
+<summary>
+3. User and Connection Management
+</summary>
 ---
 After installing Postgres, postgres user is able to login psql shell with Linux authentication. No other users are defined and noone can login  remotely.
 
@@ -272,7 +287,7 @@ CREATE TABLE Employees (Name char(15), Age int, Occupation char(15));
 INSERT INTO Employees VALUES ('Joe Smith', '26', 'Ninja');
 GRANT ALL ON ALL TABLES IN SCHEMA public to rwuser;
 GRANT SELECT ON ALL TABLES IN SCHEMA public to rouser;
-exit
+\q
 ```
 
 ### 3.4. Configure Postgres to allow remote connections
@@ -313,7 +328,7 @@ sudo pg_ctlcluster restart 16 main
 ```
 
 ### 3.5. Connection test from Workstation (192.168.1.182)
-**!! Run on the workstation !!**
+**!! Run on workstation !!**
 
 Install Postgres Client to the workstation
 
@@ -332,7 +347,7 @@ Run on psql shell
 
 ```
 INSERT INTO Employees VALUES ('John Doe', '33', 'Kedi');
-exit
+\q
 ```
 
 Connect with rouser and test reading and adding data  
@@ -347,14 +362,18 @@ Run on psql shell
 ```
 SELECT * from Employees;
 INSERT INTO Employees VALUES ('Halim Selim', '41', 'Hirsiz');
-exit
+\q
 ```
 
 If you try to use psql from another workstation in 192.168.1.0/24  network, you will see that rwuser cannot connect and rouser can connect.
 
 <br>
+</details>
 
-## 4. Backup and Restore
+<details markdown='1'>
+<summary>
+4. Backup and Restore 
+</summary>
 ---
 You can backup a database or a whole cluster. When backing up a database, users (roles) and any other clusterwide data is not backed up. So if you backup a database and restore it on another cluster, you have to create users and (if necessary) access permissions there too.
 
@@ -399,7 +418,7 @@ Restore test1 database back on 16 main cluster
 sudo -u postgres psql test1 < /tmp/test1.pg
 ```
 
-Lets restore test1 db to secondary cluster  
+Let's restore test1 db to secondary cluster  
 We need an empty test1 database. 
 
 Create test1 database on 16 secondary
@@ -441,8 +460,12 @@ sudo -u postgres psql -p 5433 -f /tmp/main.pg
 ```
 
 <br>
+</details>
 
-## 5. psql - PostgreSQL Shell
+<details markdown='1'>
+<summary>
+5. psql - PostgreSQL Shell
+</summary>
 ---
 ### 5.1. The Command
 psql command is used to open a Postgres shell. At the fresh install, only postgres Linux user has the right to connect to Postgres shell. So we need to run it by impersonating postgres user:
@@ -493,8 +516,12 @@ You can run SQL commands at psql shell. You can also run psql commands,  some of
 - \?	psql command help-
 
 <br>
+</details>
 
-## 6. Bonus: Postgres 16 and Postgres 15 together
+<details markdown='1'>
+<summary>
+6. Bonus: Postgres 16 and Postgres 15 together
+</summary>
 ---
 For testing purposes we will install Postgresql 15 on the same server. 
 
@@ -516,14 +543,14 @@ Add PPA
 ```
 echo deb [arch=amd64,arm64,ppc64el \
     signed-by=/usr/share/keyrings/postgresql.gpg] \
-    http://apt.postgresql.org/pub/repos/apt/ jammy-pgdg main \
+    http://apt.postgresql.org/pub/repos/apt/ noble-pgdg main \
     | sudo tee -a /etc/apt/sources.list.d/postgresql.list
 ```
 
 ### 6.2. Install Postgresql 15
 ```
 sudo apt update
-sudo apt install postgresql-15
+sudo apt install -y postgresql-15
 ```
 
 ### 6.3. List clusters:
@@ -535,9 +562,9 @@ Output will be like below, now we have 3 clusters namely 16-main, 16-secondary, 
 
 ```
 Ver Cluster   Port Status Owner    Data directory                   Log file
-16  main      5432 online postgres /var/lib/postgresql/14/main      /var/log/...
-16  secondary 5433 online postgres /var/lib/postgresql/14/secondary /var/log/...
 15  main      5434 online postgres /var/lib/postgresql/15/main      /var/log/...
+16  main      5432 online postgres /var/lib/postgresql/16/main      /var/log/...
+16  secondary 5433 online postgres /var/lib/postgresql/16/secondary /var/log/...
 ```
 
 ### 6.4. Connecting to the clusters with psql
@@ -558,20 +585,5 @@ Connect to the third cluster (15-main), remember it runs on port 5434
 ```
 sudo -u postgres psql -p 5434
 ```
- 
-### 6.5. Drop Postgres 15 Main cluster
-```
-sudo pg_dropcluster 15 main
-```
-If it is still running, a stop parameter is required
+</details>
 
-```
-sudo pg_dropcluster --stop 15 main
-```
-
-### 6.6. Upgrade Cluster
-Upgrade 14 secondary cluster to Postgresql 15 
-
-```
-sudo pg_upgradecluster 14 secondary -v 15
-```

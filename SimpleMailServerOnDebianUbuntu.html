@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>SimpleMailServerOnDebianUbuntu</h5>
 <h1>Mail Server with SMTP and IMAP on Debian and Ubuntu</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <p>Based on the valuable documents at: <a href="https://www.server-world.info/en/note?os=Ubuntu_18.04&amp;p=mail&amp;f=1">server-world.info</a></p>
 <p>SMTP: Postfix<br />
@@ -857,7 +864,12 @@ Operating System: Debian 12/11 or Ubuntu 24.04/22.04 LTS Server<br />
 My User Name: exforge</p>
 <p>An MX record must be created at the DNS Server with the value of  mail.386387.xyz</p>
 <p><br></p>
-<h2>1. Install and Configure Postfix</h2>
+</details>
+<details>
+<summary>
+1. Install and Configure Postfix
+</summary>
+<hr />
 <h3>1.0. Update Repositories</h3>
 <pre><code>sudo apt update
 </code></pre>
@@ -959,7 +971,11 @@ smtpd_recipient_restrictions = permit_mynetworks, permit_auth_destination, permi
 <pre><code>sudo systemctl restart postfix 
 </code></pre>
 <p><br></p>
-<h2>2. Install and Configure Dovecot</h2>
+</details>
+<details>
+<summary>
+2. Install and Configure Dovecot
+</summary>
 <hr />
 <h3>2.1. Install Dovecot core, pop3 and imap deamons</h3>
 <pre><code>sudo apt -y install dovecot-core dovecot-pop3d dovecot-imapd 
@@ -1001,13 +1017,21 @@ unix_listener /var/spool/postfix/private/auth {
 </code></pre>
 <p><br></p>
 <hr />
-<p><strong>Break Time</strong></p>
+</details>
+<details>
+<summary>
+**Break Time**
+</summary>
 <p>At this point we have a very basic mail config, all our linux users at  mail.386387.xyz have mail addresses. They can access smtp at port 25 and imap at port 143. But unfortunately there is no encryption. </p>
 <p>At the next step we will add SSL encrytpion and that will change our smtp  port to 587.</p>
 <p>We will use Certbot tool of Let's Encrypt to have a free certificate</p>
 <hr />
 <p><br></p>
-<h2>3. Add SSL/TLS to Postfix and Dovecot</h2>
+</details>
+<details>
+<summary>
+3. Add SSL/TLS to Postfix and Dovecot
+</summary>
 <hr />
 <h3>3.1. Install Certbot to get TLS certificates</h3>
 <pre><code>sudo apt -y install certbot
@@ -1062,7 +1086,11 @@ ssl_key = &lt;/etc/letsencrypt/live/mail.386387.xyz/privkey.pem
 <pre><code>sudo systemctl restart postfix dovecot 
 </code></pre>
 <p><br></p>
-<h2>4. Client Mail Settings</h2>
+</details>
+<details>
+<summary>
+4. Client Mail Settings
+</summary>
 <hr />
 <p>For Linux User exforge at mail.386387.xyz  </p>
 <ul>
@@ -1081,7 +1109,11 @@ ssl_key = &lt;/etc/letsencrypt/live/mail.386387.xyz/privkey.pem
 <li>Username: Incoming: exforge       Outgoing: exforge</li>
 </ul>
 <p><br></p>
-<h2>5. Account Management</h2>
+</details>
+<details>
+<summary>
+5. Account Management
+</summary>
 <hr />
 <h3>5.1. Users</h3>
 <p>All Linux users already have mail accounts with their login names and passwords.</p>
@@ -1112,7 +1144,8 @@ abuse: exforge
 </code></pre>
 <h3>5.3. Restart Postfix and Dovecot</h3>
 <pre><code>sudo systemctl restart postfix dovecot
-</code></pre><!-- HTML Footer Start -->
+</code></pre>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

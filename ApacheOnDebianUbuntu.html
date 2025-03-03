@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,29 +836,31 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>ApacheOnDebianUbuntu</h5>
 <h1>Apache 2 Tutorial on Debian and Ubuntu</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <p>Apache 2 Installation, configuration, sample sites, enablement of PHP,  SSL etc on Ubuntu 24.04 (and 22.04) and Debian 12 (and 11) Servers </p>
 <p>Based on the book <a href="https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition">Mastering Ubuntu Server 2nd Ed.</a> by Jay LaCroix. This book hes introduced me to Ubuntu Server and I have to thank him for this excellent book. </p>
 <p>srv1.386387.xyz, srv2.386387.xyz and srv3.386387.xyz all have the ip of my server</p>
-<h2>1. Apache Installation</h2>
+</details>
+<details>
+<summary>
+1. Apache Installation
+</summary>
 <hr />
 <h3>1.1. Install</h3>
 <pre><code>sudo apt update
@@ -904,7 +915,11 @@ sudo apt install apache2 --yes
 </code></pre>
 <p>Remember to copy sites' pages on DocumentRoot Directories: create /var/www/srv1 and /var/www/srv2 and fill them with htmls</p>
 <p><br></p>
-<h2>2. Apache Additional Modules</h2>
+</details>
+<details>
+<summary>
+2. Apache Additional Modules
+</summary>
 <hr />
 <h2>2.1. List of Apache modules</h2>
 <pre><code>apt search libapache2-mod
@@ -928,7 +943,11 @@ sudo apt install apache2 --yes
 <pre><code>sudo systemctl restart apache2
 </code></pre>
 <p><br></p>
-<h2>3. Adding SSL to Apache</h2>
+</details>
+<details>
+<summary>
+3. Adding SSL to Apache
+</summary>
 <hr />
 <h3>3.1. Enable ssl</h3>
 <pre><code>sudo a2enmod ssl
@@ -978,7 +997,11 @@ sudo apt install apache2 --yes
 <pre><code>sudo systemctl reload apache2
 </code></pre>
 <p><br></p>
-<h2>4. Auto http--&gt;https redirect</h2>
+</details>
+<details>
+<summary>
+4. Auto http--&gt;https Redirect
+</summary>
 <hr />
 <h3>4.1. http://srv1.386387.xyz automatically redirects to https://srv1.386387.xyz</h3>
 <p>First we need to enable rewrite mode</p>
@@ -1004,7 +1027,11 @@ sudo apt install apache2 --yes
 <pre><code>sudo systemctl restart apache2
 </code></pre>
 <p><br></p>
-<h2>5. Enable PHP on Apache2</h2>
+</details>
+<details>
+<summary>
+5. Enable PHP on Apache2
+</summary>
 <hr />
 <h3>5.1. Install php and apache php mod</h3>
 <pre><code>sudo apt install php libapache2-mod-php
@@ -1022,10 +1049,14 @@ sudo apt install apache2 --yes
 <pre><code>&lt;?php
 phpinfo();
 </code></pre>
-<p>Test your page<br />
+<p>Test your page 
 http://srv1.386387.xyz/info.php</p>
 <p><br></p>
-<h2>6. Some Sample Apache Confs</h2>
+</details>
+<details>
+<summary>
+6. Some Sample Apache Confs
+</summary>
 <hr />
 <h3>6.1. 3 different sites on 1 server in 1 conf file</h3>
 <pre><code>&lt;VirtualHost *:80&gt;
@@ -1133,10 +1164,15 @@ a2enmod rewrite
 &lt;/VirtualHost&gt;
 </code></pre>
 <p><br></p>
-<h2>7. Free SSL Certificates</h2>
+</details>
+<details>
+<summary>
+7. Free SSL Certificates
+</summary>
 <hr />
-<p>You can use free, autorenewing SSL certificates from Letsencrypt.org    with Certbot tool from EFF. </p>
-<p>Check it out at my <a href="CertbotOnDebianUbuntu.html">CertbotOnDebianUbuntu</a>  Tutorial.</p><!-- HTML Footer Start -->
+<p>You can use free, autorenewing SSL certificates from <https://letsencrypt.org/> with Certbot tool from EFF. </p>
+<p>Check it out at my <a href="CertbotOnDebianUbuntu.html">CertbotOnDebianUbuntu</a>  Tutorial.</p>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>WordpressOnDebianUbuntu</h5>
 <h1>Install Wordpress  On Debian and Ubuntu</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <p>Based on <a href="https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lamp-on-ubuntu-18-04">Brian Boucheron's Tutorial</a></p>
 <p>My server: www.386387.xyz  Debian 12 (or 11) and Ubuntu 24.04 Server (or 22.04)</p>
@@ -854,7 +861,11 @@ Password of wordpressuser: pAsswOrd1234<br />
 Wordpress website location: /var/www/wordpress  </p>
 <p>LAMP stack must be installed; see <a href="LampOnDebianUbuntu.html">LampOnDebianUbuntu</a>  Tutorial</p>
 <p><br></p>
-<h2>1. Configure a Website (If you haven't done already)</h2>
+</details>
+<details>
+<summary>
+1. Configure a Website (If you haven't done already)
+</summary>
 <hr />
 <h3>1.1. Make room for our website</h3>
 <pre><code>sudo mkdir /var/www/wordpress
@@ -879,7 +890,11 @@ Wordpress website location: /var/www/wordpress  </p>
 <pre><code>sudo systemctl reload apache2
 </code></pre>
 <p><br></p>
-<h2>2. Create MariaDB DB User for Wordpress</h2>
+</details>
+<details>
+<summary>
+2. Create MariaDB DB User for Wordpress
+</summary>
 <hr />
 <h3>2.1. Login to MariaDB</h3>
 <pre><code>sudo mariadb
@@ -894,7 +909,11 @@ FLUSH PRIVILEGES;
 EXIT;
 </code></pre>
 <p><br></p>
-<h2>3. Install Additional PHP Extensions</h2>
+</details>
+<details>
+<summary>
+3. Install Additional PHP Extensions
+</summary>
 <pre><code>sudo apt update
 sudo apt install php-curl php-gd php-mbstring php-xml php-xmlrpc \
 php-soap php-intl php-zip
@@ -903,7 +922,11 @@ php-soap php-intl php-zip
 <pre><code>sudo systemctl restart apache2
 </code></pre>
 <p><br></p>
-<h2>4. Adjust Apache for Wordpress</h2>
+</details>
+<details>
+<summary>
+4. Adjust Apache for Wordpress
+</summary>
 <hr />
 <h3>4.1. Enable wordpress' .htaccess files</h3>
 <p>Edit our site config, adding folders to override</p>
@@ -924,7 +947,11 @@ php-soap php-intl php-zip
 <pre><code>sudo systemctl restart apache2
 </code></pre>
 <p><br></p>
-<h2>5. Download Wordpress</h2>
+</details>
+<details>
+<summary>
+5. Download Wordpress
+</summary>
 <hr />
 <p>Wordpress can be installed by Debian packages, but we prefer to download the latest version from the original source</p>
 <h3>5.1. Go to the temp directory, download wordpress, extract it</h3>
@@ -945,7 +972,11 @@ tar xzvf latest.tar.gz
 <pre><code>sudo cp -a /tmp/wordpress/. /var/www/wordpress
 </code></pre>
 <p><br></p>
-<h2>6. Configure Wordpress Directory</h2>
+</details>
+<details>
+<summary>
+6. Configure Wordpress Directory
+</summary>
 <hr />
 <h3>6.1. Set ownerships and permissions</h3>
 <p>Owned by www-data:www-data</p>
@@ -1006,10 +1037,15 @@ define( 'DB_COLLATE', '' );
 <pre><code>define('FS_METHOD', 'direct');
 </code></pre>
 <p><br></p>
-<h3>7. Wordpress is ready, open in your browser</h3>
+</details>
+<details>
+<summary>
+7. Wordpress is ready, open in your browser
+</summary>
 <hr />
 <p><code>http://www.386387.xyz</code></p>
-<p>Of course it would be a good idea to add SSL to your site, refer to  <a href="CertbotOnDebianUbuntu.html">CertbotOnDebianUbuntu</a> Tutorial.</p><!-- HTML Footer Start -->
+<p>Of course it would be a good idea to add SSL to your site, refer to  <a href="CertbotOnDebianUbuntu.html">CertbotOnDebianUbuntu</a> Tutorial.</p>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

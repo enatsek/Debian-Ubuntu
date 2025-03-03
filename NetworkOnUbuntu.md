@@ -1,7 +1,11 @@
 ##### NetworkOnUbuntu 
 # Network Configuration On Ubuntu Server
+</details>
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 ### 0.0. Info
 Network configuration examples on Ubuntu 22.04 LTS and 24.04 LTS Servers.
@@ -18,13 +22,17 @@ Configuration files reside as yaml files in /etc/netplan dir. A good practice wo
 This configuration file consists all network configuration including the name servers.
 
 ### 0.2. Sources
-<https://netplan.io/>  
-<https://netplan.readthedocs.io/en/stable/>  
+[netplan.io](https://netplan.io/)  
+[netplan.readthedocs.io](https://netplan.readthedocs.io/en/stable/)  
 ChatGPT
 
 <br>
+</details>
 
-## 1. Example Configurations
+<details markdown='1'>
+<summary>
+1. Example Configurations
+</summary>
 ---
 ### 1.1. DHCP Configuration
 Our nic is enp0s3
@@ -149,8 +157,12 @@ sudo netplan apply
 ```
 
 <br>
+</details>
 
-## 2. Case Study - Multiple Networks
+<details markdown='1'>
+<summary>
+2. Case Study - Multiple Networks
+</summary>
 ---
 ### 2.0. Specs
 We have 2 separate networks (192.168.1.X and 10.X.X.X). Some hosts from one network need to reach to the hosts from the other network.
@@ -318,12 +330,17 @@ ping 192.168.1.217
 For a host to connect to another host on the other network, routing must be defined on the both hosts.
 
 <br>
+</details>
 
-### 3. NIC Bonding
+<details markdown='1'>
+<summary>
+3. NIC Bonding
+</summary>
 ---
-I tried NIC Bonding on Ubuntu, but unfortunately I was successful. 
+I tried NIC Bonding on Ubuntu, but unfortunately I wasn't successful. 
 
 That might be because of Virtualbox, Netplan, or Networkd. So I gave up. Maybe next time.
 
 I was able to create the bond interface, it got IP address too, but it can not connect to anywhere on the network. Even working on Networkd directly didn't help.
+</summary>
 

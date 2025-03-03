@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>NetworkOnDebian</h5>
 <h1>Network Configuration On Debian</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <h3>0.0. Info</h3>
 <p>Network configuration examples on Debian 11 and 12.</p>
@@ -900,12 +907,16 @@ sudo ifup enp0s3
 <pre><code>sudo systemctl restart networking
 </code></pre>
 <h3>0.5. Sources</h3>
-<p><a href="https://www.mybluelinux.com/debian-permanent-static-routes/">https://www.mybluelinux.com/debian-permanent-static-routes/</a><br />
-<a href="https://wiki.debian.org/NetworkConfiguration">https://wiki.debian.org/NetworkConfiguration</a><br />
-<a href="https://www.debian.org/doc/manuals/debian-handbook/sect.network-config">https://www.debian.org/doc/manuals/debian-handbook/sect.network-config</a><br />
+<p><a href="https://www.mybluelinux.com/debian-permanent-static-routes/">www.mybluelinux.com</a><br />
+<a href="https://wiki.debian.org/NetworkConfiguration">Debian Wiki</a><br />
+<a href="https://www.debian.org/doc/manuals/debian-handbook/sect.network-config">www.debian.org</a><br />
 ChatGPT</p>
 <p><br></p>
-<h2>1. Example Configurations</h2>
+</details>
+<details>
+<summary>
+1. Example Configurations
+</summary>
 <hr />
 <h3>1.1. DHCP Configuration</h3>
 <p>Our nic is enp0s3</p>
@@ -975,7 +986,11 @@ iface enp0s8 inet static
 <pre><code>sudo systemctl restart networking
 </code></pre>
 <p><br></p>
-<h2>2. Case Study - Multiple Networks</h2>
+</details>
+<details>
+<summary>
+2. Case Study - Multiple Networks
+</summary>
 <hr />
 <h3>2.0. Specs</h3>
 <p>We have 2 separate networks (192.168.1.X and 10.X.X.X). Some hosts from one network need to reach to the hosts from the other network.</p>
@@ -1134,7 +1149,11 @@ nameserver 8.8.4.4
 </code></pre>
 <p>For a host to connect to another host on the other network, routing must be defined on the both hosts.</p>
 <p><br></p>
-<h2>3. NIC Bonding</h2>
+</details>
+<details>
+<summary>
+3. NIC Bonding
+</summary>
 <hr />
 <p>Network interface card bonding simply means using 2 (or more) NICs together to achive redundancy and/or increased throughput. </p>
 <p>There are many types of bonding, some most useds are:</p>
@@ -1348,7 +1367,8 @@ iface bond0 inet static
 </code></pre>
 <p>Check the status of the bond</p>
 <pre><code>sudo cat /proc/net/bonding/bond0
-</code></pre><!-- HTML Footer Start -->
+</code></pre>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

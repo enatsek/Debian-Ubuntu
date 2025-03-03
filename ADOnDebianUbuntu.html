@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>ADOnDebianUbuntu</h5>
 <h1>Simple Active Directory Configuration on Debian and Ubuntu</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <h3>0.1. Definition</h3>
 <ul>
@@ -855,24 +862,24 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 </ul>
 <h3>0.2. Configuration</h3>
 <ul>
-<li>Domain Name: X386.ORG  </li>
-<li>Domain Netbios Name: X386  </li>
+<li>Domain Name: 386387.XYZ  </li>
+<li>Domain Netbios Name: 386387  </li>
 <li>First DC:  <ul>
-<li>srv1.x386.org   </li>
-<li>192.168.1.216   </li>
-<li>Debian 12/11 or Ubuntu 22.04/20.04 LTS Server</li>
+<li>srv1.386387.xyz   </li>
+<li>192.168.1.221   </li>
+<li>Debian 12/11 or Ubuntu 24.04/22.04 LTS Server</li>
 </ul>
 </li>
 <li>Second DC:    <ul>
-<li>srv2.x386.org </li>
-<li>192.168.1.217 </li>
-<li>Debian 12/11 or Ubuntu 22.04/20.04 LTS Server</li>
+<li>srv2.386387.xyz </li>
+<li>192.168.1.222 </li>
+<li>Debian 12/11 or Ubuntu 24.04/22.04 LTS Server</li>
 </ul>
 </li>
 <li>File Server: <ul>
-<li>filesrv.x386.org </li>
-<li>192.168.1.218 </li>
-<li>Debian 12/11 or Ubuntu 22.04/20.04 LTS Server</li>
+<li>filesrv.386387.xyz </li>
+<li>192.168.1.223 </li>
+<li>Debian 12/11 or Ubuntu 24.04/22.04 LTS Server</li>
 </ul>
 </li>
 <li>
@@ -936,13 +943,13 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 //filesrv/XSysPub   SysAdmin RW, All R
 //filesrv/XAll      ALL RW
 </code></pre>
-<p>On my tests I used distros uniformly. That is all servers were Debian 11, Debian 12, Ubuntu 20.04, or Ubuntu 22.04. I believe the system would work with nonuniform distros too, but I haven't tested it.</p>
+<p>On my tests I used distros uniformly. That is all servers were Debian 11, Debian 12, Ubuntu 22.04, or Ubuntu 24.04. I believe the system would work with nonuniform distros too, but I haven't tested it.</p>
 <h3>0.3. Phases</h3>
 <ul>
 <li>Add First DC (srv1.x36.org)</li>
-<li>Add Additional DC (srv2.x386.org)</li>
+<li>Add Additional DC (srv2.386387.xyz)</li>
 <li>AD User Management</li>
-<li>Add a Linux File Server to the Domain (filesrv.x386.org)</li>
+<li>Add a Linux File Server to the Domain (filesrv.386387.xyz)</li>
 <li>Add a Windows Computer to the Domain</li>
 </ul>
 <h3>0.4. Preliminary Tasks</h3>
@@ -959,33 +966,37 @@ Domain Name : EXAMPLE</p>
 <p>Hostname must be in the format of name.example.com (lowercase this time)  and due to an incompatability with Samba and Debian/Ubuntu (Actually all  Debian based Linuxes) you have to erase the line starting with 127.0.1.1
 (not 127.0.0.1) from your /etc/hosts file and add the IP and hostname  (short and long formats) in your /etc/hosts file as in below.</p>
 <pre><code>127.0.0.1       localhost
-192.168.1.216   srv1.x386.org srv1
+192.168.1.221   srv1.386387.xyz srv1
 </code></pre>
 <h4>0.4.3. Mixed Environment</h4>
 <p>You should have at least 2 DCs (Domain Controllers), you can use 1  Wind<em>ws and 1 Linux to benefit from Micros</em>ft's AD Management programs.  </p>
 <p>But actually it is not necessary. </p>
 <p>I'd advice installing all DCs as Linux  and use any Windxws workstation to manage AD. You can install RSAT Management Tools to a Windxws workstation and use AD Manager programs (including DNS and WINS server) from there.</p>
 <h4>0.4.4. Default Values</h4>
-<p>Remember to replace all the occurences of X386, x386, X386.ORG, and  x386.org with yours, regarding the cases. </p>
+<p>Remember to replace all the occurences of 386387, x386, 386387.XYZ, and  386387.xyz with yours, regarding the cases. </p>
 <p><br></p>
-<h2>1. Add First Domain Controller</h2>
+</details>
+<details>
+<summary>
+1. Add First Domain Controller
+</summary>
 <hr />
 <h3>1.0. Specs</h3>
-<pre><code>Domain Name:  X386
-Realm:        X386.ORG  
-Hostname:     srv1.x386.org
-IP:           192.168.1.216
+<pre><code>Domain Name:  386387
+Realm:        386387.XYZ    
+Hostname:     srv1.386387.xyz
+IP:           192.168.1.221
 </code></pre>
 <h3>1.1. Set Hostname</h3>
 <p>Set hostname as fully qualified (if you haven't done it before)</p>
-<pre><code>sudo hostnamectl set-hostname srv1.x386.org
+<pre><code>sudo hostnamectl set-hostname srv1.386387.xyz
 </code></pre>
 <p>Update /etc/hosts file</p>
 <pre><code>sudo nano /etc/hosts
 </code></pre>
 <p>Change the start of the file as below:</p>
 <pre><code>127.0.0.1       localhost
-192.168.1.216   srv1.x386.org srv1 
+192.168.1.221   srv1.386387.xyz srv1 
 </code></pre>
 <h3>1.2. Install required packages</h3>
 <pre><code>sudo apt update
@@ -994,11 +1005,11 @@ sudo apt -y install samba krb5-config winbind smbclient
 <p>Answers to parameter questions:  </p>
 <ul>
 <li>Default Kerberos version 5 realm:</li>
-<li>X386.ORG</li>
+<li>386387.XYZ</li>
 <li>Kerberos servers for your realm:</li>
-<li>srv1.x386.org</li>
+<li>srv1.386387.xyz</li>
 <li>Administrative server for your Kerberos realm:</li>
-<li>srv1.x386.org</li>
+<li>srv1.386387.xyz</li>
 </ul>
 <h3>1.2. Run Samba Config</h3>
 <p>Backup original samba configuration</p>
@@ -1010,9 +1021,9 @@ sudo apt -y install samba krb5-config winbind smbclient
 <p>Answers to parameter questions:</p>
 <ul>
 <li>Realm:</li>
-<li>X386.ORG</li>
+<li>386387.XYZ</li>
 <li>Domain: </li>
-<li>X386</li>
+<li>386387</li>
 <li>Server Role (dc, member, standalone) [dc]: </li>
 <li>Just press enter</li>
 <li>DNS backend (SAMBA_INTERNAL,...</li>
@@ -1035,7 +1046,7 @@ sudo systemctl unmask samba-ad-dc
 sudo nano /etc/resolv.conf
 </code></pre>
 <p>Fill as below</p>
-<pre><code>domain x386.org
+<pre><code>domain 386387.xyz
 nameserver 127.0.0.1
 </code></pre>
 <h3>1.5. Start DC Services</h3>
@@ -1049,26 +1060,30 @@ sudo systemctl enable samba-ad-dc
 <pre><code>sudo samba-tool user create exforge
 </code></pre>
 <p><br></p>
-<h2>2. Add Additional DC</h2>
+</details>
+<details>
+<summary>
+2. Add Additional DC
+</summary>
 <hr />
 <h2>2.0. Specs</h2>
-<pre><code>Domain Name:      X386
-Realm:            X386.ORG  
-Hostname:         srv2.x386.org
-IP:               192.168.1.217
-Org. DC Hostname: srv1.x386.org
-Org. DC IP:       192.168.1.216
+<pre><code>Domain Name:      386387
+Realm:            386387.XYZ    
+Hostname:         srv2.386387.xyz
+IP:               192.168.1.222
+Org. DC Hostname: srv1.386387.xyz
+Org. DC IP:       192.168.1.221
 </code></pre>
 <h3>2.1. Set Hostname</h3>
 <p>Set hostname as fully qualified (if you haven't done it before)</p>
-<pre><code>sudo hostnamectl set-hostname srv2.x386.org
+<pre><code>sudo hostnamectl set-hostname srv2.386387.xyz
 </code></pre>
 <p>Update /etc/hosts file</p>
 <pre><code>sudo nano /etc/hosts
 </code></pre>
 <p>Change the start of the file as below:</p>
 <pre><code>127.0.0.1       localhost
-192.168.1.217   srv2.x386.org srv2 
+192.168.1.222   srv2.386387.xyz srv2 
 </code></pre>
 <h3>2.2. Install kerberos and edit configuration</h3>
 <pre><code>sudo apt update
@@ -1079,7 +1094,7 @@ sudo apt -y install krb5-user
 </code></pre>
 <p>Change the beginning of the file as below</p>
 <pre><code>[libdefaults]
-        default_realm = X386.ORG
+        default_realm = 386387.XYZ
         dns_lookup_realm = false
         dns_lookup_kdc = true
 </code></pre>
@@ -1093,8 +1108,8 @@ sudo systemctl disable systemd-resolved
 sudo nano /etc/resolv.conf
 </code></pre>
 <p>Add following lines</p>
-<pre><code>domain x386.org
-nameserver 192.168.1.216
+<pre><code>domain 386387.xyz
+nameserver 192.168.1.221
 </code></pre>
 <h3>2.5. Get Kerberos ticket</h3>
 <p>Domain Admin password will be asked (Entered at 1.2.)</p>
@@ -1109,7 +1124,7 @@ nameserver 192.168.1.216
 </code></pre>
 <p>Rename and remove default samba config, create a new one</p>
 <pre><code>sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.org 
-sudo samba-tool domain join X386.ORG DC -U &quot;srv1\administrator&quot; \
+sudo samba-tool domain join 386387.XYZ DC -U &quot;srv1\administrator&quot; \
    --dns-backend=SAMBA_INTERNAL 
 </code></pre>
 <h3>2.7. Close and disable unnecessary services and enable samba</h3>
@@ -1129,7 +1144,11 @@ sudo systemctl enable samba-ad-dc
 <p>Following warning is not important, you can ignore it:<br />
 <code>Warning: No NC replicated for Connection!</code></p>
 <p><br></p>
-<h2>3. AD User &amp; Computer Management</h2>
+</details>
+<details>
+<summary>
+3. AD User &amp; Computer Management
+</summary>
 <hr />
 <p>You can run on any DC</p>
 <h3>3.1. User Management</h3>
@@ -1184,9 +1203,10 @@ sudo samba-tool user enable ubuntu
 </code></pre>
 <h4>3.2.3. Add a domain group.</h4>
 <pre><code>sudo samba-tool group add TestUsers
+sudo samba-tool group add TestUsers2
 </code></pre>
 <h4>3.2.4. Delete a domain group.</h4>
-<pre><code>sudo samba-tool group delete TestUsers
+<pre><code>sudo samba-tool group delete TestUsers2
 </code></pre>
 <h4>3.2.5. Add/remove a member from a domain group.</h4>
 <pre><code>sudo samba-tool group addmembers TestUsers ubuntu
@@ -1249,7 +1269,11 @@ sudo samba-tool group removemembers TestUsers ubuntu
 <pre><code>sudo samba-tool time --help
 </code></pre>
 <p><br></p>
-<h2>4. Create Users and Groups</h2>
+</details>
+<details>
+<summary>
+4. Create Users and Groups
+</summary>
 <hr />
 <h3>4.1. Create Users</h3>
 <p>Create all users with Password1 as the default password. Users are going to have to change their password at their first logon.</p>
@@ -1297,27 +1321,31 @@ sudo samba-tool group addmembers SysAdmin support
 sudo samba-tool group addmembers All Marketing,Sales,Production,IT,SysAdmin
 </code></pre>
 <p><br></p>
-<h2>5. Install and Configure the File Server</h2>
+</details>
+<details>
+<summary>
+5. Install and Configure the File Server
+</summary>
 <hr />
 <h3>5.1. Set Hostname and DNS Information</h3>
 <p>Set hostname as fully qualified (if you haven't done it before)</p>
-<pre><code>sudo hostnamectl set-hostname filesrv.x386.org
+<pre><code>sudo hostnamectl set-hostname filesrv.386387.xyz
 </code></pre>
 <p>Update /etc/hosts file</p>
 <pre><code>sudo nano /etc/hosts
 </code></pre>
 <p>Change the start of the file as below:</p>
 <pre><code>127.0.0.1       localhost
-192.168.1.218   filesrv.x386.org filesrv 
+192.168.1.223   filesrv.386387.xyz filesrv 
 </code></pre>
 <p>Remove resolv.conf and create a new one</p>
 <pre><code>sudo rm /etc/resolv.conf
 sudo nano /etc/resolv.conf
 </code></pre>
 <p>Add following lines</p>
-<pre><code>domain x386.org
-nameserver 192.168.1.216
-nameserver 192.168.1.217
+<pre><code>domain 386387.xyz
+nameserver 192.168.1.221
+nameserver 192.168.1.222
 </code></pre>
 <h3>5.2. Install necessary packages</h3>
 <pre><code>sudo apt update
@@ -1327,24 +1355,24 @@ sudo apt -y install winbind libpam-winbind libnss-winbind krb5-config \
 <p>Answers to parameter questions (if asked):</p>
 <ul>
 <li>Default Kerberos version 5 realm:</li>
-<li>X386.ORG</li>
+<li>386387.XYZ</li>
 <li>Kerberos servers for your realm:</li>
-<li>srv1.x386.org</li>
+<li>srv1.386387.xyz</li>
 <li>Administrative server for your Kerberos realm:</li>
-<li>srv1.x386.org</li>
+<li>srv1.386387.xyz</li>
 </ul>
 <h3>5.3. Configure Winbind</h3>
 <h4>5.3.1. Samba config</h4>
 <pre><code>sudo nano /etc/samba/smb.conf 
 </code></pre>
 <p>Change/add following lines under [global] stanza</p>
-<pre><code>   workgroup = X386
-   realm = X386.ORG
+<pre><code>   workgroup = 386387
+   realm = 386387.XYZ
    security = ads
    idmap config * : backend = tdb
    idmap config * : range = 3000-7999
-   idmap config X386 : backend = rid
-   idmap config X386 : range = 10000-999999
+   idmap config 386387 : backend = rid
+   idmap config 386387 : range = 10000-999999
    template homedir = /home/%U
    template shell = /bin/bash
    winbind use default domain = true
@@ -1442,7 +1470,7 @@ sudo mkdir -p /srv/shares/XAll
    winbind separator = +         
    encrypt passwords = yes         
    dns proxy = no         
-   wins server = 192.168.1.216         
+   wins server = 192.168.1.221         
    wins proxy = no  
 </code></pre>
 <p>Add following lines at the end of the file<br />
@@ -1659,11 +1687,16 @@ sudo mkdir -p /srv/shares/XAll
 <pre><code>sudo systemctl restart smbd
 </code></pre>
 <p><br></p>
-<h2>6. Add Windows Computers to the Domain</h2>
+</details>
+<details>
+<summary>
+6. Add Windows Computers to the Domain 
+</summary>
 <hr />
 <p>Change Windows computer's DNS setting to first DC and proceed as usual.</p>
 <p>AD (including the DNS server on DC) could be managed through windows  workstation after installing RSAT management.</p>
-<p>You can connect to the file server using \srvf\share1 (share2,3,4) notation from your workstation.</p><!-- HTML Footer Start -->
+<p>You can connect to the file server using \srvf\share1 (share2,3,4) notation from your workstation.</p>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>KVMOnDebianUbuntu2:</h5>
 <h1>KVM Tutorial 2 On Debian and Ubuntu Server (KVM Networking)</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <h3>0.0. Definition</h3>
 <p>KVM virtualization Tutorial 2 on Debian and Ubuntu Server. </p>
@@ -865,7 +872,11 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <p>ISBN: 978-1-78829-467-6 <strong>KVM Virtualization Cookbook</strong> by Konstantin Ivanov</p>
 <p>ISBN: 978-1-83882-871-4 <strong>Mastering KVM Virtualization 2nd Ed.</strong> by Vedran    Dakic, Humble Devassy Chirammal, Prasad Mukhedkar, Anil Vettathu</p>
 <p><br></p>
-<h2>1. KVM Networks - Configuration Commands</h2>
+</details>
+<details>
+<summary>
+1. KVM Networks - Configuration Commands
+</summary>
 <hr />
 <p>Although it is possible to produce endless variations, there are 3 basic  network types in KVM: Bridged, NAT, and Isolated.</p>
 <p>Before exploring KVM networking more, let's revise the commands for it.</p>
@@ -1037,14 +1048,18 @@ virsh net-autostart host-bridge2 --disable
 virsh net-undefine host-bridge2
 </code></pre>
 <p><br></p>
-<h2>2. KVM Networks - Network Types</h2>
+</details>
+<details>
+<summary>
+2. KVM Networks - Network Types
+</summary>
 <hr />
 <p>When preparing XML files for creating KVM networks, we use UUID and MAC  values. These UUID and MAC values must be unique for each network.  Remember to replace them with unique values.</p>
 <p>Random UUID Generator:</p>
 <pre><code>uuidgen
 </code></pre>
 <p>Random MAC Address Generator:</p>
-<p><a href="https://www.browserling.com/tools/random-mac">https://www.browserling.com/tools/random-mac</a></p>
+<p><a href="https://www.browserling.com/tools/random-mac">www.browserling.com</a></p>
 <h3>2.1. Bridged Networks</h3>
 <p>I believe you already have an idea of bridged networks. It is like the  host is sharing its interface and network with the VM. VM is in the same network as the host. If there is a DHCP Server on the network the host  resides, the VM can use it to get an IP.</p>
 <p>If you are going to use a server which directly serves information or a service to the users, most probably you'll use a Bridged Network.</p>
@@ -1121,7 +1136,11 @@ virsh net-undefine host-bridge2
 <li>Our nat bridge will have 192.168.20.1/24 IP and a DHCP server will  announce addresses between 192.168.20.101 and 192.168.20.200. Change these values as you like.</li>
 </ul>
 <p><br></p>
-<h2>3. Case Study A: Bridged and Isolated Networks Together</h2>
+</details>
+<details>
+<summary>
+3. Case Study A: Bridged and Isolated Networks Together
+</summary>
 <hr />
 <h3>3.1. Specs:</h3>
 <ul>
@@ -1201,7 +1220,11 @@ virsh net-undefine host-bridge2
 <pre><code>Acquire::http::proxy &quot;http://user:pass@proxyserver:port&quot;;
 </code></pre>
 <p><br></p>
-<h2>4. Case Study B: Separating Host and VM Access with 2 NICs</h2>
+</details>
+<details>
+<summary>
+4. Case Study B: Separating Host and VM Access with 2 NICs
+</summary>
 <hr />
 <p>I don't know if it would be a best practice but definitely it will be a  good practice to separate host's and VMs' network. That means, we will  connect our host to our network with 2 interfaces; 1 interface will be  used for accessing the host and the other will be used to access VMs.</p>
 <h3>4.1. Specs:</h3>
@@ -1324,7 +1347,11 @@ virsh net-autostart host-bridge
     --noautoconsole
 </code></pre>
 <p><br></p>
-<h2>5. Case Study C: NAT KVM Network</h2>
+</details>
+<details>
+<summary>
+5. Case Study C: NAT KVM Network
+</summary>
 <hr />
 <p>We will create a VM, in a NAT network.</p>
 <h3>5.1. Specs:</h3>
@@ -1381,7 +1408,11 @@ virsh net-autostart nat
 </code></pre>
 <p>Your VM will be able to connect to your network, but the devices on your  network will not be able to connect to it.</p>
 <p><br></p>
-<h2>6. Adding and Removing Networks From a VM</h2>
+</details>
+<details>
+<summary>
+6. Adding and Removing Networks To/From a VM 
+</summary>
 <hr />
 <p>I assume that we have bridged and isolated networks ready on our host.</p>
 <h3>6.1. Specs</h3>
@@ -1450,7 +1481,8 @@ virsh start vmtest
 <p><strong>Now we return back to our host:</strong></p>
 <pre><code>virsh detach-interface vmtest bridge --mac 52:54:00:83:3c:a0 --config
 </code></pre>
-<p>When you shutdown and start your VM, the interface will be gone.</p><!-- HTML Footer Start -->
+<p>When you shutdown and start your VM, the interface will be gone.</p>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

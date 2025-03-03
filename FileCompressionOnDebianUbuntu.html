@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>FileCompressionOnDebianUbuntu</h5>
 <h1>File Compression and Packaging on Debian And Ubuntu</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <h3>0.0. Info</h3>
 <p>When sharing files with other people, you may need to package and compress them. </p>
@@ -904,9 +911,13 @@ touch /tmp/testdir/d3/f3{1..3}
 <h3>0.3. Sources</h3>
 <p>Man pages, the commands with --help option, and ChatGPT as always.<br />
 <strong>Never trust ChatGPT, check everything it says.</strong><br />
-<a href="https://linuxconfig.org/create-a-random-character-text-file-using-linux-shell">https://linuxconfig.org/create-a-random-character-text-file-using-linux-shell</a></p>
+<a href="https://linuxconfig.org/create-a-random-character-text-file-using-linux-shell">linuxconfig.org</a></p>
 <p><br></p>
-<h2>1. gzip</h2>
+</details>
+<details>
+<summary>
+1. gzip
+</summary>
 <hr />
 <h3>1.1. Info</h3>
 <p>Installation (Most probably, it is already installed).</p>
@@ -952,7 +963,11 @@ gunzip /tmp/testdir/d1/*
 <li>-9 --best: Compress better</li>
 </ul>
 <p><br></p>
-<h2>2. bzip2</h2>
+</details>
+<details>
+<summary>
+2. bzip2
+</summary>
 <hr />
 <h3>2.1. Info</h3>
 <p>Installation (Most probably, it is already installed).</p>
@@ -992,7 +1007,11 @@ bunzip2 /tmp/testdir/d1/*
 <li>-9 --best: Compress better</li>
 </ul>
 <p><br></p>
-<h2>3. xz</h2>
+</details>
+<details>
+<summary>
+3. xz
+</summary>
 <hr />
 <h3>3.1. Info</h3>
 <p>Installation (Most probably, it is already installed).</p>
@@ -1032,7 +1051,11 @@ unxz /tmp/testdir/d1/*
 <li>-9: Compress better</li>
 </ul>
 <p><br></p>
-<h2>4. tar</h2>
+</details>
+<details>
+<summary>
+4. tar
+</summary>
 <hr />
 <h4>4.1. Info</h4>
 <p>Installation (Most probably, it is already installed)</p>
@@ -1110,7 +1133,11 @@ tar -xJvf archive.tar.xz -C /tmp
 <li>--remove-files: remove files after adding them to the archive</li>
 </ul>
 <p><br></p>
-<h2>5. zip</h2>
+</details>
+<details>
+<summary>
+5. zip
+</summary>
 <hr />
 <h3>5.1. Info</h3>
 <p>Although gzip, bzip2, xz, and tar is more than enough for compression and archiving; sometimes you may need to exchange files with the unlucky people using Wind*ws. zip tool may be helpful then.</p>
@@ -1145,18 +1172,20 @@ sudo apt install zip
 <p>Some options:</p>
 <ul>
 <li>-u: update; only changed or new files</li>
-<li>-d: delete entries in zipfile    </li>
+<li>-d: delete entries in zipfile</li>
 <li>-m: move into zipfile (delete OS files)</li>
-<li>-r: recurse into directories     </li>
+<li>-r: recurse into directories</li>
 <li>-j: junk (don't record) directory names</li>
-<li>-1: compress faster              </li>
+<li>-1: compress faster</li>
 <li>-9: compress better</li>
-<li>-q: quiet operation              </li>
+<li>-q: quiet operation</li>
 <li>-v: verbose operation/print version info</li>
-<li>-x: exclude the following names  </li>
+<li>-x: exclude the following names</li>
 <li>-i: include only the following names</li>
-<li>-e: encrypt                      </li>
-</ul><!-- HTML Footer Start -->
+<li>-e: encrypt</li>
+</ul>
+</details>
+</summary><!-- HTML Footer Start -->
 
 </body>
 </html>

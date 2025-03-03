@@ -1,7 +1,10 @@
 ##### FileCompressionOnDebianUbuntu 
 # File Compression and Packaging on Debian And Ubuntu
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 ### 0.0. Info
 When sharing files with other people, you may need to package and compress them. 
@@ -84,11 +87,15 @@ Final tree
 ### 0.3. Sources
 Man pages, the commands with --help option, and ChatGPT as always.  
 **Never trust ChatGPT, check everything it says.**  
-<https://linuxconfig.org/create-a-random-character-text-file-using-linux-shell>
+[linuxconfig.org](https://linuxconfig.org/create-a-random-character-text-file-using-linux-shell)
 
 <br>
+</details>
 
-## 1. gzip
+<details markdown='1'>
+<summary>
+1. gzip
+</summary>
 ---
 ### 1.1. Info
 Installation (Most probably, it is already installed).
@@ -162,8 +169,12 @@ Some useful options:
 - -9 --best: Compress better
 
 <br>
+</details>
 
-## 2. bzip2
+<details markdown='1'>
+<summary>
+2. bzip2
+</summary>
 ---
 ### 2.1. Info
 Installation (Most probably, it is already installed).
@@ -226,8 +237,12 @@ Some useful options:
 - -9 --best: Compress better
 
 <br>
+</details>
 
-## 3. xz
+<details markdown='1'>
+<summary>
+3. xz
+</summary>
 ---
 ### 3.1. Info
 Installation (Most probably, it is already installed).
@@ -289,8 +304,12 @@ Some useful options:
 - -9: Compress better
 
 <br>
+</details>
 
-## 4. tar
+<details markdown='1'>
+<summary>
+4. tar
+</summary>
 ---
 #### 4.1. Info
 Installation (Most probably, it is already installed)
@@ -410,8 +429,12 @@ Some selected options:
 - --remove-files: remove files after adding them to the archive
 
 <br>
+</details>
 
-## 5. zip
+<details markdown='1'>
+<summary>
+5. zip
+</summary>
 ---
 ### 5.1. Info
 Although gzip, bzip2, xz, and tar is more than enough for compression and archiving; sometimes you may need to exchange files with the unlucky people using Wind*ws. zip tool may be helpful then.
@@ -471,14 +494,18 @@ zip -u d1.zip /tmp/testdir/d2/*
 Some options:
 
 - -u: update; only changed or new files
-- -d: delete entries in zipfile    
+- -d: delete entries in zipfile
 - -m: move into zipfile (delete OS files)
-- -r: recurse into directories     
+- -r: recurse into directories
 - -j: junk (don't record) directory names
-- -1: compress faster              
+- -1: compress faster
 - -9: compress better
-- -q: quiet operation              
+- -q: quiet operation
 - -v: verbose operation/print version info
-- -x: exclude the following names  
+- -x: exclude the following names
 - -i: include only the following names
-- -e: encrypt                      
+- -e: encrypt
+
+</details>
+</summary>
+

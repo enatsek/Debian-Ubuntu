@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>AnsibleOnDebianUbuntu</h5>
 <h1>Ansible Tutorial For Debian and Ubuntu</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <h3>0.0. Servers managed from a workstation</h3>
 <p>This tutorial aims to bring you to a moderate level using Ansible.</p>
@@ -863,11 +870,15 @@ ubuntu22 -&gt; Ubuntu 22.04 LTS Server  </p>
 <h3>0.3. Resources:</h3>
 <p>Book: 978-1-4842-1660-6 Ansible From Beginner to Pro by Michael Heap<br />
 Book: 978-1-78899-756-0 Mastering Ubuntu Server Second Edition by Jay LaCroix<br />
-<a href="https://docs.ansible.com/ansible/">https://docs.ansible.com/ansible/</a><br />
-<a href="https://www.howtoforge.com/ansible-guide-ad-hoc-command/">https://www.howtoforge.com/ansible-guide-ad-hoc-command/</a><br />
-<a href="https://www.golinuxcloud.com/ansible-tutorial/">https://www.golinuxcloud.com/ansible-tutorial/</a></p>
+<a href="https://docs.ansible.com/ansible/">docs.ansible.com/ansible</a><br />
+<a href="https://www.howtoforge.com/ansible-guide-ad-hoc-command/">www.howtoforge.com</a><br />
+<a href="https://www.golinuxcloud.com/ansible-tutorial/">www.golinuxcloud.com</a></p>
 <p><br></p>
-<h2>1. Installation and Main Configuration</h2>
+</details>
+<details>
+<summary>
+1. Installation and Main Configuration
+</summary>
 <hr />
 <h3>1.1. Install ansible on workstation</h3>
 <p><strong>Run on workstation</strong></p>
@@ -916,8 +927,14 @@ ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu22
 <pre><code>sudo chmod 440 /etc/sudoers.d/ansible
 </code></pre>
 <p>All the preliminary work is completed<br />
-From now on, all the commands will be run on the workstation</p>
-<h2>2. Configuration</h2>
+From now on, all the commands will be run on the workstation
+<br></p>
+</details>
+<details>
+<summary>
+2. Configuration
+</summary>
+<hr />
 <h3>2.1. Configuration File</h3>
 <p>Ansible looks for the configuration file in the following order:</p>
 <ul>
@@ -984,7 +1001,11 @@ ubuntu22
 <pre><code>ansible all -m ping -vvvv
 </code></pre>
 <p><br></p>
-<h2>3. More on Inventory</h2>
+</details>
+<details>
+<summary>
+3. More on Inventory
+</summary>
 <hr />
 <h3>3.1. Command based inventory</h3>
 <p>It is possible to use a different inventory for each ansible or ansible-playbook command:</p>
@@ -1069,7 +1090,11 @@ role=&quot;dbserver&quot;
 </code></pre>
 <p>That way, using ansible, you can install apache to servers with webserver role and install mariadb to servers with role dbserver.</p>
 <p><br></p>
-<h2>4. Ansible Ad Hoc Commands</h2>
+</details>
+<details>
+<summary>
+4. Ansible Ad Hoc Commands
+</summary>
 <hr />
 <p>You can run Ansible commands in 2 ways, 1 is direct (adhoc), 2 is through  playbooks. </p>
 <p>In the next section we will work on our first playbook. </p>
@@ -1157,7 +1182,11 @@ ansible all -i /home/ansible/ansible/inventory -m ping
 <pre><code>ansible debian12 -m service -a &quot;name=apache2 state=restarted&quot; --become
 </code></pre>
 <p><br></p>
-<h2>5. A Simple Playbook to Install Apache</h2>
+</details>
+<details>
+<summary>
+5. A Simple Playbook to Install Apache
+</summary>
 <hr />
 <p>Playbooks are files in YAML format. They contain commands to run by  Ansible.</p>
 <p>Our playbook will install apache, and prepare a sample homepage  containing the host name</p>
@@ -1239,7 +1268,11 @@ cd /home/ansible/ansible/playbooks/apache
 <pre><code>./apache.yml
 </code></pre>
 <p><br></p>
-<h2>6. A More Complex Playbook to Install LAMP</h2>
+</details>
+<details>
+<summary>
+6. A More Complex Playbook to Install LAMP
+</summary>
 <hr />
 <h3>6.0. Necessary Steps</h3>
 <ul>
@@ -1287,7 +1320,11 @@ cd /home/ansible/ansible/playbooks/lamp
 <pre><code>ansible-playbook lamp.yml
 </code></pre>
 <p><br></p>
-<h2>7. (IMHO) Important Ansible Modules</h2>
+</details>
+<details>
+<summary>
+7. (IMHO) Important Ansible Modules
+</summary>
 <hr />
 <p>Well, actually all of the Ansible modules are important. I just selected  some of them considering my very humble opinion.</p>
 <p>To use an example, you have to put it in a playbook or in a role and  apply necessary indentation. Ansible is like Python, indentation is very  important.</p>
@@ -1998,7 +2035,11 @@ cd /home/ansible/ansible/playbooks/lamp
       remove: yes
 </code></pre>
 <p><br></p>
-<h2>8. Roles</h2>
+</details>
+<details>
+<summary>
+8. Roles
+</summary>
 <hr />
 <h3>8.0. Introduction</h3>
 <p>Playbooks can be splitted into roles. That way, we can create reusable  code. The lamp example at 7. will be rewritten using 4 roles:</p>
@@ -2121,7 +2162,11 @@ ansible-galaxy init exforge.php
 ansible-playbook lamp.yml
 </code></pre>
 <p><br></p>
-<h2>9.Ansible Facts and Magic Variables</h2>
+</details>
+<details>
+<summary>
+9.Ansible Facts and Magic Variables
+</summary>
 <hr />
 <h3>9.1. Ansible Facts</h3>
 <h4>9.1.1. Getting Facts</h4>
@@ -2223,7 +2268,11 @@ System hostname : <code>{{ ansible_facts['nodename'] }}</code>  </p>
 <li>ansible_check_mode: Boolean, set to True if you run Ansible with --check.</li>
 </ul>
 <p><br></p>
-<h2>10. Distinguishing Linux Distribution</h2>
+</details>
+<details>
+<summary>
+10. Distinguishing Linux Distribution
+</summary>
 <hr />
 <p>Debian and Ubuntu name Apache Server as apache2 and use apt package  manager. </p>
 <p>Alpine also names Apache Server as apache2 and uses apk package manager.</p>
@@ -2326,7 +2375,11 @@ ansible-playbook apacheDRA.yml
 <h3>10.4. Exercise</h3>
 <p>Redesign apacheDRA role, using package module.</p>
 <p><br></p>
-<h2>11. Role Variables</h2>
+</details>
+<details>
+<summary>
+11. Role Variables
+</summary>
 <hr />
 <p>You can set role variables when you consume a role in a playbook. The  variables are defined in the roles and can be set values at the playbook.</p>
 <p>Our example will install apache (if it is not installed), create a  configuration with the given site name and create a default page with the  given parameters.</p>
@@ -2447,7 +2500,11 @@ html_text: This page is created by Ansible
 ansible-playbook apachesite.yml
 </code></pre>
 <p><br></p>
-<h3>12. Variable Filters</h3>
+</details>
+<details>
+<summary>
+12. Variable Filters
+</summary>
 <hr />
 <p>There are a number of filters available for the variables used in  templates, playbooks and roles.</p>
 <h3>12.1. Syntax Filters</h3>
@@ -2556,7 +2613,11 @@ ansible-playbook apachesite.yml
         - &quot;Round of {{ num3 }}: {{ num3 | round }}&quot;
 </code></pre>
 <p><br></p>
-<h2>13. Handlers</h2>
+</details>
+<details>
+<summary>
+13. Handlers
+</summary>
 <hr />
 <p>If you want a task to run when something is changed, you can use  handlers. For example, a task tries to change a conf file for apache, and  you need to reload or restart apache if the file is changed. That is when  you use handlers.</p>
 <p>You might remember, there is a folder for handlers for the roles. That is where you are expected to put your handlers. </p>
@@ -2653,7 +2714,11 @@ ansible-playbook apachesite.yml
 ansible-playbook apachesite.yml
 </code></pre>
 <p><br></p>
-<h2>14. Error Recovery (Block and rescue)</h2>
+</details>
+<details>
+<summary>
+14. Error Recovery (Block and rescue)
+</summary>
 <hr />
 <p>Ansible has an exception handling (error recovery) mechanism similar to  Python's try-except-finally block.</p>
 <h3>14.1. Block-Rescue-Always usage</h3>
@@ -2696,7 +2761,11 @@ ansible-playbook apachesite.yml
 <p>If there are no errors in tasks, rescue block is skipped and the tasks in always block (Always task in our example) run.</p>
 <p>Error recovery is a very important subject in all kinds of programming. I believe you should use it as much as possible to prevent an unexpected  termination of programs (playbooks for ansible).</p>
 <p><br></p>
-<h2>15. Skipped Content</h2>
+</details>
+<details>
+<summary>
+15. Skipped Content
+</summary>
 <hr />
 <p>I skipped the following subjects just because I think I won't use them. I believe most of you won't use them ever. </p>
 <ul>
@@ -2707,7 +2776,8 @@ ansible-playbook apachesite.yml
 <li>Writing your own modules</li>
 <li>Using Ansible on Windows servers</li>
 <li>And may be some more that I am not able to know now :)</li>
-</ul><!-- HTML Footer Start -->
+</ul>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

@@ -1,7 +1,10 @@
 ##### LappOnDebianUbuntu 
 # LAPP Stack On Debian and Ubuntu 
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 - L: Debian 12/11 or Ubuntu 24.04/22.04 LTS Server
 - A: Apache 2 
@@ -9,11 +12,15 @@
 - P: PHP (Python or Perl could be other options)
 
 Sources:
-<https://stackoverflow.com/questions/49157928/how-to-fetch-data-from-postgresql-using-php>
+[stackoverflow.com](https://stackoverflow.com/questions/49157928/how-to-fetch-data-from-postgresql-using-php)
 
 <br>
+</details>
 
-## 1. Install Packages
+<details markdown='1'>
+<summary>
+1. Install Packages
+</summary>
 ---
 ### 1.0. Update Repositories
 ```
@@ -49,8 +56,12 @@ sudo systemctl restart apache2
 ```
 
 <br>
+</details>
 
-## 2. Test LAPP Stack
+<details markdown='1'>
+<summary>
+2. Test LAPP Stack
+</summary>
 ---
 We'll create a test database, a table in that database, add some rows to the table on Postgres. We will also create a test PHP file with the PHP code to retrieve the data from the database and display it as HTML. 
 
@@ -139,3 +150,6 @@ Fill it as below, remember to change to your password
 Now, from your workstation's browser, load the page (replace srv with  your server's IP: 
 
 http:/srv/test.php
+
+</details>
+

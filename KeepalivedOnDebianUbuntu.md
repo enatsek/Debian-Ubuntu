@@ -1,7 +1,10 @@
 ##### KeepalivedOnDebianUbuntu 
 # keepalived Clustering on Debian and Ubuntu
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 - Servers may be Debian 11/12 or Ubuntu 22.04/24.04
 - Floating IP Address: 192.168.1.240
@@ -29,8 +32,12 @@ You may establish a full cluster of LAMP stack by:
 4. Establishing Master-Master Replication for Mariadb on 1st and 2nd servers
 
 <br>
+</details>
 
-## 1. Install keepalived
+<details markdown='1'>
+<summary>
+1. Install keepalived
+</summary>
 ---
 Install on both the first and the second servers
 
@@ -42,8 +49,12 @@ sudo apt -y install keepalived
 After the installation, tries to start but cannot because there is no config.
 
 <br>
+</details>
 
-## 2. First Server Config
+<details markdown='1'>
+<summary>
+2. First Server Config
+</summary>
 ---
 ### 2.1. Config
 Config file location is /etc/keepalived directory, initially empty
@@ -104,16 +115,24 @@ vrrp_instance VI_1 {
       - floating ip address of the cluster
 
 
+</details>
 
-## 3. Second Server Config
+<details markdown='1'>
+<summary>
+3. Second Server Config
+</summary>
 ---
 Almost the same as step 2. Just give a smaller number (say 90) for priority.
 
 If you want to add more servers, give them numbers less then 90
 
 <br>
+</details>
 
-## 4. Start keepalived
+<details markdown='1'>
+<summary>
+4. Start keepalived
+</summary>
 ---
 Run on both servers
 
@@ -126,4 +145,6 @@ You can check the status of your cluster
 ```
 systemctl status -l keepalived
 ```
+
+</details>
 

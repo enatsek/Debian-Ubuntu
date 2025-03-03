@@ -1,7 +1,10 @@
 ##### MariadbOnDebianUbuntu 
 # MariaDB Tutorial on Debian and Ubuntu
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 Mariadb Installation, configuration, simple user and DB management, and  Primary - Replica (Master - Slave) Replication on Debian 12 (also 11) and  Ubuntu 24.04 (also 22.04) Server.
 
@@ -14,8 +17,12 @@ Mariadb is a fork or Mysql, and I prefer using it, besides a lot of other  reaso
 **Do not ever install Mariadb and Mysql on the same server**
 
 <br>
+</details>
 
-## 1. Installation and Securing
+<details markdown='1'>
+<summary>
+1. Installation and Securing
+</summary>
 ### 1.1. Install MariaDB
 ```
 sudo apt update
@@ -27,7 +34,7 @@ sudo apt install --yes mariadb-server
 systemctl status mariadb
 ```
 
-###- 1.3. Secure MariaDB
+### 1.3. Secure MariaDB
 The following command makes some fine tunes regarding Mariadb security.
 
 ```
@@ -58,8 +65,12 @@ sudo mariadb
 ```
 
 <br>
+</details>
 
-## 2. Basic User Management
+<details markdown='1'>
+<summary>
+2. Basic User Management
+</summary>
 ---
 **All commands must be run on Mariadb shell**
 
@@ -127,8 +138,12 @@ DELETE FROM mysql.user WHERE user='myuser' AND host='localhost';
 ```
 
 <br>
+</details>
 
-## 3. Database Manipulation
+<details markdown='1'>
+<summary>
+3. Database Manipulation
+</summary>
 ---
 **All commands must be run on Mariadb shell**
 
@@ -183,8 +198,12 @@ DROP DATABASE mysampledb;
 ```
 
 <br>
+</details>
 
-## 4. Backup and Restore
+<details markdown='1'>
+<summary>
+4. Backup and Restore
+</summary>
 ---
 ### 4.1. Backup a database
 ```
@@ -197,8 +216,12 @@ sudo mariadb < mysampledb.sql
 ```
 
 <br>
+</details>
 
-## 5. Primary - Replica (Master-Slave) Replication Configuration
+<details markdown='1'>
+<summary>
+5. Primary - Replica (Master-Slave) Replication Configuration
+</summary>
 ### 5.1. Specs and Preliminary Tasks
 ```
 Primary Server       : 192.168.1.216 
@@ -209,7 +232,7 @@ Database instance to replicate: mysampledb
 ```
 
 As in the following link, Mariadb Knowledge Base says that; primary and  replica server do not need to have the same version of Mariadb, although  it is preferred to have the primary an older version.  
-<https://mariadb.com/kb/en/database-version-on-master-slave-replication/>
+[MariaDB](https://mariadb.com/kb/en/database-version-on-master-slave-replication/)
 
 
 Mariadb versions on Debian and Ubuntu Servers:
@@ -348,3 +371,6 @@ UNLOCK TABLES;
 
 ### 5.5. All set. 
 You can try manipulating the DB on the primary, changes will be applied  on the replica slave in a few seconds.
+
+</details>
+

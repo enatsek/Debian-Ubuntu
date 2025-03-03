@@ -2,17 +2,22 @@
 # Apache 2 Tutorial on Debian and Ubuntu 
 
 
-
-## 0. Specs
+<details markdown="1">
+<summary>
+0. Specs
+</summary>
 ---
 Apache 2 Installation, configuration, sample sites, enablement of PHP,  SSL etc on Ubuntu 24.04 (and 22.04) and Debian 12 (and 11) Servers 
 
 Based on the book [Mastering Ubuntu Server 2nd Ed.](https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition) by Jay LaCroix. This book hes introduced me to Ubuntu Server and I have to thank him for this excellent book. 
 
 srv1.386387.xyz, srv2.386387.xyz and srv3.386387.xyz all have the ip of my server
+</details>
 
-
-## 1. Apache Installation
+<details markdown="1">
+<summary>
+1. Apache Installation
+</summary>
 ---
 ### 1.1. Install
 ```
@@ -99,8 +104,12 @@ sudo systemctl reload apache2
 Remember to copy sites' pages on DocumentRoot Directories: create /var/www/srv1 and /var/www/srv2 and fill them with htmls
 
 <br>
+</details>
 
-## 2. Apache Additional Modules
+<details markdown="1">
+<summary>
+2. Apache Additional Modules
+</summary>
 ---
 ## 2.1. List of Apache modules
 ```
@@ -137,8 +146,12 @@ sudo systemctl restart apache2
 ```
 
 <br>
+</details>
 
-## 3. Adding SSL to Apache
+<details markdown="1">
+<summary>
+3. Adding SSL to Apache
+</summary>
 ---
 ### 3.1. Enable ssl
 ```
@@ -209,8 +222,12 @@ sudo systemctl reload apache2
 ```
 
 <br>
+</details>
 
-## 4. Auto http-->https redirect
+<details markdown="1">
+<summary>
+4. Auto http-->https Redirect
+</summary>
 ---
 ### 4.1. http://srv1.386387.xyz automatically redirects to https://srv1.386387.xyz
 
@@ -247,8 +264,12 @@ sudo systemctl restart apache2
 ```
 
 <br>
+</details>
 
-## 5. Enable PHP on Apache2
+<details markdown="1">
+<summary>
+5. Enable PHP on Apache2
+</summary>
 ---
 ### 5.1. Install php and apache php mod
 ```
@@ -279,12 +300,16 @@ Fill as below:
 phpinfo();
 ```
 
-Test your page  
+Test your page 
 http://srv1.386387.xyz/info.php
 
 <br>
+</details>
 
-## 6. Some Sample Apache Confs
+<details markdown="1">
+<summary>
+6. Some Sample Apache Confs
+</summary>
 ---
 ### 6.1. 3 different sites on 1 server in 1 conf file
 ```
@@ -415,9 +440,14 @@ And our configuration:
 ```
 
 <br>
+</details>
 
-## 7. Free SSL Certificates
+<details markdown="1">
+<summary>
+7. Free SSL Certificates
+</summary>
 ---
-You can use free, autorenewing SSL certificates from Letsencrypt.org    with Certbot tool from EFF. 
+You can use free, autorenewing SSL certificates from <https://letsencrypt.org/> with Certbot tool from EFF. 
 
 Check it out at my [CertbotOnDebianUbuntu](CertbotOnDebianUbuntu.html)  Tutorial.
+</details>

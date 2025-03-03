@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,23 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>FHSOnDebianUbuntu</h5>
 <h1>Filesystem Hierarchy Standard on Debian and Ubuntu</h1>
-<h2>0. Specs</h2>
+</details>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <h3>0.1. Introduction</h3>
 <p>FHS (Filesystem Hierarchy Standard) is a set of guidelines and  specifications for organizing the structure and layout of directories in a Unix-like operating system. </p>
@@ -964,7 +972,11 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <p><strong>Filesystem Hierarchy Standard</strong> by LSB Workgroup, The Linux Foundation.<br />
 ChatGPT</p>
 <p><br></p>
-<h2>1. /bin - Essential Command Binaries</h2>
+</details>
+<details>
+<summary>
+1. /bin - Essential Command Binaries
+</summary>
 <hr />
 <p>Contains commands for system administrators and users. These commands  must be required required when no other filesystems are mounted (e.g. in
 single user mode). It may also contain commands which are used indirectly by scripts.</p>
@@ -973,7 +985,11 @@ single user mode). It may also contain commands which are used indirectly by scr
 <p>Command binaries that are not essential enough to place into /bin must be placed in /usr/bin, instead.</p>
 <p><strong>Some example commands:</strong> cat, chgrp, chmod, chown, cp, date, dd, df, dmesg, echo, false, hostname, kill, ln, login, ls, mkdir, mknod, more, mount, mv, ps, pwd, rm, rmdir, sed, sh, stty, su, sync, true, umount, uname.</p>
 <p><br></p>
-<h2>2. /boot - Static Files of the Boot Loader</h2>
+</details>
+<details>
+<summary>
+2. /boot - Static Files of the Boot Loader
+</summary>
 <hr />
 <p>Contains everything required for the boot process except configuration files not needed at boot time and the map installer. Stores data that is used before the kernel begins executing user-mode programs. This may include saved master boot sectors and sector map files.</p>
 <p>Programs necessary to arrange for the boot loader to be able to boot a file must be placed in /sbin.</p>
@@ -981,7 +997,11 @@ single user mode). It may also contain commands which are used indirectly by scr
 <p>The operating system kernel must be located in either / or /boot.</p>
 <p>Certain architectures may have other requirements for /boot related to limitations or expectations specific to that architecture. </p>
 <p><br></p>
-<h2>3. /dev - Device Files</h2>
+</details>
+<details>
+<summary>
+3. /dev - Device Files
+</summary>
 <hr />
 <p>The /dev directory is the location of special or device files.</p>
 <p>The devices in the /dev directory are created dynamically during the boot process or when new hardware is detected.</p>
@@ -992,7 +1012,11 @@ single user mode). It may also contain commands which are used indirectly by scr
 <li>/dev/null</li>
 </ul>
 <p><br></p>
-<h2>4. /etc - Host-specific System Configuration</h2>
+</details>
+<details>
+<summary>
+4. /etc - Host-specific System Configuration
+</summary>
 <hr />
 <p>The /etc hierarchy contains configuration files.</p>
 <p>It is recommended that files be stored in subdirectories of /etc rather than directly in /etc.</p>
@@ -1060,7 +1084,11 @@ single user mode). It may also contain commands which are used indirectly by scr
 <p>Generic configuration files defining high-level parameters of the XML systems are installed here. </p>
 <p>Files with names *.conf indicate generic configuration files.</p>
 <p><br></p>
-<h2>5. /home - User Home Directories</h2>
+</details>
+<details>
+<summary>
+5. /home - User Home Directories
+</summary>
 <hr />
 <p>Home directories of users are stored here.</p>
 <p>User specific configuration files for applications are stored in the user's home directory in a file that starts with the '.' character (a "dot file").</p>
@@ -1068,7 +1096,11 @@ single user mode). It may also contain commands which are used indirectly by scr
 <p>To find a user's home directory, use a library function such as getpwent, getpwent_r of fgetpwent rather than relying on /etc/passwd because user information may be stored remotely using systems such as NIS.</p>
 <p>It is recommended that, apart from autosave and lock files, programs should refrain from creating non dot files or directories in a home directory without user consent.</p>
 <p><br></p>
-<h2>6. /lib - Essential Shared Libraries and Kernel Modules</h2>
+</details>
+<details>
+<summary>
+6. /lib - Essential Shared Libraries and Kernel Modules
+</summary>
 <hr />
 <p>In Debian 12 and Ubuntu 24.04 /lib is a symbolic link to /usr/lib.</p>
 <p>Contains shared library images needed to boot the system and run the commands in /bin and /sbin.</p>
@@ -1083,7 +1115,11 @@ single user mode). It may also contain commands which are used indirectly by scr
 <li>/lib/modules:    Loadable kernel modules</li>
 </ul>
 <p><br></p>
-<h2>7. /lib* - Alternate format essential shared libraries</h2>
+</details>
+<details>
+<summary>
+7. /lib* - Alternate format essential shared libraries
+</summary>
 <hr />
 <p>There may be one or more variants of the /lib directory on systems which  support more than one binary format requiring separate libraries.</p>
 <p>By default; Debian 12 and Ubuntu 24.04 has the following directories:</p>
@@ -1097,7 +1133,11 @@ single user mode). It may also contain commands which are used indirectly by scr
 </ul>
 <p>If one or more of these directories exist, the requirements for their contents are the same as the normal /lib directory, except that /lib*/cpp is not required.</p>
 <p><br></p>
-<h2>8. /media - Mount Point for Removable Media</h2>
+</details>
+<details>
+<summary>
+8. /media - Mount Point for Removable Media
+</summary>
 <hr />
 <p>Contains subdirectories which are used as mount points for removable media such as floppy disks, cdroms and zip disks.</p>
 <p>The following directories, or symbolic links to directories, must be in  /media, if the corresponding subsystem is installed:</p>
@@ -1109,13 +1149,21 @@ single user mode). It may also contain commands which are used indirectly by scr
 </ul>
 <p>On systems where more than one device exists for mounting a certain type of media, mount directories can be created by appending a digit to the name of those available above starting with '0', but the unqualified name must also exist.</p>
 <p><br></p>
-<h2>9. /mnt - Mount Point for Mounting a Filesystem Temporarily</h2>
+</details>
+<details>
+<summary>
+9. /mnt - Mount Point for Mounting a Filesystem Temporarily
+</summary>
 <hr />
 <p>System administrators may temporarily mount a filesystem here.</p>
 <p>The content of this directory is a local issue and should not affect the manner in which any program is run.</p>
 <p>This directory must not be used by installation programs: a suitable temporary directory not in use by the system must be used instead.</p>
 <p><br></p>
-<h2>10. /opt - Add-on Application Software Packages</h2>
+</details>
+<details>
+<summary>
+10. /opt - Add-on Application Software Packages
+</summary>
 <hr />
 <p>This folder is empty on default Debian 12 and Ubuntu 24.04 installations.</p>
 <p>Reserved for the installations of add-on application software packages.</p>
@@ -1125,14 +1173,22 @@ single user mode). It may also contain commands which are used indirectly by scr
 <p>Package files that are variable (change in normal operation) must be installed in /var/opt.</p>
 <p>Host-specific configuration files must be installed in /etc/opt.</p>
 <p><br></p>
-<h2>11. /root - Home directory for the root user</h2>
+</details>
+<details>
+<summary>
+11. /root - Home directory for the root user
+</summary>
 <hr />
 <p>Recommended home directory for the root user.</p>
 <p>The root account's home directory may be determined by developer or local preference, but this is the recommended default location.</p>
 <p>It is not recommended to use the root account for tasks that can be performed by an unprivileged user, and that it be used solely for system administration.</p>
 <p>For this reason, it is recommended that subdirectories for mail and other applications not appear in the root account's home directory.</p>
 <p><br></p>
-<h2>12. /run - Data Relevant to Running Processes</h2>
+</details>
+<details>
+<summary>
+12. /run - Data Relevant to Running Processes
+</summary>
 <hr />
 <p>Contains system information data describing the system since it was booted.</p>
 <p>Files under this directory must be cleared (removed or truncated as  appropriate) at the beginning of the boot process.</p>
@@ -1140,7 +1196,11 @@ single user mode). It may also contain commands which are used indirectly by scr
 <p>Programs may have a subdirectory of /run; this is encouraged for programs that use more than one run-time file.</p>
 <p>Process identifier (PID) files, which were originally placed in /etc, must be placed in /run. The naming convention for PID files is {program-name}.pid. For example, the crond PID file is named /run/crond.pid.</p>
 <p><br></p>
-<h2>13. /sbin - Essential System Binaries</h2>
+</details>
+<details>
+<summary>
+13. /sbin - Essential System Binaries
+</summary>
 <hr />
 <p>In Debian 12 and Ubuntu 24.04 /sbin is a symbolic link to /usr/bin.</p>
 <p>Utilities used for system administration (and other root-only commands) are stored in /sbin, /usr/sbin, and /usr/local/sbin. </p>
@@ -1173,20 +1233,32 @@ single user mode). It may also contain commands which are used indirectly by scr
 <li>/sbin/update: Daemon to periodically flush filesystem buffers</li>
 </ul>
 <p><br></p>
-<h2>14. /srv - Data for Services Provided by This System</h2>
+</details>
+<details>
+<summary>
+14. /srv - Data for Services Provided by This System
+</summary>
 <hr />
 <p>This directory is empty on default installations of Debian 12 and Ubuntu 24.04.</p>
 <p>Contains site-specific data that is served by the system. This directory  provides a location for data that is served by various services running on the system, separate from other files associated with the operating system.</p>
 <p>Unlike directories such as /usr or /var, which may contain data related to installed packages, the /srv directory is not intended for distribution packages. It is for locally administered data associated with specific services.</p>
 <p><br></p>
-<h2>15. /tmp - Temporary Files</h2>
+</details>
+<details>
+<summary>
+15. /tmp - Temporary Files
+</summary>
 <hr />
 <p>Provides a location for temporary files that are used by programs and users during the course of their activities. </p>
 <p>It is recommended that files and directories located in /tmp be deleted whenever the system is booted.</p>
 <p>Many applications and system processes use the /tmp directory for temporary file storage. For example, the system's package manager or various software installers may use /tmp to download and store temporary files before installation.</p>
 <p>/tmp directory is typically world-writable, allowing any user on the system to create, modify, or delete files within it. This openness facilitates the sharing of temporary files among users and processes.</p>
 <p><br></p>
-<h2>16. /usr - Secondary hierarchy</h2>
+</details>
+<details>
+<summary>
+16. /usr - Secondary hierarchy
+</summary>
 <hr />
 <p>Stands for "Unix System Resources".</p>
 <p>Contains various subdirectories with user-related programs, libraries, documentation, and other resources. </p>
@@ -1311,7 +1383,7 @@ There must be no subdirectories in /usr/sbin.</p>
 <p>Sites that require both American and British spelling may link words to  /usr/share/dict/american-english or /usr/share/dict/british-english.</p>
 <p>Word lists for other languages may be added using the English name for that language, e.g., /usr/share/dict/french, /usr/share/dict/danish, etc. </p>
 <h4>16.8.3. /usr/share/man - Online Manuals</h4>
-<p>The primary {&lt;mandir} of the system is /usr/share/man. /usr/share/man contains manual information for commands and data under the / and /usr filesystems.</p>
+<p>The primary <strong>mandir</strong> of the system is /usr/share/man. /usr/share/man contains manual information for commands and data under the / and /usr filesystems.</p>
 <h4>16.8.4. /usr/share/misc - Miscellaneous Architecture-independent Data</h4>
 <p>Contains miscellaneous architecture-independent files which don't require a separate subdirectory under /usr/share.</p>
 <p>The following files, or symbolic links to files, must be in /usr/share/misc if the corresponding subsystem is installed:</p>
@@ -1345,7 +1417,11 @@ There must be no subdirectories in /usr/sbin.</p>
 <p>Source codes may be placed in this subdirectory, only for reference purposes.</p>
 <p>Generally, source should not be built within this hierarchy.</p>
 <p><br></p>
-<h2>17. /var - Variable Data</h2>
+</details>
+<details>
+<summary>
+17. /var - Variable Data
+</summary>
 <hr />
 <p>Contains variable data files. This includes spool directories and files,  administrative and logging data, and transient and temporary files.</p>
 <p>Applications must generally not add directories to the top level of /var.</p>
@@ -1377,7 +1453,11 @@ There must be no subdirectories in /usr/sbin.</p>
 <li>/var/yp: Network Information Service (NIS) database files</li>
 </ul>
 <p><br></p>
-<h2>18. Special to Linux</h2>
+</details>
+<details>
+<summary>
+18. Special to Linux
+</summary>
 <hr />
 <p>There are two more directory standarts specific to Linux:</p>
 <ul>
@@ -1390,7 +1470,9 @@ There must be no subdirectories in /usr/sbin.</p>
 <h3>18.2. /sys - Kernel and System Information Virtual Filesystem</h3>
 <p>The sys filesystem is the location where information about devices, drivers, and some kernel features are exposed.</p>
 <p>The /sys directory exposes information about various kernel parameters and configurations. You can read and modify certain kernel parameters through the files in this directory.</p>
-<p>/sys is a virtual filesystem, which means that it doesn't exist on a physical storage device like a hard drive.</p><!-- HTML Footer Start -->
+<p>/sys is a virtual filesystem, which means that it doesn't exist on a physical storage device like a hard drive.</p>
+</details>
+</summary><!-- HTML Footer Start -->
 
 </body>
 </html>

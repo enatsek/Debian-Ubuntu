@@ -1,7 +1,10 @@
 ##### RegexOnDebianUbuntu
 # Regular Expressions On Debian and Ubuntu 
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 ### 0.0. Info
 Well I know Regex is (almost) the same on every system, but this site is for Debian and Ubuntu, so it is named as.
@@ -12,8 +15,12 @@ Book: 978-1-4842-3875-2 Regex Quick Syntax Reference by Zsolt Nagy
 Book: 978-1-449-31943-4Regular Expressions Cookbook by Jan Goyvaerts and Steven Levithan
 
 <br>
+</details>
 
-## 1. Basics
+<details markdown='1'>
+<summary>
+1. Basics
+</summary>
 ---
 ### 1.1. A string itself
 Obviously every string is a match for itself
@@ -76,8 +83,12 @@ When used in a bracket, \ is not necessary
 - [().\\] → ( ) . or \
 
 <br>
+</details>
 
-## 2. Quantifiers and Boundaries
+<details markdown='1'>
+<summary>
+2. Quantifiers and Boundaries
+</summary>
 ---
 ### 2.1. * Quantifier
 A * quantifier after a character or group means 0 or more occurences of it.
@@ -161,8 +172,12 @@ $ defines the end of a line
 - ^Begin[\s\w]+End$ → All the lines starting with Begin and ending with End
 
 <br>
+</details>
 
-## 3. Subexpressions and Backreferences
+<details markdown='1'>
+<summary>
+3. Subexpressions and Backreferences
+</summary>
 ---
 ### 3.1. Subexpressions
 A subexpression is a group of characters or operators in paranthesis. They are used to apply quantifiers to expressions.
@@ -203,8 +218,12 @@ The first (\w+) will be the first word as \1, and the second one will be the sec
 Backreferences help a lot at find and replace operations. At the repeating word example, if we want to replace repeating words to a single one, for the replace part we would have to write \1 
 
 <br>
+</details>
 
-## 4. Regex Examples
+<details markdown='1'>
+<summary>
+4. Regex Examples
+</summary>
 ---
 Please consider, this examples are not perfect. You or someone else can definitely find or write better versions. 
 
@@ -246,4 +265,6 @@ Actually this regex matches invalid IP addresses too, like:  300.288.11.11
 ```
 (((25[0-5])|(2[0-4]\d)|(1\d{2})|(\d{1,2}))\.)(((25[0-5])|(2[0-4]\d)|(1\d{2})|(\d{1,2})))
 ```
+
+</details>
 

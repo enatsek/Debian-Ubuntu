@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>KVMOnDebianUbuntu1:</h5>
 <h1>KVM Tutorial On Debian and Ubuntu Server (Beginner)</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <h3>0.0. Start</h3>
 <p>KVM Virtualization Tutorial 1 on Debian and Ubuntu Server. </p>
@@ -872,17 +879,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <strong>Guest</strong>: A VM running on a host<br />
 <strong>Snapshot</strong>: A saved state of an image. You can revert to that stage later.</p>
 <h3>0.4. Resources</h3>
-<p><a href="https://ostechnix.com/install-and-configure-kvm-in-ubuntu-20-04-headless-server/">https://ostechnix.com/install-and-configure-kvm-in-ubuntu-20-04-headless-server/</a><br />
-<a href="https://www.qemu.org/docs/master/tools/qemu-img.html">https://www.qemu.org/docs/master/tools/qemu-img.html</a><br />
-<a href="https://www.libvirt.org/manpages/virsh.html">https://www.libvirt.org/manpages/virsh.html</a>
+<p><a href="https://ostechnix.com/install-and-configure-kvm-in-ubuntu-20-04-headless-server/">ostechnix.com</a><br />
+<a href="https://www.qemu.org/docs/master/tools/qemu-img.html">www.qemu.org</a><br />
+<a href="https://www.libvirt.org/manpages/virsh.html">www.libvirt.org</a><br />
 https://docs.fedoraproject.org/en-US/Fedora/18/html/Virtualization_Administration_Guide/index.html (not working now)<br />
-<a href="https://libguestfs.org/">https://libguestfs.org/</a><br />
-<a href="https://fabianlee.org/2020/02/23/kvm-testing-cloud-init-locally-using-kvm-for-an-ubuntu-cloud-image/">https://fabianlee.org/2020/02/23/kvm-testing-cloud-init-locally-using-kvm-for-an-ubuntu-cloud-image/</a><br />
-<a href="https://cloudinit.readthedocs.io/en/latest/reference/examples.html">https://cloudinit.readthedocs.io/en/latest/reference/examples.html</a><br />
+<a href="https://libguestfs.org/">libguestfs.org</a><br />
+<a href="https://fabianlee.org/2020/02/23/kvm-testing-cloud-init-locally-using-kvm-for-an-ubuntu-cloud-image/">fabianlee.org</a><br />
+<a href="https://cloudinit.readthedocs.io/en/latest/reference/examples.html">cloudinit.readthedocs.io</a><br />
 ISBN: 979-10-91414-20-3 <strong>The Debian Administrator's Handbook</strong> by Raphaël Hertzog and Roland Mas<br />
 ISBN: 978-1-78829-467-6 <strong>KVM Virtualization Cookbook</strong> by Konstantin Ivanov</p>
 <p><br></p>
-<h2>1. Installation and Configuration</h2>
+</details>
+<details>
+<summary>
+1. Installation and Configuration
+</summary>
+<hr />
 <h3>1.1. Installation</h3>
 <p>Install necessary packages</p>
 <pre><code>sudo apt update
@@ -1041,7 +1053,11 @@ sudo virsh pool-create-as srv-kvm dir --target /srv/kvm
 </code></pre>
 <p>At this point, you may want to copy some installation isos to server's /srv/isos dir</p>
 <p><br></p>
-<h2>2. VM Creation</h2>
+</details>
+<details>
+<summary>
+2. VM Creation
+</summary>
 <hr />
 <h3>2.1. Create the 1st VM</h3>
 <p>Now it is time to create our first vm</p>
@@ -1083,7 +1099,12 @@ virt-viewer --connect qemu+ssh://exforge@elma/system testkvm
 </code></pre>
 <p>Remember to replace exforge with your user name on the server and elma  with your server's hostname</p>
 <p><br></p>
-<h2>3. Remote Graphical Management</h2>
+</details>
+<details>
+<summary>
+3. Remote Graphical Management
+</summary>
+<hr />
 <p>Our server has no graphical interface (like the most servers). If you  really want a graphical management, you can install virt-manager on your  workstation and manage your VMs from there. </p>
 <p><strong>Run on your workstation:</strong></p>
 <pre><code>sudo apt update
@@ -1092,20 +1113,24 @@ virt-manager
 </code></pre>
 <p>The application is added to Applications Menu with the name "Virtual Machine Manager"</p>
 <p><br></p>
-<h2>4. Installing VMs from Ready Images</h2>
+</details>
+<details>
+<summary>
+4. Installing VMs from Ready Images
+</summary>
 <hr />
-<p>Starting a new VM and installing OS into it is a good but time consuming  way. Another way would be preparing an installed image and start it as a  new VM. </p>
-<p>Most server distros supply cloud images. By adding them some necessary  configurations (user and network definitions), you can use them as ready # images.</p>
+<p>Starting a new VM and installing OS into it is a good but time consuming way. Another way would be preparing an installed image and start it as a  new VM. </p>
+<p>Most server distros supply cloud images. By adding them some necessary  configurations (user and network definitions), you can use them as ready  images.</p>
 <h3>4.0. Installing cloud-image-utils</h3>
 <pre><code>sudo apt update
 sudo apt install cloud-image-utils --yes
 </code></pre>
 <h3>4.1. Acquiring Cloud Images</h3>
 <p>A search for "ubuntu cloud image" in duckduck2 gives the following  address:<br />
-<a href="https://cloud-images.ubuntu.com/">https://cloud-images.ubuntu.com/</a></p>
+<a href="https://cloud-images.ubuntu.com/">cloud-images.ubuntu.com</a></p>
 <p>Following noble and current, download kvm image noble-server-cloudimg-amd64.img, and put it in the server's /srv/isos folder.</p>
 <p>Similarly a search for "debian cloud images" in duckduck2 gives the  following address:<br />
-<a href="https://cloud.debian.org/images/cloud/">https://cloud.debian.org/images/cloud/</a></p>
+<a href="https://cloud.debian.org/images/cloud/">cloud.debian.org</a></p>
 <p>Following bookworm and latest, download debian-12-generic-amd64.qcow2 and put it in the server's /srv/isos folder.</p>
 <h3>4.2. Creating a New Image From the Original Image</h3>
 <p>We will create new images from the images we downloaded. Image sizes will be increased to 20 GiB and the Ubuntu image will be converted to qcow2, the preferred format for KVM.</p>
@@ -1119,7 +1144,7 @@ sudo apt install cloud-image-utils --yes
 </code></pre>
 <h3>4.3. Cloud-init Configuration</h3>
 <p>The next step is to crate a cloud-init config file. This file contains  instructions for the cloud image. There is a wide range of instructions  like; creating a user, creating and filling files, adding apt  repositories, running initial commands, installing  packages, reboot and  poweroff after finishing, disk and configuration. See below url for  details:</p>
-<p><a href="https://cloudinit.readthedocs.io/en/latest/reference/examples.html">https://cloudinit.readthedocs.io/en/latest/reference/examples.html</a></p>
+<p><a href="https://cloudinit.readthedocs.io/en/latest/reference/examples.html">cloudinit.readthedocs.io</a></p>
 <p>Our cloud-init file will configure the following:</p>
 <ul>
 <li>Set hostname and Fully Qualified Domain Name, </li>
@@ -1285,12 +1310,16 @@ virt-viewer --connect qemu+ssh://exforge@elma/system debian12
 <li>Memory size, vcpu count can be parameters.</li>
 </ul>
 <p><br></p>
-<h2>5. virsh: Shell Based VM Management</h2>
+</details>
+<details>
+<summary>
+5. virsh: Shell Based VM Management
+</summary>
 <hr />
 <p>virt-manager can only help with the basic management tasks. If you want  to dive deep, you need the old-style shell.</p>
 <p>There are countless options to do with virsh command. I can only list a  handfull of most useful ones (IMHO) here.</p>
 <p>For a complete list of virsh command usage, see the following web page:<br />
-<a href="https://www.libvirt.org/manpages/virsh.html">https://www.libvirt.org/manpages/virsh.html</a></p>
+<a href="https://www.libvirt.org/manpages/virsh.html">www.libvirt.org</a></p>
 <p>In all examples, NAME is the name of your VM.</p>
 <h3>5.0. Environment Variable Set</h3>
 <p>For Debian, in order to run virsh command without sudo, we need to set an environment variable.</p>
@@ -1377,8 +1406,8 @@ virsh setmem ubuntu24 2536M --live --config
 <p>To see these values for your VM:</p>
 <pre><code>virsh vcpucount NAME
 </code></pre>
-<p>I keep saying shutdown and start instead of restart or reboot, because  kvm, qemu or whatever it is, acts differently when you reboot or shutdown  and then start the VM. </p>
-<p>So when I say shutdown and start, I mean shutdown first, wait a while  (from 0.001 miliseconds to as long as you want) and then start the VM.</p>
+<p>I keep saying shutdown and start instead of restart or reboot, because kvm, qemu or whatever it is, acts differently when you reboot or shutdown  and then start the VM. </p>
+<p>So when I say shutdown and start, I mean shutdown first, wait a while (from 0.001 miliseconds to as long as you want) and then start the VM.</p>
 <p>There is no way (AFAIK) to change maximum live value, you can change  maximum config as:</p>
 <pre><code>virsh setvcpus NAME NUMBER --maximum --config
 virsh setvcpus ubuntu24 3 --maximum --config
@@ -1400,14 +1429,13 @@ virsh setvcpus ubuntu24 3 --config
 virsh setvcpus ubuntu24 3 --config --live
 </code></pre>
 <p>You can both increase and decrease the vcpu count. But beware that  decreasing vcpu count of a running VM could be dangerous.</p>
-<p>When you increase the current live vcpu count, the increased vcpus  becomes offline. That means you cannot use them right away. At least  that is what happened to me. You can see online and offline vcpu  information of your VM with the following command (<strong>run it on your VM</strong>):</p>
+<p>When you increase the current live vcpu count, the increased vcpus becomes offline. That means you cannot use them right away. At least that is what happened to me. You can see online and offline vcpu  information of your VM with the following command (<strong>run it on your VM</strong>):</p>
 <pre><code>lscpu | head
 </code></pre>
-<p>To activate an offline cpu, first you have to know its number. cpu  numbering starts from 0, so if you had 2 vcpus and increased them by 1, 
-the number for the 3rd vcpu will be 2. You need to edit the following file # and change the 0 inside to 1:</p>
+<p>To activate an offline cpu, first you have to know its number. cpu  numbering starts from 0, so if you had 2 vcpus and increased them by 1, the number for the 3rd vcpu will be 2. You need to edit the following file and change the 0 inside to 1:</p>
 <pre><code>sudo nano /sys/devices/system/cpu/cpu2/online
 </code></pre>
-<p>The number 2 after cpu means the cpu with number 2 i.e. 3rd cpu. When  you change # the file, magically that vcpu will become online. For more # vcpus, you have to change that file for each vcpu you added.</p>
+<p>The number 2 after cpu means the cpu with number 2 i.e. 3rd cpu. When  you change the file, magically that vcpu will become online. For more vcpus, you have to change that file for each vcpu you added.</p>
 <h3>5.9. Snapshots</h3>
 <p>When you take a snapshot, current disk and memory state is saved.</p>
 <p>Take a live snapshot</p>
@@ -1446,7 +1474,7 @@ virsh snapshot-create-as ubuntu24 --name ss1-ubuntu24 --description &quot;First 
 <p>Add the new image as a second disk to my ubuntu24 VM:</p>
 <pre><code>virsh attach-disk ubuntu24 /srv/kvm/ubuntu24-disk2.qcow2 vdb --persistent
 </code></pre>
-<p>The disk is added persistently, that is it is added alive and it will be  there after shutdown and and start. If you want to add the disk for the # session only, you can change --persistent to --live. Also, if you want to  add the disk after shutdown and start you can change --persistent to --config.</p>
+<p>The disk is added persistently, that is it is added alive and it will be there after shutdown and and start. If you want to add the disk for the session only, you can change --persistent to --live. Also, if you want to  add the disk after shutdown and start you can change --persistent to --config.</p>
 <p>Needless to say that, you are going to have to mount the new disk before  using it.</p>
 <p>In any case, if you want to detach the added disk, solution is easy:</p>
 <pre><code>virsh detach-disk ubuntu24 vdb --persistent
@@ -1457,12 +1485,16 @@ virsh snapshot-create-as ubuntu24 --name ss1-ubuntu24 --description &quot;First 
 <pre><code>virsh --help
 </code></pre>
 <p><br></p>
-<h2>6. qemu-img: Shell Based Image Management</h2>
+</details>
+<details>
+<summary>
+6. qemu-img: Shell Based Image Management
+</summary>
 <hr />
 <p>qemu-img allows us to manipulate images. The command is expected to work  offline. That means, before you start using qemu-img, you have to shut  down the VM associated with it. </p>
 <p><strong>Do not use qemu-img with an image of running VM</strong></p>
 <p>A full documentation can be found at the below site:
-<a href="https://www.qemu.org/docs/master/tools/qemu-img.html">https://www.qemu.org/docs/master/tools/qemu-img.html</a></p>
+<a href="https://www.qemu.org/docs/master/tools/qemu-img.html">www.qemu.org</a></p>
 <h3>6.1. Get Basic Info About an Image</h3>
 <pre><code>qemu-img info FILENAME
 </code></pre>
@@ -1476,7 +1508,7 @@ virsh snapshot-create-as ubuntu24 --name ss1-ubuntu24 --description &quot;First 
 <p>Remember, at 5.10. we created an empty disk image to add as another disk  to a VM:</p>
 <pre><code>sudo qemu-img create -f qcow2 /srv/kvm/ubuntu24-disk2.qcow2 20G
 </code></pre>
-<p>An image also can be created by backing from another image. In that way,  we will have another image from an image, differentiating its format and  size:</p>
+<p>An image also can be created by backing from another image. In that way, we will have another image from an image, differentiating its format and size:</p>
 <pre><code>sudo qemu-img create -b BACKINGFILENAME -F BACKINGFILEFORMAT \
     -f OUTPUTFILEFORMAT OUTPUTFILENAME SIZE
 </code></pre>
@@ -1485,7 +1517,7 @@ virsh snapshot-create-as ubuntu24 --name ss1-ubuntu24 --description &quot;First 
     -F qcow2 -f qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 20G
 </code></pre>
 <h3>6.3. Changing the Format of an Image</h3>
-<p>There are a lot of formats for images. For us, the 2 most important ones  are raw and qcow2. </p>
+<p>There are a lot of formats for images. For us, the 2 most important ones are raw and qcow2. </p>
 <ul>
 <li>raw   : As the name implies. </li>
 <li>qcow2 : Feature rich, allows snapshots, compression and encrytion.</li>
@@ -1499,7 +1531,7 @@ virsh snapshot-create-as ubuntu24 --name ss1-ubuntu24 --description &quot;First 
 <pre><code>qemu-img convert -f SOURCEFORMAT -O DESTINATIONFORMAT SOURCEFILE DESTFILE
 </code></pre>
 <p>I have Virtualbox installed on my workstation (Ubuntu 24.04 LTS). There  is a Windows 10 installed on it for testing purposes. I'll copy its image  (obviously in vdi format) to my server to /srv/kvm directory, convert it to qcow2 and run it on my server using KVM. </p>
-<p>Copy Windows 10 image to the server
+<p>Copy Windows 10 image to the server<br />
 <strong>Run on my workstation</strong></p>
 <pre><code>scp windows10.vdi exforge@elma:/tmp
 </code></pre>
@@ -1524,10 +1556,10 @@ Convert image to qcow2</p>
   --noautoconsole
 </code></pre>
 <h3>6.4. Resize a Disk Image.</h3>
-<p>If you need extra disk space for your VM, you can increase the size of  the image file.</p>
+<p>If you need extra disk space for your VM, you can increase the size of the image file.</p>
 <pre><code>sudo qemu-img resize FILENAME +SIZE
 </code></pre>
-<p>Resize an image, FILENAME is the name of the file which is the image for  the VM.</p>
+<p>Resize an image, FILENAME is the name of the file which is the image for the VM.</p>
 <p>SIZE could be something like +10G. Image size will be increased by (not to) this amount. it is possible to shrink with -</p>
 <p>You must use the parameter --shrink to shrink the image</p>
 <p>You must use partitioning tools in the VM to resize the disk to shrinked  size before shrinking.</p>
@@ -1539,19 +1571,23 @@ Convert image to qcow2</p>
 </code></pre>
 <p>In any case if you suspect the integrity of the image file</p>
 <p><br></p>
-<h2>7. Export and Import of VMs</h2>
+</details>
+<details>
+<summary>
+7. Export and Import of VMs
+</summary>
 <hr />
-<p>If you want to move your VM to another host, or in a way you want to  backup and restore your VM; there might be a lot of ways to do it. I'm  going to demonstrate a very simple  method which requires shutting down  the VM (you can try while it is running, but with no success guaranteed).</p>
+<p>If you want to move your VM to another host, or in a way you want to backup and restore your VM; there might be a lot of ways to do it. I'm  going to demonstrate a very simple  method which requires shutting down the VM (you can try while it is running, but with no success guaranteed).</p>
 <h3>7.1. Export</h3>
 <hr />
 <p>First of all, let's prepare a place for our backup files, /tmp/kvmbackup  would be fine.</p>
 <pre><code>mkdir /tmp/kvmbackup
 </code></pre>
-<p>We need the definition file of our VM and the image file it is using.  "virsh dumpxml" command creates the definition file in xml format, we can  save it with the VM's name.</p>
+<p>We need the definition file of our VM and the image file it is using. "virsh dumpxml" command creates the definition file in xml format, we can  save it with the VM's name.</p>
 <pre><code>virsh dumpxml ubuntu24 &gt; /tmp/kvmbackup/ubuntu24.xml
 </code></pre>
 <p>This file contains all the necessary metadata information about our VM.</p>
-<p>If our VM was installed from the scratch as in 2.1. there will be only 1  image file. But if it was installed from a cloud image as we did in 4. or if another disk was added as in 5.10; there would be more than 1 images. </p>
+<p>If our VM was installed from the scratch as in 2.1. there will be only 1 image file. But if it was installed from a cloud image as we did in 4. or if another disk was added as in 5.10; there would be more than 1 images. </p>
 <p>We need to copy all the images. </p>
 <p>Images used by the VM is listed in the xml file. Let's find them:</p>
 <pre><code>grep &quot;source file&quot; /tmp/kvmbackup/ubuntu24.xml
@@ -1581,7 +1617,7 @@ Convert image to qcow2</p>
 <p>Extract tar file there</p>
 <pre><code>tar -xf /tmp/ubuntu24.tar -C /tmp/import
 </code></pre>
-<p>Now we need to move our image files to their directories as in the  original server. If you have a different directory structure on your new  server, and you want to copy files to different directories you have to  edit the xml file and change directories there.</p>
+<p>Now we need to move our image files to their directories as in the original server. If you have a different directory structure on your new server, and you want to copy files to different directories you have to  edit the xml file and change directories there.</p>
 <pre><code>sudo cp /tmp/import/ubuntu24-seed.qcow2 \
     /tmp/import/ubuntusrv-cloudimg.qcow2 /srv/kvm
 </code></pre>
@@ -1592,12 +1628,16 @@ Convert image to qcow2</p>
 <pre><code>virsh start ubuntu24
 </code></pre>
 <p><br></p>
-<h2>8. libguestfs: VM Disk Management</h2>
+</details>
+<details>
+<summary>
+8. libguestfs: VM Disk Management
+</summary>
 <hr />
 <p>A set of commands for managing VM disks. Full documentation:<br />
-&lt;:https://libguestfs.org/&gt;</p>
-<p>Normally, as a system admin, you won't need to reach to VM's disks. But  there may happen a need once in a while. </p>
-<p>I think you already understand that when you have a VPS on a cloud  server, the administrators of that cloud environment can reach your VPS'  data. </p>
+<a href="https://libguestfs.org/">libguestfs.org</a></p>
+<p>Normally, as a system admin, you won't need to reach to VM's disks. But there may happen a need once in a while. </p>
+<p>I think you already understand that when you have a VPS on a cloud server, the administrators of that cloud environment can reach your VPS' data. </p>
 <p>There are many tools, I'm going to try to explain only mounting commands. </p>
 <h3>8.1. Installation</h3>
 <pre><code>sudo apt update
@@ -1607,7 +1647,7 @@ sudo apt-get --yes install libguestfs-tools
 <p>Works online (While the VM is running) Mount my VMs disk on my host's /mnt directory:</p>
 <pre><code>sudo guestmount -d ubuntu24 -i --ro /mnt
 </code></pre>
-<p>/mnt directory holds all the files of my VM. If you remove --ro, you can  mount it with write permissions. But be very careful.</p>
+<p>/mnt directory holds all the files of my VM. If you remove --ro, you can mount it with write permissions. But be very careful.</p>
 <p>Unmount it:</p>
 <pre><code>sudo guestunmount /mnt
 </code></pre>
@@ -1650,7 +1690,8 @@ virt-sysprep(1) — unconfigure a virtual machine before cloning<br />
 virt-tail(1) — follow log file<br />
 virt-tar(1) — archive and upload files<br />
 virt-tar-in(1) — archive and upload files<br />
-virt-tar-out(1) — archive and download files  </p><!-- HTML Footer Start -->
+virt-tar-out(1) — archive and download files  </p>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

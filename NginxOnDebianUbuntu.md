@@ -1,7 +1,10 @@
 ##### NginxOnDebianUbuntu 
 # Basic Nginx Configuration On Debian and Ubuntu
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 Basic Nginx configuration, installation, SSL, LEMP stack, sample site  configurations, 
 
@@ -11,12 +14,16 @@ srv1, srv2, srv3, srv4 all has the server's IP address.
 
 Sources:
 **Mastering Ubuntu Server 4th Ed.** by Jay LaCroix  
-<https://nginx.org/en/docs/>  
-<https://www.geeksforgeeks.org/how-to-retrieve-data-from-mysql-database-using-php/>
+[nginx.org](https://nginx.org/en/docs/)  
+[www.geeksforgeeks.org](https://www.geeksforgeeks.org/how-to-retrieve-data-from-mysql-database-using-php/)
 
 <br>
+</details>
 
-## 1. Installation and Configuration Files
+<details markdown='1'>
+<summary>
+1. Installation and Configuration Files
+</summary>
 ---
 ### 1.1. Installation
 Update repositories
@@ -180,8 +187,12 @@ sudo systemctl reload nginx
 ```
 
 <br>
+</details>
 
-## 2. SSL Configuration
+<details markdown='1'>
+<summary>
+2. SSL Configuration
+</summary>
 ---
 We will test SSL configuration with self signed certificates. Later on  the tutorial, we are going to test getting certificates with certbot tool too.
 
@@ -258,8 +269,12 @@ sudo systemctl reload nginx
 Your firefox will complain as "Warning: Potential Security Risk Ahead",  because our certificate is a self signed one. You can click "Advanced" and "Accept the Risk and Continue" to reach the SSL site.
 
 <br>
+</details>
 
-## 3. LEMP Stack
+<details markdown='1'>
+<summary>
+3. LEMP Stack
+</summary>
 ---
 - L: Linux (Debian or Ubuntu in our case)
 - E: Nginx (Enginx actually)
@@ -381,8 +396,12 @@ Now go to below address to see if it is working:
 `https://srv1/test.php`
 
 <br>
+</details>
 
-## 4. Sample Configs
+<details markdown='1'>
+<summary>
+4. Sample Configs
+</summary>
 ---
 ### 4.1. Three Sites in One Conf File
 srv2, srv3, and srv4 all have their directories and served in the same  server
@@ -481,8 +500,12 @@ server {
 ```
 
 <br>
+</details>
 
-## 5. HTTPS With Free Let's Encrypt Certificates
+<details markdown='1'>
+<summary>
+5. HTTPS With Free Let's Encrypt Certificates
+</summary>
 ---
 This section is performed on a VPS on internet. To get free Let's Encrypt certificates, our hostname must be in a DNS in internet. 
 
@@ -626,17 +649,21 @@ sudo systemctl reload nginx
 
 Your HTTPS site is ready:
 
-<https://386387.xyz/>
+`https://386387.xyz/`
 
 <br>
+</details>
 
-## 6. Nginx and Apache Together
+<details markdown='1'>
+<summary>
+6. Nginx and Apache Together
+</summary>
 ---
 **!!! This section starts with a fresh install server !!!**
 
 Nginx is very good at static content, Apache is very good at dynamic  content. So we can use them together for the maximum performance.
 
-## 6.0. Specs
+### 6.0. Specs
 - Nginx will run at port 80 and listen to the outside.
 - Apache will run at port 8080 and listen to only inside. That is it can  be connected by only the localhost. So that only Nginx will listen to it.
 - PHP and Mariadb will be connected to Apache only.
@@ -741,4 +768,5 @@ sudo systemctl restart apache2
 ```
 
 You can test the combination using steps at 3.3.
+</details>
 

@@ -1,7 +1,10 @@
 ##### MariadbClusterOnDebianUbuntu 
 # Mariadb Main-Main Replication with Galera Cluster Tutorial on Debian and Ubuntu
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 ### 0.1. Definitions
 3 servers will be installed and configured as Mariadb clusters. 
@@ -18,14 +21,18 @@ srv3 -> 192.168.1.223 Debian 12/11 Ubuntu 24.04/22.04 LTS Server
 All the nodes must have the same version of Mariadb. That is, they must  have the same Linux distros.
 
 ### 0.3. Resources
-<https://www.howtoforge.com/how-to-setup-mariadb-galera-multi-master-synchronous-replication-using-debian-10/>  
-<https://www.symmcom.com/docs/how-tos/databases/how-to-recover-mariadb-galera-cluster-after-partial-or-full-crash>
-<https://mariadb.com/docs/multi-node/galera-cluster/understand-mariadb-galera-cluster/>
-<https://mariadb.com/kb/en/galera-cluster-recovery/>
+[www.howtoforge.com](https://www.howtoforge.com/how-to-setup-mariadb-galera-multi-master-synchronous-replication-using-debian-10/)  
+[www.symmcom.com](https://www.symmcom.com/docs/how-tos/databases/how-to-recover-mariadb-galera-cluster-after-partial-or-full-crash)  
+[mariadb.com/docs](https://mariadb.com/docs/multi-node/galera-cluster/understand-mariadb-galera-cluster/)  
+[mariadb.com/kb](https://mariadb.com/kb/en/galera-cluster-recovery/)
 
 <br>
+</details>
 
-## 1. Mariadb Installations (Run on all servers)
+<details markdown='1'>
+<summary>
+1. Mariadb Installations (Run on all servers)
+</summary>
 ---
 ### 1.1. Install Mariadb and Galera Cluster on all servers
 ```
@@ -57,8 +64,12 @@ are about securing root account. In Ubuntu and Debian root account is  already p
 For the next questions you can select default answers.
 
 <br>
+</details>
 
-## 2. Mariadb Configurations (Run on all servers)
+<details markdown='1'>
+<summary>
+2. Mariadb Configurations (Run on all servers)
+</summary>
 ---
 ### 2.1. Temporarily Stop Mariadb
 ```
@@ -118,8 +129,12 @@ binlog_format = ROW
 ```
 
 <br>
+</details>
 
-## 3. Start Cluster
+<details markdown='1'>
+<summary>
+3. Start Cluster
+</summary>
 ---
 ### 3.1. Start Cluster on One of the Nodes
 **!!! You should run this only on one of the servers !!!**
@@ -144,8 +159,12 @@ sudo systemctl start mariadb
 Our Cluster is established
 
 <br>
+</details>
 
-## 4. Test Mariadb Cluster 
+<details markdown='1'>
+<summary>
+4. Test Mariadb Cluster 
+</summary>
 ---
 We will run commands on the nodes and see the changes on other nodes
 
@@ -211,8 +230,12 @@ exit;
 ```
 
 <br>
+</details>
 
-## 5. Maintenance
+<details markdown='1'>
+<summary>
+5. Maintenance
+</summary>
 ---
 ### 5.1. Healthcheck
 The following commands runs on Mariadb shell and show information about  Mariadb cluster.
@@ -285,8 +308,12 @@ It is not advised to keep less than 2 nodes online. But if you really  need to s
 If the cluster doesn't go online, refer to 6.
 
 <br>
+</details>
 
-## 6. Recovery
+<details markdown='1'>
+<summary>
+6. Recovery
+</summary>
 ---
 Mariadb Galera Cluster would run fine for a long time, as long as you  keep at least 2 nodes alive and running. If you have 3 nodes, you can  proceed on maintenance tasks (backup, upgrade etc) one at a time. 
 
@@ -449,3 +476,6 @@ Restart mariadb
 ```
 sudo systemctl restart mariadb
 ```
+
+</details>
+

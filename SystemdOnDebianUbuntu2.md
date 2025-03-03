@@ -1,7 +1,10 @@
 ##### SystemdOnDebianUbuntu2 
 # Other Systemd Components on Debian and Ubuntu
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 ### 0.1. Intro
 The first Systemd tutorial, namely [SystemdOnDebianUbuntu](SystemdOnDebianUbuntu.html) was about systemd's init and service management properties.
@@ -18,8 +21,12 @@ Unfortunately (or maybe fortunately) there were a lot of wrong information from 
 The AI still needs a lot of work before becoming really useful.
 
 <br>
+</details>
 
-## 1. Services
+<details markdown='1'>
+<summary>
+1. Services
+</summary>
 ---
 Debian 12 and Ubuntu 24.04 Server has the following systemd services by  default:
 
@@ -787,8 +794,12 @@ sudo systemd-sysusers
 ```
 
 <br>
+</details>
 
-## 2. Tools
+<details markdown='1'>
+<summary>
+2. Tools
+</summary>
 ---
 ## 2.1. systemctl
 Used to control and query the state of the systemd system and service manager. 
@@ -1507,4 +1518,5 @@ It is used to adapt daemons that are not originally designed to work with system
 
 When a daemon is adapted to use systemd-stdio-bridge, systemd creates a socket for the daemon and starts systemd-stdio-bridge as a separate process. The bridge connects the standard input/output of the daemon to the socket, allowing it to communicate with clients through the socket.
 
+</details>
 

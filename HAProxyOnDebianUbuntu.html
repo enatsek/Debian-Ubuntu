@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>HAProxyOnDebianUbuntu</h5>
 <h1>High Availability with HAProxy Load Balancer on Debian and Ubuntu</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <h3>0.0. Abstract</h3>
 <p>High Availability Load Balancing with Letsencrypt free certificates HTTPS support.</p>
@@ -870,13 +877,17 @@ My SMTP Server --&gt; 192.168.1.140 (for keepalived notify messages)</p>
 <p>First we'll load balance the web server, than we'll load balance the Mariadb database usage. At that time, you'll realize, you can load balance any kind of software.</p>
 <p>The users only see the floating IP (192.168.1.210) of the Load Balancers, they will never see or realize the other servers or their IPs.</p>
 <h3>0.3. Sources:</h3>
-<p><a href="http://www.haproxy.org/">http://www.haproxy.org/</a><br />
-<a href="https://www.server-world.info/en/note?os=Ubuntu_20.04&amp;p=haproxy&amp;f=1">https://www.server-world.info/en/note?os=Ubuntu_20.04&amp;p=haproxy&amp;f=1</a><br />
-<a href="https://cbonte.github.io/haproxy-dconv/2.3/configuration.html">https://cbonte.github.io/haproxy-dconv/2.3/configuration.html</a><br />
-<a href="https://cbonte.github.io/haproxy-dconv/2.3/management.html">https://cbonte.github.io/haproxy-dconv/2.3/management.html</a><br />
+<p><a href="https://www.haproxy.org/">www.haproxy.org</a><br />
+<a href="https://www.server-world.info/en/note?os=Ubuntu_20.04&amp;p=haproxy&amp;f=1">www.server-world.info</a><br />
+<a href="https://cbonte.github.io/haproxy-dconv/2.3/configuration.html">cbonte.github.io/haproxy-dconv</a><br />
+<a href="https://cbonte.github.io/haproxy-dconv/2.3/management.html">cbonte.github.io/haproxy-dconv</a><br />
 Book: ISBN: 9781519073846 <strong>Load Balancing with HAProxy</strong> by Nick Ramirez</p>
 <p><br></p>
-<h2>1. Install and Configure Load Balancers</h2>
+</details>
+<details>
+<summary>
+1. Install and Configure Load Balancers
+</summary>
 <hr />
 <h3>1.1. Install keepalived (srvlb1 and srvlb2)</h3>
 <pre><code>sudo apt update
@@ -945,7 +956,11 @@ vrrp_instance VI_1 {
 <pre><code>sudo systemctl stop haproxy
 </code></pre>
 <p><br></p>
-<h2>2. Install and Configure Application/Web Servers</h2>
+</details>
+<details>
+<summary>
+2. Install and Configure Application/Web Servers
+</summary>
 <hr />
 <h3>2.1. Install Apache, Mariadb and Galera Cluster on App/Web Servers (srvaw1, srvaw2, and srwaw3)</h3>
 <pre><code>sudo apt update
@@ -1085,7 +1100,11 @@ binlog_format = ROW
 <pre><code>sudo systemctl start mariadb
 </code></pre>
 <p><br></p>
-<h2>3. Configure Web Server Load Balancing</h2>
+</details>
+<details>
+<summary>
+3. Configure Web Server Load Balancing 
+</summary>
 <hr />
 <p>We'll configure HAProxy to load balance 3 web servers (192.168.1.223,  192.168.1.224 and 192.168.1.225. </p>
 <h3>3.1. Configure HAProxy (srvlb1 and srvlb2)</h3>
@@ -1134,7 +1153,12 @@ backend is the forwarding places for these icoming connection(s)  </p>
 <h3>3.4. Testing</h3>
 <p>You can connect to web site http://192.168.1.210 from different  workstations and see it is connecting to 192.168.1.223, 192.168.1.224, and 192.168.1.225.</p>
 <p><br></p>
-<h2>4. Configure Mariadb Load Balancing</h2>
+</details>
+<details>
+<summary>
+4. Configure Mariadb Load Balancing
+</summary>
+<hr />
 <h3>4.1. Explanations</h3>
 <p>Load Balancing an application is similar to load balancing a web server. </p>
 <p>All we need is determining the TCP/IP port it is using and making the  configurations using that port. We also use mode directive with tcp  keyword at backend and frontend sections to instruct HAProxy that it will  use tcp (level 4) load balancing.</p>
@@ -1174,7 +1198,11 @@ backend be_mariadb_3306
 <pre><code>SHOW VARIABLES LIKE 'hostname';
 </code></pre>
 <p><br></p>
-<h2>5. More on HAProxy Configuration Options</h2>
+</details>
+<details>
+<summary>
+5. More on HAProxy Configuration Options
+</summary>
 <hr />
 <h3>5.1. Default Configuration File</h3>
 <p>Default configuration file is as below:</p>
@@ -1223,7 +1251,7 @@ defaults
 <li>The 3 <strong>ssl-default-</strong>... options are specifications for SSL configuration.</li>
 </ul>
 <p>There are much more parameters, refer to:<br />
-<a href="https://cbonte.github.io/haproxy-dconv/2.3/configuration.html#3">https://cbonte.github.io/haproxy-dconv/2.3/configuration.html#3</a></p>
+<a href="https://cbonte.github.io/haproxy-dconv/2.3/configuration.html#3">cbonte.github.io/haproxy-dconv</a></p>
 <h4>5.2.2. defaults Section</h4>
 <p>This section is for the default values for which we define load balancing. </p>
 <ul>
@@ -1249,7 +1277,11 @@ response is expected from a backend server.</li>
      server srv1 192.168.1.181:80
 </code></pre>
 <p><br></p>
-<h2>6. Load Balancing Algorithms</h2>
+</details>
+<details>
+<summary>
+6. Load Balancing Algorithms
+</summary>
 <hr />
 <ul>
 <li>Round Robin: Split Traffic Equally</li>
@@ -1353,7 +1385,11 @@ backend be_http_80
         server   srv3 192.168.1.225:80 maxconn 50
 </code></pre>
 <p><br></p>
-<h2>7. URL Redirection</h2>
+</details>
+<details>
+<summary>
+7. URL Redirection
+</summary>
 <hr />
 <p>The requested URL can be redirected depending on URL path, URL  parameters, HTTP headers, or HTTP address. This redirections could be very efficient at some circumstances.</p>
 <h3>7.1. URL Path Redirection</h3>
@@ -1436,7 +1472,7 @@ path_reg    Regex match of the URL path
 </code></pre>
 <h3>7.2. URL Parameter Redirection</h3>
 <p>A URL parameter is a variable and  value pair. A lot of websites  including duckduckgo and google use it to send a search to the website.  Below is an example:</p>
-<p><a href="https://www.x386.org/?s=x386">https://www.x386.org/?s=x386</a></p>
+<p>https://www.x386.org/?s=x386</p>
 <p>s is the variable which stands for search and x386 is the value to search  for.</p>
 <p>HAProxy can capture the parameter (the  variable and the value) and  redirect a certain pair to a certain website. </p>
 <h4>7.2.1. Example</h4>
@@ -1456,7 +1492,7 @@ path_reg    Regex match of the URL path
 <p>As you might remember -i directive is for case-insensitive string match.  -m directive is used for exact string match.</p>
 <h3>7.3. HTTP Header Redirection</h3>
 <p>HTTP Headers may contain many information including User-Agent, Host  (website root address), Content-Type, Referer (not referrer). For a full list, please refer:</p>
-<p><a href="https://en.wikipedia.org/wiki/List_of_HTTP_header_fields">https://en.wikipedia.org/wiki/List_of_HTTP_header_fields</a></p>
+<p><a href="https://en.wikipedia.org/wiki/List_of_HTTP_header_fields">wikipedia.org</a></p>
 <p>A User-Agent HTTP Header would be something like below:</p>
 <p>Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0</p>
 <p>A host HTTP Header would be something like below:</p>
@@ -1469,7 +1505,11 @@ path_reg    Regex match of the URL path
     default_backend be_http
 </code></pre>
 <p><br></p>
-<h2>8. Enabling HTTPS at HAProxy</h2>
+</details>
+<details>
+<summary>
+8. Enabling HTTPS at HAProxy
+</summary>
 <hr />
 <p>This section deals with using https with HAProxy. Using TLS (SSL) certificates are easy with HAProxy. But we want to use LetsEncrypt certificates and certbot tool for frequent (every 2 months) renewals.</p>
 <p>I test everything I write here, actually I write here what I do on the servers. To use LetsEncrypt certificates with certbot, the servers must be connected to the internet. So we need VPS servers. Therefore, for this section only, I use 1 HAProxy server and 2 web servers (No keepalived). </p>
@@ -1787,7 +1827,8 @@ backend be_http
         cookie ACTIVESERVER insert indirect nocache
         server   srv1 146.190.153.22:443 check ssl verify none cookie srv1
         server   srv2 64.23.129.138:443 check ssl verify none cookie srv2
-</code></pre><!-- HTML Footer Start -->
+</code></pre>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

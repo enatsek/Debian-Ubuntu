@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>LVMOnDebianUbuntu</h5>
 <h1>Logical Volume Manager on Debian and Ubuntu Server</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <h3>0.1. Info</h3>
 <p>LVM, or Logical Volume Manager allows for more flexible and dynamic  management of disk space compared to traditional partitioning schemes. </p>
@@ -863,7 +870,11 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <p><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/configuring_and_managing_logical_volumes/index">Red Hat Documentation</a><br />
 ChatGPT</p>
 <p><br></p>
-<h2>1. Layers of LVM</h2>
+</details>
+<details>
+<summary>
+1. Layers of LVM
+</summary>
 <hr />
 <h3>1.0. Abstract</h3>
 <ul>
@@ -917,7 +928,11 @@ lvconvert --type writecache --cachevol myvg/mycachelv \
 <pre><code>lvcreate --type striped -i 2 -I 4M -L 200G -n striped_lv myvg
 </code></pre>
 <p><br></p>
-<h2>2. Physical Volume Commands</h2>
+</details>
+<details>
+<summary>
+2. Physical Volume Commands
+</summary>
 <hr />
 <h3>2.1. pvs</h3>
 <p>Provides physical volume information in a configurable form, displaying one line per physical volume</p>
@@ -977,7 +992,11 @@ sudo pvremove /dev/sdb1
 <pre><code>sudo pvck /dev/sdb1
 </code></pre>
 <p><br></p>
-<h2>3. Volume Group Commands</h2>
+</details>
+<details>
+<summary>
+3. Volume Group Commands
+</summary>
 <hr />
 <h3>3.1. vgs</h3>
 <p>Provides volume group information in a configurable form, displaying one line per volume group</p>
@@ -1057,7 +1076,11 @@ sudo vgdisplay myvg
 <li>vgsplit: Move PVs into a new or existing volume group</li>
 </ul>
 <p><br></p>
-<h2>4. Logical Volume Commands</h2>
+</details>
+<details>
+<summary>
+4. Logical Volume Commands
+</summary>
 <hr />
 <h3>4.1. lvs</h3>
 <p>Provides logical volume information in a configurable form, displaying one line per logical volume</p>
@@ -1144,8 +1167,12 @@ sudo mount /dev/myvg/mylv /mnt/point
 <li>lvresize: Resize a logical volume.</li>
 </ul>
 <p><br></p>
-<h2>5. Case Study 1 - Installing LVM and Manipulating Disks, PVs, VGs, LVs</h2>
-<hr />
+</details>
+<details>
+<summary>
+5. Case Study 1 - Installing LVM and Manipulating Disks, PVs, VGs, LVs
+---
+</summary>
 <h3>5.0. Specs</h3>
 <p>We have a system installed without LVM. </p>
 <ul>
@@ -1373,7 +1400,11 @@ sdb           8:16   0   50G  0 disk
 <pre><code>ls -al /mnt/mylv/tmp
 </code></pre>
 <p><br></p>
-<h2>6. Case Study 2 - LVM and Snapshot</h2>
+</details>
+<details>
+<summary>
+6. Case Study 2 - LVM and Snapshot
+</summary>
 <p>When we take a snapshot, we create a place to save the original states of the files that are changed after the snapshot.</p>
 <p>That way, those original states can be used to revert to the snapshot.</p>
 <p>Because only the originals of the changed data is backed up, snapshots do not require a lot of place.</p>
@@ -1532,7 +1563,11 @@ sudo reboot
 </code></pre>
 <p>Our snapshot LV is gone after the merge.</p>
 <p><br></p>
-<h2>7. Case Study 3 - Export and Import of LVM</h2>
+</details>
+<details>
+<summary>
+7. Case Study 3 - Export and Import of LVM
+</summary>
 <hr />
 <p>It is possible to export and import Volume Groups with their Logical Volumes.</p>
 <p>LVs are unmounted, VG is deactivated and exported, physical disks are moved, VG is imported and activated, and finally LVs are mounted.</p>
@@ -1754,7 +1789,11 @@ sudo mount /dev/myvg/mylv2 /mnt/mylv2
 ls -al /mnt/mylv2
 </code></pre>
 <p><br></p>
-<h2>8. Uncovered Subjects</h2>
+</details>
+<details>
+<summary>
+8. Uncovered Subjects
+</summary>
 <hr />
 <p>The following subjects are not covered in this tutorial:</p>
 <ul>
@@ -1767,7 +1806,8 @@ ls -al /mnt/mylv2
 <li>Controlling All
 ocation</li>
 <li>LVM object tags</li>
-</ul><!-- HTML Footer Start -->
+</ul>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

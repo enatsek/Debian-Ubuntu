@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,23 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>SystemdOnDebianUbuntu</h5>
 <h1>systemd Tutorial On Debian and Ubuntu</h1>
-<h2>0. Specs</h2>
+</details>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <h3>0.0. Intro</h3>
 <p>systemd is a suite of basic building blocks for a Linux system. It  provides a system and service manager that runs as PID 1 and starts the  rest of the system (from systemd.io site).</p>
@@ -855,20 +863,24 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <p><strong>D-Bus (Desktop Bus)</strong>:  A message-oriented middleware mechanism that  allows communication between multiple processes running concurrently on  the same machine (from wikipedia).</p>
 <p><strong>cgroups</strong>: A part built into kernel, that allows setting resource  utilization limits for processes. Like; cpu shares, memory usage, block  I/O per process. Developed by Google.</p>
 <h3>0.2. Sources</h3>
-<p><a href="https://wiki.debian.org/systemd/documentation">https://wiki.debian.org/systemd/documentation</a><br />
-<a href="https://www.digitalocean.com/community/tutorials/systemd-essentials-working-with-services-units-and-the-journal">https://www.digitalocean.com/community/tutorials/systemd-essentials-working-with-services-units-and-the-journal</a><br />
-<a href="https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units">https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units</a><br />
-<a href="https://www.digitalocean.com/community/tutorials/how-to-use-journalctl-to-view-and-manipulate-systemd-logs">https://www.digitalocean.com/community/tutorials/how-to-use-journalctl-to-view-and-manipulate-systemd-logs</a><br />
-<a href="https://www.redhat.com/sysadmin/cgroups-part-one">https://www.redhat.com/sysadmin/cgroups-part-one</a><br />
-<a href="https://en.wikipedia.org/wiki/Systemd">https://en.wikipedia.org/wiki/Systemd</a><br />
-<a href="https://en.wikipedia.org/wiki/D-Bus">https://en.wikipedia.org/wiki/D-Bus</a><br />
-<a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/chap-managing_services_with_systemd">https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/chap-managing_services_with_systemd</a><br />
-<a href="https://www.howtogeek.com/675569/why-linuxs-systemd-is-still-divisive-after-all-these-years/">https://www.howtogeek.com/675569/why-linuxs-systemd-is-still-divisive-after-all-these-years/</a>  <br />
-<a href="https://systemd.io/">https://systemd.io/</a><br />
+<p><a href="https://wiki.debian.org/systemd/documentation">wiki.debian.org</a><br />
+<a href="https://www.digitalocean.com/community/tutorials/systemd-essentials-working-with-services-units-and-the-journal">www.digitalocean.com</a><br />
+<a href="https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units">www.digitalocean.com</a><br />
+<a href="https://www.digitalocean.com/community/tutorials/how-to-use-journalctl-to-view-and-manipulate-systemd-logs">www.digitalocean.com</a><br />
+<a href="https://www.redhat.com/sysadmin/cgroups-part-one">www.redhat.com</a><br />
+<a href="https://en.wikipedia.org/wiki/Systemd">wikipedia.org</a><br />
+<a href="https://en.wikipedia.org/wiki/D-Bus">wikipedia.org</a><br />
+<a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/chap-managing_services_with_systemd">access.redhat.com</a><br />
+<a href="https://www.howtogeek.com/675569/why-linuxs-systemd-is-still-divisive-after-all-these-years/">www.howtogeek.com</a>  <br />
+<a href="https://systemd.io/">systemd.io</a><br />
 <strong>The Debian Administrator’s Handbook</strong> by Raphaël Hertzog and Roland Mas<br />
 <strong>Linux Service Management Made Easy with systemd</strong> by Donald A. Tevault</p>
 <p><br></p>
-<h2>1. systemd Units</h2>
+</details>
+<details>
+<summary>
+1. systemd Units
+</summary>
 <hr />
 <p>Units are the resources that systemd knows how to manage and to operate.</p>
 <h3>1.1. Unit Locations</h3>
@@ -1061,7 +1073,11 @@ WantedBy=multi-user.target
 <strong>Unit:</strong> Associated unit name (if different than the timer name).<br />
 <strong>Persistent:</strong> If true, the time when the service unit was last triggered  is stored on disk. When the timer is activated, the service unit is  triggered immediately if it would have been triggered at least once during the time when the timer was inactive. </p>
 <p><br></p>
-<h2>2. Targets</h2>
+</details>
+<details>
+<summary>
+2. Targets
+</summary>
 <hr />
 <h3>2.1. Definition and List</h3>
 <p>Similar to SysV init runlevel. Their purpose is to group together other  systemd units through a chain of dependencies.</p>
@@ -1189,7 +1205,11 @@ After=multi-user.target rescue.service rescue.target display-manager.service
 AllowIsolate=yes
 </code></pre>
 <p><br></p>
-<h2>3. Unit Management: systemctl Command</h2>
+</details>
+<details>
+<summary>
+3. Unit Management: systemctl Command
+</summary>
 <hr />
 <p>Start a service</p>
 <pre><code>sudo systemctl start apache2.service
@@ -1290,7 +1310,11 @@ sudo systemctl reboot
 <pre><code>systemctl --host user_name@host_name command
 </code></pre>
 <p><br></p>
-<h2>4. Log Management: journal-ctl Command</h2>
+</details>
+<details>
+<summary>
+4. Log Management: journal-ctl Command
+</summary>
 <hr />
 <p>See all log entries</p>
 <pre><code>journalctl
@@ -1349,7 +1373,11 @@ journalctl -b -u apache2 -o json-pretty
 <pre><code>sudo journalctl --vacuum-time=1years
 </code></pre>
 <p><br></p>
-<h2>5. Other systemd Components</h2>
+</details>
+<details>
+<summary>
+5. Other systemd Components
+</summary>
 <hr />
 <p>systemd has some other components too. Some of them:</p>
 <p><strong>systemd-boot:</strong> UEFI boot manager. Supports basic boot manager  configuration. Integrates with systemctl command. Has the command bootctl.</p>
@@ -1368,7 +1396,11 @@ journalctl -b -u apache2 -o json-pretty
 <p><strong>systemd-tmpfiles:</strong> Creates, deletes, and cleans up volatile and temporary  files and directories.</p>
 <p><strong>systemd-udevd:</strong> Manages physical devices.</p>
 <p><br></p>
-<h2>6. Creating a Service</h2>
+</details>
+<details>
+<summary>
+6. Creating a Service
+</summary>
 <hr />
 <p>We will create a very simple service. Our service will ping an IP address in every 10 minutes. It will create an info log if the ping is OK,  otherwise it will create and error log.</p>
 <p>The application will be a shell script, the script will be put into /usr/local/bin, a unit file will be created, enabled, started and tested.</p>
@@ -1420,7 +1452,9 @@ sudo systemctl start ipcheck.service
 </code></pre>
 <h3>6.5. Test it</h3>
 <pre><code>sudo journalctl -n 20
-</code></pre><!-- HTML Footer Start -->
+</code></pre>
+</details>
+</summary><!-- HTML Footer Start -->
 
 </body>
 </html>

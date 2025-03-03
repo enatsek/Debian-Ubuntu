@@ -1,7 +1,10 @@
 ##### DebPackagingOnDebianUbuntu 
 # Creating and Using .deb Packages On Debian and Ubuntu
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 ### 0.0. Abstract
 This tutorial deals with creating a .deb package. A .deb package is a  compressed collection of files for installing a software. Mainly used by  Debian GNU/Linux and Ubuntu. 
@@ -18,15 +21,19 @@ This tutorial is a simple one, it does not cover every detail. Its aim is to hel
 **Test Servers:** Ubuntu 24.04 LTS, Ubuntu 22.04 LTS, Ubuntu 20.04 LTS, Debian 12, Debian 11, Debian 10, Debian 12
 
 ### 0.2. Sources
-<https://www.debian.org/doc/debian-policy/>  
-<https://www.debian.org/doc/manuals/maint-guide/dother.en.html>  
-<https://tldp.org/HOWTO/html_single/Debian-Binary-Package-Building-HOWTO/>  
-<https://github.com/rsm-gh/build-deb/blob/master/DEBIAN_BASICS.md>  
+[www.debian.org](https://www.debian.org/doc/debian-policy/)  
+[www.debian.org](https://www.debian.org/doc/manuals/maint-guide/dother.en.html)  
+[tldp.org](https://tldp.org/HOWTO/html_single/Debian-Binary-Package-Building-HOWTO/)  
+[github.com](https://github.com/rsm-gh/build-deb/blob/master/DEBIAN_BASICS.md)  
 
 
 <br>
+</details>
 
-## 1. Basic Information
+<details markdown='1'>
+<summary>
+1. Basic Information
+</summary>
 ---
 ### 1.1. Package Types:
 .deb packages may be source or binary packages. As their names imply,  they contain source or executable binaries (or scripts). 
@@ -87,8 +94,12 @@ sudo apt purge test
 ```
 
 <br>
+</details>
 
-## 2. Package Control Files
+<details markdown='1'>
+<summary>
+2. Package Control Files
+</summary>
 ---
 Control files exist in control.tar.zst archive. Some of the files are  listed in 1.2.3. A (nearly) full list is below with brief descriptions,  though some important ones have detailed descriptions.
 
@@ -456,9 +467,9 @@ interest-noawait /etc/systemd/system/mariadb.service.d
 ```
 
 ### 2.11. symbols and shlibs
-This files contain information about used shared libraries.
+These files contain information about used shared libraries.
 
-<https://man7.org/linux/man-pages/man5/deb-symbols.5.html>
+<https://man7.org/linux/man-pages/man5/deb-symbols.5.html>  
 <https://man7.org/linux/man-pages/man5/deb-shlibs.5.html>
 
 Contents of Ubuntu 22.04 LTS' slapd package shlibs file:
@@ -468,8 +479,12 @@ libslapi-2.5 0 libslapi-2.5-0
 ```
 
 <br>
+</details>
 
-## 3. Package Data Files
+<details markdown='1'>
+<summary>
+3. Package Data Files
+</summary>
 ---
 ### 3.1. Basics
 Data files exist in data.tar.zst archive. The archive contains the files  in their corresponding directories. Every file in this archive is unpacked to its corresponding directory.
@@ -542,8 +557,12 @@ Every file must be placed on an appropriate place. Some examples:
    - If the time period is different: /etc/cron.d
 
 <br>
+</details>
 
-## 4. Package Installation Process
+<details markdown='1'>
+<summary>
+4. Package Installation Process
+</summary>
 ---
 ```
   If there is a previous version of the package:
@@ -648,8 +667,12 @@ Every file must be placed on an appropriate place. Some examples:
 ```
 
 <br>
+</details>
 
-### 5. Package Removal/Purge Process
+<details markdown='1'>
+<summary>
+5. Package Removal/Purge Process
+</summary>
 ---
 ```
   prerm remove
@@ -673,8 +696,12 @@ Every file must be placed on an appropriate place. Some examples:
 ```
 
 <br>
+</details>
 
-## 6. .deb Package Preparation Checklist
+<details markdown='1'>
+<summary>
+6. .deb Package Preparation Checklist
+</summary>
 ---
 ### 6.1. Create File and Folder Structure for the Package
 A minimal set would include the following:
@@ -726,8 +753,12 @@ dpkg-deb -Z xz --build --root-owner-group ProgramName-Version
 The resulting .deb file is your package.
 
 <br>
+</details>
 
-## 7. A Very Simple Package
+<details markdown='1'>
+<summary>
+7. A Very Simple Package
+</summary>
 ---
 Now, we are going to create a very simple package, namely "distro". Our  package is a python script which displays the Unix distro name and the version information.
 
@@ -829,8 +860,12 @@ Your package distro_1.0.0-1_all.deb is in your ~/packages folder.
 **A note:** dpkg-deb normally use zst compression, but we override it with -Z xz flag for xz compression. Because, the packages made in Ubuntu 22.04 with zst compression does not work on Debian distributions.
 
 <br>
+</details>
 
-## 8. A Bit More Complicated Package
+<details markdown='1'>
+<summary>
+8. A Bit More Complicated Package
+</summary>
 ---
 Our next package is named as **watchbox* and is a bit more complicated.
 
@@ -992,3 +1027,6 @@ dpkg-deb -Z xz --build --root-owner-group watchbox_0.9-1_all
 ```
 
 Your package watchbox_0.9-1_all.deb is in your ~/packages folder.
+
+</details>
+

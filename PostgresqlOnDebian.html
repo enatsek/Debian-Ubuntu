@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,30 +836,28 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>PostgresqlOnDebian</h5>
 <h1>Postgresql Tutorial On Debian</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <h3>0.0. Notes</h3>
 <p>Debian 12 and Ubuntu 24.04 LTS Server has packages for different versions of Postgresql (15 and 16). </p>
 <p>For the ease of following the tutorials, I prepared different versions  for Debian and Ubuntu.</p>
 <h3>0.1. Infrastructure</h3>
-<p>Server:      </p>
+<p>Server:  </p>
 <ul>
 <li>Debian 12   </li>
 <li>IP: 192.168.1.196</li>
@@ -861,12 +868,16 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <li>IP: 192.168.1.181</li>
 </ul>
 <h3>0.2. Resources</h3>
-<p><a href="https://www.postgresql.org/docs">https://www.postgresql.org/docs</a><br />
-<a href="https://www.postgresqltutorial.com">https://www.postgresqltutorial.com</a><br />
+<p><a href="https://www.postgresql.org/docs">www.postgresql.org</a><br />
+<a href="https://www.postgresqltutorial.com">www.postgresqltutorial.com</a><br />
 <strong>PostgreSQL 14 Administration Cookbook</strong> by Simon Riggs &amp; Gianni Ciolli<br />
 <strong>Learn PostgreSQL</strong> by Luca Ferrari &amp; Enrico Pirozzi </p>
 <p><br></p>
-<h2>1. Introduction</h2>
+</details>
+<details>
+<summary>
+1. Introduction
+</summary>
 <hr />
 <h3>1.1. Terminology:</h3>
 <p><strong>Cluster</strong>: A PostgreSQL Instance. Can contain many databases</p>
@@ -889,7 +900,11 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 </ul>
 <p>Debian postgresql package installs postgresql-client by default</p>
 <p><br></p>
-<h2>2. Installation and Basic Management</h2>
+</details>
+<details>
+<summary>
+2. Installation and Basic Management
+</summary>
 <hr />
 <h3>2.1. Installation</h3>
 <p>Update repositories</p>
@@ -978,7 +993,11 @@ Stop postgres (all the clusters)</p>
 <pre><code>sudo -u postgres psql -p 5433
 </code></pre>
 <p><br></p>
-<h2>3. User and Connection Management</h2>
+</details>
+<details>
+<summary>
+3. User and Connection Management
+</summary>
 <hr />
 <p>After installing Postgres, postgres user is able to login psql shell  with Linux authentication. No other users are defined and noone can login  remotely.</p>
 <p>We will implement a scenario for user management.</p>
@@ -1059,7 +1078,11 @@ exit
 </code></pre>
 <p>If you try to use psql from another workstation in 192.168.1.0/24  network, you will see that rwuser cannot connect and rouser can connect.</p>
 <p><br></p>
-<h2>4. Backup and Restore</h2>
+</details>
+<details>
+<summary>
+4. Backup and Restore
+</summary>
 <hr />
 <p>You can backup a database or a whole cluster. When backing up a database, users (roles) and any other clusterwide data is not backed up.</p>
 <p>So if you backup a database and restore it on another cluster, you have to create users and (if necessary) access permissions there too.</p>
@@ -1109,7 +1132,11 @@ sudo -u postgres createuser -p 5433 --pwprompt rouser
 <pre><code>sudo -u postgres psql -p 5433 -f /tmp/main.pg
 </code></pre>
 <p><br></p>
-<h2>5. psql - PostgreSQL Shell</h2>
+</details>
+<details>
+<summary>
+5. psql - PostgreSQL Shell
+</summary>
 <hr />
 <h3>5.1. The Command</h3>
 <p>psql command is used to open a Postgres shell. At the fresh install, only postgres Linux user has the right to connect to Postgres shell. So we need to run it by impersonating postgres user:</p>
@@ -1142,9 +1169,13 @@ failed: FATAL:  role &quot;exforge&quot; does not exist
 <li>\?    psql command help</li>
 </ul>
 <p><br></p>
-<h2>6. Bonus: Postgres 15 and Postgres 16 together</h2>
+</details>
+<details>
+<summary>
+6. Bonus: Postgres 15 and Postgres 16 together
+</summary>
 <hr />
-<p>For testing purposes we will install Postgresql 14 on the same server. </p>
+<p>For testing purposes we will install Postgresql 16 on the same server. </p>
 <p>That way we will have different postgres clusters with different versions.</p>
 <p>Debian 12 has Postgres 15 in its repositories. For Postgres 16 we need to add Postgres repositories.</p>
 <h3>6.1. Add Postgresql Repositories</h3>
@@ -1185,7 +1216,9 @@ sudo apt install postgresql-16
 <h3>6.5. Upgrade Cluster</h3>
 <p>Upgrade 15 secondary cluster to Postgresql 16 </p>
 <pre><code>sudo pg_upgradecluster 15 secondary -v 16
-</code></pre><!-- HTML Footer Start -->
+</code></pre>
+</details>
+</summary><!-- HTML Footer Start -->
 
 </body>
 </html>

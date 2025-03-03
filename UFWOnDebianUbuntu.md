@@ -1,22 +1,29 @@
 ##### UFWOnDebianOnUbuntu
 # Basic UFW (Uncomplicated Firewall) Tutorial On Ubuntu and Debian
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 Basic UFW (Uncomplicated Firewall) tutorial. Enabling, adding, deleting  rules, syntax etc.
 
 Prepared for Debian 12/11 and Ubuntu 24.04/22.04 LTS Server
 
 Sources:  
-<https://www.netfilter.org/>  
-<https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-22-04>  
-<https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands>  
-<https://help.ubuntu.com/community/UFW>  
-<https://manpages.ubuntu.com/manpages/jammy/en/man8/ufw.8.html>  
+[www.netfilter.org](https://www.netfilter.org/)  
+[www.digitalocean.com](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-22-04)  
+[www.digitalocean.com](https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands)  
+[help.ubuntu.com](https://help.ubuntu.com/community/UFW)  
+[manpages.ubuntu.com](https://manpages.ubuntu.com/manpages/jammy/en/man8/ufw.8.html)  
 
 <br>
+</details>
 
-## 1. Firewall Architecture 
+<details markdown='1'>
+<summary>
+1. Firewall Architecture 
+</summary>
 ---
 ### 1.1. Netfilter
 Netfilter represents a set of hooks for network packets, it is integrated into the Linux kernel. It supplies a framework for packet filtering, NAT, and port translation.
@@ -32,8 +39,12 @@ We can use nftables (or iptables, at the older Linux distros) to supply firewall
 Ufw is the higher level firewall program supplied by Ubuntu (Canonical). Other distros can supply other higher level firewalls (like firewalld and  firewall-cmd from Red Hat).
 
 <br>
+</details>
 
-## 2. Ufw Basics
+<details markdown='1'>
+<summary>
+2. Ufw Basics
+</summary>
 ---
 ### 2.1. Installation
 ufw is installed and inactive by default on Ubuntu server. For Debian :
@@ -135,8 +146,12 @@ sudo ufw show raw
 ```
 
 <br>
+</details>
 
-## 3. Allowing and Denying in Detail
+<details markdown='1'>
+<summary>
+3. Allowing and Denying in Detail
+</summary>
 ---
 ### 3.1. Long Format
 ```
@@ -236,8 +251,12 @@ sudo ufw allow ssh
 ```
 
 <br>
+</details>
 
-## 4. Case Study 1
+<details markdown='1'>
+<summary>
+4. Case Study 1
+</summary>
 ---
 ### 4.0. Specs
 - Allow SSH for 1 IP - 192.168.1.108
@@ -376,8 +395,12 @@ Status: active
 ```
 
 <br>
+</details>
 
-## 5. Case Study 2
+<details markdown='1'>
+<summary>
+5. Case Study 2
+</summary>
 ---
 ### 5.0. Specs
 - Two network interfaces - enp0s3 and enp0s8
@@ -431,4 +454,6 @@ Status: active
 [ 6] 80/tcp (v6) on enp0s3      ALLOW IN    Anywhere (v6)             
 [ 7] 443/tcp (v6) on enp0s3     ALLOW IN    Anywhere (v6)                 
 ```
+
+</details>
 

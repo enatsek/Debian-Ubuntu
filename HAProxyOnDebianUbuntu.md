@@ -1,7 +1,10 @@
 ##### HAProxyOnDebianUbuntu 
 # High Availability with HAProxy Load Balancer on Debian and Ubuntu
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 ### 0.0. Abstract
 High Availability Load Balancing with Letsencrypt free certificates HTTPS support.
@@ -42,15 +45,19 @@ First we'll load balance the web server, than we'll load balance the Mariadb dat
 The users only see the floating IP (192.168.1.210) of the Load Balancers, they will never see or realize the other servers or their IPs.
 
 ### 0.3. Sources:
-<http://www.haproxy.org/>  
-<https://www.server-world.info/en/note?os=Ubuntu_20.04&p=haproxy&f=1>  
-<https://cbonte.github.io/haproxy-dconv/2.3/configuration.html>  
-<https://cbonte.github.io/haproxy-dconv/2.3/management.html>  
+[www.haproxy.org](https://www.haproxy.org/)  
+[www.server-world.info](https://www.server-world.info/en/note?os=Ubuntu_20.04&p=haproxy&f=1)  
+[cbonte.github.io/haproxy-dconv](https://cbonte.github.io/haproxy-dconv/2.3/configuration.html)  
+[cbonte.github.io/haproxy-dconv](https://cbonte.github.io/haproxy-dconv/2.3/management.html)  
 Book: ISBN: 9781519073846 **Load Balancing with HAProxy** by Nick Ramirez
 
 <br>
+</details>
 
-## 1. Install and Configure Load Balancers
+<details markdown='1'>
+<summary>
+1. Install and Configure Load Balancers
+</summary>
 ---
 ### 1.1. Install keepalived (srvlb1 and srvlb2)
 ```
@@ -143,8 +150,12 @@ sudo systemctl stop haproxy
 ```
 
 <br>
+</details>
 
-## 2. Install and Configure Application/Web Servers
+<details markdown='1'>
+<summary>
+2. Install and Configure Application/Web Servers
+</summary>
 ---
 ### 2.1. Install Apache, Mariadb and Galera Cluster on App/Web Servers (srvaw1, srvaw2, and srwaw3)
 
@@ -371,8 +382,12 @@ sudo systemctl start mariadb
 ```
 
 <br>
+</details>
 
-## 3. Configure Web Server Load Balancing 
+<details markdown='1'>
+<summary>
+3. Configure Web Server Load Balancing 
+</summary>
 ---
 We'll configure HAProxy to load balance 3 web servers (192.168.1.223,  192.168.1.224 and 192.168.1.225. 
 
@@ -445,8 +460,13 @@ List of backend servers. srvaw1, srvaw2 and srvaw3 are used as labels. IP  and p
 You can connect to web site http://192.168.1.210 from different  workstations and see it is connecting to 192.168.1.223, 192.168.1.224, and 192.168.1.225.
 
 <br>
+</details>
 
-## 4. Configure Mariadb Load Balancing
+<details markdown='1'>
+<summary>
+4. Configure Mariadb Load Balancing
+</summary>
+---
 ### 4.1. Explanations
 Load Balancing an application is similar to load balancing a web server. 
 
@@ -505,8 +525,12 @@ SHOW VARIABLES LIKE 'hostname';
 ```
 
 <br>
+</details>
 
-## 5. More on HAProxy Configuration Options
+<details markdown='1'>
+<summary>
+5. More on HAProxy Configuration Options
+</summary>
 ---
 ### 5.1. Default Configuration File
 Default configuration file is as below:
@@ -558,7 +582,7 @@ The settings for "global" section is for HAProxy process settings.
 - The 3 **ssl-default-**... options are specifications for SSL configuration.
  
 There are much more parameters, refer to:  
-<https://cbonte.github.io/haproxy-dconv/2.3/configuration.html#3>
+[cbonte.github.io/haproxy-dconv](https://cbonte.github.io/haproxy-dconv/2.3/configuration.html#3)
 
 #### 5.2.2. defaults Section
 This section is for the default values for which we define load balancing. 
@@ -592,8 +616,12 @@ listen myproxy
 ```
 
 <br>
+</details>
 
-## 6. Load Balancing Algorithms
+<details markdown='1'>
+<summary>
+6. Load Balancing Algorithms
+</summary>
 ---
 - Round Robin: Split Traffic Equally
 - Weighted Round Robin: Split Traffic by Weight
@@ -730,8 +758,12 @@ backend be_http_80
 ```
 
 <br>
+</details>
 
-## 7. URL Redirection
+<details markdown='1'>
+<summary>
+7. URL Redirection
+</summary>
 ---
 The requested URL can be redirected depending on URL path, URL  parameters, HTTP headers, or HTTP address. This redirections could be very efficient at some circumstances.
 
@@ -855,7 +887,7 @@ acl acl_image3 path_reg (jpg|jpeg|bmp|gif|png)
 ### 7.2. URL Parameter Redirection
 A URL parameter is a variable and  value pair. A lot of websites  including duckduckgo and google use it to send a search to the website.  Below is an example:
 
-<https://www.x386.org/?s=x386>
+https://www.x386.org/?s=x386
 
 s is the variable which stands for search and x386 is the value to search  for.
 
@@ -885,7 +917,7 @@ As you might remember -i directive is for case-insensitive string match.  -m dir
 ### 7.3. HTTP Header Redirection
 HTTP Headers may contain many information including User-Agent, Host  (website root address), Content-Type, Referer (not referrer). For a full list, please refer:
 
-<https://en.wikipedia.org/wiki/List_of_HTTP_header_fields>
+[wikipedia.org](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields)
 
 A User-Agent HTTP Header would be something like below:
 
@@ -906,8 +938,12 @@ frontend be_http
 ```
 
 <br>
+</details>
 
-## 8. Enabling HTTPS at HAProxy
+<details markdown='1'>
+<summary>
+8. Enabling HTTPS at HAProxy
+</summary>
 ---
 This section deals with using https with HAProxy. Using TLS (SSL) certificates are easy with HAProxy. But we want to use LetsEncrypt certificates and certbot tool for frequent (every 2 months) renewals.
 
@@ -1390,4 +1426,6 @@ backend be_http
         server   srv1 146.190.153.22:443 check ssl verify none cookie srv1
         server   srv2 64.23.129.138:443 check ssl verify none cookie srv2
 ```
+
+</details>
 

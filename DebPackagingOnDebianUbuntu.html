@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>DebPackagingOnDebianUbuntu</h5>
 <h1>Creating and Using .deb Packages On Debian and Ubuntu</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <h3>0.0. Abstract</h3>
 <p>This tutorial deals with creating a .deb package. A .deb package is a  compressed collection of files for installing a software. Mainly used by  Debian GNU/Linux and Ubuntu. </p>
@@ -855,12 +862,16 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <p><strong>Workstation:</strong> Debian 12 or Ubuntu 24.04 LTS</p>
 <p><strong>Test Servers:</strong> Ubuntu 24.04 LTS, Ubuntu 22.04 LTS, Ubuntu 20.04 LTS, Debian 12, Debian 11, Debian 10, Debian 12</p>
 <h3>0.2. Sources</h3>
-<p><a href="https://www.debian.org/doc/debian-policy/">https://www.debian.org/doc/debian-policy/</a><br />
-<a href="https://www.debian.org/doc/manuals/maint-guide/dother.en.html">https://www.debian.org/doc/manuals/maint-guide/dother.en.html</a><br />
-<a href="https://tldp.org/HOWTO/html_single/Debian-Binary-Package-Building-HOWTO/">https://tldp.org/HOWTO/html_single/Debian-Binary-Package-Building-HOWTO/</a><br />
-<a href="https://github.com/rsm-gh/build-deb/blob/master/DEBIAN_BASICS.md">https://github.com/rsm-gh/build-deb/blob/master/DEBIAN_BASICS.md</a>  </p>
+<p><a href="https://www.debian.org/doc/debian-policy/">www.debian.org</a><br />
+<a href="https://www.debian.org/doc/manuals/maint-guide/dother.en.html">www.debian.org</a><br />
+<a href="https://tldp.org/HOWTO/html_single/Debian-Binary-Package-Building-HOWTO/">tldp.org</a><br />
+<a href="https://github.com/rsm-gh/build-deb/blob/master/DEBIAN_BASICS.md">github.com</a>  </p>
 <p><br></p>
-<h2>1. Basic Information</h2>
+</details>
+<details>
+<summary>
+1. Basic Information
+</summary>
 <hr />
 <h3>1.1. Package Types:</h3>
 <p>.deb packages may be source or binary packages. As their names imply,  they contain source or executable binaries (or scripts). </p>
@@ -897,7 +908,11 @@ sudo apt remove test
 sudo apt purge test
 </code></pre>
 <p><br></p>
-<h2>2. Package Control Files</h2>
+</details>
+<details>
+<summary>
+2. Package Control Files
+</summary>
 <hr />
 <p>Control files exist in control.tar.zst archive. Some of the files are  listed in 1.2.3. A (nearly) full list is below with brief descriptions,  though some important ones have detailed descriptions.</p>
 <h3>2.1. control</h3>
@@ -1186,14 +1201,18 @@ cb02155c6c0d5678ef2e827ebb983a3d  usr/share/openssh/sshd_config.md5sum
 interest-noawait /etc/systemd/system/mariadb.service.d
 </code></pre>
 <h3>2.11. symbols and shlibs</h3>
-<p>This files contain information about used shared libraries.</p>
-<p><a href="https://man7.org/linux/man-pages/man5/deb-symbols.5.html">https://man7.org/linux/man-pages/man5/deb-symbols.5.html</a>
+<p>These files contain information about used shared libraries.</p>
+<p><a href="https://man7.org/linux/man-pages/man5/deb-symbols.5.html">https://man7.org/linux/man-pages/man5/deb-symbols.5.html</a><br />
 <a href="https://man7.org/linux/man-pages/man5/deb-shlibs.5.html">https://man7.org/linux/man-pages/man5/deb-shlibs.5.html</a></p>
 <p>Contents of Ubuntu 22.04 LTS' slapd package shlibs file:</p>
 <pre><code>libslapi-2.5 0 libslapi-2.5-0
 </code></pre>
 <p><br></p>
-<h2>3. Package Data Files</h2>
+</details>
+<details>
+<summary>
+3. Package Data Files
+</summary>
 <hr />
 <h3>3.1. Basics</h3>
 <p>Data files exist in data.tar.zst archive. The archive contains the files  in their corresponding directories. Every file in this archive is unpacked to its corresponding directory.</p>
@@ -1261,7 +1280,11 @@ interest-noawait /etc/systemd/system/mariadb.service.d
 <li>If the time period is different: /etc/cron.d</li>
 </ul>
 <p><br></p>
-<h2>4. Package Installation Process</h2>
+</details>
+<details>
+<summary>
+4. Package Installation Process
+</summary>
 <hr />
 <pre><code>  If there is a previous version of the package:
     Call for the old package: &quot;old-prerm upgrade new-version&quot;
@@ -1364,7 +1387,11 @@ interest-noawait /etc/systemd/system/mariadb.service.d
     Remove them
 </code></pre>
 <p><br></p>
-<h3>5. Package Removal/Purge Process</h3>
+</details>
+<details>
+<summary>
+5. Package Removal/Purge Process
+</summary>
 <hr />
 <pre><code>  prerm remove
   If return status is not 0:
@@ -1386,7 +1413,11 @@ interest-noawait /etc/systemd/system/mariadb.service.d
     Remove package's file list    
 </code></pre>
 <p><br></p>
-<h2>6. .deb Package Preparation Checklist</h2>
+</details>
+<details>
+<summary>
+6. .deb Package Preparation Checklist
+</summary>
 <hr />
 <h3>6.1. Create File and Folder Structure for the Package</h3>
 <p>A minimal set would include the following:</p>
@@ -1425,7 +1456,11 @@ ProgramName-Version/usr/share/ProgramName/ProgramFiles
 </code></pre>
 <p>The resulting .deb file is your package.</p>
 <p><br></p>
-<h2>7. A Very Simple Package</h2>
+</details>
+<details>
+<summary>
+7. A Very Simple Package
+</summary>
 <hr />
 <p>Now, we are going to create a very simple package, namely "distro". Our  package is a python script which displays the Unix distro name and the version information.</p>
 <p>The package will only have the executable script and the control file. No configuration file or maintenance scripts are needed.</p>
@@ -1494,7 +1529,11 @@ dpkg-deb -Z xz --build --root-owner-group distro_1.0.0-1_all
 <p>Your package distro_1.0.0-1_all.deb is in your ~/packages folder.</p>
 <p><strong>A note:</strong> dpkg-deb normally use zst compression, but we override it with -Z xz flag for xz compression. Because, the packages made in Ubuntu 22.04 with zst compression does not work on Debian distributions.</p>
 <p><br></p>
-<h2>8. A Bit More Complicated Package</h2>
+</details>
+<details>
+<summary>
+8. A Bit More Complicated Package
+</summary>
 <hr />
 <p>Our next package is named as *<em>watchbox</em> and is a bit more complicated.</p>
 <p>It is a python script too, but it is aimed to run as a service.</p>
@@ -1601,7 +1640,8 @@ systemctl start watchbox
 <pre><code>cd ~/packages
 dpkg-deb -Z xz --build --root-owner-group watchbox_0.9-1_all 
 </code></pre>
-<p>Your package watchbox_0.9-1_all.deb is in your ~/packages folder.</p><!-- HTML Footer Start -->
+<p>Your package watchbox_0.9-1_all.deb is in your ~/packages folder.</p>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

@@ -1,7 +1,10 @@
 ##### AdminerOnDebianUbuntu 
 # Adminer on Debian and Ubuntu for MariaDB 
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 Adminer is a powerful web based management tool for Mysql, Mariadb and  more. You have to install it on the server which has the DB installed.
 
@@ -14,8 +17,12 @@ MariaDB Admin User: dbadmin   Password: PaSswOrD1234
 Server Versions: Debian 12/11 Ubuntu 24.04/22.04 LTS Server
 
 <br>
+</details>
 
-## 1. Install Adminer
+<details markdown='1'>
+<summary>
+1. Install Adminer
+</summary>
 ---
 It is possible to download Adminer php files and use them, but I prefer  installing its package, this way all the upgrades will be managed by  Debian/Ubuntu.
 
@@ -25,8 +32,12 @@ sudo apt install adminer --yes
 ```
 
 <br>
+</details>
 
-## 2. DB Admin User
+<details markdown='1'>
+<summary>
+2. DB Admin User
+</summary>
 ---
 We are going to need a Database Admin user to log in Adminer and manage  the databases.
 
@@ -42,8 +53,12 @@ exit;
 ```
 
 <br>
+</details>
 
-## 3. Prepare a Web Site
+<details markdown='1'>
+<summary>
+3. Prepare a Web Site
+</summary>
 ---
 ### 3.1. Create a Web Site Config File and Fill it
 ```
@@ -85,8 +100,12 @@ sudo systemctl reload apache2
 ```
 
 <br>
+</details>
 
-## 4. Run it
+<details markdown='1'>
+<summary>
+4. Run it
+</summary>
 ---
 Your web based Database Management tool is ready:
 
@@ -95,9 +114,16 @@ Your web based Database Management tool is ready:
 You need to select MySQL for MariaDB, server must be localhost (default), username: dbadmin, password: (whatever you gave at the Mariadb script, Database: leave empty to reach all the databases.
 
 <br>
+</details>
 
-## 5. Security
+<details markdown='1'>
+<summary>
+5. Security
+</summary>
 ---
 You should enable https if you want to put your site on the internet. 
 
 Actually https should be enabled on local network sites too. Refer to  [CertbotOnDebianUbuntu](CertbotOnDebianUbuntu.html) tutorial for enabling https with free certificates.
+
+</details>
+

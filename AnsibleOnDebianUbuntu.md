@@ -1,7 +1,10 @@
 ##### AnsibleOnDebianUbuntu 
 # Ansible Tutorial For Debian and Ubuntu
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 ### 0.0. Servers managed from a workstation
 This tutorial aims to bring you to a moderate level using Ansible.
@@ -28,13 +31,17 @@ ubuntu22 -> Ubuntu 22.04 LTS Server
 ### 0.3. Resources:
 Book: 978-1-4842-1660-6 Ansible From Beginner to Pro by Michael Heap  
 Book: 978-1-78899-756-0 Mastering Ubuntu Server Second Edition by Jay LaCroix  
-<https://docs.ansible.com/ansible/>  
-<https://www.howtoforge.com/ansible-guide-ad-hoc-command/>  
-<https://www.golinuxcloud.com/ansible-tutorial/>
+[docs.ansible.com/ansible](https://docs.ansible.com/ansible/)  
+[www.howtoforge.com](https://www.howtoforge.com/ansible-guide-ad-hoc-command/)  
+[www.golinuxcloud.com](https://www.golinuxcloud.com/ansible-tutorial/)
 
 <br>
+</details>
 
-## 1. Installation and Main Configuration
+<details markdown='1'>
+<summary>
+1. Installation and Main Configuration
+</summary>
 ---
 ### 1.1. Install ansible on workstation
 **Run on workstation**
@@ -121,10 +128,14 @@ sudo chmod 440 /etc/sudoers.d/ansible
 
 All the preliminary work is completed  
 From now on, all the commands will be run on the workstation
+<br>
+</details>
 
-
-
-## 2. Configuration
+<details markdown='1'>
+<summary>
+2. Configuration
+</summary>
+---
 ### 2.1. Configuration File
 Ansible looks for the configuration file in the following order:
 
@@ -227,8 +238,12 @@ ansible all -m ping -vvvv
 ```
 
 <br>
+</details>
 
-## 3. More on Inventory
+<details markdown='1'>
+<summary>
+3. More on Inventory
+</summary>
 ---
 ### 3.1. Command based inventory
 It is possible to use a different inventory for each ansible or ansible-playbook command:
@@ -356,8 +371,12 @@ role="dbserver"
 That way, using ansible, you can install apache to servers with webserver role and install mariadb to servers with role dbserver.
 
 <br>
+</details>
 
-## 4. Ansible Ad Hoc Commands
+<details markdown='1'>
+<summary>
+4. Ansible Ad Hoc Commands
+</summary>
 ---
 You can run Ansible commands in 2 ways, 1 is direct (adhoc), 2 is through  playbooks. 
 
@@ -521,8 +540,12 @@ ansible debian12 -m service -a "name=apache2 state=restarted" --become
 ```
 
 <br>
+</details>
 
-## 5. A Simple Playbook to Install Apache
+<details markdown='1'>
+<summary>
+5. A Simple Playbook to Install Apache
+</summary>
 ---
 Playbooks are files in YAML format. They contain commands to run by  Ansible.
 
@@ -626,8 +649,12 @@ or just
 ```
 
 <br>
+</details>
 
-## 6. A More Complex Playbook to Install LAMP
+<details markdown='1'>
+<summary>
+6. A More Complex Playbook to Install LAMP
+</summary>
 ---
 ### 6.0. Necessary Steps
 - Cache Update (sudo apt update)
@@ -683,8 +710,12 @@ ansible-playbook lamp.yml
 ```
 
 <br>
+</details>
 
-## 7. (IMHO) Important Ansible Modules
+<details markdown='1'>
+<summary>
+7. (IMHO) Important Ansible Modules
+</summary>
 ---
 Well, actually all of the Ansible modules are important. I just selected  some of them considering my very humble opinion.
 
@@ -1667,9 +1698,12 @@ Examples:
 
 
 <br>
+</details>
 
-
-## 8. Roles
+<details markdown='1'>
+<summary>
+8. Roles
+</summary>
 ---
 ### 8.0. Introduction
 Playbooks can be splitted into roles. That way, we can create reusable  code. The lamp example at 7. will be rewritten using 4 roles:
@@ -1842,8 +1876,12 @@ ansible-playbook lamp.yml
 ```
 
 <br>
+</details>
 
-## 9.Ansible Facts and Magic Variables
+<details markdown='1'>
+<summary>
+9.Ansible Facts and Magic Variables
+</summary>
 ---
 ### 9.1. Ansible Facts
 #### 9.1.1. Getting Facts
@@ -1953,8 +1991,12 @@ OS
 - ansible_check_mode: Boolean, set to True if you run Ansible with --check.
 
 <br>
+</details>
 
-## 10. Distinguishing Linux Distribution
+<details markdown='1'>
+<summary>
+10. Distinguishing Linux Distribution
+</summary>
 ---
 Debian and Ubuntu name Apache Server as apache2 and use apt package  manager. 
 
@@ -2098,8 +2140,12 @@ Redesign apacheDRA role, using package module.
 
 <br>
 
+</details>
 
-## 11. Role Variables
+<details markdown='1'>
+<summary>
+11. Role Variables
+</summary>
 ---
 You can set role variables when you consume a role in a playbook. The  variables are defined in the roles and can be set values at the playbook.
 
@@ -2253,8 +2299,12 @@ ansible-playbook apachesite.yml
 ```
 
 <br>
+</details>
 
-### 12. Variable Filters
+<details markdown='1'>
+<summary>
+12. Variable Filters
+</summary>
 ---
 There are a number of filters available for the variables used in  templates, playbooks and roles.
 
@@ -2370,9 +2420,12 @@ Fill as below:
 ```
 
 <br>
+</details>
 
-
-## 13. Handlers
+<details markdown='1'>
+<summary>
+13. Handlers
+</summary>
 ---
 If you want a task to run when something is changed, you can use  handlers. For example, a task tries to change a conf file for apache, and  you need to reload or restart apache if the file is changed. That is when  you use handlers.
 
@@ -2497,8 +2550,12 @@ ansible-playbook apachesite.yml
 ```
 
 <br>
+</details>
 
-## 14. Error Recovery (Block and rescue)
+<details markdown='1'>
+<summary>
+14. Error Recovery (Block and rescue)
+</summary>
 ---
 Ansible has an exception handling (error recovery) mechanism similar to  Python's try-except-finally block.
 
@@ -2551,8 +2608,12 @@ If there are no errors in tasks, rescue block is skipped and the tasks in always
 Error recovery is a very important subject in all kinds of programming. I believe you should use it as much as possible to prevent an unexpected  termination of programs (playbooks for ansible).
 
 <br>
+</details>
 
-## 15. Skipped Content
+<details markdown='1'>
+<summary>
+15. Skipped Content
+</summary>
 ---
 I skipped the following subjects just because I think I won't use them. I believe most of you won't use them ever. 
 
@@ -2563,3 +2624,6 @@ I skipped the following subjects just because I think I won't use them. I believ
 - Writing your own modules
 - Using Ansible on Windows servers
 - And may be some more that I am not able to know now :)
+
+</details>
+

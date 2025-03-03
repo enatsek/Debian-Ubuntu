@@ -1,7 +1,10 @@
 ##### UserAndGroupAdminOnDebianUbuntu 
 # User and Group Administration on Debian and Ubuntu
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 Aimed for Debian 12/11 and Ubuntu 24.04/22.04 Servers
 
@@ -10,8 +13,12 @@ But works fine on Debian, Ubuntu and derivatives' desktops (Ubuntu, Kubuntu, Xub
 Based on the book [Mastering Ubuntu Server 2nd Ed.](https://www.packtpub.com/networking-and-servers/mastering-ubuntu-server-second-edition) by Jay LaCroix. 
 
 <br>
+</details>
 
-## 1. User Add and Delete
+<details markdown='1'>
+<summary>
+1. User Add and Delete
+</summary>
 ---
 ### 1.1. Add a new user jdoe and create home folder
 ```
@@ -35,8 +42,12 @@ sudo userdel -r jdoe
 ```
 
 <br>
+</details>
 
-## 2. Files of User Information
+<details markdown='1'>
+<summary>
+2. Files of User Information
+</summary>
 ---
 ### 2.1. /etc/passwd file
 ```
@@ -63,8 +74,12 @@ sudo passwd -S username
 Contents of /etc/skel folder is distributed to created user's home directory
 
 <br>
+</details>
 
-## 3. root user
+<details markdown='1'>
+<summary>
+3. root user
+</summary>
 ---
 ### 3.1. root is locked by default in Ubuntu. It is optional in  Debian.
 To give a pw to (and unlock) root
@@ -89,8 +104,12 @@ sudo su - username
 ```
 
 <br>
+</details>
 
-## 4. Batch user add
+<details markdown='1'>
+<summary>
+4. Batch user add
+</summary>
 ---
 ### 4.1. Create a text file for users
 ```
@@ -128,9 +147,13 @@ You can check users from /etc/passwd
 ```
 sudo passwd user1
 ```
+<br>
+</details>
 
-
-## 5. Group Management
+<details markdown='1'>
+<summary>
+5. Group Management
+</summary>
 ---
 ### 5.1. List of groups
 ```
@@ -186,8 +209,12 @@ sudo gpasswd -d <username> <grouptoremove>
 ```
 
 <br>
+</details>
 
-## 6. User manipulation
+<details markdown='1'>
+<summary>
+6. User manipulation
+</summary>
 ---
 ## 6.1. Change username
 First change home directory
@@ -218,9 +245,12 @@ sudo chage -l <username>
 ```
 
 <br>
+</details>
 
-
-## 7. sudo Group
+<details markdown='1'>
+<summary>
+7. sudo Group
+</summary>
 ---
 Members of sudo group can use sudo command
 
@@ -257,4 +287,6 @@ ansible ALL=(ALL) NOPASSWD: ALL
 ```
 sudo -l
 ```
+
+</details>
 

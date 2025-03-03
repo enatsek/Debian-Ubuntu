@@ -1,7 +1,10 @@
 ##### KVMOnDebianUbuntu2: 
 # KVM Tutorial 2 On Debian and Ubuntu Server (KVM Networking)
 
-## 0. Specs
+<details markdown='1'>
+<summary>
+0. Specs
+</summary>
 ---
 ### 0.0. Definition
 KVM virtualization Tutorial 2 on Debian and Ubuntu Server. 
@@ -26,8 +29,12 @@ ISBN: 978-1-78829-467-6 **KVM Virtualization Cookbook** by Konstantin Ivanov
 ISBN: 978-1-83882-871-4 **Mastering KVM Virtualization 2nd Ed.** by Vedran    Dakic, Humble Devassy Chirammal, Prasad Mukhedkar, Anil Vettathu
 
 <br>
+</details>
 
-## 1. KVM Networks - Configuration Commands
+<details markdown='1'>
+<summary>
+1. KVM Networks - Configuration Commands
+</summary>
 ---
 Although it is possible to produce endless variations, there are 3 basic  network types in KVM: Bridged, NAT, and Isolated.
 
@@ -277,8 +284,12 @@ virsh net-undefine host-bridge2
 ```
 
 <br>
+</details>
 
-## 2. KVM Networks - Network Types
+<details markdown='1'>
+<summary>
+2. KVM Networks - Network Types
+</summary>
 ---
 When preparing XML files for creating KVM networks, we use UUID and MAC  values. These UUID and MAC values must be unique for each network.  Remember to replace them with unique values.
 
@@ -290,7 +301,7 @@ uuidgen
 
 Random MAC Address Generator:
 
-<https://www.browserling.com/tools/random-mac>
+[www.browserling.com](https://www.browserling.com/tools/random-mac)
 
 ### 2.1. Bridged Networks
 I believe you already have an idea of bridged networks. It is like the  host is sharing its interface and network with the VM. VM is in the same network as the host. If there is a DHCP Server on the network the host  resides, the VM can use it to get an IP.
@@ -389,8 +400,12 @@ Considerations:
 - Our nat bridge will have 192.168.20.1/24 IP and a DHCP server will  announce addresses between 192.168.20.101 and 192.168.20.200. Change these values as you like.
 
 <br>
+</details>
 
-## 3. Case Study A: Bridged and Isolated Networks Together
+<details markdown='1'>
+<summary>
+3. Case Study A: Bridged and Isolated Networks Together
+</summary>
 ---
 ### 3.1. Specs:
 - Our host has a bridged network on 192.168.1.0/24 (Network 1)
@@ -507,8 +522,12 @@ Acquire::http::proxy "http://user:pass@proxyserver:port";
 ```
 
 <br>
+</details>
 
-## 4. Case Study B: Separating Host and VM Access with 2 NICs
+<details markdown='1'>
+<summary>
+4. Case Study B: Separating Host and VM Access with 2 NICs
+</summary>
 ---
 I don't know if it would be a best practice but definitely it will be a  good practice to separate host's and VMs' network. That means, we will  connect our host to our network with 2 interfaces; 1 interface will be  used for accessing the host and the other will be used to access VMs.
 
@@ -667,8 +686,12 @@ sudo virt-install --name vm3 \
 ```
 
 <br>
+</details>
 
-## 5. Case Study C: NAT KVM Network
+<details markdown='1'>
+<summary>
+5. Case Study C: NAT KVM Network
+</summary>
 ---
 We will create a VM, in a NAT network.
 
@@ -744,8 +767,12 @@ sudo virt-install --name vmn \
 Your VM will be able to connect to your network, but the devices on your  network will not be able to connect to it.
 
 <br>
+</details>
 
-## 6. Adding and Removing Networks From a VM 
+<details markdown='1'>
+<summary>
+6. Adding and Removing Networks To/From a VM 
+</summary>
 ---
 I assume that we have bridged and isolated networks ready on our host.
 
@@ -852,4 +879,5 @@ virsh detach-interface vmtest bridge --mac 52:54:00:83:3c:a0 --config
 
 When you shutdown and start your VM, the interface will be gone.
 
+</details>
 

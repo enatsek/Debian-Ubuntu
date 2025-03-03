@@ -1,6 +1,7 @@
 <!-- HTML Header Start -->
 <!DOCTYPE html>
 <html><head>
+<title>x386.org: Debian and Ubuntu Documentation</title>
 <meta charset="UTF-8">
  
  
@@ -245,6 +246,14 @@ body kbd {
   border-radius: 6px;
   box-shadow: inset 0 -1px 0 rgba(110,118,129,.4)
 }
+
+details > summary {
+  font-weight: 600;
+  font-size: 1.4em;
+  padding-top: .1em;
+}
+
+
 body h1,
 body h2,
 body h3,
@@ -827,24 +836,22 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <h4>| &ensp;<a href="index.html">Home</a>&ensp; |&ensp; <a href="about.html">About</a> &ensp;| &ensp;<a href="contact.html">Contact</a>&ensp; | &ensp;<a href="license.html">License</a>&ensp; | &ensp;<a href="privacy_policy.html">Privacy Policy</a>&ensp; |</h4>
 <!-- Copyright Start -->
 <details>
-   <summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
-
-<hr>
-
-<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
-
-<p>   This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-<p>   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-<hr>
+<summary>Copyright (C) 2020 - 2024 Exforge exforge@x386.org</summary>
+<hr />
+<p>This document is free text: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.</p>
+<p>This document is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program.  If not, see: <a href="https://www.gnu.org/licenses/">www.gnu.org/licenses/</a>.</p>
+<hr />
 </details>
 <!-- Copyright End -->
 
 <!-- Header End -->
 <h5>SystemdOnDebianUbuntu2</h5>
 <h1>Other Systemd Components on Debian and Ubuntu</h1>
-<h2>0. Specs</h2>
+<details>
+<summary>
+0. Specs
+</summary>
 <hr />
 <h3>0.1. Intro</h3>
 <p>The first Systemd tutorial, namely <a href="SystemdOnDebianUbuntu.html">SystemdOnDebianUbuntu</a> was about systemd's init and service management properties.</p>
@@ -855,7 +862,11 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
 <p>Unfortunately (or maybe fortunately) there were a lot of wrong information from ChatGPP. I checked every answer before I prepare this tutorial.</p>
 <p>The AI still needs a lot of work before becoming really useful.</p>
 <p><br></p>
-<h2>1. Services</h2>
+</details>
+<details>
+<summary>
+1. Services
+</summary>
 <hr />
 <p>Debian 12 and Ubuntu 24.04 Server has the following systemd services by  default:</p>
 <ul>
@@ -1483,7 +1494,11 @@ g mygroup - My Group
 <pre><code>sudo systemd-sysusers
 </code></pre>
 <p><br></p>
-<h2>2. Tools</h2>
+</details>
+<details>
+<summary>
+2. Tools
+</summary>
 <hr />
 <h2>2.1. systemctl</h2>
 <p>Used to control and query the state of the systemd system and service manager. </p>
@@ -1866,7 +1881,8 @@ sudo journalctl -b -u transient-*.scope
 <h2>2.21. systemd-stdio-bridge</h2>
 <p>Designed to act as a bridge between standard input/output streams and a client-server architecture. It facilitates communication between a traditional (non-systemd) daemon that expects input/output on standard input/output and a systemd service that runs in a separate process.</p>
 <p>It is used to adapt daemons that are not originally designed to work with systemd socket activation. It allows these daemons to be socket-activated by systemd.</p>
-<p>When a daemon is adapted to use systemd-stdio-bridge, systemd creates a socket for the daemon and starts systemd-stdio-bridge as a separate process. The bridge connects the standard input/output of the daemon to the socket, allowing it to communicate with clients through the socket.</p><!-- HTML Footer Start -->
+<p>When a daemon is adapted to use systemd-stdio-bridge, systemd creates a socket for the daemon and starts systemd-stdio-bridge as a separate process. The bridge connects the standard input/output of the daemon to the socket, allowing it to communicate with clients through the socket.</p>
+</details><!-- HTML Footer Start -->
 
 </body>
 </html>

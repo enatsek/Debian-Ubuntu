@@ -5,7 +5,6 @@
 <summary>
 0. Specs
 </summary>
----
 Adminer is a powerful web based management tool for Mysql, Mariadb and  more. You have to install it on the server which has the DB installed.
 
 On my config I wanted to bind Adminer to a specific site config on the  server side and restrict it with only 1 client IP (might be more) to  reach.

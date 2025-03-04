@@ -24,6 +24,8 @@ Mariadb is a fork or Mysql, and I prefer using it, besides a lot of other  reaso
 <summary>
 1. Installation and Securing
 </summary>
+
+---
 ### 1.1. Install MariaDB
 ```
 sudo apt update

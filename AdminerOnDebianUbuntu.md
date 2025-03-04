@@ -5,6 +5,8 @@
 <summary>
 0. Specs
 </summary>
+
+---
 Adminer is a powerful web based management tool for Mysql, Mariadb and  more. You have to install it on the server which has the DB installed.
 
 On my config I wanted to bind Adminer to a specific site config on the  server side and restrict it with only 1 client IP (might be more) to  reach.
@@ -22,6 +24,7 @@ Server Versions: Debian 12/11 Ubuntu 24.04/22.04 LTS Server
 <summary>
 1. Install Adminer
 </summary>
+
 ---
 It is possible to download Adminer php files and use them, but I prefer  installing its package, this way all the upgrades will be managed by  Debian/Ubuntu.
 
@@ -37,6 +40,7 @@ sudo apt install adminer --yes
 <summary>
 2. DB Admin User
 </summary>
+
 ---
 We are going to need a Database Admin user to log in Adminer and manage  the databases.
 
@@ -58,6 +62,7 @@ exit;
 <summary>
 3. Prepare a Web Site
 </summary>
+
 ---
 ### 3.1. Create a Web Site Config File and Fill it
 ```
@@ -105,6 +110,7 @@ sudo systemctl reload apache2
 <summary>
 4. Run it
 </summary>
+
 ---
 Your web based Database Management tool is ready:
 
@@ -119,6 +125,7 @@ You need to select MySQL for MariaDB, server must be localhost (default), userna
 <summary>
 5. Security
 </summary>
+
 ---
 You should enable https if you want to put your site on the internet. 
 

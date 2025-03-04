@@ -1,6 +1,0 @@
-<!-- HTML Footer Start -->
-
-</body>
-</html>
-
-<!-- HTML Footer End -->

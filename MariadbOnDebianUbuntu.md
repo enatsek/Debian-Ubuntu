@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 Mariadb Installation, configuration, simple user and DB management, and  Primary - Replica (Master - Slave) Replication on Debian 12 (also 11) and  Ubuntu 24.04 (also 22.04) Server.
 
@@ -71,6 +72,7 @@ sudo mariadb
 <summary>
 2. Basic User Management
 </summary>
+
 ---
 **All commands must be run on Mariadb shell**
 
@@ -144,6 +146,7 @@ DELETE FROM mysql.user WHERE user='myuser' AND host='localhost';
 <summary>
 3. Database Manipulation
 </summary>
+
 ---
 **All commands must be run on Mariadb shell**
 
@@ -204,6 +207,7 @@ DROP DATABASE mysampledb;
 <summary>
 4. Backup and Restore
 </summary>
+
 ---
 ### 4.1. Backup a database
 ```

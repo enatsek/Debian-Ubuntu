@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.0. Info
 When sharing files with other people, you may need to package and compress them. 
@@ -96,6 +97,7 @@ Man pages, the commands with --help option, and ChatGPT as always.
 <summary>
 1. gzip
 </summary>
+
 ---
 ### 1.1. Info
 Installation (Most probably, it is already installed).
@@ -175,6 +177,7 @@ Some useful options:
 <summary>
 2. bzip2
 </summary>
+
 ---
 ### 2.1. Info
 Installation (Most probably, it is already installed).
@@ -243,6 +246,7 @@ Some useful options:
 <summary>
 3. xz
 </summary>
+
 ---
 ### 3.1. Info
 Installation (Most probably, it is already installed).
@@ -310,6 +314,7 @@ Some useful options:
 <summary>
 4. tar
 </summary>
+
 ---
 #### 4.1. Info
 Installation (Most probably, it is already installed)
@@ -435,6 +440,7 @@ Some selected options:
 <summary>
 5. zip
 </summary>
+
 ---
 ### 5.1. Info
 Although gzip, bzip2, xz, and tar is more than enough for compression and archiving; sometimes you may need to exchange files with the unlucky people using Wind*ws. zip tool may be helpful then.

@@ -6,6 +6,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.0. Intro 
 systemd is a suite of basic building blocks for a Linux system. It  provides a system and service manager that runs as PID 1 and starts the  rest of the system (from systemd.io site).
@@ -42,6 +43,7 @@ A strong alternative of systemd is OpenRC.
 <summary>
 1. systemd Units
 </summary>
+
 ---
 Units are the resources that systemd knows how to manage and to operate.
 
@@ -277,6 +279,7 @@ For a full list of directives see:
 <summary>
 2. Targets
 </summary>
+
 ---
 ### 2.1. Definition and List
 Similar to SysV init runlevel. Their purpose is to group together other  systemd units through a chain of dependencies.
@@ -426,6 +429,7 @@ AllowIsolate=yes
 <summary>
 3. Unit Management: systemctl Command
 </summary>
+
 ---
 Start a service
 
@@ -628,6 +632,7 @@ systemctl --host user_name@host_name command
 <summary>
 4. Log Management: journal-ctl Command
 </summary>
+
 ---
 See all log entries
 
@@ -743,6 +748,7 @@ sudo journalctl --vacuum-time=1years
 <summary>
 5. Other systemd Components
 </summary>
+
 ---
 systemd has some other components too. Some of them:
 
@@ -783,6 +789,7 @@ echo "Test" | systemd-cat -p info
 <summary>
 6. Creating a Service
 </summary>
+
 ---
 We will create a very simple service. Our service will ping an IP address in every 10 minutes. It will create an info log if the ping is OK,  otherwise it will create and error log.
 

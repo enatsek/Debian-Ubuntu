@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 Automation of SSL and certificate renewal for Apache 2 on Debian 11/12 and Ubuntu 22.04/24.04 servers.
 
@@ -21,6 +22,7 @@ Sources:
 <summary>
 1. Preliminary Work
 </summary>
+
 ---
 My server's name is srv1.386387.xyz and I have installed Apache2 and enabled the following site configuration:
 
@@ -62,6 +64,7 @@ sudo systemctl restart apache2
 <summary>
 2. Certbot
 </summary>
+
 ---
 ### 2.1. Install Certbot
 ```
@@ -120,6 +123,7 @@ Our SSL site is ready, and we can reach it by https://srv1.386387.xyz. But we ne
 <summary>
 3. Fine Tunings
 </summary>
+
 ---
 ### 3.1. Redirect HTTP Site
 https://srv1.386387.xyz goes to SSL site, but http://srv1.386387.xyz goes to  non-ssl site. 

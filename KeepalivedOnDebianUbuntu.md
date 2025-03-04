@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 - Servers may be Debian 11/12 or Ubuntu 22.04/24.04
 - Floating IP Address: 192.168.1.240
@@ -38,6 +39,7 @@ You may establish a full cluster of LAMP stack by:
 <summary>
 1. Install keepalived
 </summary>
+
 ---
 Install on both the first and the second servers
 
@@ -55,6 +57,7 @@ After the installation, tries to start but cannot because there is no config.
 <summary>
 2. First Server Config
 </summary>
+
 ---
 ### 2.1. Config
 Config file location is /etc/keepalived directory, initially empty
@@ -121,6 +124,7 @@ vrrp_instance VI_1 {
 <summary>
 3. Second Server Config
 </summary>
+
 ---
 Almost the same as step 2. Just give a smaller number (say 90) for priority.
 
@@ -133,6 +137,7 @@ If you want to add more servers, give them numbers less then 90
 <summary>
 4. Start keepalived
 </summary>
+
 ---
 Run on both servers
 

@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.0. Info
 Network configuration examples on Debian 11 and 12.
@@ -100,6 +101,7 @@ ChatGPT
 <summary>
 1. Example Configurations
 </summary>
+
 ---
 ### 1.1. DHCP Configuration
 Our nic is enp0s3
@@ -216,6 +218,7 @@ sudo systemctl restart networking
 <summary>
 2. Case Study - Multiple Networks
 </summary>
+
 ---
 ### 2.0. Specs
 We have 2 separate networks (192.168.1.X and 10.X.X.X). Some hosts from one network need to reach to the hosts from the other network.
@@ -496,6 +499,7 @@ For a host to connect to another host on the other network, routing must be defi
 <summary>
 3. NIC Bonding
 </summary>
+
 ---
 Network interface card bonding simply means using 2 (or more) NICs together to achive redundancy and/or increased throughput. 
 

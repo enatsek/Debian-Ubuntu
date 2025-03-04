@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.0. Definition
 KVM virtualization Tutorial 2 on Debian and Ubuntu Server. 
@@ -35,6 +36,7 @@ ISBN: 978-1-83882-871-4 **Mastering KVM Virtualization 2nd Ed.** by Vedran    Da
 <summary>
 1. KVM Networks - Configuration Commands
 </summary>
+
 ---
 Although it is possible to produce endless variations, there are 3 basic  network types in KVM: Bridged, NAT, and Isolated.
 
@@ -290,6 +292,7 @@ virsh net-undefine host-bridge2
 <summary>
 2. KVM Networks - Network Types
 </summary>
+
 ---
 When preparing XML files for creating KVM networks, we use UUID and MAC  values. These UUID and MAC values must be unique for each network.  Remember to replace them with unique values.
 
@@ -406,6 +409,7 @@ Considerations:
 <summary>
 3. Case Study A: Bridged and Isolated Networks Together
 </summary>
+
 ---
 ### 3.1. Specs:
 - Our host has a bridged network on 192.168.1.0/24 (Network 1)
@@ -528,6 +532,7 @@ Acquire::http::proxy "http://user:pass@proxyserver:port";
 <summary>
 4. Case Study B: Separating Host and VM Access with 2 NICs
 </summary>
+
 ---
 I don't know if it would be a best practice but definitely it will be a  good practice to separate host's and VMs' network. That means, we will  connect our host to our network with 2 interfaces; 1 interface will be  used for accessing the host and the other will be used to access VMs.
 
@@ -692,6 +697,7 @@ sudo virt-install --name vm3 \
 <summary>
 5. Case Study C: NAT KVM Network
 </summary>
+
 ---
 We will create a VM, in a NAT network.
 
@@ -773,6 +779,7 @@ Your VM will be able to connect to your network, but the devices on your  networ
 <summary>
 6. Adding and Removing Networks To/From a VM 
 </summary>
+
 ---
 I assume that we have bridged and isolated networks ready on our host.
 

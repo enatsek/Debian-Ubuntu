@@ -6,6 +6,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.0. Info
 Network configuration examples on Ubuntu 22.04 LTS and 24.04 LTS Servers.
@@ -33,6 +34,7 @@ ChatGPT
 <summary>
 1. Example Configurations
 </summary>
+
 ---
 ### 1.1. DHCP Configuration
 Our nic is enp0s3
@@ -163,6 +165,7 @@ sudo netplan apply
 <summary>
 2. Case Study - Multiple Networks
 </summary>
+
 ---
 ### 2.0. Specs
 We have 2 separate networks (192.168.1.X and 10.X.X.X). Some hosts from one network need to reach to the hosts from the other network.
@@ -336,6 +339,7 @@ For a host to connect to another host on the other network, routing must be defi
 <summary>
 3. NIC Bonding
 </summary>
+
 ---
 I tried NIC Bonding on Ubuntu, but unfortunately I wasn't successful. 
 

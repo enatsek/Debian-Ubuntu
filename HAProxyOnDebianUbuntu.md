@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.0. Abstract
 High Availability Load Balancing with Letsencrypt free certificates HTTPS support.
@@ -58,6 +59,7 @@ Book: ISBN: 9781519073846 **Load Balancing with HAProxy** by Nick Ramirez
 <summary>
 1. Install and Configure Load Balancers
 </summary>
+
 ---
 ### 1.1. Install keepalived (srvlb1 and srvlb2)
 ```
@@ -156,6 +158,7 @@ sudo systemctl stop haproxy
 <summary>
 2. Install and Configure Application/Web Servers
 </summary>
+
 ---
 ### 2.1. Install Apache, Mariadb and Galera Cluster on App/Web Servers (srvaw1, srvaw2, and srwaw3)
 
@@ -388,6 +391,7 @@ sudo systemctl start mariadb
 <summary>
 3. Configure Web Server Load Balancing 
 </summary>
+
 ---
 We'll configure HAProxy to load balance 3 web servers (192.168.1.223,  192.168.1.224 and 192.168.1.225. 
 
@@ -466,6 +470,7 @@ You can connect to web site http://192.168.1.210 from different  workstations an
 <summary>
 4. Configure Mariadb Load Balancing
 </summary>
+
 ---
 ### 4.1. Explanations
 Load Balancing an application is similar to load balancing a web server. 
@@ -531,6 +536,7 @@ SHOW VARIABLES LIKE 'hostname';
 <summary>
 5. More on HAProxy Configuration Options
 </summary>
+
 ---
 ### 5.1. Default Configuration File
 Default configuration file is as below:
@@ -622,6 +628,7 @@ listen myproxy
 <summary>
 6. Load Balancing Algorithms
 </summary>
+
 ---
 - Round Robin: Split Traffic Equally
 - Weighted Round Robin: Split Traffic by Weight
@@ -764,6 +771,7 @@ backend be_http_80
 <summary>
 7. URL Redirection
 </summary>
+
 ---
 The requested URL can be redirected depending on URL path, URL  parameters, HTTP headers, or HTTP address. This redirections could be very efficient at some circumstances.
 
@@ -944,6 +952,7 @@ frontend be_http
 <summary>
 8. Enabling HTTPS at HAProxy
 </summary>
+
 ---
 This section deals with using https with HAProxy. Using TLS (SSL) certificates are easy with HAProxy. But we want to use LetsEncrypt certificates and certbot tool for frequent (every 2 months) renewals.
 

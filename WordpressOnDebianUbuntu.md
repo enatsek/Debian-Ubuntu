@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 Based on [Brian Boucheron's Tutorial](https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lamp-on-ubuntu-18-04)
 
@@ -24,6 +25,7 @@ LAMP stack must be installed; see [LampOnDebianUbuntu](LampOnDebianUbuntu.html) 
 <summary>
 1. Configure a Website (If you haven't done already)
 </summary>
+
 ---
 ### 1.1. Make room for our website
 ```
@@ -65,6 +67,7 @@ sudo systemctl reload apache2
 <summary>
 2. Create MariaDB DB User for Wordpress
 </summary>
+
 ---
 ### 2.1. Login to MariaDB
 ```
@@ -110,6 +113,7 @@ sudo systemctl restart apache2
 <summary>
 4. Adjust Apache for Wordpress
 </summary>
+
 ---
 ### 4.1. Enable wordpress' .htaccess files
 Edit our site config, adding folders to override
@@ -147,6 +151,7 @@ sudo systemctl restart apache2
 <summary>
 5. Download Wordpress
 </summary>
+
 ---
 Wordpress can be installed by Debian packages, but we prefer to download the latest version from the original source
 
@@ -185,6 +190,7 @@ sudo cp -a /tmp/wordpress/. /var/www/wordpress
 <summary>
 6. Configure Wordpress Directory
 </summary>
+
 ---
 ### 6.1. Set ownerships and permissions
 Owned by www-data:www-data
@@ -275,6 +281,7 @@ define('FS_METHOD', 'direct');
 <summary>
 7. Wordpress is ready, open in your browser
 </summary>
+
 ---
 `http://www.386387.xyz`
 

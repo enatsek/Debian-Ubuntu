@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.0. Notes
 Debian 12 and Ubuntu 24.04 LTS Server has packages for different versions of Postgresql (15 and 16). 
@@ -33,6 +34,7 @@ Workstation:
 <summary>
 1. Introduction
 </summary>
+
 ---
 ### 1.1. Terminology:
 **Cluster**: A PostgreSQL Instance. Can contain many databases
@@ -70,6 +72,7 @@ Ubuntu postgresql package installs postgresql-client by default
 <summary>
 2. Installation and Basic Management
 </summary>
+
 ---
 ### 2.1. Installation
 Update repositories
@@ -238,6 +241,7 @@ sudo -u postgres psql -p 5433
 <summary>
 3. User and Connection Management
 </summary>
+
 ---
 After installing Postgres, postgres user is able to login psql shell with Linux authentication. No other users are defined and noone can login  remotely.
 
@@ -374,6 +378,7 @@ If you try to use psql from another workstation in 192.168.1.0/24  network, you 
 <summary>
 4. Backup and Restore 
 </summary>
+
 ---
 You can backup a database or a whole cluster. When backing up a database, users (roles) and any other clusterwide data is not backed up. So if you backup a database and restore it on another cluster, you have to create users and (if necessary) access permissions there too.
 
@@ -466,6 +471,7 @@ sudo -u postgres psql -p 5433 -f /tmp/main.pg
 <summary>
 5. psql - PostgreSQL Shell
 </summary>
+
 ---
 ### 5.1. The Command
 psql command is used to open a Postgres shell. At the fresh install, only postgres Linux user has the right to connect to Postgres shell. So we need to run it by impersonating postgres user:
@@ -522,6 +528,7 @@ You can run SQL commands at psql shell. You can also run psql commands,  some of
 <summary>
 6. Bonus: Postgres 16 and Postgres 15 together
 </summary>
+
 ---
 For testing purposes we will install Postgresql 15 on the same server. 
 

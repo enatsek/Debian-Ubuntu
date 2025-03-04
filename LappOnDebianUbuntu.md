@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 - L: Debian 12/11 or Ubuntu 24.04/22.04 LTS Server
 - A: Apache 2 
@@ -21,6 +22,7 @@ Sources:
 <summary>
 1. Install Packages
 </summary>
+
 ---
 ### 1.0. Update Repositories
 ```
@@ -62,6 +64,7 @@ sudo systemctl restart apache2
 <summary>
 2. Test LAPP Stack
 </summary>
+
 ---
 We'll create a test database, a table in that database, add some rows to the table on Postgres. We will also create a test PHP file with the PHP code to retrieve the data from the database and display it as HTML. 
 

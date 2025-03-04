@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.0. Servers managed from a workstation
 This tutorial aims to bring you to a moderate level using Ansible.
@@ -42,6 +43,7 @@ Book: 978-1-78899-756-0 Mastering Ubuntu Server Second Edition by Jay LaCroix
 <summary>
 1. Installation and Main Configuration
 </summary>
+
 ---
 ### 1.1. Install ansible on workstation
 **Run on workstation**
@@ -135,6 +137,7 @@ From now on, all the commands will be run on the workstation
 <summary>
 2. Configuration
 </summary>
+
 ---
 ### 2.1. Configuration File
 Ansible looks for the configuration file in the following order:
@@ -244,6 +247,7 @@ ansible all -m ping -vvvv
 <summary>
 3. More on Inventory
 </summary>
+
 ---
 ### 3.1. Command based inventory
 It is possible to use a different inventory for each ansible or ansible-playbook command:
@@ -377,6 +381,7 @@ That way, using ansible, you can install apache to servers with webserver role a
 <summary>
 4. Ansible Ad Hoc Commands
 </summary>
+
 ---
 You can run Ansible commands in 2 ways, 1 is direct (adhoc), 2 is through  playbooks. 
 
@@ -546,6 +551,7 @@ ansible debian12 -m service -a "name=apache2 state=restarted" --become
 <summary>
 5. A Simple Playbook to Install Apache
 </summary>
+
 ---
 Playbooks are files in YAML format. They contain commands to run by  Ansible.
 
@@ -655,6 +661,7 @@ or just
 <summary>
 6. A More Complex Playbook to Install LAMP
 </summary>
+
 ---
 ### 6.0. Necessary Steps
 - Cache Update (sudo apt update)
@@ -716,6 +723,7 @@ ansible-playbook lamp.yml
 <summary>
 7. (IMHO) Important Ansible Modules
 </summary>
+
 ---
 Well, actually all of the Ansible modules are important. I just selected  some of them considering my very humble opinion.
 
@@ -1704,6 +1712,7 @@ Examples:
 <summary>
 8. Roles
 </summary>
+
 ---
 ### 8.0. Introduction
 Playbooks can be splitted into roles. That way, we can create reusable  code. The lamp example at 7. will be rewritten using 4 roles:
@@ -1882,6 +1891,7 @@ ansible-playbook lamp.yml
 <summary>
 9.Ansible Facts and Magic Variables
 </summary>
+
 ---
 ### 9.1. Ansible Facts
 #### 9.1.1. Getting Facts
@@ -1997,6 +2007,7 @@ OS
 <summary>
 10. Distinguishing Linux Distribution
 </summary>
+
 ---
 Debian and Ubuntu name Apache Server as apache2 and use apt package  manager. 
 
@@ -2146,6 +2157,7 @@ Redesign apacheDRA role, using package module.
 <summary>
 11. Role Variables
 </summary>
+
 ---
 You can set role variables when you consume a role in a playbook. The  variables are defined in the roles and can be set values at the playbook.
 
@@ -2305,6 +2317,7 @@ ansible-playbook apachesite.yml
 <summary>
 12. Variable Filters
 </summary>
+
 ---
 There are a number of filters available for the variables used in  templates, playbooks and roles.
 
@@ -2426,6 +2439,7 @@ Fill as below:
 <summary>
 13. Handlers
 </summary>
+
 ---
 If you want a task to run when something is changed, you can use  handlers. For example, a task tries to change a conf file for apache, and  you need to reload or restart apache if the file is changed. That is when  you use handlers.
 
@@ -2556,6 +2570,7 @@ ansible-playbook apachesite.yml
 <summary>
 14. Error Recovery (Block and rescue)
 </summary>
+
 ---
 Ansible has an exception handling (error recovery) mechanism similar to  Python's try-except-finally block.
 
@@ -2614,6 +2629,7 @@ Error recovery is a very important subject in all kinds of programming. I believ
 <summary>
 15. Skipped Content
 </summary>
+
 ---
 I skipped the following subjects just because I think I won't use them. I believe most of you won't use them ever. 
 

@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.0. Abstract
 This tutorial deals with creating a .deb package. A .deb package is a  compressed collection of files for installing a software. Mainly used by  Debian GNU/Linux and Ubuntu. 
@@ -34,6 +35,7 @@ This tutorial is a simple one, it does not cover every detail. Its aim is to hel
 <summary>
 1. Basic Information
 </summary>
+
 ---
 ### 1.1. Package Types:
 .deb packages may be source or binary packages. As their names imply,  they contain source or executable binaries (or scripts). 
@@ -100,6 +102,7 @@ sudo apt purge test
 <summary>
 2. Package Control Files
 </summary>
+
 ---
 Control files exist in control.tar.zst archive. Some of the files are  listed in 1.2.3. A (nearly) full list is below with brief descriptions,  though some important ones have detailed descriptions.
 
@@ -485,6 +488,7 @@ libslapi-2.5 0 libslapi-2.5-0
 <summary>
 3. Package Data Files
 </summary>
+
 ---
 ### 3.1. Basics
 Data files exist in data.tar.zst archive. The archive contains the files  in their corresponding directories. Every file in this archive is unpacked to its corresponding directory.
@@ -563,6 +567,7 @@ Every file must be placed on an appropriate place. Some examples:
 <summary>
 4. Package Installation Process
 </summary>
+
 ---
 ```
   If there is a previous version of the package:
@@ -673,6 +678,7 @@ Every file must be placed on an appropriate place. Some examples:
 <summary>
 5. Package Removal/Purge Process
 </summary>
+
 ---
 ```
   prerm remove
@@ -702,6 +708,7 @@ Every file must be placed on an appropriate place. Some examples:
 <summary>
 6. .deb Package Preparation Checklist
 </summary>
+
 ---
 ### 6.1. Create File and Folder Structure for the Package
 A minimal set would include the following:
@@ -759,6 +766,7 @@ The resulting .deb file is your package.
 <summary>
 7. A Very Simple Package
 </summary>
+
 ---
 Now, we are going to create a very simple package, namely "distro". Our  package is a python script which displays the Unix distro name and the version information.
 
@@ -866,6 +874,7 @@ Your package distro_1.0.0-1_all.deb is in your ~/packages folder.
 <summary>
 8. A Bit More Complicated Package
 </summary>
+
 ---
 Our next package is named as **watchbox* and is a bit more complicated.
 

@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.0. Start
 KVM Virtualization Tutorial 1 on Debian and Ubuntu Server. 
@@ -57,6 +58,7 @@ ISBN: 978-1-78829-467-6 **KVM Virtualization Cookbook** by Konstantin Ivanov
 <summary>
 1. Installation and Configuration
 </summary>
+
 ---
 ### 1.1. Installation
 Install necessary packages
@@ -317,6 +319,7 @@ At this point, you may want to copy some installation isos to server's /srv/isos
 <summary>
 2. VM Creation
 </summary>
+
 ---
 ### 2.1. Create the 1st VM
 Now it is time to create our first vm
@@ -379,6 +382,7 @@ Remember to replace exforge with your user name on the server and elma  with you
 <summary>
 3. Remote Graphical Management
 </summary>
+
 ---
 Our server has no graphical interface (like the most servers). If you  really want a graphical management, you can install virt-manager on your  workstation and manage your VMs from there. 
 
@@ -400,6 +404,7 @@ The application is added to Applications Menu with the name "Virtual Machine Man
 <summary>
 4. Installing VMs from Ready Images
 </summary>
+
 ---
 Starting a new VM and installing OS into it is a good but time consuming way. Another way would be preparing an installed image and start it as a  new VM. 
 
@@ -669,6 +674,7 @@ If the file /etc/cloud/cloud-init.disabled exists, cloud-init does not run again
 <summary>
 5. virsh: Shell Based VM Management
 </summary>
+
 ---
 virt-manager can only help with the basic management tasks. If you want  to dive deep, you need the old-style shell.
 
@@ -971,6 +977,7 @@ virsh --help
 <summary>
 6. qemu-img: Shell Based Image Management
 </summary>
+
 ---
 qemu-img allows us to manipulate images. The command is expected to work  offline. That means, before you start using qemu-img, you have to shut  down the VM associated with it. 
 
@@ -1106,6 +1113,7 @@ In any case if you suspect the integrity of the image file
 <summary>
 7. Export and Import of VMs
 </summary>
+
 ---
 If you want to move your VM to another host, or in a way you want to backup and restore your VM; there might be a lot of ways to do it. I'm  going to demonstrate a very simple  method which requires shutting down the VM (you can try while it is running, but with no success guaranteed).
 
@@ -1208,6 +1216,7 @@ virsh start ubuntu24
 <summary>
 8. libguestfs: VM Disk Management
 </summary>
+
 ---
 A set of commands for managing VM disks. Full documentation:  
 [libguestfs.org](https://libguestfs.org/)

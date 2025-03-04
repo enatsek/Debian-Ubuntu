@@ -6,6 +6,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.1. Introduction 
 
@@ -135,6 +136,7 @@ ChatGPT
 <summary>
 1. /bin - Essential Command Binaries
 </summary>
+
 ---
 Contains commands for system administrators and users. These commands  must be required required when no other filesystems are mounted (e.g. in
 single user mode). It may also contain commands which are used indirectly by scripts.
@@ -154,6 +156,7 @@ Command binaries that are not essential enough to place into /bin must be placed
 <summary>
 2. /boot - Static Files of the Boot Loader
 </summary>
+
 ---
 Contains everything required for the boot process except configuration files not needed at boot time and the map installer. Stores data that is used before the kernel begins executing user-mode programs. This may include saved master boot sectors and sector map files.
 
@@ -172,6 +175,7 @@ Certain architectures may have other requirements for /boot related to limitatio
 <summary>
 3. /dev - Device Files
 </summary>
+
 ---
 The /dev directory is the location of special or device files.
 
@@ -190,6 +194,7 @@ The devices in the /dev directory are created dynamically during the boot proces
 <summary>
 4. /etc - Host-specific System Configuration
 </summary>
+
 ---
 The /etc hierarchy contains configuration files.
 
@@ -279,6 +284,7 @@ Files with names *.conf indicate generic configuration files.
 <summary>
 5. /home - User Home Directories
 </summary>
+
 ---
 Home directories of users are stored here.
 
@@ -297,6 +303,7 @@ It is recommended that, apart from autosave and lock files, programs should refr
 <summary>
 6. /lib - Essential Shared Libraries and Kernel Modules
 </summary>
+
 ---
 In Debian 12 and Ubuntu 24.04 /lib is a symbolic link to /usr/lib.
 
@@ -320,6 +327,7 @@ The following directory (or symbolic link to directory) must be in /lib, if the 
 <summary>
 7. /lib* - Alternate format essential shared libraries
 </summary>
+
 ---
 There may be one or more variants of the /lib directory on systems which  support more than one binary format requiring separate libraries.
 
@@ -341,6 +349,7 @@ If one or more of these directories exist, the requirements for their contents a
 <summary>
 8. /media - Mount Point for Removable Media
 </summary>
+
 ---
 Contains subdirectories which are used as mount points for removable media such as floppy disks, cdroms and zip disks.
 
@@ -360,6 +369,7 @@ On systems where more than one device exists for mounting a certain type of medi
 <summary>
 9. /mnt - Mount Point for Mounting a Filesystem Temporarily
 </summary>
+
 ---
 System administrators may temporarily mount a filesystem here.
 
@@ -374,6 +384,7 @@ This directory must not be used by installation programs: a suitable temporary d
 <summary>
 10. /opt - Add-on Application Software Packages
 </summary>
+
 ---
 This folder is empty on default Debian 12 and Ubuntu 24.04 installations.
 
@@ -396,6 +407,7 @@ Host-specific configuration files must be installed in /etc/opt.
 <summary>
 11. /root - Home directory for the root user
 </summary>
+
 ---
 Recommended home directory for the root user.
 
@@ -412,6 +424,7 @@ For this reason, it is recommended that subdirectories for mail and other applic
 <summary>
 12. /run - Data Relevant to Running Processes
 </summary>
+
 ---
 Contains system information data describing the system since it was booted.
 
@@ -430,6 +443,7 @@ Process identifier (PID) files, which were originally placed in /etc, must be pl
 <summary>
 13. /sbin - Essential System Binaries
 </summary>
+
 ---
 In Debian 12 and Ubuntu 24.04 /sbin is a symbolic link to /usr/bin.
 
@@ -474,6 +488,7 @@ The following files (or symbolic links to files) must be in /sbin if the  corres
 <summary>
 14. /srv - Data for Services Provided by This System
 </summary>
+
 ---
 This directory is empty on default installations of Debian 12 and Ubuntu 24.04.
 
@@ -488,6 +503,7 @@ Unlike directories such as /usr or /var, which may contain data related to insta
 <summary>
 15. /tmp - Temporary Files
 </summary>
+
 ---
 Provides a location for temporary files that are used by programs and users during the course of their activities. 
 
@@ -504,6 +520,7 @@ Many applications and system processes use the /tmp directory for temporary file
 <summary>
 16. /usr - Secondary hierarchy
 </summary>
+
 ---
 Stands for "Unix System Resources".
 
@@ -716,6 +733,7 @@ Generally, source should not be built within this hierarchy.
 <summary>
 17. /var - Variable Data
 </summary>
+
 ---
 Contains variable data files. This includes spool directories and files,  administrative and logging data, and transient and temporary files.
 
@@ -755,6 +773,7 @@ The following directories, or symbolic links to directories, must be in /var, if
 <summary>
 18. Special to Linux
 </summary>
+
 ---
 There are two more directory standarts specific to Linux:
 

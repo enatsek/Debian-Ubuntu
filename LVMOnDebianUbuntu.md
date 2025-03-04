@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.1. Info
 LVM, or Logical Volume Manager allows for more flexible and dynamic  management of disk space compared to traditional partitioning schemes. 
@@ -34,6 +35,7 @@ ChatGPT
 <summary>
 1. Layers of LVM
 </summary>
+
 ---
 ### 1.0. Abstract
 - Physical Volumes (PV) are defined from disks or partitions.
@@ -125,6 +127,7 @@ lvcreate --type striped -i 2 -I 4M -L 200G -n striped_lv myvg
 <summary>
 2. Physical Volume Commands
 </summary>
+
 ---
 ### 2.1. pvs
 Provides physical volume information in a configurable form, displaying one line per physical volume
@@ -233,6 +236,7 @@ sudo pvck /dev/sdb1
 <summary>
 3. Volume Group Commands
 </summary>
+
 ---
 ### 3.1. vgs
 Provides volume group information in a configurable form, displaying one line per volume group
@@ -366,6 +370,7 @@ sudo vgck --updatemetadata myvg -v
 <summary>
 4. Logical Volume Commands
 </summary>
+
 ---
 ### 4.1. lvs
 Provides logical volume information in a configurable form, displaying one line per logical volume
@@ -1124,6 +1129,7 @@ Our snapshot LV is gone after the merge.
 <summary>
 7. Case Study 3 - Export and Import of LVM
 </summary>
+
 ---
 It is possible to export and import Volume Groups with their Logical Volumes.
 
@@ -1362,6 +1368,7 @@ ls -al /mnt/mylv2
 <summary>
 8. Uncovered Subjects
 </summary>
+
 ---
 The following subjects are not covered in this tutorial:
 

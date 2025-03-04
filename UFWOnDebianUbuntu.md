@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 Basic UFW (Uncomplicated Firewall) tutorial. Enabling, adding, deleting  rules, syntax etc.
 
@@ -24,6 +25,7 @@ Sources:
 <summary>
 1. Firewall Architecture 
 </summary>
+
 ---
 ### 1.1. Netfilter
 Netfilter represents a set of hooks for network packets, it is integrated into the Linux kernel. It supplies a framework for packet filtering, NAT, and port translation.
@@ -45,6 +47,7 @@ Ufw is the higher level firewall program supplied by Ubuntu (Canonical). Other d
 <summary>
 2. Ufw Basics
 </summary>
+
 ---
 ### 2.1. Installation
 ufw is installed and inactive by default on Ubuntu server. For Debian :
@@ -152,6 +155,7 @@ sudo ufw show raw
 <summary>
 3. Allowing and Denying in Detail
 </summary>
+
 ---
 ### 3.1. Long Format
 ```
@@ -257,6 +261,7 @@ sudo ufw allow ssh
 <summary>
 4. Case Study 1
 </summary>
+
 ---
 ### 4.0. Specs
 - Allow SSH for 1 IP - 192.168.1.108
@@ -401,6 +406,7 @@ Status: active
 <summary>
 5. Case Study 2
 </summary>
+
 ---
 ### 5.0. Specs
 - Two network interfaces - enp0s3 and enp0s8

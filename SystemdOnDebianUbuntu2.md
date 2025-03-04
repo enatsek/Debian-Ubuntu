@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.1. Intro
 The first Systemd tutorial, namely [SystemdOnDebianUbuntu](SystemdOnDebianUbuntu.html) was about systemd's init and service management properties.
@@ -27,6 +28,7 @@ The AI still needs a lot of work before becoming really useful.
 <summary>
 1. Services
 </summary>
+
 ---
 Debian 12 and Ubuntu 24.04 Server has the following systemd services by  default:
 
@@ -800,6 +802,7 @@ sudo systemd-sysusers
 <summary>
 2. Tools
 </summary>
+
 ---
 ## 2.1. systemctl
 Used to control and query the state of the systemd system and service manager. 

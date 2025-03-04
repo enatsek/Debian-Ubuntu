@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.0. Info
 Well I know Regex is (almost) the same on every system, but this site is for Debian and Ubuntu, so it is named as.
@@ -21,6 +22,7 @@ Book: 978-1-449-31943-4Regular Expressions Cookbook by Jan Goyvaerts and Steven 
 <summary>
 1. Basics
 </summary>
+
 ---
 ### 1.1. A string itself
 Obviously every string is a match for itself
@@ -89,6 +91,7 @@ When used in a bracket, \ is not necessary
 <summary>
 2. Quantifiers and Boundaries
 </summary>
+
 ---
 ### 2.1. * Quantifier
 A * quantifier after a character or group means 0 or more occurences of it.
@@ -178,6 +181,7 @@ $ defines the end of a line
 <summary>
 3. Subexpressions and Backreferences
 </summary>
+
 ---
 ### 3.1. Subexpressions
 A subexpression is a group of characters or operators in paranthesis. They are used to apply quantifiers to expressions.
@@ -224,6 +228,7 @@ Backreferences help a lot at find and replace operations. At the repeating word 
 <summary>
 4. Regex Examples
 </summary>
+
 ---
 Please consider, this examples are not perfect. You or someone else can definitely find or write better versions. 
 

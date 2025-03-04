@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 There will be 2 DNS Servers, 1 Primary (Master) and 1 Replica (Slave). 
 
@@ -41,6 +42,7 @@ Sources:
 <summary>
 1. Primary DNS Server
 </summary>
+
 ---
 ### 1.1. Install bind9 (DNS Server)
 ```
@@ -165,6 +167,7 @@ sudo named-checkzone 386387.xyz /etc/bind/reverse.386387.xyz
 <summary>
 2. Replica DNS Server
 </summary>
+
 ---
 ### 2.1. Install bind9 (DNS Server)
 ```
@@ -233,6 +236,7 @@ sudo named-checkconf /etc/bind/named.conf.local
 <summary>
 3. Final Touch
 </summary>
+
 ---
 ### 3.1. Restart DNS on both primary and replica
 ```

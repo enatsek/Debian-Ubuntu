@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 Based on the valuable documents at: [server-world.info](https://www.server-world.info/en/note?os=Ubuntu_18.04&p=mail&f=1)
 
@@ -27,6 +28,7 @@ An MX record must be created at the DNS Server with the value of  mail.386387.xy
 <summary>
 1. Install and Configure Postfix
 </summary>
+
 ---
 ### 1.0. Update Repositories
 ```
@@ -219,6 +221,7 @@ sudo systemctl restart postfix
 <summary>
 2. Install and Configure Dovecot
 </summary>
+
 ---
 ### 2.1. Install Dovecot core, pop3 and imap deamons
 ```
@@ -310,6 +313,7 @@ We will use Certbot tool of Let's Encrypt to have a free certificate
 <summary>
 3. Add SSL/TLS to Postfix and Dovecot
 </summary>
+
 ---
 ### 3.1. Install Certbot to get TLS certificates
 ```
@@ -399,6 +403,7 @@ sudo systemctl restart postfix dovecot
 <summary>
 4. Client Mail Settings
 </summary>
+
 ---
 For Linux User exforge at mail.386387.xyz  
 
@@ -425,6 +430,7 @@ For Linux User exforge at mail.386387.xyz
 <summary>
 5. Account Management
 </summary>
+
 ---
 ### 5.1. Users
 All Linux users already have mail accounts with their login names and passwords.

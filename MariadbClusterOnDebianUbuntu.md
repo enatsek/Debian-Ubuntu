@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.1. Definitions
 3 servers will be installed and configured as Mariadb clusters. 
@@ -33,6 +34,7 @@ All the nodes must have the same version of Mariadb. That is, they must  have th
 <summary>
 1. Mariadb Installations (Run on all servers)
 </summary>
+
 ---
 ### 1.1. Install Mariadb and Galera Cluster on all servers
 ```
@@ -70,6 +72,7 @@ For the next questions you can select default answers.
 <summary>
 2. Mariadb Configurations (Run on all servers)
 </summary>
+
 ---
 ### 2.1. Temporarily Stop Mariadb
 ```
@@ -135,6 +138,7 @@ binlog_format = ROW
 <summary>
 3. Start Cluster
 </summary>
+
 ---
 ### 3.1. Start Cluster on One of the Nodes
 **!!! You should run this only on one of the servers !!!**
@@ -165,6 +169,7 @@ Our Cluster is established
 <summary>
 4. Test Mariadb Cluster 
 </summary>
+
 ---
 We will run commands on the nodes and see the changes on other nodes
 
@@ -236,6 +241,7 @@ exit;
 <summary>
 5. Maintenance
 </summary>
+
 ---
 ### 5.1. Healthcheck
 The following commands runs on Mariadb shell and show information about  Mariadb cluster.
@@ -314,6 +320,7 @@ If the cluster doesn't go online, refer to 6.
 <summary>
 6. Recovery
 </summary>
+
 ---
 Mariadb Galera Cluster would run fine for a long time, as long as you  keep at least 2 nodes alive and running. If you have 3 nodes, you can  proceed on maintenance tasks (backup, upgrade etc) one at a time. 
 

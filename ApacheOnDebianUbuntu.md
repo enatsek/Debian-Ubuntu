@@ -6,6 +6,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 Apache 2 Installation, configuration, sample sites, enablement of PHP,  SSL etc on Ubuntu 24.04 (and 22.04) and Debian 12 (and 11) Servers 
 
@@ -18,6 +19,7 @@ srv1.386387.xyz, srv2.386387.xyz and srv3.386387.xyz all have the ip of my serve
 <summary>
 1. Apache Installation
 </summary>
+
 ---
 ### 1.1. Install
 ```
@@ -110,6 +112,7 @@ Remember to copy sites' pages on DocumentRoot Directories: create /var/www/srv1 
 <summary>
 2. Apache Additional Modules
 </summary>
+
 ---
 ## 2.1. List of Apache modules
 ```
@@ -152,6 +155,7 @@ sudo systemctl restart apache2
 <summary>
 3. Adding SSL to Apache
 </summary>
+
 ---
 ### 3.1. Enable ssl
 ```
@@ -228,6 +232,7 @@ sudo systemctl reload apache2
 <summary>
 4. Auto http-->https Redirect
 </summary>
+
 ---
 ### 4.1. http://srv1.386387.xyz automatically redirects to https://srv1.386387.xyz
 
@@ -270,6 +275,7 @@ sudo systemctl restart apache2
 <summary>
 5. Enable PHP on Apache2
 </summary>
+
 ---
 ### 5.1. Install php and apache php mod
 ```
@@ -310,6 +316,7 @@ http://srv1.386387.xyz/info.php
 <summary>
 6. Some Sample Apache Confs
 </summary>
+
 ---
 ### 6.1. 3 different sites on 1 server in 1 conf file
 ```
@@ -446,6 +453,7 @@ And our configuration:
 <summary>
 7. Free SSL Certificates
 </summary>
+
 ---
 You can use free, autorenewing SSL certificates from <https://letsencrypt.org/> with Certbot tool from EFF. 
 

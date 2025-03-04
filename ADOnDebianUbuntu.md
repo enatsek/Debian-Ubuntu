@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 ### 0.1. Definition
 - Single Domain Active Directory infrastructure with Debian or Ubuntu  Servers with 2 Domain Controllers and a file server.
@@ -127,6 +128,7 @@ Remember to replace all the occurences of 386387, x386, 386387.XYZ, and  386387.
 <summary>
 1. Add First Domain Controller
 </summary>
+
 ---
 ### 1.0. Specs
 ```
@@ -249,6 +251,7 @@ sudo samba-tool user create exforge
 <summary>
 2. Add Additional DC
 </summary>
+
 ---
 ## 2.0. Specs
 ```
@@ -382,6 +385,7 @@ Following warning is not important, you can ignore it:
 <summary>
 3. AD User & Computer Management
 </summary>
+
 ---
 
 You can run on any DC
@@ -586,6 +590,7 @@ sudo samba-tool time --help
 <summary>
 4. Create Users and Groups
 </summary>
+
 ---
 ### 4.1. Create Users
 Create all users with Password1 as the default password. Users are going to have to change their password at their first logon.
@@ -646,6 +651,7 @@ sudo samba-tool group addmembers All Marketing,Sales,Production,IT,SysAdmin
 <summary>
 5. Install and Configure the File Server
 </summary>
+
 ---
 ### 5.1. Set Hostname and DNS Information
 Set hostname as fully qualified (if you haven't done it before)
@@ -1067,6 +1073,7 @@ sudo systemctl restart smbd
 <summary>
 6. Add Windows Computers to the Domain 
 </summary>
+
 ---
 Change Windows computer's DNS setting to first DC and proceed as usual.
 

@@ -5,6 +5,7 @@
 <summary>
 0. Specs
 </summary>
+
 ---
 Basic Nginx configuration, installation, SSL, LEMP stack, sample site  configurations, 
 
@@ -24,6 +25,7 @@ Sources:
 <summary>
 1. Installation and Configuration Files
 </summary>
+
 ---
 ### 1.1. Installation
 Update repositories
@@ -193,6 +195,7 @@ sudo systemctl reload nginx
 <summary>
 2. SSL Configuration
 </summary>
+
 ---
 We will test SSL configuration with self signed certificates. Later on  the tutorial, we are going to test getting certificates with certbot tool too.
 
@@ -275,6 +278,7 @@ Your firefox will complain as "Warning: Potential Security Risk Ahead",  because
 <summary>
 3. LEMP Stack
 </summary>
+
 ---
 - L: Linux (Debian or Ubuntu in our case)
 - E: Nginx (Enginx actually)
@@ -402,6 +406,7 @@ Now go to below address to see if it is working:
 <summary>
 4. Sample Configs
 </summary>
+
 ---
 ### 4.1. Three Sites in One Conf File
 srv2, srv3, and srv4 all have their directories and served in the same  server
@@ -506,6 +511,7 @@ server {
 <summary>
 5. HTTPS With Free Let's Encrypt Certificates
 </summary>
+
 ---
 This section is performed on a VPS on internet. To get free Let's Encrypt certificates, our hostname must be in a DNS in internet. 
 
@@ -658,6 +664,7 @@ Your HTTPS site is ready:
 <summary>
 6. Nginx and Apache Together
 </summary>
+
 ---
 **!!! This section starts with a fresh install server !!!**
 

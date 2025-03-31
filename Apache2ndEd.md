@@ -839,6 +839,7 @@ as
 <summary>
 4. Adding PHP Support to Apache
 </summary>
+
 ---
 
 ### 4.1. Install PHP and Apache Dependencies

@@ -53,7 +53,7 @@ When installed on Debian and Ubuntu, apache (as the other daemon packages) start
 systemctl status apache2
 ```
 
-Debian administrators prepared a sample page for the web server. You can check it:
+Debian package managers prepared a sample page for the web server. You can check it:
 
 ```
 sudo nano /var/www/html/index.html
@@ -128,7 +128,7 @@ When Apache package is installed, it creates 2 configuration files in sites-avai
 
 000-default.conf comes enabled, that is linked to sites-enabled/ directory. 
 
-default-ssl.conf is not enabled and can be considered as a template for configuring an SSL site.
+default-ssl.conf is not enabled and can be considered as a template for configuring SSL sites.
 
 There are 4 steps to create a web site on Apache Web Server.
 
@@ -206,7 +206,7 @@ Fill as below:
 Line by line explanation of the configuration file
 
 - Start of the site configuration. Site listens from all IPs in the host at the port 80.
-- Site is accessibleed by name 386387.xyz
+- Site is accessible by name 386387.xyz
 - Site is also accessible by name www.386387.xyz
 - Content of the site is in /var/www/386387.xyz
 - File for error logs
@@ -312,7 +312,7 @@ sudo systemctl reload apache2
 
 #### 2.2.5. HTTP to HTTPS Redirection
 
-Our site works as HTTPS, but there is one some more work to do.
+Our site works as HTTPS, but there is one more work to do.
 
 Whenever someone tries to connect to https://386387.xyz, they meet our HTTPS site. But if someone tries to connect to https://386387.xyz, they get to our plain HTTP site. 
 
@@ -458,7 +458,7 @@ sudo a2ensite srv1.conf
 sudo systemctl reload apache2
 ```
 
-You will not be able to reach to the site at ```https://srv1.386387.xyz```, but if you run the following command on the server, it will retrieve the HTML:
+You will not be able to reach to the site at ```http://srv1.386387.xyz```, but if you run the following command on the server, it will retrieve the HTML:
 
 ```
 curl 127.0.0.1
@@ -536,7 +536,7 @@ You can add more IPs or even IP blocks as following:
 
 ### 3.3. Reverse Proxy Configuration
 
-Some software supplies locally running mini web servers. One of them is RSpamd. You can only access them from the server they are running.
+Some softwares supply locally running mini web servers. One of them is RSpamd. You can only access them from the server they are running.
 
 Using Apache's Reverse Proxy module, we can access them from outside the server too.
 

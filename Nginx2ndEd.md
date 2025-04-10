@@ -944,7 +944,7 @@ Fill as below:
 ```
 server {
    listen 80;
-   root /var/www/srv6
+   root /var/www/srv6;
    index index.html index.htm;
    server_name srv6.386387.xyz;
    access_log off;

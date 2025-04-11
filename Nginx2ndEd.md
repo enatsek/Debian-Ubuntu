@@ -20,7 +20,18 @@ I have a test domain name: 386387.xyz. I used it for my tests.
 
 Unless you want to run a totally static website, you would need PHP and a database server too. So we're going to touch them a bit.
 
-### 0.3. Sources
+All the following domain names points to my test server:
+
+- 386387.xyz
+- www.386387.xyz
+- srv1.386387.xyz
+- srv2.386387.xyz
+- srv3.386387.xyz
+- srv4.386387.xyz
+- srv5.386387.xyz
+- srv6.386387.xyz
+
+### 0.2. Sources
 
 - [nginx.org](https://nginx.org/en/docs/)  
 - [www.geeksforgeeks.org](https://www.geeksforgeeks.org/how-to-retrieve-data-from-mysql-database-using-php/)  
@@ -459,7 +470,7 @@ sudo systemctl reload nginx
 
 #### 2.2.4. HTTP to HTTPS Redirection
 
-Our site works as HTTPS, but there is one some more work to do.
+Our site works as HTTPS, but there is one more work to do.
 
 Whenever someone tries to connect to https://386387.xyz, they meet our HTTPS site. But if someone tries to connect to http://386387.xyz, they get to our plain HTTP site. 
 
@@ -678,7 +689,7 @@ sudo nxensite srv2
 sudo systemctl reload nginx
 ```
 
-Only 2 given IPs will be able to access to the site, the other will have Forbidden message.
+Only 2 given IPs will be able to access to the site ```http://srv2.386387.xyz```, the others will have Forbidden message.
 
 You can add more IPs or even IP blocks as following:
 
@@ -1042,7 +1053,7 @@ sudo systemctl reload nginx
  
 ### 4.3. Test it
 
-We'll create a test database, a table in that database, add some rows to  the table on Mariadb. We will also create a test PHP file with the PHP  code to retrieve the data from the database and display it as HTML. 
+We'll create a test database, a table in that database, add some rows to the table on Mariadb. We will also create a test PHP file with the PHP code to retrieve the data from the database and display it as HTML. 
 
 #### 4.3.1. DB Operations
 
@@ -1127,6 +1138,4 @@ Now go to below address to see if it is working:
 
 <br>
 </details>
-
-
 

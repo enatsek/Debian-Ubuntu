@@ -30,7 +30,7 @@ I used Debian and Ubuntu server editions, namely Debian 11 & 12, Ubuntu 22.04 & 
 
 <details markdown="1">
 <summary>
-1. Installation and Configuration Files
+1. Installation
 </summary>
 
 ---

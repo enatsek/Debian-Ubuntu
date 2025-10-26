@@ -96,9 +96,9 @@ cat publickey    # Check public key
 
 My public and private keys for reference:
 
-net1-1 Public Key : fZjce9XED9g6LN0CJPjpeNueq7mzHFbIc9yIh/c+HVY=
-net1-1 Private Key: 8CKa3+nFCemn6ja0RH+soc9lZVzBRiIKjO4UKguYoFk=
-net2-1 Public Key : 8ZqdXWlcrJaYgOOrVZI3Aygz90CBnsQa1qtyL4/8LwU=
+net1-1 Public Key : fZjce9XED9g6LN0CJPjpeNueq7mzHFbIc9yIh/c+HVY=  
+net1-1 Private Key: 8CKa3+nFCemn6ja0RH+soc9lZVzBRiIKjO4UKguYoFk=  
+net2-1 Public Key : 8ZqdXWlcrJaYgOOrVZI3Aygz90CBnsQa1qtyL4/8LwU=  
 net2-2 Private Key: QE3DmQNIX4WePgJskO6oERq2toIqcrSVYRxONq+Fa0A=
 
 <br>
@@ -121,18 +121,18 @@ We need to configure wireguard on both servers. The IP addresses for wireguard e
 
 The keys and their explanations at the config file are as follows:
 
-Interface Section
+**Interface Section**
 
-Address: Given IP address to wireguard in CIDR notation.
-PrivateKey: Produced Private Key of the server
-ListenPort: The port number used for wireguard tunnel
+Address: Given IP address to wireguard in CIDR notation.  
+PrivateKey: Produced Private Key of the server.  
+ListenPort: The port number used for wireguard tunnel.  
 
-Peer Section
+**Peer Section**
 
-PublicKey: Produced Public Key of the other wireguard server
-Endpoint: IP:Port of the other server
-AllowedIPs: IP addresses at the other network who can reach to this network
-PersistentKeepalive: Send an empty packet to the other side every given second to keepalive the connection (Optional)
+PublicKey: Produced Public Key of the other wireguard server.  
+Endpoint: IP:Port of the other server.  
+AllowedIPs: IP addresses at the other network who can reach to this network.  
+PersistentKeepalive: Send an empty packet to the other side every given second to keepalive the connection (Optional).  
 
 
 ### 3.1. First Server Configuration

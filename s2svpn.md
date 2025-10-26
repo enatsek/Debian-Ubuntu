@@ -17,6 +17,7 @@ It's different from the VPN you might use on your personal computer, which typic
 ### 0.1. Environment
 
 **Site 1**
+
 - Name: net1
 - Network: 192.168.56.0/24
 - wireguard server (Debian 13 Server/Ubuntu 24.04 LTS Server): 
@@ -28,6 +29,7 @@ It's different from the VPN you might use on your personal computer, which typic
 
 
 **Site 2**
+
 - Name: net2
 - Network: 192.168.57.0/24
 - wireguard server (Debian 13 Server/Ubuntu 24.04 LTS Server): 

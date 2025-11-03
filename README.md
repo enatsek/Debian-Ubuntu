@@ -1,5 +1,7 @@
 # Tutorials
 
+- [**Self Hosted VPN**](shvpn.md) Self hosted VPN tutorial using wireguard on Debian and Ubuntu servers.
+
 - [**Site-to-site VPN**](s2svpn.md) Site-to-site VPN tutorial using wireguard on Debian and Ubuntu servers.
 
 - [**Node.js:**](Nodejs.md) Simple Node.js tutorial on Debian and Ubuntu servers.

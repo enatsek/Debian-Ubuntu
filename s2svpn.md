@@ -18,26 +18,28 @@ It's different from the VPN you might use on your personal computer, which typic
 
 **Site 1**
 
-- Name: net1
-- Network: 192.168.56.0/24
-- wireguard server (Debian 13 Server/Ubuntu 24.04 LTS Server): 
-    - name: net1-1
-    - Public IP: 192.168.1.251
-    - Private IP: 192.168.56.1
-- Hosts in the network (Linux/Mac/Wind*ws/etc): 
-    - name: net1-2 Private IP: 192.168.56.2 
+- **Name:** net1
+- **Network:** 192.168.56.0/24
+- **Wireguard Server (Debian 13 Server/Ubuntu 24.04 LTS Server):** 
+    - **Name:** net1-1
+    - **Public IP:** 192.168.1.251
+    - **Private IP:** 192.168.56.1
+- **Hosts in the network (Linux/Mac/Wind*ws/etc):** 
+    - **Name:** net1-2 
+    - **Private IP:** 192.168.56.2 
 
 
 **Site 2**
 
-- Name: net2
-- Network: 192.168.57.0/24
-- wireguard server (Debian 13 Server/Ubuntu 24.04 LTS Server): 
-    - name: net2-1
-    - Public IP: 192.168.1.252
-    - Private IP: 192.168.57.1
-- Hosts in the network (Linux/Mac/Wind*ws/etc): 
-    - name: net2-2 Private IP: 192.168.57.2 
+- **Name:** net2
+- **Network:** 192.168.57.0/24
+- **Wireguard Server (Debian 13 Server/Ubuntu 24.04 LTS Server):** 
+    - **Name:** net2-1
+    - **Public IP:** 192.168.1.252
+    - **Private IP:** 192.168.57.1
+- **Hosts in the network (Linux/Mac/Wind*ws/etc):** 
+    - **Name:** net2-2 
+    - **Private IP:** 192.168.57.2 
 
 ### 0.2. Sources
 
@@ -58,16 +60,16 @@ It's different from the VPN you might use on your personal computer, which typic
 ---
 
 Enable IP Forwarding on both wireguard servers
-Run on net1-1 and net2-1
+Run on **net1-1** and **net2-1**:
 
 ```
 echo 'net.ipv4.ip_forward=1' | sudo tee -a /etc/sysctl.conf
-sudo sysctl -p    # Activate it
-sudo sysctl net.ipv4.ip_forward  # Check it
+sudo sysctl -p                   # Activate the change
+sudo sysctl net.ipv4.ip_forward  # Verify it's set to 1
 ```
 
 Install wireguard
-Run on net1-1 and net2-1
+Run on **net1-1** and **net2-1**:
 
 ```
 sudo apt update
@@ -79,16 +81,17 @@ sudo apt install wireguard -y
 
 <details markdown="1">
 <summary>
-2. Generate Keypairs
+2. Generate Key Pairs
 </summary>
 
 ---
 
-We need to create public/private keypairs for both wireguard servers.  
-While installing take notes of them, we're going to use them on configuration files.
+We need to create public/private key pairs for both WireGuard servers.  
+Take note of the generated keys, as we will use them in the configuration files.
 
-You can delete or backup them after using in configurations
-Run on net1-1 and net2-1
+You can delete or back up the key files after using them in the configurations.  
+
+Run on **net1-1** and **net2-1**:
 
 ```
 wg genkey | tee privatekey | wg pubkey > publickey
@@ -98,10 +101,10 @@ cat publickey    # Check public key
 
 My public and private keys for reference:
 
-net1-1 Public Key : ```fZjce9XED9g6LN0CJPjpeNueq7mzHFbIc9yIh/c+HVY=```  
-net1-1 Private Key: ```8CKa3+nFCemn6ja0RH+soc9lZVzBRiIKjO4UKguYoFk=```  
-net2-1 Public Key : ```8ZqdXWlcrJaYgOOrVZI3Aygz90CBnsQa1qtyL4/8LwU=```  
-net2-2 Private Key: ```QE3DmQNIX4WePgJskO6oERq2toIqcrSVYRxONq+Fa0A=```
+- net1-1 Public Key : ```fZjce9XED9g6LN0CJPjpeNueq7mzHFbIc9yIh/c+HVY=```
+- net1-1 Private Key: ```8CKa3+nFCemn6ja0RH+soc9lZVzBRiIKjO4UKguYoFk=```
+- net2-1 Public Key : ```8ZqdXWlcrJaYgOOrVZI3Aygz90CBnsQa1qtyL4/8LwU=```
+- net2-1 Private Key: ```QE3DmQNIX4WePgJskO6oERq2toIqcrSVYRxONq+Fa0A=```
 
 <br>
 </details>
@@ -119,35 +122,32 @@ net2-2 Private Key: ```QE3DmQNIX4WePgJskO6oERq2toIqcrSVYRxONq+Fa0A=```
 
 ### 3.0. Explanations
 
-We need to configure wireguard on both servers. The IP addresses for wireguard endpoints are choosen as 10.200.0.1/30 (net1-1) and 10.200.0.2/30 (net2-1). They are arbitrary, you can change them if you want.
+We need to configure WireGuard on both servers. The IP addresses for the WireGuard tunnel endpoints are chosen as `10.200.0.1/30` (net1-1) and `10.200.0.2/30` (net2-1). These are arbitrary and can be changed if desired.
 
-The keys and their explanations at the config file are as follows:
+**`[Interface]` Section**
 
-**Interface Section**
+- **Address:** The IP address assigned to this WireGuard interface in CIDR notation.
+- **PrivateKey:** This server's generated private key.
+- **ListenPort:** The port number used for the WireGuard tunnel.
 
-Address: Given IP address to wireguard in CIDR notation.  
-PrivateKey: Produced Private Key of the server.  
-ListenPort: The port number used for wireguard tunnel.  
+**`[Peer]` Section**
 
-**Peer Section**
-
-PublicKey: Produced Public Key of the other wireguard server.  
-Endpoint: IP:Port of the other server.  
-AllowedIPs: IP addresses at the other network who can reach to this network.  
-PersistentKeepalive: Send an empty packet to the other side every given second to keepalive the connection (Optional).  
+- **PublicKey:** The generated public key of the other WireGuard server.
+- **Endpoint:** The public IP address and port of the other server.
+- **AllowedIPs:** The IP addresses on the remote network that are allowed to be reached through this tunnel.
+- **PersistentKeepalive:** Sends an empty packet to the other side at the specified interval (in seconds) to maintain connection state, which is useful for traversing NATs/firewalls (Optional).
 
 
 ### 3.1. First Server Configuration
 
-We will create a configuration file and fill it as in the template.
-
-Run on net1-1
+Create and edit the configuration file.  
+Run on **net1-1**:
 
 ```
 sudo nano /etc/wireguard/wg0.conf
 ```
 
-Fill as below (Remember changing variables as yours):
+Fill it as shown below (remember to replace the variables with your own):
 
 ```
 [Interface]
@@ -165,15 +165,14 @@ PersistentKeepalive = 25
 
 ### 3.2. Second Server Configuration
 
-We will create a configuration file and fill it as in the template.
-
-Run on net2-1
+Create and edit the configuration file.  
+Run on **net2-1**:
 
 ```
 sudo nano /etc/wireguard/wg0.conf
 ```
 
-Fill as below (Remember changing variables as yours):
+Fill it as shown below (remember to replace the variables with your own):
 
 ```
 [Interface]
@@ -190,33 +189,32 @@ PersistentKeepalive = 25
 
 ### 3.3. Enable and Start the Wireguard Tunnel
 
-Enable our configuration (make it run at start-up) and start it.
-
-Run on net1-1 and net2-1
+Enable the configuration (to run at startup) and start the tunnel.  
+Run on **net1-1** and **net2-1**:
 
 ```
 sudo systemctl enable wg-quick@wg0
 sudo wg-quick up wg0
-sudo wg show     # Verify the tunnel
+sudo wg show     # Verify the tunnel status
 ```
 
 Test connectivity:
 
-Run on net1-1
+Run on **net1-1**:
 
 ```
-ping 10.200.0.2             # Ping other side of the VPN tunnel
-ping 192.168.57.1           # Ping the other server's Private IP
+ping 10.200.0.2             # Ping the other end of the VPN tunnel
+ping 192.168.57.1           # Ping the other server's private IP
 ```
 
 Run on net2-1
 
 ```
-ping 10.200.0.1             # Ping other side of the VPN tunnel
-ping 192.168.56.1           # Ping the other server's Private IP
+ping 10.200.0.1             # Ping the other end of the VPN tunnel
+ping 192.168.56.1           # Ping the other server's private IP
 ```
 
-If the pings return the replies, it means the VPN tunnel is established. For connecting to the other hosts, we need to add routes to access to other network.
+If the pings receive replies, the VPN tunnel is established successfully. To enable communication with other hosts on the remote network, we need to add routes.
 
 <br>
 </details>
@@ -232,37 +230,40 @@ If the pings return the replies, it means the VPN tunnel is established. For con
 
 ### 4.0. Explanations
 
-TL;DR: Ask your network administrator.
+**TL;DR:** Consult your network administrator for the best method in your environment.
 
-If you have access to default gateways (routers) in the networks, you can add the routes there.  
-For net1, 192.168.57.0/24 will be routed by 192.168.56.1. For net2, 192.168.56.0/24 will be routed by 192.168.57.1. 
+If you have access to the default gateways (routers) in both networks, you can add the routes there. For net1, traffic to `192.168.57.0/24` should be routed via `192.168.56.1`. For net2, traffic to `192.168.56.0/24` should be routed via `192.168.57.1`.
 
-If you are using DHCP, it is possible to add there. I really don't know how, but I know it is somehow possible.
+It is also possible to configure these routes via DHCP, though the specific method is beyond the scope of this tutorial.
 
-Otherwise, you have to add it manually.
+Otherwise, you must add the routes manually on each host.
 
-For windows hosts it is the easiest: 
-
-```
-route add -p 192.168.57.0 MASK 255.255.255.0 192.168.56.1   # For net1 hosts
-route add -p 192.168.56.0 MASK 255.255.255.0 192.168.57.1   # For net2 hosts
-```
-
-For Linux hosts, there is a similar way:
+For Windows hosts, it is straightforward. Use an elevated Command Prompt:
 
 ```
-sudo route add 192.168.57.0/24 via 192.168.56.1       # For net1 hosts
-sudo route add 192.168.56.0/24 via 192.168.57.1       # For net2 hosts
+# Run on net1 hosts
+route add -p 192.168.57.0 MASK 255.255.255.0 192.168.56.1
+# Run on net2 hosts
+route add -p 192.168.56.0 MASK 255.255.255.0 192.168.57.1
 ```
 
-But it is not persistent. Goes away when you reboot the host.
+For Linux hosts, a similar temporary command exists:
 
-Method of adding persistent routes depends on the Linux distro and its networking stack. Debian servers use ifupdown, Ubuntu servers use netplan, Red-Hat servers (and derivatives) use systemd-networkd, most of the Desktop editions (including Debian & Ubuntu) use NetworkManager. 
+```
+# Run on net1 hosts
+sudo ip route add 192.168.57.0/24 via 192.168.56.1
+# Run on net2 hosts
+sudo ip route add 192.168.56.0/24 via 192.168.57.1
+```
+
+However, this route is not persistent and will be lost after a reboot.
+
+The method for adding persistent routes depends on the Linux distribution and its networking stack. Debian servers typically use `ifupdown`, Ubuntu servers use `netplan`, Red Hat derivatives use `systemd-networkd`, and most desktop editions (including Debian & Ubuntu) use `NetworkManager`.
 
 
 ### 4.1. ifupdown (Debian Server) Configuration
 
-A sample configuration for net1-2 could be as below:
+A sample configuration for **net1-2** could be as follows. Edit `/etc/network/interfaces`:
 
 ```
 # /etc/network/interfaces
@@ -282,7 +283,7 @@ iface enp0s3 inet static
     post-down ip route del 192.168.57.0/24 via 192.168.56.1
 ```
 
-Similarly a sample configuration for net2-2 could be as below:
+Similarly, a sample configuration for **net2-2**:
 
 ```
 # /etc/network/interfaces
@@ -316,7 +317,7 @@ sudo ifdown enp0s3 && sudo ifup enp0s3
 
 ### 4.2. netplan (Ubuntu Server) Configuration
 
-A sample configuration for net1-2 could be as below:
+A sample configuration for **net1-2** could be as follows. Edit `/etc/netplan/01-netcfg.yaml`:
 
 ```
 # /etc/netplan/01-netcfg.yaml
@@ -336,7 +337,7 @@ network:
 ```
 
 
-Similarly a sample configuration for net2-2 could be as below:
+Similarly, a sample configuration for **net2-2**:
 
 ```
 network:
@@ -364,50 +365,34 @@ sudo netplan apply
 
 ### 4.3. NetworkManager (Debian & Ubuntu Desktop)
 
-You can configure the route through Network Settings. But it is possible to perform it through terminal.
+You can configure the route through the GUI Network Settings. It is also possible to do via the command line.
 
-First you need the name of the network connection. For Debian desktop It is most probably "Wired connection 1", for Ubuntu desktop it is something like "netplan-enp0s3". The following command will give you a clue:
+First, you need the name of the network connection. The following command will list them:
 
 ```
 nmcli connection show
 ```
 
-Add route for net1-2:
+Add a route for **net1-2**:
 
 ```
+# Use the appropriate connection name from the command above
 sudo nmcli connection modify "Wired connection 1" +ipv4.routes "192.168.57.0/24 192.168.56.1"
 ```
 
-or
+Add a route for **net2-2**:
 
 ```
-sudo nmcli connection modify "netplan-enp0s3" +ipv4.routes "192.168.57.0/24 192.168.56.1"
-```
-
-Add route for net2-2:
-
-```
+# Use the appropriate connection name from the command above
 sudo nmcli connection modify "Wired connection 1" +ipv4.routes "192.168.56.0/24 192.168.57.1"
 ```
-
-or
-
-```
-sudo nmcli connection modify "netplan-enp0s3" +ipv4.routes "192.168.56.0/24 192.168.57.1"
-```
-
 
 
 Apply the configuration:
 
 ```
+# Use the appropriate connection name from the command above
 sudo nmcli connection up "Wired connection 1"
-```
-
-or
-
-```
-sudo nmcli connection up "netplan-enp0s3"
 ```
 
 <br>

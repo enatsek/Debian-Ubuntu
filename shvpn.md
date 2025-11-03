@@ -215,18 +215,22 @@ wg genkey | tee client3privkey | wg pubkey > client3pubkey
 For reference, the generated keys in this example are:
 
 Server: 
+
 - Privkey: ```kAy+LgQ3EkJtTKyB1N0BnbXGZVJE/pX6SH2yCG2l1lI=```
 - Pubkey:  ```OCtqLy2OkpuiBPhmXR0DbhbaVDhpuS4AVDm3yZDP1XU=```
 
-Client1: 
+Client1:
+
 - Privkey: ```SJPFU+D5Eoa3cSseIjWNh44dUQfyyFYxw0m4qGRSrFc=``` 
 - Pubkey:  ```KgjPrrOPamV81q76C0Cql2fU1K7sSiigqYXVlwkKyBA=```
 
-Client2: 
+Client2:
+
 - Privkey: ```gCJE0PoqARqSnQgq1v87v7QcSzUn97d0abVM7BpqjFc=```
 -  Pubkey: ```ZfZtUviU/jUAxEcIEXnf2d6rW0RcBFg+1Wt4kNnpTxg=```
 
-Client3: 
+Client3:
+
 - Privkey: ```gLoXU+1aNQmcK/OtjSUJGnOXt28w/mRo1szjU+XO/XM=```
 - Pubkey:  ```IG/wUYUGSDuZI0+DZsE6lq1OLNzx8aNIp8SUjllAwj8=```
 

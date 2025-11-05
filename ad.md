@@ -1,4 +1,4 @@
-##### ADOnDebianUbuntu  
+##### Active Directory on Debian and Ubuntu  
 # Simple Active Directory Configuration on Debian and Ubuntu 
 
 <details markdown='1'>
@@ -7,119 +7,116 @@
 </summary>
 
 ---
-### 0.1. Definition
-- Single Domain Active Directory infrastructure with Debian or Ubuntu  Servers with 2 Domain Controllers and a file server.
-- Windows workstations can join to AD.
-- No license costs except Windows workstation licences.
-- Based on the valuable documents at: [Server-World](https://www.server-world.info/en/note?os=Ubuntu_18.04&p=samba&f=4)
+### 0.0. The What
+We will install a single-domain Active Directory infrastructure using Debian or Ubuntu Servers.
 
-### 0.2. Configuration
-- Domain Name: 386387.XYZ  
-- Domain Netbios Name: 386387  
-- First DC:  
-    - srv1.386387.xyz   
-    - 192.168.1.221   
-    - Debian 12/11 or Ubuntu 24.04/22.04 LTS Server
-- Second DC:    
-    - srv2.386387.xyz 
-    - 192.168.1.222 
-    - Debian 12/11 or Ubuntu 24.04/22.04 LTS Server
-- File Server: 
-    - filesrv.386387.xyz 
-    - 192.168.1.223 
-    - Debian 12/11 or Ubuntu 24.04/22.04 LTS Server
-- Windows workstations can connect to the domain
+- **2 Domain Controllers** and **1 File Server**.
+- Windows workstations will be able to join the domain.
+- **No license costs**, except for the Windows workstation licenses.
 
+### 0.1. Environment
 
-- Groups and Users:
-  - Marketing:
-     - mrk01, mrk02, mrk03
-  - Sales:
-     - sls01, sls02, sls03
-  - Production:
-     - prd01, prd02, prd03
-  - IT:
-     - it01, it02, it03, support
-  - SysAdmin:
-     - support
-  - All:
-     - all of the users
+- **Domain Name:** `386387.XYZ`
+- **Domain NetBIOS Name:** `386387`
+- **First DC:**
+    - `srv1.386387.xyz`
+    - `192.168.1.201`
+    - Debian 13/12 or Ubuntu 24.04/22.04 LTS Server
+- **Second DC:**
+    - `srv2.386387.xyz`
+    - `192.168.1.202`
+    - Debian 13/12 or Ubuntu 24.04/22.04 LTS Server
+- **File Server:**
+    - `filesrv.386387.xyz`
+    - `192.168.1.203`
+    - Debian 13/12 or Ubuntu 24.04/22.04 LTS Server
+- Windows workstations will be able to connect to the domain.
 
 
-- File server shares:
+- **Groups and Users:**
+  - **Marketing:** mrk01, mrk02, mrk03
+  - **Sales:** sls01, sls02, sls03
+  - **Production:** prd01, prd02, prd03
+  - **IT:** it01, it02, it03, support
+  - **SysAdmin:** support
+  - **All:** all of the above users
+
+
+- **File Server Shares:**
 
 ```
-//filesrv/Xmrk01    mrk01 RW
-//filesrv/Xmrk02    mrk02 RW
-//filesrv/Xmrk03    mrk03 RW
-//filesrv/XMrk      Marketing RW
-//filesrv/XMrkPub   Marketing RW, All R
-//filesrv/Xsls01    sls01 RW
-//filesrv/Xsls02    sls02 RW
-//filesrv/Xsls03    sls03 RW
-//filesrv/XSls      Sales RW
-//filesrv/XSlsPub   Sales RW, All R
-//filesrv/Xprd01    prd01 RW
-//filesrv/Xprd02    prd02 RW
-//filesrv/Xprd03    prd03 RW
-//filesrv/XPrd      Production RW
-//filesrv/XPrdPub   Production RW, All R
-//filesrv/Xit01     it01 RW
-//filesrv/Xit02     it02 RW
-//filesrv/Xit03     it03 RW
-//filesrv/Xsupport  support RW
-//filesrv/XIT       IT RW
-//filesrv/XITPub    IT RW, All R
-//filesrv/XSys      SysAdmin RW
-//filesrv/XSysPub   SysAdmin RW, All R
-//filesrv/XAll      ALL RW
+//filesrv/Xmrk01    mrk01 (RW)
+//filesrv/Xmrk02    mrk02 (RW)
+//filesrv/Xmrk03    mrk03 (RW)
+//filesrv/XMrk      Marketing (RW)
+//filesrv/XMrkPub   Marketing (RW), All (R)
+//filesrv/Xsls01    sls01 (RW)
+//filesrv/Xsls02    sls02 (RW)
+//filesrv/Xsls03    sls03 (RW)
+//filesrv/XSls      Sales (RW)
+//filesrv/XSlsPub   Sales (RW), All (R)
+//filesrv/Xprd01    prd01 (RW)
+//filesrv/Xprd02    prd02 (RW)
+//filesrv/Xprd03    prd03 (RW)
+//filesrv/XPrd      Production (RW)
+//filesrv/XPrdPub   Production (RW), All (R)
+//filesrv/Xit01     it01 (RW)
+//filesrv/Xit02     it02 (RW)
+//filesrv/Xit03     it03 (RW)
+//filesrv/Xsupport  support (RW)
+//filesrv/XIT       IT (RW)
+//filesrv/XITPub    IT (RW), All (R)
+//filesrv/XSys      SysAdmin (RW)
+//filesrv/XSysPub   SysAdmin (RW), All (R)
+//filesrv/XAll      All (RW)
 ```
 
-On my tests I used distros uniformly. That is all servers were Debian 11, Debian 12, Ubuntu 22.04, or Ubuntu 24.04. I believe the system would work with nonuniform distros too, but I haven't tested it.
+In my tests, I used distributions uniformly (i.e., all servers were either Debian 12, Debian 13, Ubuntu 22.04, or Ubuntu 24.04). I believe the system would work with a mix of distributions, but this has not been tested.
 
 ### 0.3. Phases
-- Add First DC (srv1.x36.org)
-- Add Additional DC (srv2.386387.xyz)
+- Add First DC (`srv1.386387.xyz`)
+- Add Additional DC (`srv2.386387.xyz`)
 - AD User Management
-- Add a Linux File Server to the Domain (filesrv.386387.xyz)
+- Add a Linux File Server to the Domain (`filesrv.386387.xyz`)
 - Add a Windows Computer to the Domain
 
 ### 0.4. Preliminary Tasks
-There are some important matters to consider. Not complying them can  cause some problems.
+There are some important considerations. Not complying with them can cause problems.
 
 #### 0.4.1. Choosing Domain Name and Realm
-Realm is in the domain name format and Domain Name is a single  word (actually Netbios Name of your domain).
+The Realm is in the domain name format, and the Domain Name is a single word (the NetBIOS name of your domain).
 
-If your company's internet domain name is example.com, then you can  choose your Realm and Domain Name as following:
+If your company's internet domain name is `example.com`, you can choose your Realm and Domain Name as follows:
+- **Realm:** `EXAMPLE.COM`
+- **Domain Name:** `EXAMPLE`
 
-Realm : EXAMPLE.COM  
-Domain Name : EXAMPLE
+Whenever you use them, they must be in **UPPERCASE**. This is due to a design choice in Microsoft's implementation.
 
-Whenever you use them, they must be UPPERCASE. Don't ask me why, that is  something about Micros*ft's bad design.
+#### 0.4.2. IP Address and Hostname for Domain Controllers and Domain Members
 
-#### 0.4.2. IP Address and Host Name for Domain Controllers and Domain Members
+Domain Controllers and Domain Members should have static IP addresses.
 
-Domain Controllers and Domain Members should have static IP addresses. 
+While there might be ways to use DHCP, it is not recommended for Domain Controllers, and the method is beyond this guide's scope.
 
-There might be some ways to use DHCP but I don't know how and actually I don't see any reason to use DHCP for Domain Controllers.
+The hostname must be in the format `name.example.com` (lowercase). Due to an incompatibility between Samba and Debian/Ubuntu (and other Debian-based distributions), you must remove the line starting with `127.0.1.1` (not `127.0.0.1`) from your `/etc/hosts` file and add the server's IP and hostname (both short and FQDN) as shown below.
 
-Hostname must be in the format of name.example.com (lowercase this time)  and due to an incompatability with Samba and Debian/Ubuntu (Actually all  Debian based Linuxes) you have to erase the line starting with 127.0.1.1
-(not 127.0.0.1) from your /etc/hosts file and add the IP and hostname  (short and long formats) in your /etc/hosts file as in below.
-
+**Example `/etc/hosts`:**
 ```
 127.0.0.1       localhost
-192.168.1.221	srv1.386387.xyz srv1
+192.168.1.201   srv1.386387.xyz srv1
 ```
+
  
 #### 0.4.3. Mixed Environment
-You should have at least 2 DCs (Domain Controllers), you can use 1  Wind*ws and 1 Linux to benefit from Micros*ft's AD Management programs.  
+You should have at least 2 Domain Controllers (DCs). You could use one Windows and one Linux DC to benefit from Microsoft's native AD management tools, but this is not necessary.
 
-But actually it is not necessary. 
+I recommend installing all DCs on Linux and using a Windows workstation with RSAT (Remote Server Administration Tools) installed to manage AD. This allows you to use the standard AD management programs (including for DNS) from a familiar environment.
 
-I'd advice installing all DCs as Linux  and use any Windxws workstation to manage AD. You can install RSAT Management Tools to a Windxws workstation and use AD Manager programs (including DNS and WINS server) from there.
+#### 0.4.4. Default Values
+Remember to replace all occurrences of `386387`, `386387.XYZ`, and `386387.xyz` with your own values, respecting the case.
 
-#### 0.4.4. Default Values 
-Remember to replace all the occurences of 386387, x386, 386387.XYZ, and  386387.xyz with yours, regarding the cases. 
+### 0.5. Sources
+- Based on the valuable documentation at: [Server-World](https://www.server-world.info/en/note?os=Ubuntu_18.04&p=samba&f=4)
 
 <br>
 </details>
@@ -135,74 +132,66 @@ Remember to replace all the occurences of 386387, x386, 386387.XYZ, and  386387.
 Domain Name:  386387
 Realm:        386387.XYZ	
 Hostname:     srv1.386387.xyz
-IP:           192.168.1.221
+IP:           192.168.1.201
 ```
 
 ### 1.1. Set Hostname
-Set hostname as fully qualified (if you haven't done it before)
+Set the hostname to the fully qualified domain name (if not done already):
 
 ```
-sudo hostnamectl set-hostname srv1.386387.xyz
+sudo hostnamectl hostname srv1.386387.xyz
 ```
 
-Update /etc/hosts file
+Update the /etc/hosts file
 
 ```
 sudo nano /etc/hosts
 ```
 
-Change the start of the file as below:
+Modify the beginning of the file as follows:
 
 ```
 127.0.0.1       localhost
-192.168.1.221   srv1.386387.xyz srv1 
+192.168.1.201   srv1.386387.xyz srv1 
 ```
 
 ### 1.2. Install required packages
+
 ```
 sudo apt update
 sudo apt -y install samba krb5-config winbind smbclient 
 ```
 
-Answers to parameter questions:  
+Provide the following answers to the configuration prompts:
+- **Default Kerberos version 5 realm:** `386387.XYZ`
+- **Kerberos servers for your realm:** `srv1.386387.xyz`
+- **Administrative server for your Kerberos realm:** `srv1.386387.xyz`
 
-- Default Kerberos version 5 realm:
-   - 386387.XYZ
-- Kerberos servers for your realm:
-   - srv1.386387.xyz
-- Administrative server for your Kerberos realm:
-   - srv1.386387.xyz
 
-### 1.2. Run Samba Config
+### 1.3. Run Samba Configuration
 
-Backup original samba configuration
+Backup the original samba configuration:
 
 ```
 sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.original 
 ```
 
-Run provision tool to create the Domain
+Run the domain provisioning tool:
 
 ```
 sudo samba-tool domain provision
 ```
 
-Answers to parameter questions:
+Provide the following answers:
+- **Realm:** `386387.XYZ`
+- **Domain:** `386387`
+- **Server Role (dc, member, standalone) [dc]:** Press Enter
+- **DNS backend (SAMBA_INTERNAL,...:** Press Enter
+- **DNS forwarder IP address...:** Enter your DNS server (e.g., `8.8.8.8`)
+- **Administrator password:** Enter a strong password
 
-- Realm:
-   - 386387.XYZ
-- Domain: 
-   - 386387
-- Server Role (dc, member, standalone) [dc]: 
-   - Just press enter
-- DNS backend (SAMBA_INTERNAL,...
-   - Just press enter
-- DNS forwarder IP address...
-   - Enter your DNS address, or you may enter 8.8.8.8
-- Administrator password:
-   - Enter a good password
+### 1.4. Copy Kerberos Config, Stop and Disable Services
 
-### 1.3. Copy kerberos config file, stop and disable unnecessary services
 ```
 sudo cp /var/lib/samba/private/krb5.conf /etc/
 sudo systemctl stop smbd nmbd winbind systemd-resolved
@@ -210,17 +199,16 @@ sudo systemctl disable smbd nmbd winbind systemd-resolved
 sudo systemctl unmask samba-ad-dc 
 ```
 
-Debian 12 gives the following error, ignore it:
+**Note:** On Debian 12, you may see an error `Failed to stop systemd-resolved.service: Unit systemd-resolved.service not loaded.` This can be safely ignored.
 
-`Failed to stop systemd-resolved.service: Unit systemd-resolved.service not loaded.`
+### 1.5. Recreate resolv.conf
 
-### 1.4. Remove resolv.conf and create a new one
 ```
 sudo rm /etc/resolv.conf
 sudo nano /etc/resolv.conf
 ```
 
-Fill as below
+Add the following lines:
 
 ```
 domain 386387.xyz
@@ -233,13 +221,13 @@ sudo systemctl start samba-ad-dc
 sudo systemctl enable samba-ad-dc 
 ```
 
-Check domain level
+Check the domain functional level:
 
 ```
 sudo samba-tool domain level show
 ```
 
-Create a domain user named exforge
+Create a test domain user:
 
 ```
 sudo samba-tool user create exforge
@@ -249,53 +237,54 @@ sudo samba-tool user create exforge
 
 <details markdown='1'>
 <summary>
-2. Add Additional DC
+2. Add Additional Domain Controller
 </summary>
 
 ---
 ## 2.0. Specs
 ```
-Domain Name:      386387
-Realm:            386387.XYZ	
-Hostname:         srv2.386387.xyz
-IP:               192.168.1.222
-Org. DC Hostname: srv1.386387.xyz
-Org. DC IP:       192.168.1.221
+Domain Name: 386387
+Realm:       386387.XYZ	
+Hostname:    srv2.386387.xyz
+IP:          192.168.1.202
+Original DC: srv1.386387.xyz (192.168.1.201)
 ```
 
 ### 2.1. Set Hostname
 Set hostname as fully qualified (if you haven't done it before)
 
 ```
-sudo hostnamectl set-hostname srv2.386387.xyz
+sudo hostnamectl hostname srv2.386387.xyz
 ```
 
-Update /etc/hosts file
+Update the /etc/hosts file
 
 ```
 sudo nano /etc/hosts
 ```
 
-Change the start of the file as below:
+Modify the beginning of the file as follows:
 
 ```
 127.0.0.1       localhost
-192.168.1.222   srv2.386387.xyz srv2 
+192.168.1.202   srv2.386387.xyz srv2 
 ```
 
-### 2.2. Install kerberos and edit configuration
+### 2.2. Install Kerberos and Edit Configuration
+
 ```
 sudo apt update
 sudo apt -y install krb5-user
 ```
 
-Pass all the questions with enter
+(Press Enter through all prompts; we will configure manually.)
 
+Edit the Kerberos configuration:
 ```
 sudo nano /etc/krb5.conf 
 ```
 
-Change the beginning of the file as below
+Ensure the beginning of the file contains:
 
 ```
 [libdefaults]
@@ -305,47 +294,50 @@ Change the beginning of the file as below
 ```
 
 ### 2.3. Stop and disable systemd.resolved
-This step is not necessary for Debian 12
+*This step is typically not necessary for Debian 12/13.*
 
 ```
 sudo systemctl stop systemd-resolved
 sudo systemctl disable systemd-resolved 
 ```
 
-### 2.4. Remove resolv.conf and create a new one
+### 2.4. Recreate resolv.conf
+
 ```
 sudo rm /etc/resolv.conf
 sudo nano /etc/resolv.conf
 ```
 
-Add following lines
+Add the following lines (pointing to the first DC):
 
 ```
 domain 386387.xyz
-nameserver 192.168.1.221
+nameserver 192.168.1.201
 ```
 
-### 2.5. Get Kerberos ticket
-Domain Admin password will be asked (Entered at 1.2.)
+### 2.5. Obtain a Kerberos Ticket
+
+You will be prompted for the Domain Administrator password (set during provisioning in section 1.3).
 
 ```
 sudo kinit administrator
 ```
 
-Check Kerberos ticket
+Verify the Kerberos ticket:
 
 ```
 sudo klist
 ```
 
 ### 2.6. Add This DC to Existing AD
-Add necessary packages 
+
+Install necessary packages:
 
 ```
 sudo apt -y install samba winbind smbclient 
 ```
 
-Rename and remove default samba config, create a new one
+Back up and remove the default Samba config, then join the domain:
 
 ```
 sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.org 
@@ -353,7 +345,8 @@ sudo samba-tool domain join 386387.XYZ DC -U "srv1\administrator" \
    --dns-backend=SAMBA_INTERNAL 
 ```
 
-### 2.7. Close and disable unnecessary services and enable samba
+### 2.7. Stop, Disable Old Services, and Enable Samba AD DC
+
 ```
 sudo systemctl stop smbd nmbd winbind
 sudo systemctl disable smbd nmbd winbind
@@ -362,21 +355,21 @@ sudo systemctl start samba-ad-dc
 sudo systemctl enable samba-ad-dc
 ```
 
-### 2.8. Verify 
-Verify authentication to localhost
+### 2.8. Verification
+
+Verify authentication locally:
 
 ```
 sudo smbclient //127.0.0.1/netlogon -U Administrator -c 'ls'
 ```
 
-Verify replication status with AD
+Check replication status:
 
 ```
 sudo samba-tool drs showrepl
 ```
 
-Following warning is not important, you can ignore it:  
-       `Warning: No NC replicated for Connection!`
+**Note:** The warning `Warning: No NC replicated for Connection!` is not critical and can be ignored initially.
 
 <br>
 </details>
@@ -388,197 +381,231 @@ Following warning is not important, you can ignore it:
 
 ---
 
-You can run on any DC
+*These commands can be run on any Domain Controller.*
+
 ### 3.1. User Management
-#### 3.1.0. See All Commands
+
+View all user-related commands:
+
 ```
 sudo samba-tool user --help
 ```
 
-#### 3.1.1. Display domain users list.
+List domain users:
+
 ```
 sudo samba-tool user list
 ```
 
-Display DN info instead of user names
+List users with full Distinguished Name (DN):
 
 ```
 sudo samba-tool user list --full-dn
 ```
 
-#### 3.1.2. Add a domain user.
+Create a domain user:
+
 ```
 sudo samba-tool user create ubuntu
 ```
 
-Force to change password at next login
+Create a user forced to change password at next login:
 
 ```
 sudo samba-tool user create ubuntu2 --must-change-at-next-login
 ```
  
-#### 3.1.3. Delete a domain user.
+Delete a domain user:
+
 ```
 sudo samba-tool user delete ubuntu2
 ```
 
-#### 3.1.4. Reset password of a user.
+Reset a user's password:
+
 ```
 sudo samba-tool user setpassword ubuntu
 ```
  
-#### 3.1.5. Set expiration for a user.
-User will be disabled at expiration
+Set an expiration date for a user account:
 
 ```
 sudo samba-tool user setexpiry ubuntu --days=7
 ```
 
-Remove expiration
+Remove expiration from a user account:
 
 ```
 sudo samba-tool user setexpiry --noexpiry ubuntu
 ```
  
-#### 3.1.6. Disable/Enable user account.
+Disable/Enable a user account:
+
 ```
 sudo samba-tool user disable ubuntu
 sudo samba-tool user enable ubuntu
 ```
 
-#### 3.1.7. Show information about a user
+Show user details:
+
 ```
 sudo samba-tool user show ubuntu
 ```
  
-#### 3.1.8. Edit details of a user
+Edit user details (opens in a text editor):
+
 ```
 sudo samba-tool user edit ubuntu
 ```
-
-You can edit the details in an editor, be careful.
  
 ### 3.2. Group Management
-#### 3.2.0. See All Commands
+
+View all group-related commands:
+
 ```
 sudo samba-tool group --help
 ```
 
-#### 3.2.1. Display domain group list.
+List domain groups:
+
 ```
 sudo samba-tool group list
 ```
 
-#### 3.2.2. Display members in a group.
+List members of a specific group:
+
 ```
 sudo samba-tool group listmembers "Domain Users"
 ```
  
-#### 3.2.3. Add a domain group.
+Create a new domain group:
+
 ```
 sudo samba-tool group add TestUsers
 sudo samba-tool group add TestUsers2
 ```
  
-#### 3.2.4. Delete a domain group.
+Delete a domain group:
+
 ```
 sudo samba-tool group delete TestUsers2
 ```
 
-#### 3.2.5. Add/remove a member from a domain group.
+Add/Remove a member to/from a group:
+
 ```
 sudo samba-tool group addmembers TestUsers ubuntu
 sudo samba-tool group removemembers TestUsers ubuntu
 ```
 
-#### 3.2.6. Show information about a group
+Show group details:
+
 ```
 sudo samba-tool group show TestUsers
 ```
 
-#### 3.2.7. Edit details of a group
+Edit group details (opens in a text editor):
+
 ```
 sudo samba-tool group edit TestUsers
 ```
 
 ### 3.3. Computer Management
-#### 3.3.0. See All Commands
+
+View all computer-related commands:
+
 ```
 sudo samba-tool computer --help
 ```
 
-#### 3.3.1. List Domain Computers
+List domain computers:
+
 ```
 sudo samba-tool computer list
 ```
 
-#### 3.3.2. Show details of a domain computer
+Show computer details:
+
 ```
 sudo samba-tool computer show srv1
 ```
 
-#### 3.3.2. Edit details of a domain computer
+Edit computer details (opens in a text editor):
+
 ```
 sudo samba-tool computer edit srv1
 ```
 
 ### 3.4. Other Important Management Subcommands
-#### 3.4.1. Check local AD database for errors.
+
+Check the local AD database for errors:
+
 ```
 sudo samba-tool dbcheck --help
 ```
 
-#### 3.4.2. Delegation management.
+Manage delegation:
+
 ```
 sudo samba-tool delegation --help
 ```
 
-#### 3.4.3. Domain Name Service (DNS) management.
+Manage DNS:
+
 ```
 sudo samba-tool dns --help
 ```
 
-#### 3.4.4. Domain management
+Domain management:
+
 ```
 sudo samba-tool domain --help
 ```
 
-#### 3.4.5. Directory Replication Services (DRS) management.
+Manage Directory Replication Services (DRS):
+
 ```
 sudo samba-tool drs --help
 ```
 
-#### 3.4.6. Forest management
+Forest management:
+
 ```
 sudo samba-tool forest --help
 ```
 
-#### 3.4.7. Flexible Single Master Operations (FSMO) roles management.
+Manage Flexible Single Master Operations (FSMO) roles:
+
 ```
 sudo samba-tool fsmo --help
 ```
 
-#### 3.4.8. Group Policy Object (GPO) management.
+Manage Group Policy Objects (GPO):
+
 ```
 sudo samba-tool gpo --help
 ```
 
-#### 3.4.9. Organizational Units (OU) management.
+Manage Organizational Units (OU):
+
 ```
 sudo samba-tool ou --help
 ```
 
-#### 3.4.10. Schema querying and management.
+Schema querying and management:
+
 ```
 sudo samba-tool schema --help
 ```
 
-#### 3.4.11. Sites management.
+Sites management:
+
 ```
 sudo samba-tool sites --help
 ```
 
-#### 3.4.12. Retrieve the time on a server.
+Retrieve the time from a server:
+
 ```
 sudo samba-tool time --help
 ```
@@ -593,7 +620,8 @@ sudo samba-tool time --help
 
 ---
 ### 4.1. Create Users
-Create all users with Password1 as the default password. Users are going to have to change their password at their first logon.
+
+Create all users with `Password1` as the default password. Users will be required to change their password at first logon.
 
 ```
 sudo samba-tool user add mrk01 Password1 --given-name=Mrk --surname=01 \
@@ -625,6 +653,7 @@ sudo samba-tool user add support Password1 --given-name=Support --surname=User \
 ```
 
 ### 4.2. Create Groups
+
 ```
 sudo samba-tool group add Marketing
 sudo samba-tool group add Sales
@@ -654,38 +683,39 @@ sudo samba-tool group addmembers All Marketing,Sales,Production,IT,SysAdmin
 
 ---
 ### 5.1. Set Hostname and DNS Information
-Set hostname as fully qualified (if you haven't done it before)
+
+Set the hostname:
 
 ```
-sudo hostnamectl set-hostname filesrv.386387.xyz
+sudo hostnamectl hostname filesrv.386387.xyz
 ```
 
-Update /etc/hosts file
+Update `/etc/hosts`:
 
 ```
 sudo nano /etc/hosts
 ```
 
-Change the start of the file as below:
+Modify the beginning of the file:
 
 ```
 127.0.0.1       localhost
-192.168.1.223   filesrv.386387.xyz filesrv 
+192.168.1.203   filesrv.386387.xyz filesrv 
 ```
  
-Remove resolv.conf and create a new one
+Recreate `/etc/resolv.conf`:
 
 ```
 sudo rm /etc/resolv.conf
 sudo nano /etc/resolv.conf
 ```
 
-Add following lines
+Add:
 
 ```
 domain 386387.xyz
-nameserver 192.168.1.221
-nameserver 192.168.1.222
+nameserver 192.168.1.201
+nameserver 192.168.1.202
 ```
 
 ### 5.2. Install necessary packages
@@ -695,22 +725,20 @@ sudo apt -y install winbind libpam-winbind libnss-winbind krb5-config \
    samba-dsdb-modules samba-vfs-modules 
 ```
 
-Answers to parameter questions (if asked):
-
-- Default Kerberos version 5 realm:
-   - 386387.XYZ
-- Kerberos servers for your realm:
-   - srv1.386387.xyz
-- Administrative server for your Kerberos realm:
-   - srv1.386387.xyz
+Provide the following answers if prompted:
+- **Default Kerberos version 5 realm:** `386387.XYZ`
+- **Kerberos servers for your realm:** `srv1.386387.xyz`
+- **Administrative server for your Kerberos realm:** `srv1.386387.xyz`
 
 ### 5.3. Configure Winbind
-#### 5.3.1. Samba config
+
+#### 5.3.1. Configure Samba
+
 ```
 sudo nano /etc/samba/smb.conf 
 ```
 
-Change/add following lines under [global] stanza
+Add/Modify the following lines in the `[global]` section:
 
 ```
    workgroup = 386387
@@ -726,100 +754,57 @@ Change/add following lines under [global] stanza
    winbind offline logon = false
 ```
 
-#### 5.3.2. pam config
+#### 5.3.2. Configure PAM to Create Home Directories
+
 ```
 sudo nano /etc/pam.d/common-session 
 ```
 
-Add following line
+Add the following line:
 
 ```
 session optional        pam_mkhomedir.so skel=/etc/skel umask=077
 ```
 
-### 5.4. Join AD
-#### 5.4.1. Add this server to AD 
+### 5.4. Join the AD Domain
+
+Join the server to the domain:
+
 ```
 sudo net ads join -U Administrator
 ```
 
-Restart winbind
+Restart the winbind service:
+
 ```
 sudo systemctl restart winbind
 ```
 
-#### 5.4.2. Show Domain Users
+Verify domain users are visible:
+
 ```
 sudo wbinfo -u
 ```
 
-### 5.5. Config File Server
-#### 5.5.0. Specs
-There will be 24 shares: 
+### 5.5. Configure the File Server
+
+#### 5.5.0. Share Specifications
+
+There will be 24 shares. Create the directory structure:
 
 ```
-/srv/shares/Xmrk01    mrk01 RW
-/srv/shares/Xmrk02    mrk02 RW
-/srv/shares/Xmrk03    mrk03 RW
-/srv/shares/XMrk      Marketing RW
-/srv/shares/XMrkPub   Marketing RW, All R
-/srv/shares/Xsls01    sls01 RW
-/srv/shares/Xsls02    sls02 RW
-/srv/shares/Xsls03    sls03 RW
-/srv/shares/XSls      Sales RW
-/srv/shares/XSlsPub   Sales RW, All R
-/srv/shares/Xprd01    prd01 RW
-/srv/shares/Xprd02    prd02 RW
-/srv/shares/Xprd03    prd03 RW
-/srv/shares/XPrd      Production RW
-/srv/shares/XPrdPub   Production RW, All R
-/srv/shares/Xit01     it01 RW
-/srv/shares/Xit02     it02 RW
-/srv/shares/Xit03     it03 RW
-/srv/shares/Xsupport  support RW
-/srv/shares/XIT       IT RW
-/srv/shares/XITPub    IT RW, All R
-/srv/shares/XSys      SysAdmin RW
-/srv/shares/XSysPub   SysAdmin RW, All R
-/srv/shares/XAll      ALL RW
+sudo mkdir -p /srv/shares/{Xmrk01,Xmrk02,Xmrk03,XMrk,XMrkPub,Xsls01,Xsls02,Xsls03,XSls,XSlsPub,Xprd01,Xprd02,Xprd03,XPrd,XPrdPub,Xit01,Xit02,Xit03,Xsupport,XIT,XITPub,XSys,XSysPub,XAll}
 ```
 
-Create shared folders:
+Set initial permissions (more specific permissions will be set via Samba):
 
 ```
-sudo mkdir -p /srv/shares/Xmrk01
-sudo mkdir -p /srv/shares/Xmrk02
-sudo mkdir -p /srv/shares/Xmrk03
-sudo mkdir -p /srv/shares/XMrk
-sudo mkdir -p /srv/shares/XMrkPub
-sudo mkdir -p /srv/shares/Xsls01
-sudo mkdir -p /srv/shares/Xsls02
-sudo mkdir -p /srv/shares/Xsls03
-sudo mkdir -p /srv/shares/XSls
-sudo mkdir -p /srv/shares/XSlsPub
-sudo mkdir -p /srv/shares/Xprd01
-sudo mkdir -p /srv/shares/Xprd02
-sudo mkdir -p /srv/shares/Xprd03
-sudo mkdir -p /srv/shares/XPrd
-sudo mkdir -p /srv/shares/XPrdPub
-sudo mkdir -p /srv/shares/Xit01
-sudo mkdir -p /srv/shares/Xit02
-sudo mkdir -p /srv/shares/Xit03
-sudo mkdir -p /srv/shares/Xsupport
-sudo mkdir -p /srv/shares/XIT
-sudo mkdir -p /srv/shares/XITPub
-sudo mkdir -p /srv/shares/XSys
-sudo mkdir -p /srv/shares/XSysPub
-sudo mkdir -p /srv/shares/XAll
+sudo chmod -R 777 /srv/shares
 ```
 
-Set Permissions to full, we are going to set permissions on the shares too
-
-```
-sudo chmod -R 777 /srv/shares 
-```
 
 #### 5.5.1. Install Samba
+
 ```
 sudo apt -y install samba
 ```
@@ -829,7 +814,7 @@ sudo apt -y install samba
 sudo nano /etc/samba/smb.conf
 ```
 
-Add following lines under [global]  stanza
+Add the following lines to the `[global]` section:
 
 ```
    netbios name = filesrv         
@@ -844,12 +829,11 @@ Add following lines under [global]  stanza
    winbind separator = +         
    encrypt passwords = yes         
    dns proxy = no         
-   wins server = 192.168.1.221         
+   wins server = 192.168.1.201         
    wins proxy = no  
 ```
 
-Add following lines at the end of the file  
-!!! Remember to change them according to your shares !!!
+Add the following share definitions to the end of the file. **Remember to replace `386387` with your domain NetBIOS name if different.**
 
 ```
 # Marketing
@@ -1075,10 +1059,11 @@ sudo systemctl restart smbd
 </summary>
 
 ---
-Change Windows computer's DNS setting to first DC and proceed as usual.
 
-AD (including the DNS server on DC) could be managed through windows  workstation after installing RSAT management.
+1.  On the Windows computer, configure its DNS settings to point to your Domain Controllers (e.g., `192.168.1.201` and `192.168.1.202`).
+2.  Proceed with the standard "Join a Domain" process through System Properties, using the domain name (`386387`) and an administrative account.
+3.  After joining, you can install **RSAT (Remote Server Administration Tools)** on the Windows workstation to manage AD, DNS, and other services.
+4.  You can connect to the file shares using `\\filesrv\ShareName` (e.g., `\\filesrv\XMrk`) from any domain-joined Windows computer.
 
-You can connect to the file server using \\srvf\share1 (share2,3,4) notation from your workstation.
 </details>
 

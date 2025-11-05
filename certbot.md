@@ -274,7 +274,7 @@ Reload Apache to apply the changes:
 sudo systemctl reload apache2
 ```
 
-### 3.2. Redirect HTTP Site - Nginx
+### 3.1. HTTP to HTTPS Redirect - Nginx
 
 While `https://srv1.386387.xyz` now uses SSL, `http://srv1.386387.xyz` still does not.
 

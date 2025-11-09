@@ -62,9 +62,9 @@
 
 - [**Simple Mail Server:**](SimpleMailServerOnDebianUbuntu.md) A very simple mail server for Debian and Ubuntu Servers.
 
-- [**Mariadb:**](MariadbOnDebianUbuntu.md) Mariadb installation and basic configuration on Debian and Ubuntu Servers. Includes some user management and primary-replica (master-slave) replication.
+- [**Mariadb:**](mariadb.md) Mariadb installation and basic configuration on Debian and Ubuntu Servers. Includes some user management and primary-replica (master-slave) replication.
 
-- [**LAMP Stack:**](LampOnDebianUbuntu.md) Installation of LAMP stack on Debian and Ubuntu servers. My choice of DB is Mariadb.
+- [**LAMP Stack:**](lamp.md) Installation of LAMP stack on Debian and Ubuntu servers. My choice of DB is Mariadb.
 
 - [**Certbot:**](certbot.md) Using certbot tool of eff.org to automatize obtaining and renewing letsencrytp.org SSL certificates on Apache 2 and Nginx for Debian and Ubuntu Servers.
 

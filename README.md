@@ -60,8 +60,6 @@
 
 - [**Wordpress:**](WordpressOnDebianUbuntu.md) Installing and activating Wordpress on Debian and Ubuntu Servers.
 
-- [**Simple Mail Server:**](SimpleMailServerOnDebianUbuntu.md) A very simple mail server for Debian and Ubuntu Servers.
-
 - [**Mariadb:**](mariadb.md) Mariadb installation and basic configuration on Debian and Ubuntu Servers. Includes some user management and primary-replica (master-slave) replication.
 
 - [**LAMP Stack:**](lamp.md) Installation of LAMP stack on Debian and Ubuntu servers. My choice of DB is Mariadb.

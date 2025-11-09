@@ -266,7 +266,10 @@ sudo mariadb < mysampledb.sql
 <summary>
 5. Primary - Replica (Master-Slave) Replication Configuration
 </summary>
+---
+
 ### 5.0. Specs and Preliminary Tasks
+
 ```
 Primary Server            : 192.168.1.144 
 Replica Server            : 192.168.1.145

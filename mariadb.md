@@ -1,8 +1,4 @@
-Can you grammatically and semantically check and correct if necessary text below:
-
-
-
-##### MariadbOnDebianUbuntu 
+##### Mariadb  
 # MariaDB Tutorial on Debian and Ubuntu
 
 <details markdown='1'>

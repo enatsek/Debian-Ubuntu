@@ -56,9 +56,9 @@
 
 - [**Keepalived:**](KeepalivedOnDebianUbuntu.md) Clustering with keepalived on Debian and Ubuntu Server.
 
-- [**DNS:**](DNSOnDebianUbuntu.md) Installing and configuring Master and Slave DNS Servers on Debian and Ubuntu Server.
+- [**DNS:**](dns.md) Installing and configuring Primary and Replica DNS Servers on Debian and Ubuntu Server.
 
-- [**Wordpress:**](WordpressOnDebianUbuntu.md) Installing and activating Wordpress on Debian and Ubuntu Servers.
+- [**Wordpress:**](wordpress.md) Installing and activating Wordpress on Debian and Ubuntu Servers.
 
 - [**Mariadb:**](mariadb.md) Mariadb installation and basic configuration on Debian and Ubuntu Servers. Includes some user management and primary-replica (master-slave) replication.
 

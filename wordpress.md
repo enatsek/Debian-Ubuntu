@@ -1,5 +1,5 @@
-##### WordpressOnDebianUbuntu 
-# Install Wordpress  On Debian and Ubuntu
+##### Wordpress
+# Install Wordpress On Debian and Ubuntu
 
 <details markdown='1'>
 <summary>
@@ -7,37 +7,55 @@
 </summary>
 
 ---
-Based on [Brian Boucheron's Tutorial](https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lamp-on-ubuntu-18-04)
 
-My server: www.386387.xyz  Debian 12 (or 11) and Ubuntu 24.04 Server (or 22.04)
+### 0.1. The What
 
-Wordpress Mariadb Database Name: wordpress  
-Wordpress Mariadb Database User: wordpressuser  
-Password of wordpressuser: pAsswOrd1234  
-Wordpress website location: /var/www/wordpress  
+WordPress is a free and open-source content management system (CMS) that allows users to create and manage websites easily without needing extensive coding knowledge.
 
-LAMP stack must be installed; see [LampOnDebianUbuntu](LampOnDebianUbuntu.html)  Tutorial
+This tutorial demonstrates how to install WordPress on Debian and Ubuntu servers.
+
+### 0.2. The Environment
+
+- **Server Name:** `www.386387.xyz`
+- **Server Distro:** Debian 12/13 or Ubuntu 22.04/24.04 LTS Server
+
+**WordPress Configuration:**
+- **MariaDB Database Name:** `wordpress`
+- **MariaDB Database User:** `wordpressuser`
+- **Database User Password:** `pAsswOrd1234`
+- **Website Location:** `/var/www/wordpress`
+
+**Prerequisite:** A LAMP stack (Linux, Apache, MySQL/MariaDB, PHP) must be installed. See the [LAMP Tutorial](lamp.html).
+
+### 0.3. Sources
+
+- [Brian Boucheron's Tutorial](https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lamp-on-ubuntu-18-04)
+- [Deepseek](https://www.deepseek.com/)
+
 
 <br>
 </details>
 
 <details markdown='1'>
 <summary>
-1. Configure a Website (If you haven't done already)
+1. Configure a Website (If Not Already Done)
 </summary>
 
 ---
-### 1.1. Make room for our website
+
+Create the directory for your WordPress site:
+
 ```
 sudo mkdir /var/www/wordpress
 ```
 
-### 1.2. Create a configuration file for our web server
+Create a virtual host configuration file for Apache:
+
 ```
 sudo nano /etc/apache2/sites-available/386387.xyz.conf
 ```
 
-Fill as below:
+Fill with the following content:
 
 ```
 <VirtualHost *:80>
@@ -50,13 +68,10 @@ Fill as below:
 </VirtualHost>
 ```
 
-### 1.3. Enable the site
+Enable the site and reload Apache:
+
 ```
 sudo a2ensite 386387.xyz.conf
-```
-
-### 1.4. Reload apache
-```
 sudo systemctl reload apache2
 ```
 
@@ -65,19 +80,18 @@ sudo systemctl reload apache2
 
 <details markdown='1'>
 <summary>
-2. Create MariaDB DB User for Wordpress
+2. Create MariaDB Database and User for Wordpress
 </summary>
 
 ---
-### 2.1. Login to MariaDB
+
+Access the MariaDB shell:
+
 ```
 sudo mariadb
 ```
 
-### 2.2. Create the Database
-Create a database named as wordpress, create a user named as wordpressuser and give the user necessarry permissions for the database.
-
-Run on Mariadb Shell:
+Run the following commands in the MariaDB shell to create the database and user:
 
 ```
 CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
@@ -94,13 +108,18 @@ EXIT;
 <summary>
 3. Install Additional PHP Extensions
 </summary>
+
+---
+
+WordPress requires several PHP extensions for full functionality. Install them with:
+
 ```
 sudo apt update
 sudo apt install php-curl php-gd php-mbstring php-xml php-xmlrpc \
 php-soap php-intl php-zip
 ```
 
-Restart apache
+Restart Apache to load the new PHP extensions:
 
 ```
 sudo systemctl restart apache2
@@ -115,13 +134,14 @@ sudo systemctl restart apache2
 </summary>
 
 ---
-### 4.1. Enable wordpress' .htaccess files
-Edit our site config, adding folders to override
+
+To allow WordPress to use `.htaccess` files for URL rewriting and other directives, modify your site configuration:
 
 ```
 sudo nano /etc/apache2/sites-available/386387.xyz.conf
 ```
-Add following lines to just after DocumentRoot line
+
+Add the following `Directory` block just after the `DocumentRoot` line:
 
 ```
         <Directory /var/www/wordpress/>
@@ -129,17 +149,20 @@ Add following lines to just after DocumentRoot line
         </Directory>
 ```
 
-### 4.2. Enable Apache Rewrite module 
+Enable Apache's rewrite module:
+
 ```
 sudo a2enmod rewrite
 ```
 
-### 4.3. (Optional) Check Status of Apache Configs
+(Optional) Verify that your Apache configuration is valid:
+
 ```
 sudo apache2ctl configtest
 ```
 
-### 4.4. Restart Apache
+Restart Apache to apply the changes:
+
 ```
 sudo systemctl restart apache2
 ```
@@ -153,32 +176,28 @@ sudo systemctl restart apache2
 </summary>
 
 ---
-Wordpress can be installed by Debian packages, but we prefer to download the latest version from the original source
 
-### 5.1. Go to the temp directory, download wordpress, extract it
-For Debian, you may need to install curl
+While WordPress is available via Debian packages, this guide uses the latest version from the official source for better compatibility and features.
+
+Navigate to the temporary directory and download WordPress:
 
 ```
+sudo apt update
 sudo apt install --yes curl
 cd /tmp
 curl -O https://wordpress.org/latest.tar.gz
 tar xzvf latest.tar.gz
 ```
 
-### 5.2. Before copying to its home we need to make some additions
-Create a dummy .htaccess file
+Create a dummy `.htaccess` file and copy the sample configuration:
 
 ```
 touch /tmp/wordpress/.htaccess
-```
-
-Copy sample config file to real config file
-
-```
 cp /tmp/wordpress/wp-config-sample.php /tmp/wordpress/wp-config.php
 ```
 
-### 5.3. Copy wordpress files to their location
+Copy the WordPress files to your web directory:
+
 ```
 sudo cp -a /tmp/wordpress/. /var/www/wordpress
 ```
@@ -192,14 +211,14 @@ sudo cp -a /tmp/wordpress/. /var/www/wordpress
 </summary>
 
 ---
-### 6.1. Set ownerships and permissions
-Owned by www-data:www-data
+
+Set ownership of all WordPress files to the web server user:
 
 ```
 sudo chown -R www-data:www-data /var/www/wordpress
 ```
 
-All files 640, all dirs 750
+Set secure permissions (directories: 750, files: 640):
 
 ```
 sudo find /var/www/wordpress/ -type d -exec chmod 750 {} \;
@@ -207,15 +226,14 @@ sudo find /var/www/wordpress/ -type f -exec chmod 640 {} \;
 ```
 
 ### 6.2. Setup wordpress config file
-#### 6.2.1. Generate secure phrases
-WP requires some secure phrases for security, we will create them now
+
+Generate secure authentication keys and salts:
 
 ```
 curl -s https://api.wordpress.org/secret-key/1.1/salt/
 ```
 
-The output of this program will be something like following:  
-Temporarily copy them into a text file, we'll use it later
+This command will output a block of code similar to the following. **Copy the entire output** as you'll need to paste it in the next step:
 
 ```
 define('AUTH_KEY',         'O`tLoX^0[pT24ty<YOByEP#}wBtd|7M!9^-az.W_v{`;+!*PX_9/A#^#}SL@I_wD');
@@ -228,12 +246,13 @@ define('LOGGED_IN_SALT',   '=HN;=E:zl1-X:5w:MTw3LHV^?VP})Z}&T*P!zvAG|R=S>6;~Xz|r
 define('NONCE_SALT',       '`d)>*Ae)9g<Aaa1eQ*9HlqY-|__kE5,Nte2UAMJO3ro=9T#y=,|-/^D(&+XQ:,la');
 ```
 
-#### 6.2.2. Add phrases to WP config file
+
+Edit the WordPress configuration file:
 ```
 sudo nano /var/www/wordpress/wp-config.php
 ```
 
-Browse to the section with the following lines, replace them with the text you copied. (Around line 50)
+**Locate the section with the placeholder authentication keys (around line 50)** that looks like this:
 
 ```
 define( 'AUTH_KEY',         'put your unique phrase here' );
@@ -246,19 +265,26 @@ define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
 define( 'NONCE_SALT',       'put your unique phrase here' );
 ```
 
-While in the same file, browse up to the section with the following lines:
+**Delete these placeholder lines and paste the keys you copied from the previous step in their place.**
+
+**Next, locate the database configuration section** and update it with your actual database credentials:
 
 ```
 /** The name of the database for WordPress */
 define( 'DB_NAME', 'database_name_here' );
+
 /** MySQL database username */
 define( 'DB_USER', 'username_here' );
+
 /** MySQL database password */
 define( 'DB_PASSWORD', 'password_here' );
+
 /** MySQL hostname */
 define( 'DB_HOST', 'localhost' );
+
 /** Database Charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
+
 /** The Database Collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 ```
@@ -268,24 +294,30 @@ Change as specified:
 - username_here : wordpressuser
 - password : pAsswOrd1234
 
-Add following line:
+**Finally, add the following line** to allow WordPress to directly manage its files (important for plugin/theme installations and updates):
 
 ```
 define('FS_METHOD', 'direct');
 ```
+
+Save and close the file.
 
 <br>
 </details>
 
 <details markdown='1'>
 <summary>
-7. Wordpress is ready, open in your browser
+7. Complete the Installation via Web Browser
 </summary>
 
 ---
+
+Open your web browser and navigate to your domain:
 `http://www.386387.xyz`
 
-Of course it would be a good idea to add SSL to your site, refer to  [CertbotOnDebianUbuntu](CertbotOnDebianUbuntu.html) Tutorial.
+You should see the WordPress installation wizard. Follow the on-screen instructions to complete the setup.
+
+**Recommended Next Step:** For security and SEO benefits, consider adding SSL/HTTPS to your site. Refer to the [Certbot Tutorial](certbot.html) for instructions on setting up free Let's Encrypt certificates.
 
 </details>
 

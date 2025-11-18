@@ -1,8 +1,8 @@
 # Tutorials
 
-- [**Self Hosted VPN**](shvpn.md) Self hosted VPN tutorial using wireguard on Debian and Ubuntu servers.
+- [**Self Hosted VPN:**](shvpn.md) Self hosted VPN tutorial using wireguard on Debian and Ubuntu servers.
 
-- [**Site-to-site VPN**](s2svpn.md) Site-to-site VPN tutorial using wireguard on Debian and Ubuntu servers.
+- [**Site-to-site VPN:**](s2svpn.md) Site-to-site VPN tutorial using wireguard on Debian and Ubuntu servers.
 
 - [**Node.js:**](Nodejs.md) Simple Node.js tutorial on Debian and Ubuntu servers.
 
@@ -52,9 +52,9 @@
 
 - [**Ansible:**](AnsibleOnDebianUbuntu.md) Ansible tutorial based on Debian/Ubuntu workstation and servers.
 
-- [**User And Group Admin:**](UserAndGroupAdminOnDebianUbuntu.md) User and Group administration on Debian and Ubuntu Server (and desktops).
+- [**User And Group Admin:**](useradministration.md) User and Group administration on Debian and Ubuntu Server (and desktops).
 
-- [**Keepalived:**](KeepalivedOnDebianUbuntu.md) Clustering with keepalived on Debian and Ubuntu Server.
+- [**Keepalived:**](keepalived.md) Clustering with keepalived on Debian and Ubuntu Server.
 
 - [**DNS:**](dns.md) Installing and configuring Primary and Replica DNS Servers on Debian and Ubuntu Server.
 

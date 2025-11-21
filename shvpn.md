@@ -390,7 +390,7 @@ PersistentKeepalive = 25
 ```
 
 
-Download and run the Windows installer from <https://www.wireguard.com/install/>.
+Download and run the Windows installer from [Wireguard Install](https://www.wireguard.com/install/).
 
 After installation, the WireGuard application will run. Click "Add Tunnel" at the bottom left and select "Import tunnel(s) from file." Choose the wg0.conf file you created. To activate the VPN, click the "Activate" button. To deactivate it, click "Deactivate."
 

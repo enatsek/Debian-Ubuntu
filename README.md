@@ -44,7 +44,7 @@
 
 - [**HAProxy:**](haproxy.md) HAProxy High Availability Load Balancing with Letsencrypt free certificates HTTPS support and keepalived.
 
-- [**mariadbcluster:**](MariadbClusterOnDebianUbuntu.md) MariaDB main-main (master-master) replication with Galera Cluster tutorial on Debian and Ubuntu Servers.
+- [**mariadbcluster:**](mariadbcluster.md) MariaDB main-main (master-master) replication with Galera Cluster tutorial on Debian and Ubuntu Servers.
 
 - [**KVM 2:**](KVMOnDebianUbuntu2.md) KVM Virtualization networking tutorial  on Debian and Ubuntu Server. 
 

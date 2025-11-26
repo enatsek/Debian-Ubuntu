@@ -40,17 +40,17 @@
 
 - [**Debian Postgresql:**](PostgresqlOnDebian.md) Postgresql installation and basic configuration on Debian. Includes some user management, cluster management, backup and restore.
  
-- [**Adminer Tool:**](AdminerOnDebianUbuntu.md) Adminer, a replacement for PHPMyAdmin. Web based Database Management.
+- [**Adminer Tool:**](adminer.md) Adminer, a replacement for PHPMyAdmin. Web based Database Management.
 
-- [**HAProxy:**](HAProxyOnDebianUbuntu.md) HAProxy High Availability Load Balancing with Letsencrypt free certificates HTTPS support and keepalived.
+- [**HAProxy:**](haproxy.md) HAProxy High Availability Load Balancing with Letsencrypt free certificates HTTPS support and keepalived.
 
-- [**Mariadb Cluster:**](MariadbClusterOnDebianUbuntu.md) MariaDB main-main (master-master) replication with Galera Cluster tutorial on Debian and Ubuntu Servers.
+- [**mariadbcluster:**](MariadbClusterOnDebianUbuntu.md) MariaDB main-main (master-master) replication with Galera Cluster tutorial on Debian and Ubuntu Servers.
 
 - [**KVM 2:**](KVMOnDebianUbuntu2.md) KVM Virtualization networking tutorial  on Debian and Ubuntu Server. 
 
 - [**KVM:**](KVMOnDebianUbuntu1.md) KVM Virtualization tutorial (beginner) on Debian and Ubuntu Server. 
 
-- [**Ansible:**](AnsibleOnDebianUbuntu.md) Ansible tutorial based on Debian/Ubuntu workstation and servers.
+- [**Ansible:**](ansible.md) Ansible tutorial based on Debian/Ubuntu workstations and servers.
 
 - [**User And Group Admin:**](useradministration.md) User and Group administration on Debian and Ubuntu Server (and desktops).
 

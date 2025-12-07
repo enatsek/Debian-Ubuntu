@@ -32,13 +32,13 @@
 
 - [**Deb Packaging:**](DebPackagingOnDebianUbuntu.md) A basic tutorial about creating and using .deb packages.
 
-- [**Systemd:**](SystemdOnDebianUbuntu.md) Basic systemd tutorial.
+- [**Systemd:**](systemd.md) Basic systemd tutorial.
 
-- [**Other Linuxes:**](OtherLinuxesOnDebianUbuntu.md) Basic management of Debian, Ubuntu, Red Hat, Alpine and Devuan distributions.
+- [**Other Linuxes:**](otherlinuxes.md) Basic management of Debian, Ubuntu, Red Hat, Alpine and Devuan distributions.
 
-- [**Ubuntu Postgresql:**](PostgresqlOnUbuntu.md) Postgresql installation and basic configuration on Ubuntu. Includes some user management, cluster management, backup and restore.
+- [**Ubuntu Postgresql:**](postgresubuntu.md) Postgresql installation and basic configuration on Ubuntu. Includes some user management, cluster management, backup and restore.
 
-- [**Debian Postgresql:**](PostgresqlOnDebian.md) Postgresql installation and basic configuration on Debian. Includes some user management, cluster management, backup and restore.
+- [**Debian Postgresql:**](postgresdebian.md) Postgresql installation and basic configuration on Debian. Includes some user management, cluster management, backup and restore.
  
 - [**Adminer Tool:**](adminer.md) Adminer, a replacement for PHPMyAdmin. Web based Database Management.
 

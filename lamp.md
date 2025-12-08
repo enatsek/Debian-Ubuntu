@@ -11,6 +11,7 @@
 ### 0.0. The What
 
 The LAMP stack is a popular open-source web development platform. The acronym stands for:
+
 - **L**inux (the operating system)
 - **A**pache (the web server)
 - **M**ySQL/MariaDB (the database management system)

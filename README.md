@@ -24,13 +24,13 @@
 
 - [**FHS:**](FHSOnDebianUbuntu.md) File Hierarchy Standard specifications.
 
-- [**Systemd 2:**](SystemdOnDebianUbuntu2.md) Additional services and tools of Systemd.
+- [**Systemd 2:**](systemd2.md) Additional services and tools of Systemd.
 
-- [**LAPP Stack:**](LappOnDebianUbuntu.md) Installation of LAPP (Linux, Apache, Postgresql, PHP) stack on Debian and Ubuntu servers.
+- [**LAPP Stack:**](lapp.md) Installation of LAPP (Linux, Apache, Postgresql, PHP) stack on Debian and Ubuntu servers.
 
-- [**UFW:**](UFWOnDebianUbuntu.md) Basic UFW (Uncomplicated Firewall) tutorial for Debian and Ubuntu.
+- [**UFW:**](ufw.md) Basic UFW (Uncomplicated Firewall) tutorial for Debian and Ubuntu.
 
-- [**Deb Packaging:**](DebPackagingOnDebianUbuntu.md) A basic tutorial about creating and using .deb packages.
+- [**Deb Packaging:**](debpackaging.md) A basic tutorial about creating and using .deb packages.
 
 - [**Systemd:**](systemd.md) Basic systemd tutorial.
 

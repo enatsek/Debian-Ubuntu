@@ -10,19 +10,19 @@
 
 - [**Apache 2nd Ed.:**](Apache2ndEd.md) Apache http server on Debian and Ubuntu servers. With sample configurations and SSL support.
 
-- [**Etc Folder:**](EtcOnDebianUbuntu.md) Contents of /etc/ folder on Debian & Ubuntu.
+- [**Etc Folder:**](etcfolder.md) Contents of /etc/ folder on Debian & Ubuntu.
 
-- [**Regex:**](RegexOnDebianUbuntu.md) Regular Expressions tutorial.
+- [**Regex:**](regex.md) Regular Expressions tutorial.
 
-- [**Ubuntu Network Configuration:**](NetworkOnUbuntu.md) Ubuntu basic network configuration tutorial.
+- [**Ubuntu Network Configuration:**](networkubuntu.md) Ubuntu basic network configuration tutorial.
 
-- [**Debian Network Configuration:**](NetworkOnDebian.md) Debian basic network configuration tutorial.
+- [**Debian Network Configuration:**](networkdebian.md) Debian basic network configuration tutorial.
 
-- [**LVM:**](LVMOnDebianUbuntu.md) Logical Volume Management tutorial.
+- [**LVM:**](lvm.md) Logical Volume Management tutorial.
 
-- [**File Compression:**](FileCompressionOnDebianUbuntu.md) Overview and tutorial of file compression utilities.
+- [**File Compression:**](filecompression.md) Overview and tutorial of file compression utilities.
 
-- [**FHS:**](FHSOnDebianUbuntu.md) File Hierarchy Standard specifications.
+- [**FHS:**](fhs.md) File Hierarchy Standard specifications.
 
 - [**Systemd 2:**](systemd2.md) Additional services and tools of Systemd.
 

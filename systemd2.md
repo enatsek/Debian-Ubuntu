@@ -15,7 +15,7 @@ sidebar:
 ---
 ### 0.1. The What
 
-The first [Systemd tutorial](systemd.html) focused on systemd's init and service management capabilities.
+The first Systemd Basics tutorial focused on systemd's init and service management capabilities.
 
 However, systemd includes many more services and tools. This tutorial explores these additional components from a Debian and Ubuntu perspective.
 

@@ -22,7 +22,7 @@ In this configuration, I wanted to bind Adminer to a specific site configuration
 ### 0.2. The Environment
 
 - My Hostname: `adminer.386387.xyz`
-- LAMP is already installed (See [LAMP Tutorial](lamp.html))
+- LAMP is already installed (See LAMP Stack tutorial)
 - My Client IP address: `192.168.1.56`
 - MariaDB Admin User: `dbadmin` | Password: `PaSswOrD1234`
 - Server Versions: Debian 13/12, Ubuntu 24.04/22.04 LTS Server
@@ -126,7 +126,7 @@ Your web-based database management tool is now ready:
 
 You should enable HTTPS, especially if you plan to expose your site to the internet. HTTPS is also recommended for local network sites for enhanced security.
 
-Refer to the [Certbot Tutorial](certbot.html) for instructions on enabling HTTPS with free Let's Encrypt certificates.
+Refer to the Certbot tutorial for instructions on enabling HTTPS with free Let's Encrypt certificates.
 
 
 

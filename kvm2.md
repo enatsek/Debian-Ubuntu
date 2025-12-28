@@ -16,7 +16,7 @@ sidebar:
 ### 0.0. Definition
 KVM virtualization Tutorial 2 on Debian and Ubuntu Server. 
 
-Please refer to [1st KVM tutorial](KVMOnDebianUbuntu1.html) before reading this one.
+Please refer to KVM Virtualization Beginner tutorial before reading this one.
 
 This tutorial specializes on KVM Networking.
 

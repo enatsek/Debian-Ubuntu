@@ -30,7 +30,7 @@ This tutorial demonstrates how to install WordPress on Debian and Ubuntu servers
 - **Database User Password:** `pAsswOrd1234`
 - **Website Location:** `/var/www/wordpress`
 
-**Prerequisite:** A LAMP stack (Linux, Apache, MySQL/MariaDB, PHP) must be installed. See the [LAMP Tutorial](lamp.html).
+**Prerequisite:** A LAMP stack (Linux, Apache, MySQL/MariaDB, PHP) must be installed. See the LAMP Stack tutorial.
 
 ### 0.3. Sources
 
@@ -294,7 +294,7 @@ Open your web browser and navigate to your domain:
 
 You should see the WordPress installation wizard. Follow the on-screen instructions to complete the setup.
 
-**Recommended Next Step:** For security and SEO benefits, consider adding SSL/HTTPS to your site. Refer to the [Certbot Tutorial](certbot.html) for instructions on setting up free Let's Encrypt certificates.
+**Recommended Next Step:** For security and SEO benefits, consider adding SSL/HTTPS to your site. Refer to the Certbot tutorial for instructions on setting up free Let's Encrypt certificates.
 
 
 

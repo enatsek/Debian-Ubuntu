@@ -1,10 +1,15 @@
-##### DNS (BIND9)
-# Installation and Configuration of DNS Servers on Debian and Ubuntu 
+---
+title: "DNS"
+description: "Primary and replica DNS server configuration"
+next: false
+prev: false
+sidebar: 
+   label: DNS
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### Primary and replica DNS server configuration 
+
+## 0. Specs
 
 ---
 
@@ -47,12 +52,8 @@ This tutorial has been tested with various combinations including Debian 12/13 a
 - [https://bind9.readthedocs.io](https://bind9.readthedocs.io)
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Primary DNS Server Configuration
-</summary>
+## 1. Primary DNS Server Configuration
 
 ---
 
@@ -190,12 +191,8 @@ sudo named-checkzone 386387.xyz /etc/bind/reverse.386387.xyz
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Replica DNS Server Configuration
-</summary>
+## 2. Replica DNS Server Configuration
 
 ---
 
@@ -262,12 +259,8 @@ sudo named-checkconf /etc/bind/named.conf.local
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. Final Touch
-</summary>
+## 3. Final Touch
 
 ---
 ### 3.1. Start the DNS Services
@@ -311,5 +304,5 @@ dig @192.168.1.201 386387.xyz AXFR
 - You can also configure the DNS servers themselves to use each other as primary resolvers by editing `/etc/resolv.conf`.
 
 
-</details>
+
 

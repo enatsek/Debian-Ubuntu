@@ -1,10 +1,15 @@
-##### UFW (Uncomplicated Firewall)
-# Basic UFW Tutorial for Ubuntu and Debian
+---
+title: "UFW (Uncomplicated Firewall)"
+description: "Firewall configuration and management"
+next: false
+prev: false
+sidebar: 
+   label: UFW (Uncomplicated Firewall)
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### Firewall configuration and management
+
+## 0. Specs
 
 ---
 
@@ -28,12 +33,8 @@ Prepared for and tested on Debian 13/12 and Ubuntu 24.04/22.04 LTS Server.
 - [manpages.ubuntu.com](https://manpages.ubuntu.com/manpages/jammy/en/man8/ufw.8.html)
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Firewall Architecture 
-</summary>
+## 1. Firewall Architecture 
 
 ---
 
@@ -54,12 +55,8 @@ While nftables (or iptables on older distributions) can be used directly for fir
 UFW is the higher-level firewall program provided by Ubuntu (Canonical). Other distributions offer similar tools (such as firewalld and firewall-cmd from Red Hat).
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. UFW Basics
-</summary>
+## 2. UFW Basics
 
 ---
 
@@ -163,13 +160,8 @@ sudo ufw show raw
 ```
 
 <br>
-</details>
 
-
-<details markdown='1'>
-<summary>
-3. Allowing and Denying in Detail
-</summary>
+## 3. Allowing and Denying in Detail
 
 ---
 ### 3.1. Long Format
@@ -271,12 +263,8 @@ sudo ufw allow ssh
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. Case Study 1
-</summary>
+## 4. Case Study 1
 
 ---
 
@@ -435,12 +423,8 @@ Status: active
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-5. Case Study 2
-</summary>
+## 5. Case Study 2
 
 ---
 
@@ -509,5 +493,5 @@ Status: active
 [ 7] 443/tcp (v6) on enp0s3     ALLOW IN    Anywhere (v6)                 
 ```
 
-</details>
+
 

@@ -1,10 +1,15 @@
-##### Deb Packaging 
-# Creating and Using .deb Packages
+---
+title: "Debian Packaging"
+description: "Creating and managing .deb packages"
+next: false
+prev: false
+sidebar: 
+   label: Debian Packaging
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### Creating and managing .deb packages
+
+## 0. Specs
 
 ---
 
@@ -32,12 +37,8 @@ This tutorial is introductory and does not cover every detail. Its purpose is to
 
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Basic Information
-</summary>
+## 1. Basic Information
 
 ---
 
@@ -99,13 +100,8 @@ sudo apt purge test
 ```
 
 <br>
-</details>
 
-
-<details markdown='1'>
-<summary>
-2. Package Control Files
-</summary>
+## 2. Package Control Files
 
 ---
 
@@ -496,13 +492,8 @@ libslapi 2 slapd (>= 2.6.10+dfsg)
 ```
 
 <br>
-</details>
 
-
-<details markdown='1'>
-<summary>
-3. Package Data Files
-</summary>
+## 3. Package Data Files
 
 ---
 ### 3.1. Basics
@@ -578,12 +569,8 @@ Data files include binaries, static files, dynamic files, configurations, and mo
     - For custom schedules → `/etc/cron.d`
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. Package Installation Process
-</summary>
+## 4. Package Installation Process
 
 ---
 
@@ -695,13 +682,8 @@ If there were conflicting packages:
 ```
 
 <br>
-</details>
 
-
-<details markdown='1'>
-<summary>
-5. Package Removal/Purge Process
-</summary>
+## 5. Package Removal/Purge Process
 
 ---
 
@@ -731,12 +713,8 @@ If purging (not just removing):
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-6. .deb Package Preparation Checklist
-</summary>
+## 6. .deb Package Preparation Checklist
 
 ---
 
@@ -801,15 +779,9 @@ dpkg-deb -Z xz --build --root-owner-group ProgramName-Version
 
 The resulting `.deb` file (e.g., `ProgramName-Version.deb`) is your ready-to-use package.
 
-
 <br>
-</details>
 
-
-<details markdown='1'>
-<summary>
-7. A Very Simple Package
-</summary>
+## 7. A Very Simple Package
 
 ---
 
@@ -913,16 +885,12 @@ Your package, `distro_1.0.0-1_all.deb`, is now located in the `~/packages` folde
 **Note:** `dpkg-deb` typically uses `zst` compression, but we override it with the `-Z xz` flag for broader compatibility. Packages compressed with `zst` (default in Ubuntu 22.04) may not work on older Debian distributions.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-8. A More Complex Package: Watchbox
-</summary>
+## 8. A More Complex Package: Watchbox
 
 ---
 
-OOur next package, **watchbox**, is more complex. It is a Python script designed to run as a systemd service.
+Our next package, **watchbox**, is more complex. It is a Python script designed to run as a systemd service.
 
 The package must:
 
@@ -1098,5 +1066,5 @@ dpkg-deb -Z xz --build --root-owner-group watchbox_0.9-1_all
 
 Your package, `watchbox_0.9-1_all.deb`, is now ready in the `~/packages` folder.
 
-</details>
+
 

@@ -1,10 +1,15 @@
-##### Adminer
-# Adminer Tutorial for Debian and Ubuntu Servers  
+---
+title: "Adminer Tool"
+description: "Web-based database management (PHPMyAdmin alternative)"
+next: false
+prev: false
+sidebar: 
+   label: Adminer Tool
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### Web-based database management (PHPMyAdmin alternative)
+
+## 0. Specs
 
 ---
 
@@ -23,12 +28,8 @@ In this configuration, I wanted to bind Adminer to a specific site configuration
 - Server Versions: Debian 13/12, Ubuntu 24.04/22.04 LTS Server
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Install Adminer
-</summary>
+## 1. Install Adminer
 
 ---
 
@@ -40,12 +41,8 @@ sudo apt install adminer --yes
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. DB Admin User
-</summary>
+## 2. DB Admin User
 
 ---
 We need to create a database admin user to log into Adminer and manage the databases.
@@ -62,12 +59,9 @@ exit;
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. Prepare a Web Site
-</summary>
+
+## 3. Prepare a Web Site
 
 ---
 ### 3.1. Create a Web Site Config File and Fill it
@@ -108,12 +102,8 @@ sudo systemctl reload apache2
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. Run Adminer
-</summary>
+## 4. Run Adminer
 
 ---
 
@@ -129,12 +119,8 @@ Your web-based database management tool is now ready:
 - Database: Leave empty to access all databases
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-5. Security
-</summary>
+## 5. Security
 
 ---
 
@@ -142,5 +128,5 @@ You should enable HTTPS, especially if you plan to expose your site to the inter
 
 Refer to the [Certbot Tutorial](certbot.html) for instructions on enabling HTTPS with free Let's Encrypt certificates.
 
-</details>
+
 

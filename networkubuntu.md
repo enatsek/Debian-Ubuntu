@@ -1,11 +1,15 @@
-##### Network On Ubuntu 
-# Network Configuration On Ubuntu Server
-</details>
+---
+title: "Ubuntu Network Configuration"
+description: "Basic network configuration for Ubuntu systems"
+next: false
+prev: false
+sidebar: 
+   label: Ubuntu Network Configuration
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### Basic network configuration for Ubuntu systems
+
+## 0. Specs
 
 ---
 ### 0.0. Info
@@ -29,12 +33,9 @@ This configuration file contains all network configurations, including name serv
 - [ChatGPT](https://chatgpt.com/)
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Example Configurations
-</summary>
+## 1. Example Configurations
+
 
 ---
 ### 1.1. DHCP Configuration
@@ -160,12 +161,9 @@ sudo netplan apply
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Case Study - Multiple Networks
-</summary>
+## 2. Case Study - Multiple Networks
+
 
 ---
 ### 2.0. Specs
@@ -340,12 +338,9 @@ ping 192.168.1.217
 For a host to connect to another host on the other network, routing must be defined on both hosts.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. NIC Bonding
-</summary>
+## 3. NIC Bonding
+
 
 ---
 I tried NIC bonding on Ubuntu, but unfortunately I wasn't successful.
@@ -354,5 +349,5 @@ This might be because of VirtualBox, Netplan, or Networkd. So I gave up. Maybe n
 
 I was able to create the bond interface, and it got an IP address too, but it could not connect to anywhere on the network. Even working with Networkd directly didn't help.
 
-</summary>
+
 

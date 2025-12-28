@@ -1,10 +1,16 @@
-##### Certbot Tutorial
-# Free Let's Encrypt SSL Certificates on Debian and Ubuntu Server
+---
+title: "Certbot"
+description: "Automated SSL certificate management with Let's Encrypt for Apache and Nginx"
+next: false
+prev: false
+sidebar: 
+   label: Certbot
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+
+##### Automated SSL certificate management with Let's Encrypt for Apache and Nginx
+
+## 0. Specs
 
 ---
 
@@ -31,12 +37,8 @@ The certificates are free but need to be renewed every 90 days. This tutorial gu
 - [123qwe.com](https://123qwe.com/)
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Preliminary Work
-</summary>
+## 1. Preliminary Work
 
 ---
 
@@ -128,12 +130,8 @@ sudo systemctl reload nginx
 HTML files should be placed in `/var/www/srv1`.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Certbot
-</summary>
+## 2. Certbot
 
 ---
 ### 2.1. Install Certbot
@@ -229,12 +227,8 @@ Your SSL site is now accessible at `https://srv1.386387.xyz`. The next section c
 
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. Fine Tunings
-</summary>
+## 3. Fine Tunings
 
 ---
 ### 3.1. HTTP to HTTPS Redirect - Apache2
@@ -355,4 +349,4 @@ Make the script executable
 ```
 sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
 ```
-</details>
+

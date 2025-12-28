@@ -1,10 +1,16 @@
-##### Systemd2 
-# Other Systemd Components on Debian and Ubuntu
+---
+title: "Systemd Additional"
+description: "Additional systemd services and tools"
+next: false
+prev: false
+sidebar: 
+   label: Systemd Additional
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+
+##### Additional systemd services and tools
+
+## 0. Specs
 
 ---
 ### 0.1. The What
@@ -24,12 +30,8 @@ Unfortunately (or perhaps fortunately), ChatGPT provided a significant amount of
 AI still requires considerable refinement before becoming truly reliable.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Services
-</summary>
+## 1. Services
 
 ---
 
@@ -793,13 +795,8 @@ sudo systemd-sysusers
 ```
 
 <br>
-</details>
 
-
-<details markdown='1'>
-<summary>
-2. Tools
-</summary>
+## 2. Tools
 
 ---
 
@@ -1507,5 +1504,5 @@ Acts as a bridge between standard input/output streams and a client-server archi
 **Typical use:** Adapting legacy daemons to integrate with systemd's socket activation mechanism.
 
 
-</details>
+
 

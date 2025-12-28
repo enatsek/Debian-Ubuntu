@@ -1,10 +1,15 @@
-##### Wordpress
-# Install Wordpress On Debian and Ubuntu
+---
+title: "WordPress"
+description: "WordPress installation and activation guide"
+next: false
+prev: false
+sidebar: 
+   label: WordPress
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### WordPress installation and activation guide
+
+## 0. Specs
 
 ---
 
@@ -34,12 +39,8 @@ This tutorial demonstrates how to install WordPress on Debian and Ubuntu servers
 
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Configure a Website (If Not Already Done)
-</summary>
+## 1. Configure a Website (If Not Already Done)
 
 ---
 
@@ -76,12 +77,8 @@ sudo systemctl reload apache2
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Create MariaDB Database and User for Wordpress
-</summary>
+## 2. Create MariaDB Database and User for Wordpress
 
 ---
 
@@ -102,12 +99,8 @@ EXIT;
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. Install Additional PHP Extensions
-</summary>
+## 3. Install Additional PHP Extensions
 
 ---
 
@@ -126,12 +119,8 @@ sudo systemctl restart apache2
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. Adjust Apache for Wordpress
-</summary>
+## 4. Adjust Apache for Wordpress
 
 ---
 
@@ -168,12 +157,8 @@ sudo systemctl restart apache2
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-5. Download Wordpress
-</summary>
+## 5. Download Wordpress
 
 ---
 
@@ -203,12 +188,8 @@ sudo cp -a /tmp/wordpress/. /var/www/wordpress
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-6. Configure Wordpress Directory
-</summary>
+## 6. Configure Wordpress Directory
 
 ---
 
@@ -225,7 +206,7 @@ sudo find /var/www/wordpress/ -type d -exec chmod 750 {} \;
 sudo find /var/www/wordpress/ -type f -exec chmod 640 {} \;
 ```
 
-### 6.2. Setup wordpress config file
+**Setup wordpress config file**
 
 Generate secure authentication keys and salts:
 
@@ -303,12 +284,8 @@ define('FS_METHOD', 'direct');
 Save and close the file.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-7. Complete the Installation via Web Browser
-</summary>
+## 7. Complete the Installation via Web Browser
 
 ---
 
@@ -319,5 +296,5 @@ You should see the WordPress installation wizard. Follow the on-screen instructi
 
 **Recommended Next Step:** For security and SEO benefits, consider adding SSL/HTTPS to your site. Refer to the [Certbot Tutorial](certbot.html) for instructions on setting up free Let's Encrypt certificates.
 
-</details>
+
 

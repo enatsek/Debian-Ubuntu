@@ -1,10 +1,15 @@
-##### Nginx Web Server
-# Nginx Tutorial for Debian and Ubuntu
+---
+title: "Nginx Web Server"
+description: "Nginx HTTP server configuration with SSL support and LEMP stack"
+next: false
+prev: false
+sidebar: 
+   label: Nginx Web Server
+---
 
-<details markdown="1">
-<summary>
-0. Specs
-</summary>
+##### Nginx HTTP server configuration with SSL support and LEMP stack
+
+## 0. Specs
 
 ---
 
@@ -37,12 +42,10 @@ All the following domain names point to my test server:
 - [ChatGPT](https://chatgpt.com/) 
 
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-1. Installation and Configuration Files
-</summary>
+
+## 1. Installation and Configuration Files
+
 
 ---
 ### 1.1. Installation
@@ -266,12 +269,10 @@ sudo systemctl restart nginx
 ```
 
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-2. Creating Our First Website
-</summary>
+
+## 2. Creating Our First Website
+
 
 ---
 ### 2.0. Explanations
@@ -327,7 +328,7 @@ sudo find /var/www/386387.xyz -type d -exec chmod 755 {} \;
 sudo find /var/www/386387.xyz -type f -exec chmod 644 {} \;
 ```
 
-### 2.1.2. Create Website Configuration 
+#### 2.1.2. Create Website Configuration 
 
 Disable the default site configuration (we don't need it anymore):
 
@@ -377,7 +378,7 @@ Line-by-line explanation:
 - `server_tokens off;`: Hide Nginx version in headers and error pages.
 - `}`: End of server block.
 
-### 2.1.3. Enable the Website
+#### 2.1.3. Enable the Website
 Enable the site and reload Nginx:
 
 ```
@@ -511,7 +512,7 @@ sudo systemctl reload nginx
 ```
 
 
-### 2.2.5. Certbot Hooks
+#### 2.2.5. Certbot Hooks
 
 Certbot automatically renews certificates before they expire, but Nginx continues using the old certificates until reloaded. To ensure Nginx uses renewed certificates, create a deployment hook script.
 
@@ -537,12 +538,10 @@ sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadnginx.sh
 Now Nginx will automatically reload whenever Certbot renews certificates.
 
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-3. Adding More Sites to Our Server
-</summary>
+
+## 3. Adding More Sites to Our Server
+
 
 ---
 ### 3.0. Explanations
@@ -983,12 +982,12 @@ as
 ```
 
 <br>
-</details>
+
 
 <details markdown='1'>
 <summary>
-4. LEMP Stack
-</summary>
+## 4. LEMP Stack
+
 
 ---
 - **L**: Linux (Debian or Ubuntu in our case)
@@ -1133,5 +1132,5 @@ Fill as below:
 Access the test page at `http://srv6.386387.xyz/test.php` to verify the LEMP stack is working correctly.
 
 <br>
-</details>
+
 

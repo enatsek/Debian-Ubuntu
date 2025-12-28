@@ -1,3 +1,7 @@
+---
+title: "Index"
+---
+
 # Debian & Ubuntu Tutorials & Guides
 
 A collection of practical documentation for Debian and Ubuntu system administration. These guides are written from real-world experience and serve as a reference for common tasks, configurations, and troubleshooting.
@@ -14,11 +18,11 @@ This documentation started as personal notes to compensate for a terrible memory
 
 ### Web Services & HTTPS
 
-- [**Apache 2nd Ed.**](apache.md) — Apache HTTP server configuration with SSL support and sample configurations
-- [**Nginx 2nd Ed.**](nginx.md) — Nginx HTTP server configuration with SSL support and LEMP stack setup
+- [**Apache Web Server**](apache.md) — Apache HTTP server configuration with SSL support and sample configurations
+- [**Nginx Web Server**](nginx.md) — Nginx HTTP server configuration with SSL support and LEMP stack setup
 - [**Certbot**](certbot.md) — Automated SSL certificate management with Let's Encrypt for Apache and Nginx
-- [**LAPP Stack**](lapp.md) — Linux, Apache, PostgreSQL, PHP stack installation and configuration
 - [**LAMP Stack**](lamp.md) — Linux, Apache, MariaDB, PHP stack installation and configuration
+- [**LAPP Stack**](lapp.md) — Linux, Apache, PostgreSQL, PHP stack installation and configuration
 - [**WordPress**](wordpress.md) — WordPress installation and activation guide
 - [**Adminer Tool**](adminer.md) — Web-based database management (PHPMyAdmin alternative)
 
@@ -26,8 +30,8 @@ This documentation started as personal notes to compensate for a terrible memory
 
 - [**MariaDB**](mariadb.md) — Installation, configuration, user management, and primary-replica replication
 - [**MariaDB Cluster**](mariadbcluster.md) — Multi-master replication with Galera Cluster
-- [**PostgreSQL (Ubuntu)**](postgresubuntu.md) — Installation, configuration, user management, cluster management, backup/restore on Ubuntu
 - [**PostgreSQL (Debian)**](postgresdebian.md) — Installation, configuration, user management, cluster management, backup/restore on Debian
+- [**PostgreSQL (Ubuntu)**](postgresubuntu.md) — Installation, configuration, user management, cluster management, backup/restore on Ubuntu
 
 ### Networking
 
@@ -39,12 +43,12 @@ This documentation started as personal notes to compensate for a terrible memory
 
 ### Infrastructure & Virtualization
 
-- [**KVM Virtualization (Beginner)**](KVMOnDebianUbuntu1.md) — Introduction to KVM virtualization
-- [**KVM Virtualization (Networking)**](KVMOnDebianUbuntu2.md) — Advanced KVM networking configurations
+- [**KVM Virtualization (Beginner)**](kvm1.md) — Introduction to KVM virtualization
+- [**KVM Virtualization (Networking)**](kvm2.md) — Advanced KVM networking configurations
+- [**Keepalived**](keepalived.md) — High-availability clustering
 - [**HAProxy**](haproxy.md) — High-availability load balancing with SSL/TLS and keepalived
 - [**Ansible**](ansible.md) — Configuration management and automation
 - [**LVM (Logical Volume Management)**](lvm.md) — Flexible disk management with LVM
-- [**Keepalived**](keepalived.md) — High-availability clustering
 - [**DNS**](dns.md) — Primary and replica DNS server configuration
 - [**Active Directory**](ad.md) — Simple AD domain with multiple domain controllers and file server
 - [**Node.js**](nodejs.md) — Node.js installation and basic setup
@@ -57,7 +61,7 @@ This documentation started as personal notes to compensate for a terrible memory
 - [**File Compression**](filecompression.md) — Compression utilities overview and usage
 - [**FHS (Filesystem Hierarchy Standard)**](fhs.md) — Linux filesystem structure specifications
 - [**Systemd Basics**](systemd.md) — Introduction to systemd service management
-- [**Systemd Advanced**](systemd2.md) — Additional systemd services and tools
+- [**Systemd Additional**](systemd2.md) — Additional systemd services and tools
 - [**Debian Packaging**](debpackaging.md) — Creating and managing .deb packages
 - [**Other Linux Distributions**](otherlinuxes.md) — Managing Debian, Ubuntu, Red Hat, Alpine, and Devuan systems
 

@@ -1,10 +1,16 @@
-##### LVM
-# Logical Volume Manager on Debian and Ubuntu Server
+---
+title: "LVM (Logical Volume Management)"
+description: "Flexible disk management with LVM"
+next: false
+prev: false
+sidebar: 
+   label: LVM (Logical Volume Management)
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### Flexible disk management with LVM
+
+## 0. Specs
+
 
 ---
 ### 0.1. The What
@@ -39,12 +45,10 @@ Tested on the following distributions:
 - [ChatGPT](https://chatgpt.com/)
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Layers of LVM
-</summary>
+
+## 1. Layers of LVM
+
 
 ---
 ### 1.0. Abstract
@@ -104,12 +108,10 @@ Stripes data evenly across multiple physical volumes to enhance I/O performance.
 
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Physical Volume Commands
-</summary>
+
+## 2. Physical Volume Commands
+
 
 ---
 ### 2.1. pvs
@@ -220,13 +222,11 @@ sudo pvck /dev/sdb1
 ```
 
 <br>
-</details>
 
 
-<details markdown='1'>
-<summary>
-3. Volume Group Commands
-</summary>
+
+## 3. Volume Group Commands
+
 
 ---
 ### 3.1. vgs
@@ -351,12 +351,10 @@ sudo vgck --updatemetadata myvg -v
 
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. Logical Volume Commands
-</summary>
+
+## 4. Logical Volume Commands
+
 
 ---
 ### 4.1. lvs
@@ -520,13 +518,11 @@ sudo lvrename myvg mylv mynewlv2
 - `lvresize`: A combined command that can extend or reduce a logical volume (use with the same caution as `lvreduce`).
 
 <br>
-</details>
 
 
-<details markdown='1'>
-<summary>
-5. Case Study 1 - Installing LVM and Manipulating Disks, PVs, VGs, LVs
-</summary>
+
+## 5. Case Study 1 - Installing LVM and Manipulating Disks, PVs, VGs, LVs
+
 
 ---
 
@@ -895,13 +891,11 @@ ls -al /mnt/mylv/tmp
 ```
 
 <br>
-</details>
 
 
-<details markdown='1'>
-<summary>
-6. Case Study 2 - LVM and Snapshot
-</summary>
+
+## 6. Case Study 2 - LVM and Snapshot
+
 
 ---
 
@@ -1163,12 +1157,10 @@ sudo reboot
 **Note:** The snapshot LV (`mysnapshot`) will no longer exist after a successful merge.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-7. Case Study 3 - Export and Import of LVM
-</summary>
+
+## 7. Case Study 3 - Export and Import of LVM
+
 
 ---
 
@@ -1423,12 +1415,10 @@ ls -al /mnt/mylv2
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-8. Uncovered Subjects
-</summary>
+
+## 8. Uncovered Subjects
+
 
 ---
 
@@ -1443,5 +1433,5 @@ The following LVM subjects are not covered in this tutorial:
 - Controlling physical extent allocation policies
 - LVM object tags
 
-</details>
+
 

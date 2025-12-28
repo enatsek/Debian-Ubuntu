@@ -1,10 +1,16 @@
-##### Regex
-# Regular Expressions Tutorial 
+---
+title: "Regular Expressions"
+description: "Regex tutorial for text processing"
+next: false
+prev: false
+sidebar: 
+   label: Regular Expressions
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### Regex tutorial for text processing
+
+## 0. Specs
+
 
 ---
 ### 0.1. The What
@@ -23,12 +29,8 @@ Regex and its usage are independent of operating systems. I tested these pattern
 - Book: 978-1-449-31943-4 *Regular Expressions Cookbook* by Jan Goyvaerts and Steven Levithan
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Basics
-</summary>
+## 1. Basics
 
 ---
 ### 1.1. A String Itself
@@ -97,12 +99,8 @@ When used inside a character class `[]`, the backslash is not always necessary f
 - `[().\\]` → matches `(`, `)`, `.`, or `\`
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Quantifiers and Boundaries
-</summary>
+## 2. Quantifiers and Boundaries
 
 ---
 ### 2.1. `*` Quantifier (Zero or More)
@@ -190,12 +188,8 @@ Lazy versions of quantifiers:
 - `^Begin[\s\w]+End$` → All lines starting with "Begin" and ending with "End"
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. Subexpressions and Backreferences
-</summary>
+## 3. Subexpressions and Backreferences
 
 ---
 ### 3.1. Subexpressions
@@ -239,12 +233,8 @@ Backreferences are particularly useful in find-and-replace operations. In the re
 
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. Regex Examples
-</summary>
+## 4. Regex Examples
 
 ---
 
@@ -303,5 +293,5 @@ This pattern validates that each octet is between 0-255:
 - `1\d{2}` → 100-199
 - `\d{1,2}` → 0-99
 
-</details>
+
 

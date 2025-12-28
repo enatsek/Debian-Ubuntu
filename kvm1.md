@@ -1,10 +1,15 @@
-##### KVMOnDebianUbuntu1: 
-# KVM Tutorial On Debian and Ubuntu Server (Beginner)
+---
+title: "KVM Virtualization (Beginner)"
+description: "Introduction to KVM virtualization"
+next: false
+prev: false
+sidebar: 
+   label: KVM Virtualization (Beginner)
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### Introduction to KVM virtualization 
+
+## 0. Specs
 
 ---
 ### 0.0. Start
@@ -52,12 +57,8 @@ ISBN: 979-10-91414-20-3 **The Debian Administrator's Handbook** by Raphaël Hert
 ISBN: 978-1-78829-467-6 **KVM Virtualization Cookbook** by Konstantin Ivanov
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Installation and Configuration
-</summary>
+## 1. Installation and Configuration
 
 ---
 ### 1.1. Installation
@@ -313,12 +314,8 @@ sudo virsh pool-create-as srv-kvm dir --target /srv/kvm
 At this point, you may want to copy some installation isos to server's /srv/isos dir
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. VM Creation
-</summary>
+## 2. VM Creation
 
 ---
 ### 2.1. Create the 1st VM
@@ -376,12 +373,8 @@ virt-viewer --connect qemu+ssh://exforge@elma/system testkvm
 Remember to replace exforge with your user name on the server and elma  with your server's hostname
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. Remote Graphical Management
-</summary>
+## 3. Remote Graphical Management
 
 ---
 Our server has no graphical interface (like the most servers). If you  really want a graphical management, you can install virt-manager on your  workstation and manage your VMs from there. 
@@ -398,12 +391,8 @@ The application is added to Applications Menu with the name "Virtual Machine Man
 
 <br>
 
-</details>
 
-<details markdown='1'>
-<summary>
-4. Installing VMs from Ready Images
-</summary>
+## 4. Installing VMs from Ready Images
 
 ---
 Starting a new VM and installing OS into it is a good but time consuming way. Another way would be preparing an installed image and start it as a  new VM. 
@@ -668,12 +657,8 @@ If the file /etc/cloud/cloud-init.disabled exists, cloud-init does not run again
    - Memory size, vcpu count can be parameters.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-5. virsh: Shell Based VM Management
-</summary>
+## 5. virsh: Shell Based VM Management
 
 ---
 virt-manager can only help with the basic management tasks. If you want  to dive deep, you need the old-style shell.
@@ -971,12 +956,8 @@ virsh --help
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-6. qemu-img: Shell Based Image Management
-</summary>
+## 6. qemu-img: Shell Based Image Management
 
 ---
 qemu-img allows us to manipulate images. The command is expected to work  offline. That means, before you start using qemu-img, you have to shut  down the VM associated with it. 
@@ -1107,12 +1088,8 @@ qemu-img check FILENAME
 In any case if you suspect the integrity of the image file
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-7. Export and Import of VMs
-</summary>
+## 7. Export and Import of VMs
 
 ---
 If you want to move your VM to another host, or in a way you want to backup and restore your VM; there might be a lot of ways to do it. I'm  going to demonstrate a very simple  method which requires shutting down the VM (you can try while it is running, but with no success guaranteed).
@@ -1210,12 +1187,8 @@ virsh start ubuntu24
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-8. libguestfs: VM Disk Management
-</summary>
+## 8. libguestfs: VM Disk Management
 
 ---
 A set of commands for managing VM disks. Full documentation:  
@@ -1293,5 +1266,5 @@ virt-tar(1) — archive and upload files
 virt-tar-in(1) — archive and upload files  
 virt-tar-out(1) — archive and download files  
 
-</details>
+<br>
 

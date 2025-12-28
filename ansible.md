@@ -1,10 +1,15 @@
-##### Ansible 
-# Ansible Tutorial For Debian and Ubuntu
+---
+title: "Ansible"
+description: "Configuration management and automation"
+next: false
+prev: false
+sidebar: 
+   label: Ansible
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### Configuration management and automation 
+
+## 0. Specs
 
 ---
 ### 0.0. The What 
@@ -42,12 +47,9 @@ Local Virtual Servers:
 - [www.golinuxcloud.com](https://www.golinuxcloud.com/ansible-tutorial/)
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Installation and Main Configuration
-</summary>
+
+## 1. Installation and Main Configuration
 
 ---
 Install Ansible on the workstation. **Run on workstation only:**
@@ -124,13 +126,10 @@ sudo chmod 440 /etc/sudoers.d/ansible
 
 **All preliminary work is now complete.**  
 From this point forward, all commands should be run on the workstation unless otherwise specified.
-<br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Configuration
-</summary>
+<br>
+
+## 2. Configuration
 
 ---
 ### 2.1. Configuration File
@@ -227,13 +226,7 @@ For detailed output:
 ansible all -m ping -vvvv
 ```
 
-<br>
-</details>
-
-<details markdown='1'>
-<summary>
-3. More on Inventory
-</summary>
+## 3. More on Inventory
 
 ---
 You can specify a custom inventory file for individual commands:
@@ -361,12 +354,9 @@ role="dbserver"
 This allows you to conditionally install software based on roles (e.g., Apache for webservers, MariaDB for dbservers).
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. Ansible Ad Hoc Commands
-</summary>
+## 4. Ansible Ad Hoc Commands
+
 
 ---
 Ansible commands can be executed in two ways: ad hoc (direct) or through playbooks. Ad hoc commands are suitable for one-time tasks, while playbooks are better for recurring tasks.
@@ -527,12 +517,8 @@ ansible debian13 -m service -a "name=apache2 state=restarted" --become
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-5. A Simple Playbook to Install Apache
-</summary>
+## 5. A Simple Playbook to Install Apache
 
 ---
 Playbooks are YAML files that define automation tasks. This playbook will install Apache and deploy a customized homepage.
@@ -619,12 +605,8 @@ chmod +x apache.yml
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-6. A More Complex Playbook to Install LAMP
-</summary>
+## 6. A More Complex Playbook to Install LAMP
 
 ---
 This playbook installs a complete LAMP (Linux, Apache, MySQL/MariaDB, PHP) stack.
@@ -685,12 +667,10 @@ ansible-playbook lamp.yml
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-7. (IMHO) Important Ansible Modules
-</summary>
+
+## 7. (IMHO) Important Ansible Modules
+
 
 ---
 While all Ansible modules are valuable, here are some commonly used ones. Remember that proper indentation is crucial in Ansible playbooks, similar to Python.
@@ -1670,14 +1650,9 @@ Examples:
       remove: yes
 ```
 
-
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-8. Roles
-</summary>
+## 8. Roles
 
 ---
 ### 8.0. Introduction
@@ -1832,12 +1807,8 @@ ansible-playbook lamp.yml
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-9.Ansible Facts and Magic Variables
-</summary>
+## 9.Ansible Facts and Magic Variables
 
 ---
 ### 9.1. Ansible Facts
@@ -1939,12 +1910,8 @@ debian13 | SUCCESS => {
 - `ansible_check_mode` - True if running with `--check`
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-10. Cross-Distribution Compatibility
-</summary>
+## 10. Cross-Distribution Compatibility
 
 ---
 
@@ -2081,12 +2048,7 @@ ansible-playbook apacheDRA.yml
 
 <br>
 
-</details>
-
-<details markdown='1'>
-<summary>
-11. Role Variables
-</summary>
+## 11. Role Variables
 
 ---
 
@@ -2245,12 +2207,8 @@ ansible-playbook apachesite.yml
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-12. Variable Filters
-</summary>
+## 12. Variable Filters
 
 ---
 Ansible provides various filters for variable manipulation in templates and playbooks.
@@ -2383,12 +2341,8 @@ ansible-playbook filters.yml
 
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-13. Handlers
-</summary>
+## 13. Handlers
 
 ---
 
@@ -2525,12 +2479,8 @@ ansible-playbook apachesite.yml
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-14. Error Recovery (Block and rescue)
-</summary>
+## 14. Error Recovery (Block and rescue)
 
 ---
 
@@ -2583,7 +2533,6 @@ cd /home/ansible/ansible/playbooks
 ansible-playbook blocktest.yml
 ```
 
-
 ### 14.2. Explanations
 
 Tasks in the block (Tasks 1, 2, 3 and 4 in our example) run  sequentially. 
@@ -2595,12 +2544,8 @@ If there are no errors in tasks, rescue block is skipped and the tasks in always
 Error recovery is a very important subject in all kinds of programming. I believe you should use it as much as possible to prevent an unexpected  termination of programs (playbooks for ansible).
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-15. Skipped Content
-</summary>
+## 15. Skipped Content
 
 ---
 The following topics are beyond this tutorial's scope but are worth exploring:
@@ -2613,5 +2558,5 @@ The following topics are beyond this tutorial's scope but are worth exploring:
 
 These topics may be valuable for specific use cases but aren't essential for basic to intermediate Ansible proficiency.
 
-</details>
+
 

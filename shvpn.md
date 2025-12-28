@@ -1,10 +1,15 @@
-##### Self Hosted VPN Server
-# VPN Server Configuration Tutorial using Wireguard for Debian and Ubuntu
+---
+title: "Self-Hosted VPN"
+description: "WireGuard VPN server setup for remote access"
+next: false
+prev: false
+sidebar: 
+   label: Self-Hosted VPN
+---
 
-<details markdown="1">
-<summary>
-0. Specs
-</summary>
+##### WireGuard VPN server setup for remote access
+
+## 0. Specs
 
 ---
 
@@ -142,14 +147,9 @@ Notes on the client configuration:
 - [Claude](https://claude.ai/)  
 - [Wireguard Documentation](https://www.wireguard.com/)
 
-
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-1. Server Configuration
-</summary>
+## 1. Server Configuration
 
 ---
 
@@ -282,15 +282,10 @@ sudo wg show     # Verify the tunnel status and peers
 ```
 
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-2. Debian / Ubuntu & Derivatives Client Configuration
-</summary>
+## 2. Debian / Ubuntu & Derivatives Client Configuration
 
 ---
-
 
 This configuration should work on all Debian-based and Ubuntu-based systems, including Mint and MX Linux. It has been tested on Debian 13, Ubuntu 24.04, and Linux Mint 22.2.
 
@@ -360,12 +355,8 @@ sudo systemctl enable wg-quick@wg0
 
 
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-3. Windows Client Configuration
-</summary>
+## 3. Windows Client Configuration
 
 ---
 
@@ -395,12 +386,8 @@ Download and run the Windows installer from [Wireguard Install](https://www.wire
 After installation, the WireGuard application will run. Click "Add Tunnel" at the bottom left and select "Import tunnel(s) from file." Choose the wg0.conf file you created. To activate the VPN, click the "Activate" button. To deactivate it, click "Deactivate."
 
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-4. Android Client Configuration
-</summary>
+## 4. Android Client Configuration
 
 ---
 
@@ -429,12 +416,8 @@ Install the WireGuard app from the Google Play Store: <https://play.google.com/s
 Open the WireGuard app, tap the "+" button, and select "Import from file or archive." Select your wg0.conf file. Once imported, tap the "Activate" switch to start the VPN connection.
 
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-5. Other Clients
-</summary>
+## 5. Other Clients
 
 ---
 
@@ -442,12 +425,8 @@ The process is similar for other operating systems like macOS and iOS. Download 
 
 
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-6. Case Study - Configuring for 1,000 Clients
-</summary>
+## 6. Case Study - Configuring for 1,000 Clients
 
 ---
 
@@ -610,6 +589,5 @@ Do not forget to back up your key pairs and configuration files securely!
 
 
 <br>
-</details>
 
 

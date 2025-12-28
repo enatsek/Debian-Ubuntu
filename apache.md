@@ -1,10 +1,15 @@
-##### Apache Web Server
-# Apache Tutorial for Debian and Ubuntu
+---
+title: "Apache Web Server"
+description: "Apache HTTP server configuration with SSL support and sample configurations"
+next: false
+prev: false
+sidebar: 
+   label: Apache Web Server
+---
 
-<details markdown="1">
-<summary>
-0. Specs
-</summary>
+##### Apache HTTP server configuration with SSL support and sample configurations
+
+## 0. Specs
 
 ---
 
@@ -27,7 +32,7 @@ I have a test domain name: 386387.xyz, which I used for testing. The test hostna
 
 If you want to run more than a static website, you'll need PHP and a database server as well. We'll cover these components briefly.
 
-### 0.3. Sources
+### 0.2. Sources
 
 - [Apache Documentation](https://httpd.apache.org/docs/)  
 - [Debian](https://manpages.debian.org/) and [Ubuntu](https://manpages.ubuntu.com/) manpages.
@@ -35,12 +40,10 @@ If you want to run more than a static website, you'll need PHP and a database se
 - [ChatGPT](https://chatgpt.com/)
 
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-1. Installation and Configuration Files
-</summary>
+
+## 1. Installation and Configuration Files
+
 
 ---
 ### 1.1. Installation
@@ -113,12 +116,10 @@ sudo systemctl restart apache2
 ```
 
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-2. Creating Our First Website
-</summary>
+
+## 2. Creating Our First Website
+
 
 ---
 ### 2.0. Explanations
@@ -174,7 +175,7 @@ sudo find /var/www/386387.xyz -type d -exec chmod 755 {} \;
 sudo find /var/www/386387.xyz -type f -exec chmod 644 {} \;
 ```
 
-### 2.1.2. Create Website Configuration 
+#### 2.1.2. Create Website Configuration 
 
 Disable the default site configuration (we don't need it anymore):
 
@@ -212,7 +213,7 @@ Line-by-line explanation of the configuration file:
 - `CustomLog`: File for access logs with combined format.
 - `</VirtualHost>`: End of site configuration.
 
-### 2.1.3. Enable the Website
+#### 2.1.3. Enable the Website
 Enable the site and reload Apache:
 
 ```
@@ -355,7 +356,7 @@ Reload Apache:
 sudo systemctl reload apache2
 ```
 
-### 2.2.6. Certbot Hooks
+#### 2.2.6. Certbot Hooks
 
 When the time comes, certbot renews the certificates. But Apache doesn't know that and tries to use the old ones. That means our HTTPS site does not work anymore. 
 
@@ -380,12 +381,10 @@ Make the script executable:
 sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadapache.sh
 ```
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-3. Adding More Sites to Our Server
-</summary>
+
+## 3. Adding More Sites to Our Server
+
 
 ---
 ### 3.0. Explanations
@@ -830,14 +829,12 @@ as
 ```
 
 <br>
-</details>
 
 
 
-<details markdown="1">
-<summary>
-4. Adding PHP Support to Apache
-</summary>
+
+## 4. Adding PHP Support to Apache
+
 
 ---
 
@@ -908,6 +905,6 @@ sudo systemctl restart apache2
 ```
 
 <br>
-</details>
+
 
 

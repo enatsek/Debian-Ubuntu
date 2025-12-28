@@ -1,12 +1,18 @@
-##### Active Directory on Debian and Ubuntu  
-# Simple Active Directory Configuration on Debian and Ubuntu 
+---
+title: "Active Directory"
+description: "Simple AD domain with multiple domain controllers and file server"
+next: false
+prev: false
+sidebar: 
+   label: Active Directory
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### Simple AD domain with multiple domain controllers and file server
+
+## 0. Specs
 
 ---
+
 ### 0.0. The What
 We will install a single-domain Active Directory infrastructure using Debian or Ubuntu Servers.
 
@@ -32,7 +38,6 @@ We will install a single-domain Active Directory infrastructure using Debian or 
     - Debian 13/12 or Ubuntu 24.04/22.04 LTS Server
 - Windows workstations will be able to connect to the domain.
 
-
 - **Groups and Users:**
   - **Marketing:** mrk01, mrk02, mrk03
   - **Sales:** sls01, sls02, sls03
@@ -40,7 +45,6 @@ We will install a single-domain Active Directory infrastructure using Debian or 
   - **IT:** it01, it02, it03, support
   - **SysAdmin:** support
   - **All:** all of the above users
-
 
 - **File Server Shares:**
 
@@ -73,17 +77,19 @@ We will install a single-domain Active Directory infrastructure using Debian or 
 
 In my tests, I used distributions uniformly (i.e., all servers were either Debian 12, Debian 13, Ubuntu 22.04, or Ubuntu 24.04). I believe the system would work with a mix of distributions, but this has not been tested.
 
-### 0.3. Phases
+### 0.2. Phases
+
 - Add First DC (`srv1.386387.xyz`)
 - Add Additional DC (`srv2.386387.xyz`)
 - AD User Management
 - Add a Linux File Server to the Domain (`filesrv.386387.xyz`)
 - Add a Windows Computer to the Domain
 
-### 0.4. Preliminary Tasks
+### 0.3. Preliminary Tasks
+
 There are some important considerations. Not complying with them can cause problems.
 
-#### 0.4.1. Choosing Domain Name and Realm
+#### 0.3.1. Choosing Domain Name and Realm
 The Realm is in the domain name format, and the Domain Name is a single word (the NetBIOS name of your domain).
 
 If your company's internet domain name is `example.com`, you can choose your Realm and Domain Name as follows:
@@ -92,7 +98,7 @@ If your company's internet domain name is `example.com`, you can choose your Rea
 
 Whenever you use them, they must be in **UPPERCASE**. This is due to a design choice in Microsoft's implementation.
 
-#### 0.4.2. IP Address and Hostname for Domain Controllers and Domain Members
+#### 0.3.2. IP Address and Hostname for Domain Controllers and Domain Members
 
 Domain Controllers and Domain Members should have static IP addresses.
 
@@ -107,24 +113,20 @@ The hostname must be in the format `name.example.com` (lowercase). Due to an inc
 ```
 
  
-#### 0.4.3. Mixed Environment
+#### 0.3.3. Mixed Environment
 You should have at least 2 Domain Controllers (DCs). You could use one Windows and one Linux DC to benefit from Microsoft's native AD management tools, but this is not necessary.
 
 I recommend installing all DCs on Linux and using a Windows workstation with RSAT (Remote Server Administration Tools) installed to manage AD. This allows you to use the standard AD management programs (including for DNS) from a familiar environment.
 
-#### 0.4.4. Default Values
+#### 0.3.4. Default Values
 Remember to replace all occurrences of `386387`, `386387.XYZ`, and `386387.xyz` with your own values, respecting the case.
 
-### 0.5. Sources
+### 0.4. Sources
 - Based on the valuable documentation at: [Server-World](https://www.server-world.info/en/note?os=Ubuntu_18.04&p=samba&f=4)
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Add First Domain Controller
-</summary>
+## 1. Add First Domain Controller
 
 ---
 ### 1.0. Specs
@@ -215,7 +217,7 @@ domain 386387.xyz
 nameserver 127.0.0.1
 ```
 
-### 1.5. Start DC Services
+### 1.6. Start DC Services
 ```
 sudo systemctl start samba-ad-dc
 sudo systemctl enable samba-ad-dc 
@@ -233,12 +235,8 @@ Create a test domain user:
 sudo samba-tool user create exforge
 ```
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Add Additional Domain Controller
-</summary>
+## 2. Add Additional Domain Controller
 
 ---
 ## 2.0. Specs
@@ -372,12 +370,8 @@ sudo samba-tool drs showrepl
 **Note:** The warning `Warning: No NC replicated for Connection!` is not critical and can be ignored initially.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. AD User & Computer Management
-</summary>
+## 3. AD User & Computer Management
 
 ---
 
@@ -611,12 +605,8 @@ sudo samba-tool time --help
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. Create Users and Groups
-</summary>
+## 4. Create Users and Groups
 
 ---
 ### 4.1. Create Users
@@ -674,12 +664,8 @@ sudo samba-tool group addmembers All Marketing,Sales,Production,IT,SysAdmin
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-5. Install and Configure the File Server
-</summary>
+## 5. Install and Configure the File Server
 
 ---
 ### 5.1. Set Hostname and DNS Information
@@ -1051,12 +1037,8 @@ sudo systemctl restart smbd
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-6. Add Windows Computers to the Domain 
-</summary>
+## 6. Add Windows Computers to the Domain 
 
 ---
 
@@ -1065,5 +1047,5 @@ sudo systemctl restart smbd
 3.  After joining, you can install **RSAT (Remote Server Administration Tools)** on the Windows workstation to manage AD, DNS, and other services.
 4.  You can connect to the file shares using `\\filesrv\ShareName` (e.g., `\\filesrv\XMrk`) from any domain-joined Windows computer.
 
-</details>
+
 

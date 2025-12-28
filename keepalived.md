@@ -1,10 +1,15 @@
-##### Keepalived
-# Keepalived Clustering on Debian and Ubuntu Servers
+---
+title: "Keepalived"
+description: "High-availability clustering"
+next: false
+prev: false
+sidebar: 
+   label: Keepalived
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### High-availability clustering
+
+## 0. Specs
 
 ---
 
@@ -38,16 +43,9 @@ In this tutorial, we'll configure two servers with various Keepalived scenarios 
 - [Claude](https://claude.ai/)
 - [Keepalived Documentation](https://keepalived.readthedocs.io/)
 
-
-
-
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Scenario 1 - Simple Mode
-</summary>
+# 1. Scenario 1 - Simple Mode
 
 ---
 
@@ -134,13 +132,7 @@ systemctl status -l keepalived
 
 **Testing:** You can test failover by stopping the primary server (`sudo systemctl stop keepalived` or shutting it down) and observing the VIP migration to the backup server.
 
-</details>
-
-
-<details markdown='1'>
-<summary>
-2. Scenario 2 - Nonpreemptive Mode
-</summary>
+## 2. Scenario 2 - Nonpreemptive Mode
 
 ---
 
@@ -213,14 +205,7 @@ Restart Keepalived on both servers to apply the changes:
 sudo systemctl restart keepalived
 ```
 
-</details>
-
-
-
-<details markdown='1'>
-<summary>
-3. Scenario 3 - Apache High Availability
-</summary>
+## 3. Scenario 3 - Apache High Availability
 
 ---
 
@@ -360,14 +345,7 @@ sudo systemctl restart keepalived
 
 **Note:** For Nginx or other services, modify the check script accordingly (e.g., check for `nginx` instead of `apache2`).
 
-</details>
-
-
-
-<details markdown='1'>
-<summary>
-4. Scenario 4 - Active/Active VIPs
-</summary>
+## 4. Scenario 4 - Active/Active VIPs
 
 ---
 
@@ -468,4 +446,4 @@ sudo systemctl restart keepalived
 You can enhance this configuration by adding health check scripts (as shown in Scenario 3) to each `vrrp_instance` block to trigger failover based on application health rather than just server availability.
 
 
-</details>
+

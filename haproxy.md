@@ -1,16 +1,15 @@
-0,1,2
-3,4,5
-6,7
-8
+---
+title: "HAProxy"
+description: "High-availability load balancing with SSL/TLS and keepalived"
+next: false
+prev: false
+sidebar: 
+   label: HAProxy
+---
 
+##### High-availability load balancing with SSL/TLS and keepalived
 
-##### HAProxy
-# High Availability with HAProxy Load Balancer on Debian and Ubuntu
-
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+## 0. Specs
 
 ---
 ### 0.1. The What
@@ -47,19 +46,15 @@ First, we will load balance the web server, then we will load balance the MariaD
 
 Users will only see the floating IP (`192.168.1.200`) of the Load Balancers and will not be aware of the other servers or their IPs.
 
-### 0.4. Sources:
+### 0.4. Sources
 - [www.haproxy.org](https://www.haproxy.org/)  
 - [www.server-world.info](https://www.server-world.info/en/note?os=Ubuntu_20.04&p=haproxy&f=1)  
 - [HAProxy Documentation](https://docs.haproxy.org/)  
 - Book: ISBN: 9781519073846 **Load Balancing with HAProxy** by Nick Ramirez
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Install and Configure Load Balancers
-</summary>
+## 1. Install and Configure Load Balancers
 
 ---
 
@@ -147,12 +142,8 @@ sudo systemctl stop haproxy
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Install and Configure Application/Web Servers
-</summary>
+## 2. Install and Configure Application/Web Servers
 
 ---
 
@@ -350,12 +341,8 @@ sudo systemctl start mariadb
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. Configure Web Server Load Balancing 
-</summary>
+## 3. Configure Web Server Load Balancing 
 
 ---
 We will configure HAProxy to load balance the three web servers (192.168.1.203, 192.168.1.204, and 192.168.1.205).
@@ -428,12 +415,8 @@ Let's break down the configuration:
 You can now connect to the website at `http://192.168.1.200` from different workstations. You should see that connections are being distributed across `192.168.1.203`, `192.168.1.204`, and `192.168.1.205`.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. Configure Mariadb Load Balancing
-</summary>
+## 4. Configure Mariadb Load Balancing
 
 ---
 **Notes:**
@@ -494,12 +477,8 @@ SHOW VARIABLES LIKE 'hostname';
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-5. More on HAProxy Configuration Options
-</summary>
+## 5. More on HAProxy Configuration Options
 
 ---
 ### 5.1. Default Configuration File
@@ -585,12 +564,8 @@ listen myproxy
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-6. Load Balancing Algorithms
-</summary>
+## 6. Load Balancing Algorithms
 
 ---
 
@@ -739,12 +714,8 @@ backend be_http_80
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-7. URL Redirection
-</summary>
+## 7. URL Redirection
 
 ---
 
@@ -925,12 +896,8 @@ frontend be_http
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-8. Enabling HTTPS at HAProxy
-</summary>
+## 8. Enabling HTTPS at HAProxy
 
 ---
 
@@ -1392,5 +1359,5 @@ backend be_http
         server srv2 165.227.176.14:443 check cookie srv2 ssl verify none 
 ```
 
-</details>
+
 

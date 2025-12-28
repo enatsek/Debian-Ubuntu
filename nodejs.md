@@ -1,10 +1,15 @@
-##### Node.js
-# Node.js Tutorial for Debian and Ubuntu
+---
+title: "Node.js"
+description: "Node.js installation and basic setup"
+next: false
+prev: false
+sidebar: 
+   label: Node.js
+---
 
-<details markdown="1">
-<summary>
-0. Specs
-</summary>
+##### Node.js installation and basic setup
+
+## 0. Specs
 
 ---
 
@@ -26,12 +31,9 @@ I used Debian and Ubuntu server editions, namely Debian 12 & 13, Ubuntu 22.04 & 
 
 
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-1. Installation
-</summary>
+
+## 1. Installation
 
 ---
 
@@ -146,12 +148,10 @@ nvm uninstall 23
 
 
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-2. Using Node.js
-</summary>
+
+## 2. Using Node.js
+
 
 ---
 
@@ -266,7 +266,7 @@ npm uninstall chalk
 ```
 
 <br>
-</details>
+
 
 
 

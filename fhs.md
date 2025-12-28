@@ -1,11 +1,16 @@
-##### FHS
-# Filesystem Hierarchy Standard
-</details>
+---
+title: "FHS (Filesystem Hierarchy Standard)"
+description: "Linux filesystem structure specifications"
+next: false
+prev: false
+sidebar: 
+   label: FHS (Filesystem Hierarchy Standard)
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+
+##### Linux filesystem structure specifications
+
+## 0. Specs
 
 ---
 ### 0.1. Introduction 
@@ -133,12 +138,8 @@ The goal of the FHS is to establish a consistent and predictable directory layou
 - [ChatGPT](https://chatgpt.com/)
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. /bin - Essential Command Binaries
-</summary>
+## 1. /bin - Essential Command Binaries
 
 ---
 
@@ -153,12 +154,8 @@ Command binaries that are not essential enough to reside in `/bin` should be pla
 **Example commands:** `cat`, `chgrp`, `chmod`, `chown`, `cp`, `date`, `dd`, `df`, `dmesg`, `echo`, `false`, `hostname`, `kill`, `ln`, `login`, `ls`, `mkdir`, `mknod`, `more`, `mount`, `mv`, `ps`, `pwd`, `rm`, `rmdir`, `sed`, `sh`, `stty`, `su`, `sync`, `true`, `umount`, `uname`.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. /boot - Static Files of the Boot Loader
-</summary>
+## 2. /boot - Static Files of the Boot Loader
 
 ---
 
@@ -173,12 +170,8 @@ Contains all files required for the boot process, except for configuration files
 **Note:** Certain architectures may have additional requirements for `/boot` due to limitations or expectations specific to that architecture.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. /dev - Device Files
-</summary>
+## 3. /dev - Device Files
 
 ---
 
@@ -193,14 +186,12 @@ The devices in the /dev directory are created dynamically during the boot proces
 - `/dev/null` – Null device (discards all data written to it)
 
 <br>
-</details>
 
 
 
-<details markdown='1'>
-<summary>
-4. /etc - Host-specific System Configuration
-</summary>
+
+
+## 4. /etc - Host-specific System Configuration
 
 ---
 
@@ -294,12 +285,8 @@ Contains generic configuration files defining high-level parameters of XML syste
 - `*.conf`: Generic configuration files
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-5. /home - User Home Directories
-</summary>
+## 5. /home - User Home Directories
 
 ---
 
@@ -319,12 +306,8 @@ User home directories are stored here.
 - Apart from autosave and lock files, programs should avoid creating non-dot files or directories in a home directory without user consent.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-6. /lib - Essential Shared Libraries and Kernel Modules
-</summary>
+## 6. /lib - Essential Shared Libraries and Kernel Modules
 
 ---
 
@@ -343,12 +326,8 @@ Contains shared library images required to boot the system and run commands in `
 - `/lib/modules`: Loadable kernel modules
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-7. /lib* - Alternate format essential shared libraries
-</summary>
+## 7. /lib* - Alternate format essential shared libraries
 
 ---
 
@@ -364,12 +343,8 @@ Systems supporting multiple binary formats requiring separate libraries may have
 
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-8. /media - Mount Point for Removable Media
-</summary>
+## 8. /media - Mount Point for Removable Media
 
 ---
 
@@ -387,12 +362,8 @@ Contains subdirectories used as mount points for removable media such as floppy 
 - If multiple devices of the same type exist, mount directories can be created by appending a digit (starting with `0`) to the base name, but the unqualified name must also exist (e.g., `/media/cdrom0`, `/media/cdrom`).
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-9. /mnt - Mount Point for Mounting a Filesystem Temporarily
-</summary>
+## 9. /mnt - Mount Point for Mounting a Filesystem Temporarily
 
 ---
 
@@ -404,13 +375,8 @@ System administrators may temporarily mount filesystems here.
 - Installation programs must not use this directory; they should use a suitable temporary directory not in use by the system.
 
 <br>
-</details>
 
-
-<details markdown='1'>
-<summary>
-10. /opt - Add-on Application Software Packages
-</summary>
+## 10. /opt - Add-on Application Software Packages
 
 ---
 
@@ -435,12 +401,8 @@ Reserved for the installation of add-on application software packages. Its purpo
 - Host-specific configuration files must be installed in `/etc/opt`.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-11. /root - Home directory for the root user
-</summary>
+## 11. /root - Home directory for the root user
 
 ---
 
@@ -453,12 +415,8 @@ Recommended home directory for the root user.
 - For this reason, subdirectories for mail and other user applications are not recommended in `/root`.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-12. /run - Data Relevant to Running Processes
-</summary>
+## 12. /run - Data Relevant to Running Processes
 
 ---
 
@@ -476,12 +434,8 @@ Contains system information describing the system since it was booted.
 - Naming convention: `{program-name}.pid` (e.g., `/run/crond.pid`).
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-13. /sbin - Essential System Binaries
-</summary>
+## 13. /sbin - Essential System Binaries
 
 ---
 
@@ -520,12 +474,8 @@ In Debian 13 and Ubuntu 24.04, `/sbin` is a symbolic link to `/usr/sbin`.
 - `/sbin/update`: Daemon to periodically flush filesystem buffers
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-14. /srv - Data for Services Provided by This System
-</summary>
+## 14. /srv - Data for Services Provided by This System
 
 ---
 
@@ -539,12 +489,8 @@ This directory is empty in default Debian 13 and Ubuntu 24.04 installations.
 - It is reserved for locally administered data associated with specific services (e.g., web content, FTP files, version control repositories).
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-15. /tmp - Temporary Files
-</summary>
+## 15. /tmp - Temporary Files
 
 ---
 
@@ -557,12 +503,8 @@ Provides a location for temporary files used by programs and users during their 
 - The directory is typically world-writable, allowing any user to create, modify, or delete files, facilitating sharing of temporary data.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-16. /usr - Secondary hierarchy
-</summary>
+## 16. /usr - Secondary hierarchy
 
 ---
 
@@ -769,12 +711,8 @@ May contain source code for reference purposes. Source should generally not be b
 
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-17. /var - Variable Data
-</summary>
+## 17. /var - Variable Data
 
 ---
 
@@ -811,12 +749,8 @@ Contains variable data files: spool directories, administrative and logging data
 - `/var/yp`: Network Information Service (NIS) database files
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-18. Special to Linux
-</summary>
+## 18. Special to Linux
 
 ---
 
@@ -838,6 +772,5 @@ Exposes information about devices, drivers, and kernel features.
 - A virtual filesystem.
 - Allows reading and modifying certain kernel parameters through its files.
 
-</details>
-</summary>
+
 

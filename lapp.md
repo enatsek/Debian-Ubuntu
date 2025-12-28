@@ -1,10 +1,15 @@
-##### LAPP Stack 
-# Installing LAPP Stack On Debian and Ubuntu 
+---
+title: "LAPP Stack"
+description: "Linux, Apache, PostgreSQL, PHP stack installation and configuration"
+next: false
+prev: false
+sidebar: 
+   label: LAPP Stack
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### Linux, Apache, PostgreSQL, PHP stack installation and configuration
+
+## 0. Specs
 
 ---
 
@@ -30,12 +35,8 @@ In this guide, we will use **PHP** as our server-side scripting language.
 - [stackoverflow.com](https://stackoverflow.com/questions/49157928/how-to-fetch-data-from-postgresql-using-php)
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Install Packages
-</summary>
+## 1. Install Packages
 
 ---
 
@@ -72,12 +73,8 @@ sudo systemctl restart apache2
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Test LAPP Stack
-</summary>
+## 2. Test LAPP Stack
 
 ---
 
@@ -182,7 +179,7 @@ Open a web browser on your workstation and navigate to the following URL, replac
 
 You should see a table displaying the data from the `Employees` table.
 
-</details>
+
 
 
 

@@ -1,10 +1,15 @@
-##### Site-to-site VPN
-# Site-to-site VPN Tutorial using wireguard for Debian and Ubuntu
+---
+title: "Site-to-Site VPN"
+description: "WireGuard VPN configuration for connecting networks"
+next: false
+prev: false
+sidebar: 
+   label: Site-to-Site VPN
+---
 
-<details markdown="1">
-<summary>
-0. Specs
-</summary>
+##### WireGuard VPN configuration for connecting networks
+
+## 0. Specs
 
 ---
 
@@ -50,12 +55,8 @@ It's different from the VPN you might use on your personal computer, which typic
 
 
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-1. Pre-Config and Wireguard Installation
-</summary>
+## 1. Pre-Config and Wireguard Installation
 
 ---
 
@@ -77,12 +78,8 @@ sudo apt install wireguard -y
 ```
 
 <br>
-</details>
 
-<details markdown="1">
-<summary>
-2. Generate Key Pairs
-</summary>
+## 2. Generate Key Pairs
 
 ---
 
@@ -107,16 +104,8 @@ My public and private keys for reference:
 - net2-1 Private Key: ```QE3DmQNIX4WePgJskO6oERq2toIqcrSVYRxONq+Fa0A=```
 
 <br>
-</details>
 
-
-
-
-
-<details markdown="1">
-<summary>
-3. Wireguard Configuration
-</summary>
+## 3. Wireguard Configuration
 
 ---
 
@@ -217,14 +206,8 @@ ping 192.168.56.1           # Ping the other server's private IP
 If the pings receive replies, the VPN tunnel is established successfully. To enable communication with other hosts on the remote network, we need to add routes.
 
 <br>
-</details>
 
-
-
-<details markdown="1">
-<summary>
-4. Adding Routes
-</summary>
+## 4. Adding Routes
 
 ---
 
@@ -396,6 +379,4 @@ sudo nmcli connection up "Wired connection 1"
 ```
 
 <br>
-</details>
-
 

@@ -1,10 +1,16 @@
-##### File Compression 
-# File Compression and Archiving on Debian And Ubuntu
+---
+title: "File Compression"
+description: "Compression utilities overview and usage"
+next: false
+prev: false
+sidebar: 
+   label: File Compression
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+
+##### Compression utilities overview and usage
+
+## 0. Specs
 
 ---
 ### 0.1. The What
@@ -95,12 +101,8 @@ Final tree
 - [ChatGPT](https://chatgpt.com/)
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. gzip
-</summary>
+## 1. gzip
 
 ---
 ### 1.1. Info
@@ -177,12 +179,8 @@ Some useful options:
 - -9 --best: Compress better
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. bzip2
-</summary>
+## 2. bzip2
 
 ---
 ### 2.1. Info
@@ -248,12 +246,8 @@ Some useful options:
 - -9 --best: Compress better
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. xz
-</summary>
+## 3. xz
 
 ---
 ### 3.1. Info
@@ -318,12 +312,8 @@ Some useful options:
 - -9: Compress better
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. tar
-</summary>
+## 4. tar
 
 ---
 #### 4.1. Info
@@ -447,12 +437,8 @@ Some selected options:
 - --remove-files: remove files after adding them to the archive
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-5. zip
-</summary>
+## 5. zip
 
 ---
 ### 5.1. Info
@@ -527,6 +513,6 @@ Some options:
 - -i: include only the following names
 - -e: encrypt
 
-</details>
-</summary>
+
+
 

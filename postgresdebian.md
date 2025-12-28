@@ -1,10 +1,16 @@
-##### Postgresql Debian
-# Postgresql Tutorial for Debian
+---
+title: "PostgreSQL (Debian)"
+description: "Installation, configuration, user management, cluster management, backup/restore on Debian"
+next: false
+prev: false
+sidebar: 
+   label: PostgreSQL (Debian)
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+
+##### Installation, configuration, user management, cluster management, backup/restore on Debian
+
+## 0. Specs
 
 ---
 ### 0.1. The What
@@ -30,12 +36,8 @@ Debian 13 and Ubuntu 24.04 LTS Server include packages for different PostgreSQL 
 - **Learn PostgreSQL** by Luca Ferrari & Enrico Pirozzi 
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Introduction
-</summary>
+## 1. Introduction
 
 ---
 ### 1.1. Terminology:
@@ -65,12 +67,8 @@ PostgreSQL supports the information schema but also maintains a catalog that pro
 The Debian `postgresql` package installs `postgresql-client` by default.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Installation and Basic Management
-</summary>
+## 2. Installation and Basic Management
 
 ---
 ### 2.1. Installation
@@ -241,12 +239,8 @@ sudo -u postgres psql -p 5433
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. User and Connection Management
-</summary>
+## 3. User and Connection Management
 
 ---
 
@@ -384,12 +378,8 @@ INSERT INTO Employees VALUES ('Halim Selim', '41', 'Hirsiz');
 If you try to connect from another workstation in the `192.168.1.0/24` network, you'll see that `rwuser` cannot connect while `rouser` can.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. Backup and Restore 
-</summary>
+## 4. Backup and Restore 
 
 ---
 
@@ -480,12 +470,8 @@ sudo -u postgres psql -p 5433 -f /tmp/main.pg
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-5. psql - PostgreSQL Shell
-</summary>
+## 5. psql - PostgreSQL Shell
 
 ---
 ### 5.1. The Command
@@ -547,12 +533,8 @@ You can run SQL commands in the `psql` shell, as well as `psql` meta-commands (p
 - `\?` - Show psql command help
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-6. Bonus: Postgres 17 and Postgres 18 together
-</summary>
+## 6. Bonus: Postgres 17 and Postgres 18 together
 
 ---
 
@@ -630,5 +612,5 @@ Connect to the third cluster (18-main, port 5434):
 ```
 sudo -u postgres psql -p 5434
 ```
-</details>
+
 

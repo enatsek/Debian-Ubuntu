@@ -1,10 +1,18 @@
-##### Network On Debian 
-# Network Configuration On Debian Servers 
+---
+title: "Debian Network Configuration"
+description: "Basic network configuration for Debian systems"
+next: false
+prev: false
+sidebar: 
+   label: Debian Network Configuration
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+
+##### Basic network configuration for Debian systems 
+
+
+## 0. Specs
+
 
 ---
 ### 0.0. The What
@@ -14,7 +22,7 @@ Tried to be as thorough as possible: single NIC, multiple NICs, multiple network
 
 Debian and Ubuntu network configurations are very different, so there are separate tutorials for Debian and Ubuntu.
 
-#### 0.1. Configuration Files
+### 0.1. Configuration Files
 Debian 12 & 13 use ifupdown for network configuration.
 
 The main configuration file is `/etc/network/interfaces`. This file includes all files in the `/etc/network/interfaces.d/` directory.
@@ -95,12 +103,11 @@ sudo systemctl restart networking
 - [ChatGPT](https://chatgpt.com/)
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Example Configurations
-</summary>
+
+
+## 1. Example Configurations
+
 
 ---
 ### 1.1. DHCP Configuration
@@ -212,12 +219,11 @@ sudo systemctl restart networking
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Case Study - Multiple Networks
-</summary>
+
+
+## 2. Case Study - Multiple Networks
+
 
 ---
 ### 2.0. Specs
@@ -501,12 +507,11 @@ ping 192.168.1.197
 For a host to connect to another host on the other network, routing must be defined on both hosts.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. NIC Bonding
-</summary>
+
+
+## 3. NIC Bonding
+
 
 ---
 Network Interface Card (NIC) bonding involves using two or more NICs together to achieve redundancy and/or increased throughput.
@@ -732,5 +737,5 @@ Check the status of the bond:
 sudo cat /proc/net/bonding/bond0
 ```
 
-</details>
+
 

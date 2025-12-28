@@ -1,10 +1,15 @@
-##### Other Linuxes
-# Other Linux Distributions for Debian and Ubuntu Admins
+---
+title: "Other Linux Distributions"
+description: "Managing Debian, Ubuntu, Red Hat, Alpine, and Devuan systems"
+next: false
+prev: false
+sidebar: 
+   label: Other Linux Distributions
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+#####  Managing Debian, Ubuntu, Red Hat, Alpine, and Devuan systems
+
+## 0. Specs
 
 ---
 ### 0.1. The What
@@ -34,12 +39,8 @@ Distributions covered:
 - [www.geeksforgeeks.org](https://www.geeksforgeeks.org/how-to-retrieve-data-from-mysql-database-using-php/)
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Debian 13 & 12
-</summary>
+## 1. Debian 13 & 12
 
 ---
 ### 1.1. Package Management
@@ -170,7 +171,6 @@ sudo apt install --yes apache2 mariadb-server php \
    libapache2-mod-php php-mysql
 ```
 
-
 #### 1.3.2. Test LAMP Stack
 
 We'll create a test database, table, and PHP file to verify all components work together.
@@ -295,12 +295,8 @@ sudo systemctl disable apache2
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Ubuntu 24.04 LTS & 22.04 LTS
-</summary>
+## 2. Ubuntu 24.04 LTS & 22.04 LTS
 
 ---
 
@@ -350,7 +346,7 @@ sudo autoremove
 sudo show apache2
 ```
  
-## 2.2. Network Configuration
+### 2.2. Network Configuration
 
 #### 2.2.1. Get the name of the network adapter
 
@@ -462,12 +458,8 @@ sudo systemctl disable apache2
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. RHEL (AlmaLinux, Rocky Linux) 10.x, 9.x
-</summary>
+## 3. RHEL (AlmaLinux, Rocky Linux) 10.x, 9.x
 
 ---
 
@@ -628,12 +620,8 @@ sudo systemctl disable httpd
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. Alpine Linux 3.23
-</summary>
+## 4. Alpine Linux 3.23
 
 ---
 ### 4.1. Package Management
@@ -802,12 +790,8 @@ sudo rc-update del apache2 default
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-5. Devuan 6 & 5
-</summary>
+## 5. Devuan 6 & 5
 
 ---
 
@@ -978,5 +962,5 @@ sudo update-rc.d apache2 defaults
 sudo update-rc.d apache2 remove
 ```
 
-</details>
+
 

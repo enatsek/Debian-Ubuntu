@@ -1,10 +1,15 @@
-##### User Administration 
-# User and Group Administration on Debian and Ubuntu
+---
+title: "User and Group Administration"
+description: "User and group management essentials"
+next: false
+prev: false
+sidebar: 
+   label: User and Group Administration
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### User and group management essentials
+
+## 0. Specs
 
 ---
 
@@ -23,12 +28,8 @@ The commands and concepts also work on Debian, Ubuntu, and their derivatives' de
 
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. User Add and Delete
-</summary>
+## 1. User Add and Delete
 
 ---
 
@@ -66,12 +67,8 @@ sudo userdel -r jdoe
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. User Information Files
-</summary>
+## 2. User Information Files
 
 ---
 
@@ -117,12 +114,8 @@ Format: `username:password:last_change:min_age:max_age:warn:inactive:expire`
 The contents of this directory are copied to new users' home directories when their accounts are created. You can place default configuration files (like `.bashrc`, `.profile`) here.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. Root user
-</summary>
+## 3. Root user
 
 ---
 
@@ -153,12 +146,8 @@ sudo su - username
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. Batch User Creation
-</summary>
+## 4. Batch User Creation
 
 ---
 
@@ -206,12 +195,8 @@ grep -E 'user1|user2|user3' /etc/passwd
 sudo passwd user1
 ```
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-5. Group Management
-</summary>
+## 5. Group Management
 
 ---
 
@@ -269,12 +254,8 @@ sudo gpasswd -d user1 admins
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-6. User Account Modifications
-</summary>
+## 6. User Account Modifications
 
 ---
 Change a user's home directory and move the contents:
@@ -308,12 +289,8 @@ sudo chage -l user1
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-7. sudo Group
-</summary>
+## 7. sudo Group
 
 ---
 
@@ -359,5 +336,5 @@ View your current sudo privileges:
 sudo -l
 ```
 
-</details>
+
 

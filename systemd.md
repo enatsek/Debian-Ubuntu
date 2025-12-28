@@ -1,11 +1,15 @@
-##### Systemd 
-# Basic Systemd Tutorial 
-</details>
+---
+title: "Systemd Basics"
+description: "Introduction to systemd service management"
+next: false
+prev: false
+sidebar: 
+   label: Systemd Basics
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### Introduction to systemd service management
+
+## 0. Specs
 
 ---
 ### 0.1. The What 
@@ -39,12 +43,8 @@ A strong alternative to systemd is OpenRC.
 - **Linux Service Management Made Easy with systemd** by Donald A. Tevault
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. systemd Units
-</summary>
+## 1. systemd Units
 
 ---
 
@@ -281,12 +281,8 @@ For a complete list of directives, see:
 - **`Persistent`**: If `true`, stores the last trigger time on disk; triggers immediately if missed while inactive.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Targets
-</summary>
+## 2. Targets
 
 ---
 ### 2.1. Definition and List
@@ -433,13 +429,8 @@ AllowIsolate=yes
 ```
 
 <br>
-</details>
 
-
-<details markdown='1'>
-<summary>
-3. Unit Management: systemctl Command
-</summary>
+## 3. Unit Management: systemctl Command
 
 ---
 
@@ -638,12 +629,8 @@ systemctl --host user_name@host_name command
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. Log Management: journalctl Command
-</summary>
+## 4. Log Management: journalctl Command
 
 ---
 
@@ -755,12 +742,8 @@ sudo journalctl --vacuum-time=1years
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-5. Other systemd Components
-</summary>
+## 5. Other systemd Components
 
 ---
 
@@ -799,12 +782,8 @@ systemd includes several additional components. Some notable ones are:
 - **systemd-udevd**: Manages physical devices.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-6. Creating a Custom Service
-</summary>
+## 6. Creating a Custom Service
 
 ---
 
@@ -887,7 +866,6 @@ Check the recent logs to verify the service is working:
 sudo journalctl -n 20
 ```
 
-</details>
-</summary>
+
 
 

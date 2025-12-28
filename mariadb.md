@@ -1,10 +1,16 @@
-##### Mariadb  
-# MariaDB Tutorial on Debian and Ubuntu
+---
+title: "MariaDB"
+description: "Installation, configuration, user management, and primary-replica replication"
+next: false
+prev: false
+sidebar: 
+   label: MariaDB
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+
+##### Installation, configuration, user management, and primary-replica replication
+
+## 0. Specs
 
 ---
 
@@ -29,12 +35,8 @@ MariaDB is a fork of MySQL. I prefer using it for a variety of reasons, one of w
 **Warning: Do not install MariaDB and MySQL on the same server.**
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Installation and Securing
-</summary>
+## 1. Installation and Securing
 
 ---
 
@@ -78,12 +80,8 @@ sudo mariadb
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Basic User Management
-</summary>
+## 2. Basic User Management
 
 ---
 **All commands in this section must be run within the MariaDB shell.**
@@ -158,12 +156,8 @@ DELETE FROM mysql.user WHERE user='myuser' AND host='localhost';
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. Database Manipulation
-</summary>
+## 3. Database Manipulation
 
 ---
 **All commands in this section must be run within the MariaDB shell.**
@@ -234,12 +228,8 @@ DROP DATABASE mysampledb;
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. Backup and Restore
-</summary>
+## 4. Backup and Restore
 
 ---
 
@@ -256,12 +246,9 @@ sudo mariadb < mysampledb.sql
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-5. Primary - Replica (Master-Slave) Replication Configuration
-</summary>
+## 5. Primary - Replica (Master-Slave) Replication Configuration
+
 ---
 
 ### 5.0. Specs and Preliminary Tasks
@@ -450,5 +437,5 @@ EXIT;
 **Configuration Complete.**
 
 You can now test the setup by manipulating data in the `mysampledb` database on the primary server. Changes should be replicated to the replica server within seconds.
-</details>
+
 

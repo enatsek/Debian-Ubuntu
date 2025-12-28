@@ -1,10 +1,15 @@
-##### LAMP Stack 
-# Installing LAMP Stack On Debian and Ubuntu 
+---
+title: "LAMP Stack"
+description: "Linux, Apache, MariaDB, PHP stack installation and configuration"
+next: false
+prev: false
+sidebar: 
+   label: LAMP Stack
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### Linux, Apache, MariaDB, PHP stack installation and configuration
+
+## 0. Specs
 
 ---
 
@@ -31,12 +36,8 @@ In this guide, we will use **MariaDB** as our database and **PHP** as our server
 - [geeksforgeeks](https://www.geeksforgeeks.org/how-to-retrieve-data-from-mysql-database-using-php/)
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Install Packages
-</summary>
+## 1. Install Packages
 
 ---
 
@@ -93,12 +94,8 @@ sudo systemctl restart apache2
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Test LAMP Stack
-</summary>
+## 2. Test LAMP Stack
 
 ---
 
@@ -194,7 +191,7 @@ Open a web browser on your workstation and navigate to the following URL, replac
 
 You should see a table displaying the data from the `Employees` table.
 
-</details>
+
 
 
 

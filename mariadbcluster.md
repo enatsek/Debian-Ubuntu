@@ -1,10 +1,15 @@
-##### Mariadb Galera Cluster 
-# MariaDB Multi-Primary Replication with Galera Cluster Tutorial on Debian and Ubuntu
+---
+title: "MariaDB Cluster"
+description: "Multi-master replication with Galera Cluster"
+next: false
+prev: false
+sidebar: 
+   label: MariaDB Cluster
+---
 
-<details markdown='1'>
-<summary>
-0. Specs
-</summary>
+##### Multi-master replication with Galera Cluster
+
+## 0. Specs
 
 ---
 
@@ -40,12 +45,8 @@ MariaDB Galera Cluster is a Linux-exclusive, multi-primary cluster solution for 
 - [MariaDB Knowledge Base - Galera Recovery](https://mariadb.com/kb/en/galera-cluster-recovery/)
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-1. Mariadb Installation
-</summary>
+## 1. Mariadb Installation
 
 ---
 
@@ -78,12 +79,8 @@ You will be asked a series of questions. Here are recommended answers:
 - For the remaining questions (remove anonymous users, disallow root login remotely, remove test database, reload privilege tables), it is safe to accept the defaults by pressing **`Y`**.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-2. Mariadb Configuration
-</summary>
+## 2. Mariadb Configuration
 
 ---
 
@@ -152,12 +149,8 @@ binlog_format = ROW
 ```
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-3. Starting The Cluster
-</summary>
+## 3. Starting The Cluster
 
 ---
 
@@ -184,12 +177,8 @@ sudo systemctl start mariadb
 The Galera Cluster is now established and operational.
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-4. Testing the MariaDB Cluster
-</summary>
+## 4. Testing the MariaDB Cluster
 
 ---
 We will execute commands on different nodes to verify replication is working correctly.
@@ -257,12 +246,8 @@ exit;
 
 You should see the same records on all nodes, confirming that replication is working.
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-5. Maintenance
-</summary>
+## 5. Maintenance
 
 ---
 ### 5.1. Cluster Health Check
@@ -332,12 +317,8 @@ sudo systemctl restart mariadb
 3. If the cluster fails to start, proceed to Section 6 (Cluster Recovery)
 
 <br>
-</details>
 
-<details markdown='1'>
-<summary>
-6. Cluster Recovery
-</summary>
+## 6. Cluster Recovery
 
 ---
 MariaDB Galera Cluster typically runs reliably as long as at least 2 nodes remain online. However, if all nodes go offline, recovery procedures are required.
@@ -472,5 +453,5 @@ sudo systemctl restart mariadb
 ```
 
 If these steps don't resolve the issue, professional support may be required.
-</details>
+
 

@@ -126,7 +126,7 @@ Your web-based database management tool is now ready:
 
 You should enable HTTPS, especially if you plan to expose your site to the internet. HTTPS is also recommended for local network sites for enhanced security.
 
-Refer to the Certbot tutorial for instructions on enabling HTTPS with free Let's Encrypt certificates.
+Refer to the Certbot tutorial for instructions on enabling HTTPS with free Let's Encrypt certificates. 
 
 
 

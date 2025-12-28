@@ -1,70 +1,87 @@
-# Tutorials
+# Debian & Ubuntu Tutorials & Guides
 
-- [**Self Hosted VPN:**](shvpn.md) Self hosted VPN tutorial using wireguard on Debian and Ubuntu servers.
+A collection of practical documentation for Debian and Ubuntu system administration. These guides are written from real-world experience and serve as a reference for common tasks, configurations, and troubleshooting.
 
-- [**Site-to-site VPN:**](s2svpn.md) Site-to-site VPN tutorial using wireguard on Debian and Ubuntu servers.
+## About This Repository
 
-- [**Node.js:**](nodejs.md) Simple Node.js tutorial on Debian and Ubuntu servers.
+This documentation started as personal notes to compensate for a terrible memory. What began as a single text file evolved into a comprehensive collection of tutorials covering web servers, databases, networking, virtualization, and system administration.
 
-- [**Nginx 2nd Ed.:**](nginx.md) Nginx http server on Debian and Ubuntu servers. With sample configurations, SSL support and LEMP Stack.
+**Philosophy:** Keep it simple, text-based, and useful. Every guide here documents something I've actually configured or deployed.
 
-- [**Apache 2nd Ed.:**](apache.md) Apache http server on Debian and Ubuntu servers. With sample configurations and SSL support.
+---
 
-- [**Etc Folder:**](etcfolder.md) Contents of /etc/ folder on Debian & Ubuntu.
+## 📚 Contents
 
-- [**Regex:**](regex.md) Regular Expressions tutorial.
+### Web Services & HTTPS
 
-- [**Ubuntu Network Configuration:**](networkubuntu.md) Ubuntu basic network configuration tutorial.
+- [**Apache 2nd Ed.**](apache.md) — Apache HTTP server configuration with SSL support and sample configurations
+- [**Nginx 2nd Ed.**](nginx.md) — Nginx HTTP server configuration with SSL support and LEMP stack setup
+- [**Certbot**](certbot.md) — Automated SSL certificate management with Let's Encrypt for Apache and Nginx
+- [**LAPP Stack**](lapp.md) — Linux, Apache, PostgreSQL, PHP stack installation and configuration
+- [**LAMP Stack**](lamp.md) — Linux, Apache, MariaDB, PHP stack installation and configuration
+- [**WordPress**](wordpress.md) — WordPress installation and activation guide
+- [**Adminer Tool**](adminer.md) — Web-based database management (PHPMyAdmin alternative)
 
-- [**Debian Network Configuration:**](networkdebian.md) Debian basic network configuration tutorial.
+### Database Management
 
-- [**LVM:**](lvm.md) Logical Volume Management tutorial.
+- [**MariaDB**](mariadb.md) — Installation, configuration, user management, and primary-replica replication
+- [**MariaDB Cluster**](mariadbcluster.md) — Multi-master replication with Galera Cluster
+- [**PostgreSQL (Ubuntu)**](postgresubuntu.md) — Installation, configuration, user management, cluster management, backup/restore on Ubuntu
+- [**PostgreSQL (Debian)**](postgresdebian.md) — Installation, configuration, user management, cluster management, backup/restore on Debian
 
-- [**File Compression:**](filecompression.md) Overview and tutorial of file compression utilities.
+### Networking
 
-- [**FHS:**](fhs.md) File Hierarchy Standard specifications.
+- [**Debian Network Configuration**](networkdebian.md) — Basic network configuration for Debian systems
+- [**Ubuntu Network Configuration**](networkubuntu.md) — Basic network configuration for Ubuntu systems
+- [**UFW (Uncomplicated Firewall)**](ufw.md) — Firewall configuration and management
+- [**Self-Hosted VPN**](shvpn.md) — WireGuard VPN server setup for remote access
+- [**Site-to-Site VPN**](s2svpn.md) — WireGuard VPN configuration for connecting networks
 
-- [**Systemd 2:**](systemd2.md) Additional services and tools of Systemd.
+### Infrastructure & Virtualization
 
-- [**LAPP Stack:**](lapp.md) Installation of LAPP (Linux, Apache, Postgresql, PHP) stack on Debian and Ubuntu servers.
+- [**KVM Virtualization (Beginner)**](KVMOnDebianUbuntu1.md) — Introduction to KVM virtualization
+- [**KVM Virtualization (Networking)**](KVMOnDebianUbuntu2.md) — Advanced KVM networking configurations
+- [**HAProxy**](haproxy.md) — High-availability load balancing with SSL/TLS and keepalived
+- [**Ansible**](ansible.md) — Configuration management and automation
+- [**LVM (Logical Volume Management)**](lvm.md) — Flexible disk management with LVM
+- [**Keepalived**](keepalived.md) — High-availability clustering
+- [**DNS**](dns.md) — Primary and replica DNS server configuration
+- [**Active Directory**](ad.md) — Simple AD domain with multiple domain controllers and file server
+- [**Node.js**](nodejs.md) — Node.js installation and basic setup
 
-- [**UFW:**](ufw.md) Basic UFW (Uncomplicated Firewall) tutorial for Debian and Ubuntu.
+### System Administration Guides
 
-- [**Deb Packaging:**](debpackaging.md) A basic tutorial about creating and using .deb packages.
+- [**User and Group Administration**](useradministration.md) — User and group management essentials
+- [**/etc Folder Contents**](etcfolder.md) — Overview of the /etc directory structure
+- [**Regular Expressions**](regex.md) — Regex tutorial for text processing
+- [**File Compression**](filecompression.md) — Compression utilities overview and usage
+- [**FHS (Filesystem Hierarchy Standard)**](fhs.md) — Linux filesystem structure specifications
+- [**Systemd Basics**](systemd.md) — Introduction to systemd service management
+- [**Systemd Advanced**](systemd2.md) — Additional systemd services and tools
+- [**Debian Packaging**](debpackaging.md) — Creating and managing .deb packages
+- [**Other Linux Distributions**](otherlinuxes.md) — Managing Debian, Ubuntu, Red Hat, Alpine, and Devuan systems
 
-- [**Systemd:**](systemd.md) Basic systemd tutorial.
+---
 
-- [**Other Linuxes:**](otherlinuxes.md) Basic management of Debian, Ubuntu, Red Hat, Alpine and Devuan distributions.
+## 🎯 Who Is This For?
 
-- [**Ubuntu Postgresql:**](postgresubuntu.md) Postgresql installation and basic configuration on Ubuntu. Includes some user management, cluster management, backup and restore.
+- System administrators managing Debian/Ubuntu servers
+- Anyone learning Linux server administration
+- People who prefer practical, tested documentation over theoretical explanations
+- Those who need quick reference guides for common tasks
 
-- [**Debian Postgresql:**](postgresdebian.md) Postgresql installation and basic configuration on Debian. Includes some user management, cluster management, backup and restore.
- 
-- [**Adminer Tool:**](adminer.md) Adminer, a replacement for PHPMyAdmin. Web based Database Management.
+## 📖 How to Use
 
-- [**HAProxy:**](haproxy.md) HAProxy High Availability Load Balancing with Letsencrypt free certificates HTTPS support and keepalived.
+Each document is self-contained and includes step-by-step instructions. Browse the categories above, pick a topic, and dive in. All guides assume you have basic Linux command-line familiarity.
 
-- [**Mariadb Cluster:**](mariadbcluster.md) MariaDB main-main (master-master) replication with Galera Cluster tutorial on Debian and Ubuntu Servers.
+## 🤝 Contributing
 
-- [**KVM 2:**](KVMOnDebianUbuntu2.md) KVM Virtualization networking tutorial  on Debian and Ubuntu Server. 
+Found an error? Have a suggestion? Feel free to open an issue or submit a pull request. These docs are maintained based on real-world usage, so practical feedback is always welcome.
 
-- [**KVM:**](KVMOnDebianUbuntu1.md) KVM Virtualization tutorial (beginner) on Debian and Ubuntu Server. 
+## 📄 License
 
-- [**Ansible:**](ansible.md) Ansible tutorial based on Debian/Ubuntu workstations and servers.
+This documentation is provided as-is for anyone who finds it useful. Use freely, no strings attached.
 
-- [**User And Group Admin:**](useradministration.md) User and Group administration on Debian and Ubuntu Server (and desktops).
+---
 
-- [**Keepalived:**](keepalived.md) Clustering with keepalived on Debian and Ubuntu Server.
-
-- [**DNS:**](dns.md) Installing and configuring Primary and Replica DNS Servers on Debian and Ubuntu Server.
-
-- [**Wordpress:**](wordpress.md) Installing and activating Wordpress on Debian and Ubuntu Servers.
-
-- [**Mariadb:**](mariadb.md) Mariadb installation and basic configuration on Debian and Ubuntu Servers. Includes some user management and primary-replica (master-slave) replication.
-
-- [**LAMP Stack:**](lamp.md) Installation of LAMP stack on Debian and Ubuntu servers. My choice of DB is Mariadb.
-
-- [**Certbot:**](certbot.md) Using certbot tool of eff.org to automatize obtaining and renewing letsencrytp.org SSL certificates on Apache 2 and Nginx for Debian and Ubuntu Servers.
-
-- [**AD:**](ad.md) Simple Active Directory, with 1 domain, 2 DCs and 1 Fileserver with Debian and Ubuntu Servers.
 

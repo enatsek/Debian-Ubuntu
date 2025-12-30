@@ -7,42 +7,42 @@ sidebar:
    label: KVM Virtualization (Networking)
 ---
 
-
 ##### Advanced KVM networking configurations
 
 ## 0. Specs
 
 ---
 ### 0.0. Definition
-KVM virtualization Tutorial 2 on Debian and Ubuntu Server. 
+KVM Virtualization Tutorial 2 for Debian and Ubuntu Server.
 
-Please refer to KVM Virtualization Beginner tutorial before reading this one.
+Please refer to the KVM Virtualization Beginner tutorial before reading this one.
 
-This tutorial specializes on KVM Networking.
+This tutorial focuses on KVM networking configurations.
 
 ### 0.1. Infrastructure
-- Server (Host): Debian (12/11) or Ubuntu (24.04/22.04) Server
-   - IP: 192.168.1.121 
+- **Server (Host)**: Debian (13/12) or Ubuntu (24.04/22.04) Server
+   - IP: 192.168.1.121
    - Name: elma
    - NIC1: enp3s0f0
-   - NIC2: enx00e04c534458
-- Network1: 192.168.1.0/24 which is supplied by my internet modem (1st  interface)
-- Network2: 10.1.1.0/24 with an external switch (2nd interface)
-- Workstation: Debian 12 or Ubuntu 24.04 LTS Desktop
+   - NIC2: enx00e04c534458 (USB network adapter)
+- **Network1**: 192.168.1.0/24 (internet modem/router, first interface)
+- **Network2**: 10.1.1.0/24 (external switch, second interface)
+- **Workstation**: Debian 13 or Ubuntu 24.04 LTS Desktop
 
 ### 0.2. Resources
-ISBN: 978-1-78829-467-6 **KVM Virtualization Cookbook** by Konstantin Ivanov
-
-ISBN: 978-1-83882-871-4 **Mastering KVM Virtualization 2nd Ed.** by Vedran    Dakic, Humble Devassy Chirammal, Prasad Mukhedkar, Anil Vettathu
+- ISBN: 978-1-78829-467-6 **KVM Virtualization Cookbook** by Konstantin Ivanov
+- ISBN: 978-1-83882-871-4 **Mastering KVM Virtualization 2nd Ed.** by Vedran Dakic, Humble Devassy Chirammal, Prasad Mukhedkar, Anil Vettathu
 
 <br>
 
 ## 1. KVM Networks - Configuration Commands
 
 ---
-Although it is possible to produce endless variations, there are 3 basic  network types in KVM: Bridged, NAT, and Isolated.
+While numerous variations exist, KVM supports three basic network types:
+- **Bridged**: VMs appear as physical devices on the network
+- **NAT**: VMs share host's IP with network address translation
+- **Isolated**: VMs communicate only with each other and host
 
-Before exploring KVM networking more, let's revise the commands for it.
  
 ### 1.1. Active Networks
 List KVM Networks:
@@ -51,7 +51,7 @@ List KVM Networks:
 virsh net-list
 ```
 
-We've already configured a bridged network on tutorial 1, so my server  gives the following output:
+Example output (after Tutorial 1 bridge configuration):
 
 ```
  Name           State    Autostart   Persistent
@@ -59,14 +59,14 @@ We've already configured a bridged network on tutorial 1, so my server  gives th
  host-bridge    active   yes         yes
 ```
  
-To display information about a network, the following command can be used:
+Display detailed network information:
 
 ```
 virsh net-info NETWORKNAME
 virsh net-info host-bridge
 ```
 
-Output on my server:
+Example output:
 
 ```
 Name:           host-bridge
@@ -77,14 +77,14 @@ Autostart:      yes
 Bridge:         br0
 ```
  
-We can display the information for the network as an XML file too:
+Display network configuration as XML:
 
 ```
 virsh net-dumpxml NETWORKNAME
 virsh net-dumpxml host-bridge
 ```
 
-Output on my server:
+Example output:
 
 ```
 <network>
@@ -96,29 +96,24 @@ Output on my server:
 ```
 
 ### 1.2. Adding a Network
-To add a network, we must prepare the configuration in an XML file, and  use the name of the file as a parameter.
+To add a network, create an XML configuration file and define it:
 
 ```
 virsh net-define XMLFILE
 ```
 
-As an example, I'm going to create another bridge on my 2nd interface and add that bridge to the KVM as another network.
+**Example**: Create a second bridge on the second interface.
 
-Before creating a bridge on the KVM, we have to create it on the server. 
+First, create the bridge on the host system.
 
-As Debian and Ubuntu have different ways of network configuration, we will do it for both of them.
-
-**!!! Creating the Bridge on Ubuntu BEGIN !!!**
-
-Edit netplan file to define the bridge. (If your netplan file is named as something else, change it below to that.
+#### Ubuntu Bridge Configuration
+Edit Netplan configuration:
  
 ```
 sudo nano /etc/netplan/01-netcfg.yaml
 ```
 
-Remove its content , fill it as below, beware of changing enp3s0f0 and  enx00e04c534458 to your interfaces' names.
-
-Also remember to change IP addresses as in your networks too.
+RReplace content with (adjust interface names and IPs):
 
 ```
 network:
@@ -160,24 +155,20 @@ network:
   version: 2
 ```
 
-Activate the new configuration
+Apply configuration:
 
 ```
 sudo netplan apply
 ```
 
-**!!! Creating the Bridge on Ubuntu END !!!**
+#### Debian Bridge Configuration
+Edit network interfaces file:
 
----
-
-**!!! Creating the Bridge on Debian BEGIN !!!**
-
-Edit your network config file
+```
 sudo nano /etc/network/interfaces
+```
 
-Remove its content , fill it as below, beware of changing enp3s0f0 and  enx00e04c534458 to your interfaces' names.
-
-Also remember to change IP addresses as in your networks too.
+Replace content with (adjust interface names and IPs):
 
 ```
 auto lo
@@ -211,22 +202,15 @@ iface br1 inet static
         bridge_maxwait 0
 ```
 
-Apply the changes. If you connect through ssh, you connection may break.  In this case, close the terminal and reconnect.
+Apply configuration (SSH may disconnect):
 
 ```
 sudo systemctl restart networking.service
 ```
 
-**!!! Creating the Bridge on Debian END !!!**
+#### Add Bridge to KVM
+Create XML configuration for the second bridge:
 
----
-
-
-enp3s0f0 is my 1st interface, its name is a bit funny, but my 2nd  interface really has a weird name as enx00e04c534458. I guess that is  because it is an USB network adapter. 
-
-Anyway, don't forget to change the names as your adapters'.
-
-Now, it is time to create the XML file for the second bridge (namely br1).
 
 ```
 sudo nano host-bridge2.xml
@@ -243,44 +227,36 @@ Fill as below:
 </network>
 ```
 
-Now we can define it
+**Note**: Generate a unique UUID with `uuidgen` if needed.
+
+Define, start, and enable autostart:
 
 ```
 virsh net-define host-bridge2.xml
-```
-
-Start it:
-
-```
 virsh net-start host-bridge2
-virsh net-start NETWORKNAME
-```
-
-Make it autostart (Starts when the server starts)
-
-```
 virsh net-autostart host-bridge2
-virsh net-autostart NETWORKNAME
 ```
 
-Now we have 2 bridges. If we want a VM in 192.168.1.0/24 network we use  br0, if we want it in 10.1.1.0/24 then we use br1.
+Now you have two bridges:
+- `br0` for 192.168.1.0/24 network
+- `br1` for 10.1.1.0/24 network
 
 ### 1.3. Stopping and Removing KVM Networks
-Stop a KVM Network
+Stop a KVM Network:
 
 ```
 virsh net-destroy NETWORKNAME
 virsh net-destroy host-bridge2
 ```
 
-Disable autostart property of a KVM Network
+Disable autostart:
 
 ```
 virsh net-autostart NETWORKNAME --disable
 virsh net-autostart host-bridge2 --disable
 ```
 
-Remove a KVM Network
+Remove network definition:
 
 ```
 virsh net-undefine NETWORKNAME
@@ -292,26 +268,30 @@ virsh net-undefine host-bridge2
 ## 2. KVM Networks - Network Types
 
 ---
-When preparing XML files for creating KVM networks, we use UUID and MAC  values. These UUID and MAC values must be unique for each network.  Remember to replace them with unique values.
+When creating KVM network XML files, use unique UUID and MAC values for each network.
 
-Random UUID Generator:
+Generate a random UUID:
 
 ```
 uuidgen
 ```
 
-Random MAC Address Generator:
+Generate a random MAC address (or use online tools like [Browserling Random MAC Generator](https://www.browserling.com/tools/random-mac)).
 
-[www.browserling.com](https://www.browserling.com/tools/random-mac)
 
 ### 2.1. Bridged Networks
-I believe you already have an idea of bridged networks. It is like the  host is sharing its interface and network with the VM. VM is in the same network as the host. If there is a DHCP Server on the network the host  resides, the VM can use it to get an IP.
+Bridged networks connect VMs directly to the host's physical network. VMs appear as separate devices on the same network segment as the host.
 
-If you are going to use a server which directly serves information or a service to the users, most probably you'll use a Bridged Network.
+**Use cases**:
+- Public-facing servers
+- Services requiring direct network access
+- Environments with existing DHCP infrastructure
 
-To use a bridged network, first you need to create the bridge in the host machine's network configuration, and then prepare an XML file and add the network to the KVM with `virsh net-define` command, as we did in 1.2.
+**Requirements**:
+1. Create a bridge in the host's network configuration
+2. Define the bridge in KVM via XML
 
-A sample Bridged Network XML File:
+**Example XML configuration**:
 
 ```
 <network>
@@ -322,21 +302,27 @@ A sample Bridged Network XML File:
 </network>
 ```
 
-Considerations:
+**Customization**:
+- Replace `host-bridge2` with your network name
+- Replace UUID with a generated value
+- Replace `br1` with your actual bridge interface name
 
-- Replace host-bridge2 with your chosen network name.
-- Replace c723a80b-d496-460e-9235-9eced7b218cf with your generated uuid.
-- Replace br1 with your bridge name in netplan file.
+**Network integration**:
+- VMs receive IPs from the same DHCP server as the host
+- VMs are directly accessible from the network
+- No NAT translation occurs
+
 
 
 ### 2.2. NAT Network
-A NAT (Network Address Translation) Network is similar to (actually the same as) your home network behind your internet router. Your host's interface stands like your internet router and VMs are like your home devices. 
+NAT (Network Address Translation) networks allow VMs to access external networks while remaining hidden behind the host's IP address.
 
-When VMs want to access to the network, they use host's IP address, but the other devices on the network cannot access to your VMs.
+**Use cases**:
+- Development and testing environments
+- VMs requiring internet access but not public exposure
+- Security-focused deployments
 
-This type of network is useful when you don't want anyone to access your  VMs, but you want your VMs to access everywhere. 
- 
-An example of NAT Network XML File:
+**Example XML configuration**:
 
 ```
 <network>
@@ -357,25 +343,30 @@ An example of NAT Network XML File:
 </network>
 ```
 
-Considerations:
+**Customization**:
+- Replace `nat` with your network name
+- Replace UUID with a generated value
+- Replace `brnat` with your preferred bridge name
+- Replace MAC address with a generated value
+- Adjust IP subnet and DHCP range as needed
 
-- Replace nat with your chosen network name.
-- Replace d589efd6-7d61-4f92-976b-bde62956cca7 with your generated uuid.
-- Replace brnat with your chosen bridge name.
-- Replace 52:54:00:6e:a9:d8 with your generated MAC address.
-- Our nat bridge will have 192.168.122.1/24 IP and a DHCP server will announce addresses between 192.168.122.101 and 192.168.10.254. Change these values as you like.
+**Network behavior**:
+- VMs can initiate connections to external networks
+- External hosts cannot initiate connections to VMs
+- Port forwarding can be configured for specific services
+- Built-in DHCP server provides IP addresses
 
 
 ### 2.3. Isolated Network
-An Isolated Network, as the name implies, is isolated. Noone can go out, noone can come in. 
+Isolated networks create completely private segments where VMs can communicate only with each other and the host.
 
-The VMs in the isolated network cannot reach outside, and the devices outside cannot reach the VMs in the isolated network. Only the devices in the isolated network can reach to each other.
+**Use cases**:
+- Database backends
+- Internal service communication
+- Security-sensitive applications
+- Testing environments requiring network isolation
 
-Although it is very useful for testing purposes, there might be some situations that isolated network could be very useful in the production. 
-
-Consider you have a web server and a database server. The DB server can only be accessed by the web server and the web server will be accessed by everyone. You can put the DB server in an isolated network and define 2 interfaces for the web server as 1 in a bridged network and the other one in the isolated network. That way, noone other than the web server can access the DB server.
-
-An example of Isolated Network XML File:
+**Example XML configuration**:
 
 ```
 <network>
@@ -392,30 +383,55 @@ An example of Isolated Network XML File:
 </network>
 ```
 
-Considerations:
+**Customization**:
+- Replace `isolated` with your network name
+- Replace UUID with a generated value
+- Replace `brisolated` with your preferred bridge name
+- Replace MAC address with a generated value
+- Adjust IP subnet and DHCP range as needed
+- Set domain name for internal DNS
 
-- Replace isolated with your chosen network name.
-- Replace a67bbbaf-81e9-4e4c-832f-bc14443da475 with your generated uuid.
-- Replace brisolated with your chosen bridge name.
-- Replace 55:33:00:dd:dd:ee with your generated MAC address.
-- Our nat bridge will have 192.168.20.1/24 IP and a DHCP server will  announce addresses between 192.168.20.101 and 192.168.20.200. Change these values as you like.
+**Security architecture example**:
+```
+Internet ── [Web Server (dual NIC)] ── [Database Server]
+             bridged:192.168.1.x/24    isolated:192.168.20.x/24
+```
+
+**Implementation**:
+1. Web server: One interface in bridged network, one in isolated network
+2. Database server: Only isolated network interface
+3. Result: Database accessible only via web server
+
+**Network characteristics**:
+- No external network access
+- Built-in DHCP server
+- Internal DNS resolution via domain name
+- Complete isolation from external traffic
 
 <br>
+
+!!!
+
 
 ## 3. Case Study A: Bridged and Isolated Networks Together
 
 ---
-### 3.1. Specs:
-- Our host has a bridged network on 192.168.1.0/24 (Network 1)
-- Our host has an isolated network on 192.168.20.0/24 (Network 2)
-- Our VM1 has 2 interfaces, 1 in Network1 and 1 in Network2
-- Our VM2 has 1 interface in Network2
-- After the installations, VM2 will be accessed by VM1 only, but VM1 will  be accessed by all the devices on the network.
+### 3.1. Specifications
+- **Network1**: Bridged network on 192.168.1.0/24 (existing)
+- **Network2**: Isolated network on 192.168.20.0/24 (to create)
+- **VM1**: Two network interfaces
+  - Interface 1: Network1 (bridged)
+  - Interface 2: Network2 (isolated)
+- **VM2**: One network interface
+  - Interface: Network2 (isolated)
 
-### 3.2. Create the Networks
-We already have Network1, lets create Network2
+**Architecture**:
+- VM1: Accessible from all network devices (via Network1)
+- VM2: Accessible only from VM1 (via Network2)
+- VM1 acts as a gateway between the two networks
 
-Prepare XML File
+### 3.2. Create the Isolated Network
+Create XML configuration file:
 
 ```
 nano isolated.xml
@@ -438,26 +454,22 @@ Fill as below:
 </network>
 ```
 
-Create the network
+Define and activate the network:
 
 ```
 virsh net-define isolated.xml
-```
-
-Start it:
-
-```
 virsh net-start isolated
-```
-
-Make it autostart 
-
-```
 virsh net-autostart isolated
 ```
 
-### 3.3. Create VM1 and VM2
-VM1
+Verify network creation:
+
+```
+virsh net-list --all
+```
+
+### 3.3. Create VMs with Dual Network Configuration
+**Create VM1 (dual-homed)**:
 
 ```
 sudo virt-install --name vm1 \
@@ -472,7 +484,7 @@ sudo virt-install --name vm1 \
     --noautoconsole
 ```
 
-VM2
+**Create VM2 (isolated)**:
 
 ```
 sudo virt-install --name vm2 \
@@ -486,37 +498,68 @@ sudo virt-install --name vm2 \
     --noautoconsole
 ```
 
-On Debian 11, --os-variant ubuntu22.04 gives an error. In that case,  change it as --os-variant ubuntu20.04.
+**Note for Debian 12 hosts**: Replace `--os-variant ubuntu24.04` with `--os-variant ubuntu22.04`.
 
-Now you can connect VM1 and VM2 from your workstation and install them. 
+Connect to VMs from your workstation to complete installation:
+
  
-### 3.4. Considerations for Isolated Networks
-If a VM is in an isolated network, and if it has no connections to the other networks, it cannot connect to the internet. That means, VM1 can connect  to the internet and VM2 cannot connect to the internet. 
+### 3.4. Network Configuration Considerations
+**Isolated Network Limitations**:
+- VM2 cannot access external networks (including internet)
+- VM2 cannot receive updates or install packages directly
+- VM1 can access both networks and act as a gateway
 
-Actually, when we put it in an isolated network, we accepted that it won't connect to other networks. But we need internet to install or update applications.
+**Proxy Solution for Package Management**:
+Install Squid proxy on the host to provide internet access for isolated VMs.
 
-I have a not so bad solution for this situation. Install squid proxy to  the host, make it listen to Isolated Network IP of host (192.168.20.1),  allow all IPs to access it. Configure your VMs to use "apt" command  through a proxy.
+**Host Configuration (Simplified)**:
+```
+sudo apt update
+sudo apt install squid --yes
+sudo nano /etc/squid/squid.conf
+```
 
-I won't go in the details of installing and configuring squid proxy here, there are tons of materials on the internet about it. 
+Add to configuration:
+```
+http_port 192.168.20.1:3128
+acl localnet src 192.168.20.0/24
+http_access allow localnet
+```
 
-Configure your VM to use apt commands through a proxy:
+Restart Squid:
+```
+sudo systemctl restart squid
+```
 
-**!!! Run on your VM !!!**
+**VM Configuration (apt proxy)**:
+On each isolated VM (VM2 in our case):
 
 ```
 sudo nano /etc/apt/apt.conf
 ```
 
-Add the following line:
-
+Add for unauthenticated proxy:
 ```
-Acquire::http::proxy "http://192.168.20.1:3128";
+Acquire::http::Proxy "http://192.168.20.1:3128";
 ```
 
-If you use username/password for the proxy, use the following format:
-
+For authenticated proxy:
 ```
-Acquire::http::proxy "http://user:pass@proxyserver:port";
+Acquire::http::Proxy "http://username:password@192.168.20.1:3128";
+```
+
+**Security Considerations**:
+1. The proxy allows package downloads but maintains network isolation
+2. Consider firewall rules to restrict proxy access
+3. Monitor proxy logs for unusual activity
+4. Use HTTPS proxy for additional security
+
+**Testing Connectivity**:
+From VM2:
+```
+ping 192.168.20.1                    # Should work (host isolated IP)
+ping 192.168.1.1                     # Should fail (external network)
+curl --proxy http://192.168.20.1:3128 http://example.com  # Should work
 ```
 
 <br>
@@ -524,24 +567,26 @@ Acquire::http::proxy "http://user:pass@proxyserver:port";
 ## 4. Case Study B: Separating Host and VM Access with 2 NICs
 
 ---
-I don't know if it would be a best practice but definitely it will be a  good practice to separate host's and VMs' network. That means, we will  connect our host to our network with 2 interfaces; 1 interface will be  used for accessing the host and the other will be used to access VMs.
+Separating host and VM network traffic is a recommended practice for improved security, performance, and management. We'll dedicate one interface for host access and another for VM traffic.
 
-### 4.1. Specs:
-- Both interfaces of host are connected to my internet router.
-- Our host has a bridged network on 192.168.1.0/24 (192.168.1.121-NIC 1)
-- Our host has a standart network on 192.168.1.0/24 (192.168.1.122-NIC 2) 
-- Our VM will have 1 interface on bridged network. 
-- The first nic will be used by VMs and the second nic will be used to  access the host.
+### 4.1. Specifications
+- **Network**: 192.168.1.0/24 (single subnet)
+- **Host Interfaces**:
+  - NIC1 (enp3s0f0): VM traffic via bridge (192.168.1.121)
+  - NIC2 (enx00e04c534458): Host management (192.168.1.122)
+- **VM Configuration**: Single interface on bridged network
+
+**Benefits**:
+- Isolate host management traffic from VM traffic
+- Prevent VM network issues from affecting host access
+- Simplified firewall rules and monitoring
+- Better performance isolation
 
 ### 4.2. Host Network Configuration
-Before the KVM network configuration, we need to configure the server's  network. 
+Configure the server's network interfaces before KVM setup.
 
-- Again, Debian and Ubuntu have different steps:
-
----
-**!!! Ubuntu Network Configuration BEGIN !!!**
-
-Edit netplan file (change if your netplan file has a different name):
+#### Ubuntu Network Configuration
+Edit Netplan configuration:
 
 ```
 sudo nano /etc/netplan/01-netcfg.yaml
@@ -581,30 +626,29 @@ network:
   version: 2
 ```
 
-Apply the configuration, (You'd better restart the host)
+Apply configuration and reboot:
 
 ```
 sudo netplan apply
+sudo reboot
 ```
 
-**!!! Ubuntu Network Configuration END !!!**
-
----
-**!!! Debian Network Configuration BEGIN !!!**
-
-Edit your network config file
+#### Debian Network Configuration
+Edit network interfaces file:
 
 ```
 sudo nano /etc/network/interfaces
 ```
 
-Change as below:
-
-```
+```bash
 auto lo
 iface lo inet loopback
+
+# VM traffic interface (bridged)
 auto enp3s0f0
 iface enp3s0f0 inet manual
+
+# Bridge for VMs
 auto br0
 iface br0 inet static
         address 192.168.1.121
@@ -617,31 +661,41 @@ iface br0 inet static
         bridge_fd 0
         bridge_maxwait 0
         dns-nameservers 8.8.8.8
+
+# Host management interface
 auto enx00e04c534458
 iface enx00e04c534458 inet static
         address 192.168.1.122
         netmask 255.255.255.0
         network 192.168.1.0
+        broadcast 192.168.1.255
         gateway 192.168.1.1
+        dns-nameservers 8.8.8.8
 ```
 
-Apply the changes. If you connect through ssh, your connection may break. In this case, close the terminal and reconnect.
+Apply configuration (SSH may disconnect):
 
 ```
 sudo systemctl restart networking.service
 ```
 
-**!!! Debian Network Configuration END !!!**
+**Network Verification**:
+```
+ip addr show br0
+ip addr show enx00e04c534458
+ping -c 3 192.168.1.1
+```
+
 
 ---
 
 ### 4.3. KVM Network Configuration
-We already configured our br0 bridge on KVM. But in case you didn't do  it, or removed it.
+Define the bridged network in KVM:
 
-If you already have it, skip this step.
-
+Create XML configuration:
 ```
 nano host-bridge.xml
+```
 
 Fill as below:
 
@@ -651,22 +705,25 @@ Fill as below:
   <forward mode="bridge"/>
   <bridge name="br0"/>
 </network>
+```
 
-Define the KVM Network
+Define and activate network:
 
 ```
 virsh net-define host-bridge.xml
-```
-
-Start and make it autostarted:
-
-```
 virsh net-start host-bridge
 virsh net-autostart host-bridge
 ```
 
-### 4.4. Create a VM on the Bridged Network
-Now, if we create a VM on br0 bridge, it will use the first interface of # the host, and we will keep using the second interface at 192.168.1.202
+Verify network creation:
+
+```
+virsh net-list --all
+virsh net-info host-bridge
+```
+
+### 4.4. Create VM on the Bridged Network
+Create a VM using the bridged interface:
 
 ```
 sudo virt-install --name vm3 \
@@ -680,7 +737,26 @@ sudo virt-install --name vm3 \
     --noautoconsole
 ```
 
+**Connect to VM**:
+```
+virt-viewer --connect qemu+ssh://exforge@elma/system vm3
+```
+
+**Network Verification**:
+1. Host should be accessible at 192.168.1.122
+2. VM should obtain an IP from 192.168.1.0/24 range
+3. Both should have internet access via 192.168.1.1
+
+**Firewall Considerations**:
+Consider implementing firewall rules to:
+- Restrict host management interface access
+- Separate VM traffic rules
+- Monitor traffic patterns
+
+
 <br>
+
+!!!
 
 ## 5. Case Study C: NAT KVM Network
 
@@ -688,20 +764,31 @@ sudo virt-install --name vm3 \
 We will create a VM, in a NAT network.
 
 ### 5.1. Specs:
-Server: 
+Create a VM within a NAT (Network Address Translation) network for enhanced security and isolation.
 
--  Interface 1 is in bridged mode (as in 4.)
--  Interface 2 is in standard mode (as in 4.)
--  A NAT KVM network will be added.
+### 5.1. Specifications
+**Server Configuration**:
+- Interface 1 (enp3s0f0): Bridged mode for VMs (as configured in Section 4)
+- Interface 2 (enx00e04c534458): Standard mode for host management
+- Additional NAT network for isolated VMs
 
-VM (Named vmn):
--  An interface will be connected to the nat network
+**VM Configuration**:
+- Name: `vmn` (VM-NAT)
+- Single interface connected to NAT network
+- Outbound internet access via NAT
+- Inbound connections blocked (except port forwarding)
+
 
 ### 5.2. Host Network Configuration
-There is no change needed if you applied 4.2. Otherwise do it now.
+No changes required if you completed Section 4.2. Verify existing configuration:
+
+```
+ip addr show br0
+ip addr show enx00e04c534458
+```
 
 ### 5.3. KVM NAT Network Configuration
-Prepare XML File
+Create XML configuration file:
 
 ```
 nano nat.xml
@@ -728,22 +815,30 @@ Fill as below:
 </network>
 ```
 
-Remember to generate a new uuid and a new MAC address
+**Important**: Generate unique values:
+- UUID: `uuidgen`
+- MAC address: Use a random generator or `openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//'`
 
-Define the KVM Network
+Define and activate the NAT network:
 
 ```
 virsh net-define nat.xml
-```
-
-Start and make it autostarted:
-
-```
 virsh net-start nat
 virsh net-autostart nat
 ```
 
-### 5.4. Create the VM
+Verify network creation:
+
+```
+virsh net-list --all
+virsh net-info nat
+virsh net-dumpxml nat
+```
+
+
+### 5.4. Create VM on NAT Network
+Create the NAT-connected VM:
+
 ```
 sudo virt-install --name vmn \
     --connect qemu:///system  --virt-type kvm \
@@ -756,25 +851,49 @@ sudo virt-install --name vmn \
     --noautoconsole
 ```
 
-Your VM will be able to connect to your network, but the devices on your  network will not be able to connect to it.
+**Note**: For Debian 12 hosts, use `--os-variant ubuntu22.04`.
+
+### 5.5. NAT Network Behavior
+**Outbound Access (VM → External)**:
+- VM can initiate connections to external networks
+- Source IP translated to host's IP (192.168.1.121)
+- Source ports mapped to 1024-65535 range
+
+**Inbound Access (External → VM)**:
+- External devices cannot initiate connections to VM
+- Port forwarding required for specific services
+- VM remains hidden behind NAT
+
+**Internal Network**:
+- DHCP range: 192.168.122.101-254
+- Gateway: 192.168.122.1 (host)
+- DNS: Inherited from host configuration
+
+
 
 <br>
 
 ## 6. Adding and Removing Networks To/From a VM 
 
 ---
-I assume that we have bridged and isolated networks ready on our host.
+Dynamically modify VM network interfaces without recreating the VM.
 
-### 6.1. Specs
-- VM Name: vm
-- Initial Network: host-bridge (bridge br0)
-- Network to be added: nat (bridge brnat)
-- Network to be removed: host-bridge (bridge br0)
+### 6.1. Specifications
+- **VM Name**: `vmtest`
+- **Initial Network**: `host-bridge` (bridge `br0`)
+- **Network to Add**: `nat` (bridge `brnat`)
+- **Network to Remove**: `host-bridge` (bridge `br0`)
+
+**Process**:
+1. Create VM with bridged network
+2. Add NAT network interface
+3. Configure new interface on VM
+4. Remove original bridged interface
 
 
-We will create a VM with br0, then we will add it to the nat network, and then we will remove the br0 network.
+### 6.2. Create VM with Bridged Network
+Create initial VM:
 
-### 6.2. Create a VM with Bridged Network
 ```
 sudo virt-install --name vmtest \
     --connect qemu:///system  --virt-type kvm \
@@ -787,38 +906,55 @@ sudo virt-install --name vmtest \
     --noautoconsole
 ```
 
-### 6.3. Add an Interface to the VM at the Isolated Network
-Add an interface to the VM named vm, network type is bridge and bridge  name is brnat, interface name on the VM (--target) will be ens1 and it  will be active after shutdown and start again.
+### 6.3. Add NAT Network Interface
+Add a second network interface to the running VM:
 
 ```
-virsh attach-interface vmtest bridge brnat --target ens1 --config
+virsh attach-interface vmtest \
+    bridge brnat \
+    --target ens1 \
+    --config
 ```
 
-Alternatively, you may add the network when the VM is off.
+**Parameters**:
+- `bridge brnat`: Network type and bridge name
+- `--target ens1`: Interface name inside VM
+- `--config`: Persistent after shutdown/start
 
-Restart the VM, either by logging into it, or using the following  commands at the host :
+**Alternative for Powered-off VM**:
+```
+virsh attach-interface vmtest \
+    bridge brnat \
+    --target ens1 \
+    --config \
+    --persistent
+```
 
+**Restart VM** (required for interface activation):
 ```
 virsh destroy vmtest
 virsh start vmtest
 ```
 
-`virsh reboot` does not work, it restarts the VM but the interface does  not become active.
+**Important**: `virsh reboot` may not activate new interfaces; use shutdown/start cycle.
 
-### 6.4. Configure the New Network at the VM
-The new interface ens1 will become active at the VM but it won't start,  because it is not configured. We need to configure it using the netplan  file.
+### 6.4. Configure New Network Interface on VM
+Configure the new interface (`ens1`) on the Ubuntu VM.
 
-**!!! Run on the VM !!!**
+**On the VM**:
 
-Our VM is Ubuntu, if it were Debian, you should have configured the  network through /etc/network/interfaces file
+Check available interfaces:
+```
+ip link show
+```
+
+Configure Netplan (Ubuntu):
 
 ```
 sudo nano /etc/netplan/00-installer-config.yaml
 ```
 
-Change it as below
-
-```
+```yaml
 network:
   ethernets:
     enp1s0:
@@ -827,45 +963,90 @@ network:
       dhcp4: true
   version: 2
 ```
- 
-Activate it
 
+**For Debian VMs**, use `/etc/network/interfaces**:
+
+```
+sudo nano /etc/network/interfaces
+```
+
+```bash
+auto lo
+iface lo inet loopback
+
+auto enp1s0
+iface enp1s0 inet dhcp
+
+auto ens1
+iface ens1 inet dhcp
+```
+
+Apply configuration:
+
+**Ubuntu**:
 ```
 sudo netplan apply
 ```
 
-Now the VM will have an IP from 192.168.122.0/24 (nat) network for the  2nd interface.
-
-### 6.5. Remove the Bridged Network from the VM
-We want to remove the Bridged Network from the VM, we will accomplish it  by removing its first interface (enp1s0). 
-
-To do it, we need the MAC Address of the interface. Run the following command on the VM:
-
-**!!! Run on the VM !!!**
-
-ip link show
-
-It will display something like below:
-
+**Debian**:
 ```
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+sudo systemctl restart networking
+```
+
+Verify network configuration:
+```
+ip addr show
+ip route show
+```
+
+
+### 6.5. Remove Bridged Network Interface
+Remove the original bridged interface (`enp1s0`).
+
+**On the VM**:
+
+Identify MAC address of interface to remove:
+```
+ip link show enp1s0
+```
+
+Example output:
+```
 2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
     link/ether 52:54:00:83:3c:a0 brd ff:ff:ff:ff:ff:ff
-3: ens1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
-    link/ether 52:54:00:70:55:cf brd ff:ff:ff:ff:ff:ff
 ```
 
-My first interface is enp1s0, most probably yours will be the same, or  something like it.
+**MAC Address**: `52:54:00:83:3c:a0`
 
-At the line under the one starting with "2: enp1s0...", the part after # link/ether is the MAC Address. Mine is: 52:54:00:83:3c:a0
+**On the Host**:
 
-**Now we return back to our host:**
-
+Detach interface using MAC address:
 ```
-virsh detach-interface vmtest bridge --mac 52:54:00:83:3c:a0 --config
+virsh detach-interface vmtest \
+    bridge \
+    --mac 52:54:00:83:3c:a0 \
+    --config
 ```
 
-When you shutdown and start your VM, the interface will be gone.
+**Parameters**:
+- `bridge`: Network type
+- `--mac`: MAC address of interface to remove
+- `--config`: Persistent after shutdown/start
+
+**For immediate removal** (if VM is running):
+```
+virsh detach-interface vmtest \
+    bridge \
+    --mac 52:54:00:83:3c:a0 \
+    --live \
+    --config
+```
+
+**Shutdown and start VM** to complete removal:
+```
+virsh destroy vmtest
+virsh start vmtest
+```
+
 
 <br>

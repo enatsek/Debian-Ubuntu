@@ -1,8 +1,6 @@
 ---
 title: "WordPress"
 description: "WordPress installation and activation guide"
-next: false
-prev: false
 sidebar: 
    label: WordPress
 ---

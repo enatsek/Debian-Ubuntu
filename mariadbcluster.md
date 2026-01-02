@@ -1,8 +1,6 @@
 ---
 title: "MariaDB Cluster"
 description: "Multi-master replication with Galera Cluster"
-next: false
-prev: false
 sidebar: 
    label: MariaDB Cluster
 ---

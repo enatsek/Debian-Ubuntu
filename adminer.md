@@ -1,8 +1,6 @@
 ---
 title: "Adminer Tool"
 description: "Web-based database management (PHPMyAdmin alternative)"
-next: false
-prev: false
 sidebar: 
    label: Adminer Tool
 ---

@@ -1,8 +1,6 @@
 ---
 title: "HAProxy"
 description: "High-availability load balancing with SSL/TLS and keepalived"
-next: false
-prev: false
 sidebar: 
    label: HAProxy
 ---

@@ -1,8 +1,6 @@
 ---
 title: "PostgreSQL (Debian)"
 description: "Installation, configuration, user management, cluster management, backup/restore on Debian"
-next: false
-prev: false
 sidebar: 
    label: PostgreSQL (Debian)
 ---

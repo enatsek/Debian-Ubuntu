@@ -1,8 +1,6 @@
 ---
 title: "Ubuntu Network Configuration"
 description: "Basic network configuration for Ubuntu systems"
-next: false
-prev: false
 sidebar: 
    label: Ubuntu Network Configuration
 ---

@@ -1,8 +1,6 @@
 ---
 title: "Certbot"
 description: "Automated SSL certificate management with Let's Encrypt for Apache and Nginx"
-next: false
-prev: false
 sidebar: 
    label: Certbot
 ---

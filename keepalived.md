@@ -1,8 +1,6 @@
 ---
 title: "Keepalived"
 description: "High-availability clustering"
-next: false
-prev: false
 sidebar: 
    label: Keepalived
 ---

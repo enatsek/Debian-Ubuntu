@@ -1,8 +1,6 @@
 ---
 title: "DNS"
 description: "Primary and replica DNS server configuration"
-next: false
-prev: false
 sidebar: 
    label: DNS
 ---

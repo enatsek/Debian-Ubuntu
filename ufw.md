@@ -1,8 +1,6 @@
 ---
 title: "UFW (Uncomplicated Firewall)"
 description: "Firewall configuration and management"
-next: false
-prev: false
 sidebar: 
    label: UFW (Uncomplicated Firewall)
 ---

@@ -1,8 +1,6 @@
 ---
 title: "PostgreSQL (Ubuntu)"
 description: "Installation, configuration, user management, cluster management, backup/restore on Ubuntu"
-next: false
-prev: false
 sidebar: 
    label: PostgreSQL (Ubuntu)
 ---

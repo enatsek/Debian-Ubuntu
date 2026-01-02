@@ -1,8 +1,6 @@
 ---
 title: "Apache Web Server"
 description: "Apache HTTP server configuration with SSL support and sample configurations"
-next: false
-prev: false
 sidebar: 
    label: Apache Web Server
 ---

@@ -1,8 +1,6 @@
 ---
 title: "LVM (Logical Volume Management)"
 description: "Flexible disk management with LVM"
-next: false
-prev: false
 sidebar: 
    label: LVM (Logical Volume Management)
 ---

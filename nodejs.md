@@ -1,8 +1,6 @@
 ---
 title: "Node.js"
 description: "Node.js installation and basic setup"
-next: false
-prev: false
 sidebar: 
    label: Node.js
 ---

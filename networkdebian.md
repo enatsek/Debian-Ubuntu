@@ -1,8 +1,6 @@
 ---
 title: "Debian Network Configuration"
 description: "Basic network configuration for Debian systems"
-next: false
-prev: false
 sidebar: 
    label: Debian Network Configuration
 ---

@@ -1,8 +1,6 @@
 ---
 title: "Debian Packaging"
 description: "Creating and managing .deb packages"
-next: false
-prev: false
 sidebar: 
    label: Debian Packaging
 ---

@@ -1,8 +1,6 @@
 ---
 title: "/etc Folder Contents"
 description: "Overview of the /etc directory structure"
-next: false
-prev: false
 sidebar: 
    label: /etc Folder Contents
 ---

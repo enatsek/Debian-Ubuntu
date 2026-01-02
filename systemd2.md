@@ -1,8 +1,6 @@
 ---
 title: "Systemd Additional"
 description: "Additional systemd services and tools"
-next: false
-prev: false
 sidebar: 
    label: Systemd Additional
 ---

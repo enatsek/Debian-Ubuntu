@@ -1,8 +1,6 @@
 ---
 title: "LAPP Stack"
 description: "Linux, Apache, PostgreSQL, PHP stack installation and configuration"
-next: false
-prev: false
 sidebar: 
    label: LAPP Stack
 ---

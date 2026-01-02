@@ -1,8 +1,6 @@
 ---
 title: "Self-Hosted VPN"
 description: "WireGuard VPN server setup for remote access"
-next: false
-prev: false
 sidebar: 
    label: Self-Hosted VPN
 ---

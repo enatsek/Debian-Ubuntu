@@ -1,8 +1,6 @@
 ---
 title: "Ansible"
 description: "Configuration management and automation"
-next: false
-prev: false
 sidebar: 
    label: Ansible
 ---

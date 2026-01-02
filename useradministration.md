@@ -1,8 +1,6 @@
 ---
 title: "User and Group Administration"
 description: "User and group management essentials"
-next: false
-prev: false
 sidebar: 
    label: User and Group Administration
 ---

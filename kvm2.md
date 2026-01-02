@@ -1,8 +1,6 @@
 ---
 title: "KVM Virtualization (Networking)"
 description: "Advanced KVM networking configurations"
-next: false
-prev: false
 sidebar: 
    label: KVM Virtualization (Networking)
 ---

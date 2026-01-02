@@ -1,8 +1,6 @@
 ---
 title: "KVM Virtualization (Beginner)"
 description: "Introduction to KVM virtualization"
-next: false
-prev: false
 sidebar: 
    label: KVM Virtualization (Beginner)
 ---

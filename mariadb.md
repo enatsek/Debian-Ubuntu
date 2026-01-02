@@ -1,8 +1,6 @@
 ---
 title: "MariaDB"
 description: "Installation, configuration, user management, and primary-replica replication"
-next: false
-prev: false
 sidebar: 
    label: MariaDB
 ---

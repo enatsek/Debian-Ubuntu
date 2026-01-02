@@ -1,8 +1,6 @@
 ---
 title: "Site-to-Site VPN"
 description: "WireGuard VPN configuration for connecting networks"
-next: false
-prev: false
 sidebar: 
    label: Site-to-Site VPN
 ---

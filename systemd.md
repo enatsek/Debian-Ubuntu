@@ -1,8 +1,6 @@
 ---
 title: "Systemd Basics"
 description: "Introduction to systemd service management"
-next: false
-prev: false
 sidebar: 
    label: Systemd Basics
 ---

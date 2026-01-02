@@ -1,8 +1,6 @@
 ---
 title: "FHS (Filesystem Hierarchy Standard)"
 description: "Linux filesystem structure specifications"
-next: false
-prev: false
 sidebar: 
    label: FHS (Filesystem Hierarchy Standard)
 ---

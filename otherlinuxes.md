@@ -1,8 +1,6 @@
 ---
 title: "Other Linux Distributions"
 description: "Managing Debian, Ubuntu, Red Hat, Alpine, and Devuan systems"
-next: false
-prev: false
 sidebar: 
    label: Other Linux Distributions
 ---

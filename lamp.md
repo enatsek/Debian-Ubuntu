@@ -1,8 +1,6 @@
 ---
 title: "LAMP Stack"
 description: "Linux, Apache, MariaDB, PHP stack installation and configuration"
-next: false
-prev: false
 sidebar: 
    label: LAMP Stack
 ---

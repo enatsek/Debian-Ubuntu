@@ -1,8 +1,6 @@
 ---
 title: "Nginx Web Server"
 description: "Nginx HTTP server configuration with SSL support and LEMP stack"
-next: false
-prev: false
 sidebar: 
    label: Nginx Web Server
 ---

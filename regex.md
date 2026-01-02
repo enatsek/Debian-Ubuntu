@@ -1,8 +1,6 @@
 ---
 title: "Regular Expressions"
 description: "Regex tutorial for text processing"
-next: false
-prev: false
 sidebar: 
    label: Regular Expressions
 ---

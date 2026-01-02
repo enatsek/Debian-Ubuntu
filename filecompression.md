@@ -1,8 +1,6 @@
 ---
 title: "File Compression"
 description: "Compression utilities overview and usage"
-next: false
-prev: false
 sidebar: 
    label: File Compression
 ---

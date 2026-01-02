@@ -1,8 +1,6 @@
 ---
 title: "Active Directory"
 description: "Simple AD domain with multiple domain controllers and file server"
-next: false
-prev: false
 sidebar: 
    label: Active Directory
 ---

@@ -232,10 +232,17 @@ sudo nano /etc/network/interfaces
 Replace the content with the following (adjust `enp3s0f0` to your interface name, and use your local network IP and gateway):
 
 ```
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
 auto lo
 iface lo inet loopback
+
 # The primary network interface
-auto enp3s0f0
+allow-hotplug enp3s0f0
 #make sure we don't get addresses on our raw device
 iface enp3s0f0 inet manual
 #set up bridge and give it a static ip
@@ -303,13 +310,12 @@ At this point, you may want to copy some installation ISOs to the server's `/srv
 ## 2. VM Creation
 
 ---
-### 2.1. Create the 1st VM
 ### 2.1. Create the First VM
 Now it's time to create our first virtual machine.
 
-It will be Ubuntu Server 22.04 LTS with 1 GB RAM and 10 GB HDD.
+It will be Ubuntu Server 24.04 LTS with 1 GB RAM and 10 GB HDD.
 
-I've already copied the Ubuntu Server ISO `ubuntu-22.04.2-live-server-amd64.iso` to `/srv/isos`.
+I've already copied the Ubuntu Server ISO `ubuntu-24.04.2-live-server-amd64.iso` to `/srv/isos`.
 
 Install a VM named `testkvm`:
 
@@ -318,10 +324,10 @@ sudo virt-install --name testkvm \
     --connect qemu:///system  --virt-type kvm \
     --memory 1024 --vcpus 1 \
     --disk /srv/kvm/testkvm.qcow2,format=qcow2,size=10 \
-    --cdrom /srv/isos/ubuntu-22.04.2-live-server-amd64.iso  \
+    --cdrom /srv/isos/ubuntu-24.04.2-live-server-amd64.iso  \
     --network bridge=br0 \
     --graphics vnc,port=5901,listen=0.0.0.0 \
-    --os-variant ubuntu22.04 \
+    --os-variant ubuntu24.04 \
     --noautoconsole
 ```
 
@@ -338,7 +344,7 @@ Parameters explained:
 - `--os-variant`: Guest OS optimization profile
 - `--noautoconsole`: Don't automatically connect to console
 
-**Note**: Debian 11 may not recognize `ubuntu22.04` OS variant; use `ubuntu20.04` instead.
+**Note**: Ubuntu 22.04 may not recognize `ubuntu24.04` OS variant; use `ubuntu22.04` instead.
 
 
 ### 2.2. OS Variant List
@@ -354,7 +360,7 @@ This helps the hypervisor optimize for the guest OS. The parameter can be omitte
 ### 2.3. Connecting to the VM
 A graphical desktop is required to connect via VNC. Install `virt-viewer` on your workstation:
 
-**Run on your workstation:**
+**Run on your workstation:** 
 
 ```
 sudo apt update
@@ -403,6 +409,12 @@ Search for cloud images:
 
 Download the latest images (e.g., Ubuntu 24.04 Noble and Debian 13 Trixie) to `/srv/isos`.
 
+```
+cd /srv/isos
+sudo wget https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img
+sudo wget https://cloud.debian.org/images/cloud/trixie/latest/debian-13-generic-amd64.qcow2
+```
+
 ### 4.2. Creating a New Image From the Original Image
 Create new images with increased size (20 GB) and convert to qcow2 format.
 
@@ -416,9 +428,11 @@ sudo qemu-img create -b /srv/isos/noble-server-cloudimg-amd64.img \
 **Debian image:**
 
 ```
-sudo qemu-img create -b /srv/isos/debian-12-generic-amd64.qcow2 \
+sudo qemu-img create -b /srv/isos/debian-13-generic-amd64.qcow2 \
     -F qcow2 -f qcow2 /srv/kvm/debiansrv-cloudimg.qcow2 20G
 ```
+
+
 
 ### 4.3. Cloud-init Configuration
 The next step is to crate a cloud-init config file. This file contains instructions for the cloud image. There is a wide range of instructions like; creating a user, creating and filling files, adding apt repositories, running initial commands, installing packages, reboot and poweroff after finishing, disk and configuration. See below url for details:
@@ -473,7 +487,7 @@ users:
      home: /home/exforge
      shell: /bin/bash
      lock_passwd: false
-     passwd: $6$rounds=4096$u5D5VbBZD7NcG/8Y$sc8WH5R9YU/xx1QqjQnMzNbQJOptj33DQGJqyHHju5EzJkvGF913gPVhjw.CsL8QLX5G79C0312tAuGIhWEhf1
+     passwd: $6$rounds=4096$hVAmry7V/zE8KHCT$Ha.qFtVJLDxRhmKTFY3hFhQqXmWrbF3n39dlWMXnmIAmdm5hJriRWRHVlT7FtaVUHIPeSm5u966vOcXFfXCyI/
 packages: qemu-guest-agent
 ```
 
@@ -488,8 +502,8 @@ Fill as below (Again remember updating password with the hash you get):
 
 ```
 #cloud-config
-hostname: debian12
-fqdn: debian12.x386.org
+hostname: debian13
+fqdn: debian13.x386.org
 manage_etc_hosts: true
 groups: exforge
 users:
@@ -500,7 +514,7 @@ users:
      home: /home/exforge
      shell: /bin/bash
      lock_passwd: false
-     passwd: $6$rounds=4096$u5D5VbBZD7NcG/8Y$sc8WH5R9YU/xx1QqjQnMzNbQJOptj33DQGJqyHHju5EzJkvGF913gPVhjw.CsL8QLX5G79C0312tAuGIhWEhf1
+     passwd: $6$rounds=4096$hVAmry7V/zE8KHCT$Ha.qFtVJLDxRhmKTFY3hFhQqXmWrbF3n39dlWMXnmIAmdm5hJriRWRHVlT7FtaVUHIPeSm5u966vOcXFfXCyI/
 packages: qemu-guest-agent
 ```
 
@@ -563,7 +577,7 @@ sudo cloud-localds --network-config /srv/init/ubuntu-network-init.cfg \
 
 ```
 sudo cloud-localds --network-config /srv/init/debian-network-init.cfg \
-   /srv/kvm/debian12-seed.qcow2 \
+   /srv/kvm/debian13-seed.qcow2 \
    /srv/init/debian-cloud-init.cfg
 ```
 
@@ -587,26 +601,28 @@ virt-install --name ubuntu24 \
 **Debian Server VM:**
 
 ```
-virt-install --name debian12 \
+virt-install --name debian13 \
   --connect qemu:///system \
   --virt-type kvm --memory 2048 --vcpus 2 \
   --boot hd,menu=on \
-  --disk path=/srv/kvm/debian12-seed.qcow2,device=cdrom \
+  --disk path=/srv/kvm/debian13-seed.qcow2,device=cdrom \
   --disk path=/srv/kvm/debiansrv-cloudimg.qcow2,device=disk \
   --graphics vnc,port=5903,listen=0.0.0.0 \
-  --os-variant debian12 \
+  --os-variant debian13 \
   --network bridge=br0 \
   --noautoconsole \
   --install no_install=yes
 ```
 
-**Note**: If `--os-variant debian12` fails on Debian 12, try `--os-variant debian11`.
+**Note**: If `--os-variant debian13` fails on Ubuntu servers, try `--os-variant debian11`.
 
 Cloud-init may take several minutes to complete. Connect via virt-viewer:
 
+** Run on your workstation **
+
 ```
 virt-viewer --connect qemu+ssh://exforge@elma/system ubuntu24
-virt-viewer --connect qemu+ssh://exforge@elma/system debian12
+virt-viewer --connect qemu+ssh://exforge@elma/system debian13
 ```
 
 ### 4.7. Disable Cloud-init After Initial Configuration
@@ -792,7 +808,7 @@ I keep saying shutdown and start instead of restart or reboot, because kvm, qemu
 
 So when I say shutdown and start, I mean shutdown first, wait a while (from 0.001 miliseconds to as long as you want) and then start the VM.
 
-Change maximum vCPUs (config state only):
+Change maximum vCPUs (config state only - requires shutdown and start to activate):
 
 ```
 virsh setvcpus NAME NUMBER --maximum --config
@@ -802,14 +818,14 @@ virsh setvcpus ubuntu24 3 --maximum --config
 Change current vCPU count:
 
 ```
-virsh setvcpus NAME 4             # Current session
-virsh setvcpus NAME 4 --live      # Live change
-virsh setvcpus NAME 4 --config    # Persistent change
-virsh setvcpus NAME 4 --live --config  # Both immediate and persistent
-virsh setvcpus ubuntu24 4 
-virsh setvcpus ubuntu24 4 --live
-virsh setvcpus ubuntu24 4 --current
-virsh setvcpus ubuntu24 4 --live --config
+virsh setvcpus NAME 3             # Current session
+virsh setvcpus NAME 3 --live      # Live change
+virsh setvcpus NAME 3 --config    # Persistent change
+virsh setvcpus NAME 3 --live --config  # Both immediate and persistent
+virsh setvcpus ubuntu24 3 
+virsh setvcpus ubuntu24 3 --live
+virsh setvcpus ubuntu24 3 --current
+virsh setvcpus ubuntu24 3 --live --config
 ```
 
 **Important**: After increasing vCPUs on a running VM, new vCPUs may be offline. Check online status on the VM:
@@ -953,7 +969,7 @@ sudo qemu-img create \
   -b /srv/isos/noble-server-cloudimg-amd64.img \
   -F qcow2 \
   -f qcow2 \
-  /srv/kvm/ubuntusrv-cloudimg.qcow2 \
+  /srv/kvm/ubuntusrv2-cloudimg.qcow2 \
   20G
 ```
  
@@ -979,60 +995,6 @@ qemu-img convert \
   DESTFILE
 ```
 
-I have Virtualbox installed on my workstation (Ubuntu 24.04 LTS). There  is a Windows 10 installed on it for testing purposes. I'll copy its image  (obviously in vdi format) to my server to /srv/kvm directory, convert it to qcow2 and run it on my server using KVM. 
-
-Copy Windows 10 image to the server:
-
-**Run on my workstation**
-
-```
-scp windows10.vdi exforge@elma:/tmp
-```
-
-**Example**: Convert VirtualBox VDI to QEMU qcow2
-
-First, copy Windows 10 image to server:
-
-```
-# On workstation
-scp windows10.vdi exforge@elma:/tmp/
-```
-
-Then convert on server:
-
-```
-sudo qemu-img convert \
-  -f vdi \
-  -O qcow2 \
-  /tmp/windows10.vdi \
-  /srv/kvm/windows10.qcow2
-```
-
-Show progress during conversion:
-
-```
-sudo qemu-img convert -p \
-  -f vdi \
-  -O qcow2 \
-  /tmp/windows10.vdi \
-  /srv/kvm/windows10.qcow2
-```
-
-Create VM from converted image:
-
-```
-virt-install --name windows10 \
-  --connect qemu:///system \
-  --virt-type kvm \
-  --memory 4096 \
-  --vcpus 2 \
-  --boot hd,menu=on \
-  --disk path=/srv/kvm/windows10.qcow2,device=disk \
-  --graphics vnc,port=5904,listen=0.0.0.0 \
-  --os-variant win10 \
-  --network bridge=br0 \
-  --noautoconsole
-```
 
 ### 6.4. Resize a Disk Image.
 Increase or decrease image size:
@@ -1097,7 +1059,7 @@ Example output:
       <source file='/srv/kvm/ubuntusrv-cloudimg.qcow2'/>
 ```
 
-Copy disk images:
+Copy disk images to backup location:
 
 ```
 cp /srv/kvm/ubuntu24-seed.qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 \
@@ -1154,6 +1116,7 @@ virsh start ubuntu24
 
 <br>
 
+
 ## 8. libguestfs: VM Disk Management
 
 ---
@@ -1174,7 +1137,7 @@ Mount VM disk read-only (safer):
 sudo guestmount -d ubuntu24 -i --ro /mnt
 ```
 
-Mount with write access (use with caution):
+Mount with write access (use with caution -  VM must be shut down):
 
 ```
 sudo guestmount -d ubuntu24 -i /mnt

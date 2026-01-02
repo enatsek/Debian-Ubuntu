@@ -171,6 +171,10 @@ sudo nano /etc/network/interfaces
 Replace content with (adjust interface names and IPs):
 
 ```
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
 auto lo
 iface lo inet loopback
 # The primary network interface
@@ -410,7 +414,6 @@ Internet ── [Web Server (dual NIC)] ── [Database Server]
 
 <br>
 
-!!!
 
 
 ## 3. Case Study A: Bridged and Isolated Networks Together
@@ -476,7 +479,7 @@ sudo virt-install --name vm1 \
     --connect qemu:///system  --virt-type kvm \
     --memory 1024 --vcpus 1 \
     --disk /srv/kvm/vm1.qcow2,format=qcow2,size=10 \
-    --cdrom /srv/isos/ubuntu-22.04.2-live-server-amd64.iso  \
+    --cdrom /srv/isos/ubuntu-24.04.2-live-server-amd64.iso  \
     --network bridge=br0 \
     --network bridge=brisolated \
     --graphics vnc,port=5901,listen=0.0.0.0 \
@@ -491,7 +494,7 @@ sudo virt-install --name vm2 \
     --connect qemu:///system  --virt-type kvm \
     --memory 1024 --vcpus 1 \
     --disk /srv/kvm/vm2.qcow2,format=qcow2,size=10 \
-    --cdrom /srv/isos/ubuntu-22.04.2-live-server-amd64.iso  \
+    --cdrom /srv/isos/ubuntu-24.04.2-live-server-amd64.iso  \
     --network bridge=brisolated \
     --graphics vnc,port=5902,listen=0.0.0.0 \
     --os-variant ubuntu22.04 \
@@ -509,58 +512,8 @@ Connect to VMs from your workstation to complete installation:
 - VM2 cannot receive updates or install packages directly
 - VM1 can access both networks and act as a gateway
 
-**Proxy Solution for Package Management**:
-Install Squid proxy on the host to provide internet access for isolated VMs.
+You can install Squid proxy on the host to provide internet access for isolated VMs.
 
-**Host Configuration (Simplified)**:
-```
-sudo apt update
-sudo apt install squid --yes
-sudo nano /etc/squid/squid.conf
-```
-
-Add to configuration:
-```
-http_port 192.168.20.1:3128
-acl localnet src 192.168.20.0/24
-http_access allow localnet
-```
-
-Restart Squid:
-```
-sudo systemctl restart squid
-```
-
-**VM Configuration (apt proxy)**:
-On each isolated VM (VM2 in our case):
-
-```
-sudo nano /etc/apt/apt.conf
-```
-
-Add for unauthenticated proxy:
-```
-Acquire::http::Proxy "http://192.168.20.1:3128";
-```
-
-For authenticated proxy:
-```
-Acquire::http::Proxy "http://username:password@192.168.20.1:3128";
-```
-
-**Security Considerations**:
-1. The proxy allows package downloads but maintains network isolation
-2. Consider firewall rules to restrict proxy access
-3. Monitor proxy logs for unusual activity
-4. Use HTTPS proxy for additional security
-
-**Testing Connectivity**:
-From VM2:
-```
-ping 192.168.20.1                    # Should work (host isolated IP)
-ping 192.168.1.1                     # Should fail (external network)
-curl --proxy http://192.168.20.1:3128 http://example.com  # Should work
-```
 
 <br>
 
@@ -641,6 +594,10 @@ sudo nano /etc/network/interfaces
 ```
 
 ```bash
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
 auto lo
 iface lo inet loopback
 
@@ -679,6 +636,9 @@ Apply configuration (SSH may disconnect):
 sudo systemctl restart networking.service
 ```
 
+**Note:** You may need to reboot because of the previous network configurations may cause instability.
+
+
 **Network Verification**:
 ```
 ip addr show br0
@@ -690,7 +650,7 @@ ping -c 3 192.168.1.1
 ---
 
 ### 4.3. KVM Network Configuration
-Define the bridged network in KVM:
+Skip this step if host-bridge already exists. Define the bridged network in KVM:
 
 Create XML configuration:
 ```
@@ -730,14 +690,14 @@ sudo virt-install --name vm3 \
     --connect qemu:///system  --virt-type kvm \
     --memory 1024 --vcpus 1 \
     --disk /srv/kvm/vm3.qcow2,format=qcow2,size=10 \
-    --cdrom /srv/isos/ubuntu-22.04.2-live-server-amd64.iso  \
+    --cdrom /srv/isos/ubuntu-24.04.2-live-server-amd64.iso  \
     --network bridge=br0 \
     --graphics vnc,port=5901,listen=0.0.0.0 \
     --os-variant ubuntu22.04 \
     --noautoconsole
 ```
 
-**Connect to VM**:
+**Connect to VM from your workstation**:
 ```
 virt-viewer --connect qemu+ssh://exforge@elma/system vm3
 ```
@@ -756,7 +716,7 @@ Consider implementing firewall rules to:
 
 <br>
 
-!!!
+
 
 ## 5. Case Study C: NAT KVM Network
 
@@ -844,7 +804,7 @@ sudo virt-install --name vmn \
     --connect qemu:///system  --virt-type kvm \
     --memory 1024 --vcpus 1 \
     --disk /srv/kvm/vmn.qcow2,format=qcow2,size=10 \
-    --cdrom /srv/isos/ubuntu-22.04.2-live-server-amd64.iso  \
+    --cdrom /srv/isos/ubuntu-24.04.2-live-server-amd64.iso  \
     --network bridge=brnat \
     --graphics vnc,port=5902,listen=0.0.0.0 \
     --os-variant ubuntu22.04 \
@@ -869,7 +829,7 @@ sudo virt-install --name vmn \
 - Gateway: 192.168.122.1 (host)
 - DNS: Inherited from host configuration
 
-
+!!!
 
 <br>
 
@@ -899,7 +859,7 @@ sudo virt-install --name vmtest \
     --connect qemu:///system  --virt-type kvm \
     --memory 1024 --vcpus 1 \
     --disk /srv/kvm/vm.qcow2,format=qcow2,size=10 \
-    --cdrom /srv/isos/ubuntu-22.04.2-live-server-amd64.iso  \
+    --cdrom /srv/isos/ubuntu-24.04.2-live-server-amd64.iso  \
     --network bridge=br0 \
     --graphics vnc,port=5902,listen=0.0.0.0 \
     --os-variant ubuntu22.04 \
@@ -920,15 +880,6 @@ virsh attach-interface vmtest \
 - `bridge brnat`: Network type and bridge name
 - `--target ens1`: Interface name inside VM
 - `--config`: Persistent after shutdown/start
-
-**Alternative for Powered-off VM**:
-```
-virsh attach-interface vmtest \
-    bridge brnat \
-    --target ens1 \
-    --config \
-    --persistent
-```
 
 **Restart VM** (required for interface activation):
 ```
@@ -1024,7 +975,7 @@ Detach interface using MAC address:
 ```
 virsh detach-interface vmtest \
     bridge \
-    --mac 52:54:00:83:3c:a0 \
+    --mac 52:54:00:f7:6d:66 \
     --config
 ```
 
@@ -1042,7 +993,7 @@ virsh detach-interface vmtest \
     --config
 ```
 
-**Shutdown and start VM** to complete removal:
+**Shutdown and start VM** (not reboot) to complete removal:
 ```
 virsh destroy vmtest
 virsh start vmtest

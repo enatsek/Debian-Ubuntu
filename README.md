@@ -43,6 +43,7 @@ This documentation started as personal notes to compensate for a terrible memory
 
 ### Infrastructure & Virtualization
 
+- [*New* **Docker**](docker.md) - Docker installation, configuration including Compose and Swarm
 - [**KVM Virtualization (Beginner)**](kvm1.md) — Introduction to KVM virtualization
 - [**KVM Virtualization (Networking)**](kvm2.md) — Advanced KVM networking configurations
 - [**Keepalived**](keepalived.md) — High-availability clustering

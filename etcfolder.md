@@ -10,6 +10,7 @@ sidebar:
 ## Specs
 
 ---
+
 ### Info
 
 The `/etc` directory is a crucial part of the filesystem hierarchy. Its name stands for "et cetera," and it stores system-wide configuration files and directories.
@@ -28,7 +29,6 @@ This guide attempts to cover all files and folders under `/etc` for a default in
 
 ##/etc/.pwd.lock
 
-
 ---
 This file exists in default Ubuntu and Debian installations.
 
@@ -43,7 +43,6 @@ A process first calls `lckpwdf()` to lock the file, gaining exclusive rights to 
 
 ## /etc/.updated
 
-
 ---
 This file exists in default Ubuntu and Debian installations.
 
@@ -51,7 +50,7 @@ It is updated by `systemd-update-done.service` when the `/usr` directory is upda
 
 Sample content on Debian:
 
-```
+```ini
 # This file was created by systemd-update-done. Its only 
 # purpose is to hold a timestamp of the time this directory
 # was updated. See man:systemd-update-done.service(8).
@@ -62,7 +61,6 @@ TIMESTAMP_NSEC=1760517533879884038
 
 ## /etc/adduser.conf
 
-
 ---
 File exists in default Ubuntu & Debian installations.
 
@@ -70,7 +68,7 @@ It configures default settings for the `adduser` and `addgroup` commands, which 
 
 Sample content:
 
-```
+```ini
 # /etc/adduser.conf: `adduser' configuration.
 # See adduser(8) and adduser.conf(5) for full documentation.
 #
@@ -144,7 +142,7 @@ The hardware clock is often inaccurate, but much of its inaccuracy is predictabl
 
 Sample content:
 
-```
+```text
 0.000000 1692481832 0.000000
 1692481832
 UTC
@@ -173,7 +171,7 @@ Changes require running the `newaliases` command to rebuild the alias database.
 
 Sample content:
 
-```
+```text
 # alias: address1, address2, ...
 root: admin@example.com
 webmaster: admin@example.com
@@ -196,7 +194,7 @@ Administrators can use the `update-alternatives` command to manage these symboli
 
 Excerpt from a directory listing:
 
-```
+```text
 lrwxrwxrwx  1 root root   13 Jun 17  2022 awk -> /usr/bin/mawk
 lrwxrwxrwx  1 root root    9 Jan 18  2023 editor -> /bin/nano
 lrwxrwxrwx  1 root root   17 May  4  2023 ex -> /usr/bin/vim.tiny
@@ -240,7 +238,7 @@ These folders exist in default Ubuntu and Debian installations.
 
 Excerpt from `/etc/apparmor/parser.conf`:
 
-```
+```text
 # parser.conf is a global AppArmor config file for the apparmor_parser
 
 # It can be used to specify the default options for the parser, which
@@ -316,7 +314,7 @@ On Debian and Ubuntu, it typically includes the path to the main completion scri
 
 Sample content:
 
-```
+```text
 . /usr/share/bash-completion/bash_completion
 ```
 
@@ -331,7 +329,7 @@ It contains additional scripts for Bash completion functionality.
 
 Example script (`/etc/bash_completion.d/git-prompt`):
 
-```
+```bash
 # /etc/bash_completion.d/git-prompt
 # In git versions < 1.7.12, this shell library was part of the
 # git completion script.
@@ -359,7 +357,7 @@ It contains global settings, aliases, shell options, and environment variables.
 
 Excerpt:
 
-```
+```bash
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 # check the window size after each command and, if necessary,
@@ -402,7 +400,7 @@ Traditionally, only privileged processes can bind to these ports.
 
 Sample content:
 
-```
+```text
 # This file contains a list of port numbers between 600 and 1024,
 # which should not be used by bindresvport. bindresvport is mostly
 # called by RPC services. This mostly solves the problem, that a
@@ -430,7 +428,7 @@ It is used to configure **Binary Format (binfmt) handlers**—a Linux kernel fea
 
 Example configuration (`/etc/binfmt.d/wine.conf`):
 
-```
+```text
 # /etc/binfmt.d/wine.conf
 # Start WINE on Windows executables
 :DOSWin:M::MZ::/usr/bin/wine:
@@ -447,7 +445,7 @@ It allows customization of the behavior of the `blkid` command.
 
 Sample content:
 
-```
+```ini
 # Configuration file for blkid(8)
 
 # How to encode whitespace characters in LABEL/UUID. 'b' uses backslash,
@@ -483,7 +481,7 @@ Example files:
 
 **`/etc/byobu/backend`:**
 
-```
+```ini
 # /etc/byobu/backend
 # BYOBU_BACKEND can currently be "screen" or "tmux"
 # Override this on a per-user basis by editing "$BYOBU_CONFIG_DIR/backend"
@@ -493,7 +491,7 @@ BYOBU_BACKEND="tmu
 
 **`/etc/byobu/socketdir`:**
 
-```
+```ini
 # /etc/byobu/socketdir
 # Set the location of the socket directory that byobu will use.
 # On Debian/Ubuntu systems, this is in /var/run/screen, but on
@@ -521,7 +519,7 @@ These folders exist in default Debian and Ubuntu installations.
 
 Example `/etc/ca-certificates.conf` content:
 
-```
+```text
 # This file lists certificates that you wish to use or to ignore to be
 # installed in /etc/ssl/certs.
 # update-ca-certificates(8) will update /etc/ssl/certs by reading this file.
@@ -594,7 +592,7 @@ These files and folders exist in default Debian and Ubuntu installations.
 
 Example content:
 
-```
+```text
 # /etc/crontab: system-wide crontab
 # Unlike any other crontab you don't have to run the `crontab'
 # command to install the new version when you edit this file
@@ -634,7 +632,7 @@ Ubuntu installations contain only the `conf-hook` file by default.
 
 Excerpt from `/etc/cryptsetup-initramfs/conf-hook`:
 
-```
+```text
 # Configuration file for the cryptroot initramfs hook.
 
 # KEYFILE_PATTERN: ...
@@ -678,7 +676,7 @@ It describes encrypted block devices that are set up during system boot.
 
 Example configuration:
 
-```
+```text
 # <name>       <source>         <keyfile>       <options>
 encrypted_data /dev/sdb1        /etc/keys/encrypted_data.key   luks
 ```
@@ -732,7 +730,7 @@ Debconf handles configuration prompts and manages configuration files during pac
 Excerpt:
 
 
-```
+```text
 # Debconf will use this database to store the data you enter into it,
 # and some other dynamic data.
 Config: configdb
@@ -769,13 +767,13 @@ Example contents:
 
 **Debian 13:**
 
-```
+```text
 13.1
 ```
 
 **Ubuntu 24.04:**
 
-```
+```text
 trixie/sid
 ```
 
@@ -794,7 +792,7 @@ Example files:
 
 **`/etc/default/ssh`:**
 
-```
+```bash
 # Default settings for openssh-server. This file is sourced by /bin/sh from
 # /etc/init.d/ssh.
 
@@ -804,7 +802,7 @@ SSHD_OPTS=
 
 **`/etc/default/keyboard`:**
 
-```
+```ini
 # KEYBOARD CONFIGURATION FILE
 # Consult the keyboard(5) manual page.
 XKBMODEL="pc105"
@@ -825,7 +823,7 @@ It configures default settings for the `deluser` command.
 
 Example content:
 
-```
+```ini
 # /etc/deluser.conf: `deluser' configuration.
 # See deluser(8) and deluser.conf(5) for full documentation.
 
@@ -867,7 +865,7 @@ Linux kernel modules can provide services (called "symbols") for other modules. 
 - **Debian:** No files by default.
 - **Ubuntu:** Contains one file, `ubuntu.conf`, with the following content:
 
-```
+```text
 search updates ubuntu built-in
 ```
 
@@ -891,7 +889,7 @@ Key files and folders:
 
 Example `dhcpd.conf`:
 
-```
+```text
 # /etc/dhcp/dhcpd.conf
 
 # Set the domain name for the DHCP clients
@@ -918,7 +916,7 @@ subnet 192.168.1.0 netmask 255.255.255.0 {
 
 Example `dhclient.conf`:
 
-```
+```text
 # /etc/dhcp/dhclient.conf
 
 # Request specific DHCP options
@@ -951,7 +949,7 @@ It configures **`dhcpcd`**, a common DHCP client for Linux systems, defining how
 
 Example content:
 
-```
+```text
 # A sample configuration for dhcpcd.
 # See dhcpcd.conf(5) for details.
 
@@ -1081,7 +1079,7 @@ It configures the **`e2scrub`** utility, which checks (but does not repair) all 
 
 Example content:
 
-```
+```text
 # e2scrub configuration file
 
 # Uncomment to enable automatic periodic runs of e2scrub_all
@@ -1150,7 +1148,7 @@ It is used by tools like **tcpdump** or **Wireshark** to display EtherType value
 
 Example content:
 
-```
+```text
 # Ethernet frame types
 
 # The EtherType is a two-octet field of Ethernet frames used to indicate
@@ -1211,7 +1209,7 @@ It contains the **NFS server export table**—a list of local file systems acces
 
 Example `exports` file:
 
-```
+```text
 /               master(rw) trusty(rw,no_root_squash)
 /projects       proj*.local.domain(rw)
 /usr            *.local.domain(ro) @trusted(rw)
@@ -1252,7 +1250,7 @@ It defines how file systems are mounted and configured during system startup.
 
 Example:
 
-```
+```text
 # /etc/fstab: static file system information.
 
 # Use 'blkid' to print the universally unique identifier for a device; this 
@@ -1280,7 +1278,7 @@ FUSE provides a secure method for non-privileged users to create and mount their
 
 Example content:
 
-```
+```text
 # The file /etc/fuse.conf allows for the following parameters:
 #
 # user_allow_other - Using the allow_other mount option works fine as root, in
@@ -1345,7 +1343,7 @@ It contains configuration files for the **GnuTLS** library, widely used for hand
 
 Default Ubuntu installations include one file, `config`, with the following content:
 
-```
+```ini
 [overrides]
 disabled-version = tls1.0
 disabled-version = tls1.1
@@ -1378,7 +1376,7 @@ These files exist in default Debian and Ubuntu installations.
 
 Example `/etc/group` content:
 
-```
+```text
 root:x:0:
 daemon:x:1:
 bin:x:2:
@@ -1474,7 +1472,7 @@ The system's DNS resolver library reads this file.
 
 Example content:
 
-```
+```text
 # Configuration file for host name resolution
 
 # Order of host name resolution methods
@@ -1507,7 +1505,7 @@ It maps hostnames to IP addresses locally, allowing hostname resolution without 
 
 Example content:
 
-```
+```text
 # /etc/hosts
 
 # Static table lookup for hostnames.
@@ -1545,7 +1543,7 @@ Example files:
 
 **`/etc/hosts.allow`:**
 
-```
+```text
 # /etc/hosts.allow
 
 # Allow SSH access from the local network
@@ -1560,7 +1558,7 @@ ALL: 127.0.0.1
 
 **`/etc/hosts.deny`:**
 
-```
+```text
 # /etc/hosts.deny
 
 # Deny all services from all hosts by default
@@ -1612,7 +1610,7 @@ It contains configuration settings for **Readline**, a library providing command
 
 Excerpt:
 
-```
+```text
 # allow the use of the Home/End keys
 "\e[1~": beginning-of-line
 "\e[4~": end-of-line
@@ -1684,25 +1682,25 @@ Example contents:
 
 **Debian 13 `/etc/issue`:**
 
-```
+```text
 Debian GNU/Linux 13 \n \l
 ```
 
 **Debian 13 `/etc/issue.net`:**
 
-```
+```text
 Debian GNU/Linux 13 
 ```
 
 **Ubuntu 24.04 `/etc/issue`:**
 
-```
+```text
 Ubuntu 24.04 LTS \n \l
 ```
 
 **Ubuntu 24.04 `/etc/issue.net`:**
 
-```
+```text
 Ubuntu 24.04 LTS 
 ```
 
@@ -1736,7 +1734,7 @@ It is used during kernel package installation and removal to specify local optio
 
 Example content:
 
-```
+```ini
 # Kernel image management overrides
 # See kernel-img.conf(5) for details
 do_symlinks = yes
@@ -1791,7 +1789,7 @@ OpenLDAP is an open-source implementation of the Lightweight Directory Access Pr
 
 Default Ubuntu includes only `ldap.conf`:
 
-```
+```text
 # /etc/ldap/ldap.conf
 
 # LDAP Defaults
@@ -1830,7 +1828,7 @@ It contains legal notices.
 
 Default content:
 
-```
+```text
 The programs included with the Ubuntu system are free software;
 the exact distribution terms for each program are described in the
 individual files in /usr/share/doc/*/copyright.
@@ -1851,7 +1849,7 @@ It contains configuration for user-space applications linking to **libaudit**, a
 
 Example content:
 
-```
+```ini
 # This is the configuration file for libaudit tunables.
 # It is currently only used for the failure_action tunable.
 
@@ -1873,7 +1871,7 @@ Applications can use it to programmatically handle block devices without dealing
 
 Example configuration (`/etc/libblockdevconf.d/00-default.cfg`):
 
-```
+```ini
 # /etc/libblockdevconf.d/00-default.cfg
 # This is the default configuration for the libblockdev library. For
 # each supported technology/plugin there is a separate section/group
@@ -1972,7 +1970,7 @@ These files exist in default Debian and Ubuntu installations.
 
 Example excerpt from `/etc/locale.alias`:
 
-```
+```text
 catalan         ca_ES.ISO-8859-1
 croatian        hr_HR.ISO-8859-2
 czech           cs_CZ.ISO-8859-2
@@ -1994,7 +1992,7 @@ hrvatski        hr_HR.ISO-8859-2
 
 Example excerpt from `/etc/locale.gen`:
 
-```
+```text
 # en_SG.UTF-8 UTF-8
 # en_US ISO-8859-1
 # en_US.ISO-8859-15 ISO-8859-15
@@ -2023,7 +2021,7 @@ It defines system-wide **locale settings**, which determine language, regional f
 
 Example content:
 
-```
+```text
 LANG=en_US.UTF-8
 LC_TIME=en_GB.UTF-8
 LC_NUMERIC=de_DE.UTF-8
@@ -2078,7 +2076,7 @@ Each line contains a directive name and its associated value, allowing system ad
 Example excerpt:
 
 
-```
+```text
 # REQUIRED for useradd/userdel/usermod
 #   Directory where mailboxes reside, _or_ name of file, relative to the
 #   home directory.  If you _do_ define MAIL_DIR and MAIL_FILE,
@@ -2144,7 +2142,7 @@ Changes to `logrotate.conf` typically take effect immediately, with log rotation
 
 Example `logrotate.conf`:
 
-```
+```text
 # /etc/logrotate.conf
 # Global options
 # Rotate log files weekly
@@ -2181,7 +2179,7 @@ It provides distribution release, version, and other details in a standardized f
 
 Example content (Ubuntu):
 
-```
+```ini
 DISTRIB_ID=Ubuntu
 DISTRIB_RELEASE=24.04
 DISTRIB_CODENAME=noble
@@ -2213,12 +2211,13 @@ Key files and folders:
 ---
 This file exists in default Debian and Ubuntu installations.
 
-It contains the **unique machine ID** of the local system, set during installation or boot.  
+It contains the **unique machine ID** of the local system, set during installation or boot. 
+
 The ID is a 32-character lowercase hexadecimal string (16 bytes/128 bits) terminated by a newline, and it must not be all zeros.
 
 Example content:
 
-```
+```text
 4d7f0b0c161e4e729b6c2f1d8e9b37a2
 ```
 
@@ -2239,7 +2238,7 @@ Example contents:
 
 **`/etc/magic`:**
 
-```
+```text
 # /etc/magic
 # Offset    Data type      Byte sequence    File type
 # Example rule: Identify JPEG files
@@ -2251,7 +2250,7 @@ Example contents:
 
 **`/etc/magic.mime`:**
 
-```
+```text
 # /etc/magic.mime
 # MIME type definitions for file type detection
 # This file is used by MIME type detection utilities to determine
@@ -2288,7 +2287,7 @@ These files do **not** exist in default Debian or Ubuntu installations.
 
 Example `mailcap` content:
 
-```
+```text
 text/plain; more %s; needsterminal
 text/english; vim %s; needsterminal
 text/plain; vim %s; needsterminal
@@ -2305,7 +2304,7 @@ text/x-tcl; vim %s; needsterminal
 
 Example `mailcap.order` content:
 
-```
+```text
 text/html
 text/plain
 image/jpeg
@@ -2324,7 +2323,7 @@ It configures the system-wide manual page paths for the `man` command, defining 
 
 Example content:
 
-```
+```text
 # There are three mappings allowed in this file:
 # --------------------------------------------------------
 # MANDATORY_MANPATH                     manpath_element
@@ -2402,7 +2401,7 @@ It maps filename extensions to **MIME types**, allowing applications to determin
 
 Example content:
 
-```
+```text
 application/octet-stream       bin dms lha lrf lzh exe class so dll img iso dmg
 application/pdf                pdf
 application/zip                zip
@@ -2426,7 +2425,7 @@ It configures the **mke2fs** utility, controlling default parameters when creati
 
 Example content:
 
-```
+```ini
 [defaults]
 	base_features = sparse_super,large_file,filetype,resize_inode,dir_index,ext_attr
 	default_mntopts = acl,user_xattr
@@ -2501,7 +2500,7 @@ Example files:
 
 **`/etc/modprobe.d/intel-microcode-blacklist.conf`:**
 
-```
+```text
 # /etc/modprobe.d/intel-microcode-blacklist.conf
 #
 # The microcode module attempts to apply a microcode update when
@@ -2511,7 +2510,7 @@ blacklist microcode
 
 **`/etc/modprobe.d/blacklist.conf`:**
 
-```
+```text
 # /etc/modprobe.d/blacklist.conf
 #
 # This file lists those modules which we don't want to be loaded by
@@ -2537,7 +2536,7 @@ blacklist eth1394
 
 **`/etc/modprobe.d/mdadm.conf`:**
 
-```
+```text
 # /etc/modprobe.d/mdadm.conf
 
 # mdadm module configuration file
@@ -2564,7 +2563,7 @@ These exist in default Debian and Ubuntu installations.
 
 Example `/etc/modules` content:
 
-```
+```text
 # /etc/modules: kernel modules to load at boot time.
 #
 # This file contains the names of kernel modules that should be loaded
@@ -2608,7 +2607,7 @@ They configure the **multipath daemon (`multipathd`)** and the `multipath` comma
 
 Example `/etc/multipath.conf`:
 
-```
+```text
 # /etc/multipath.conf
 #
 # Multipath configuration file
@@ -2654,7 +2653,7 @@ It is the configuration (initialization) file for the **nano** text editor.
 
 Excerpt:
 
-```
+```text
 ## Sample initialization file for GNU nano.
 ##
 ## For the options that take parameters, the default value is shown.
@@ -2742,7 +2741,7 @@ Currently, it is used only in conjunction with the TI-RPC code in the `libtirpc`
 
 Example content:
 
-```
+```text
 #
 # The network configuration file. This file is currently only used in
 # conjunction with the TI-RPC code in the libtirpc library.
@@ -2777,7 +2776,8 @@ It contains **Netplan** network configuration files.
 Netplan is a utility developed by Canonical for configuring network interfaces on Ubuntu.
 
 Example configuration (`/etc/netplan/00-installer-config.yaml`):
-```
+
+```yaml
 # /etc/netplan/00-installer-config.yaml
 network:
   ethernets:
@@ -2820,7 +2820,7 @@ Example files:
 
 **`/etc/network/interfaces.d/enp0s3`:**
 
-```
+```text
 # /etc/network/interfaces.d/enp0s3
 auto enp0s3
 iface enp0s3 inet static
@@ -2832,7 +2832,7 @@ iface enp0s3 inet static
 
 **`/etc/network/if-up.d/routes`:**
 
-```
+```bash
 #!/bin/sh
 if [ "$IFACE" = "enp0s3" ]; then
   ip route del 10.0.0.0/8 via 192.168.1.196 dev enp0s3 
@@ -2873,7 +2873,7 @@ Used by network-related utilities (e.g., `route`) to resolve network names to IP
 
 Example content:
 
-```
+```text
 default         0.0.0.0
 loopback        127.0.0.0
 link-local      169.254.0.0
@@ -2893,7 +2893,7 @@ It contains configuration files for the **Newt** library, used for creating text
 
 Example configuration (`/etc/newt/palette.ubuntu`):
 
-```
+```text
 # /etc/newt/palette.ubuntu
 root=,magenta
 checkbox=,magenta
@@ -2918,7 +2918,7 @@ It configures the **nftables** firewall framework, a modern and flexible replace
 
 Example content (default Debian configuration):
 
-```
+```bash
 #!/usr/sbin/nft -f
 flush ruleset
 table inet filter {
@@ -2969,7 +2969,7 @@ It configures the **Name Service Switch (NSS)** system, defining sources and the
 
 Example content:
 
-```
+```text
 # /etc/nsswitch.conf
 #
 # Example configuration of GNU Name Service Switch functionality.
@@ -3010,7 +3010,7 @@ It configures the **Network Time Protocol (NTP)** daemon, which synchronizes com
 
 Example content:
 
-```
+```text
 # /etc/ntp.conf
 # Configuration file for ntpd
 
@@ -3055,7 +3055,7 @@ It is a symbolic link to `/usr/lib/os-release` and contains operating system ide
 
 **Debian 13 example:**
 
-```
+```ini
 PRETTY_NAME="Debian GNU/Linux 13 (trixie)"
 NAME="Debian GNU/Linux"
 VERSION_ID="13"
@@ -3070,7 +3070,7 @@ BUG_REPORT_URL="https://bugs.debian.org/"
 
 **Ubuntu 24.04 example:**
 
-```
+```ini
 PRETTY_NAME="Ubuntu 24.04 LTS"
 NAME="Ubuntu"
 VERSION_ID="24.04"
@@ -3132,7 +3132,7 @@ These files exist in default Debian and Ubuntu installations.
 
 Example `/etc/passwd` content:
 
-```
+```text
 root:x:0:0:root:/root:/bin/bash
 daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
 bin:x:2:2:bin:/bin:/usr/sbin/nologin
@@ -3255,7 +3255,7 @@ It configures the **Popularity Contest** package for Debian, which collects anon
 
 Example content:
 
-```
+```ini
 # Config file for Debian's popularity-contest package.
 #
 # To change this file, use:
@@ -3303,7 +3303,7 @@ These exist in default Debian and Ubuntu installations.
 
 Example `/etc/profile` content:
 
-```
+```bash
 # /etc/profile: system-wide .profile file for the Bourne shell (sh(1))
 # and Bourne compatible shells (bash(1), ksh(1), ash(1), ...).
 if [ "$(id -u)" -eq 0 ]; then
@@ -3352,7 +3352,7 @@ Used by networking utilities and applications for protocol identification.
 
 Example content:
 
-```
+```text
 # Internet (IP) protocols
 
 # Updated from http://www.iana.org/assignments/protocol-numbers and other
@@ -3438,7 +3438,8 @@ These folders exist in default Debian and Ubuntu installations.
 Example files:
 
 **`/etc/python3/debian_config`:**
-```
+
+```ini
 [DEFAULT]
 # how to byte-compile (comma separated: standard, optimize)
 byte-compile = standard
@@ -3446,7 +3447,7 @@ byte-compile = standard
 
 **`/etc/python3.13/sitecustomize.py`:**
 
-```
+```python
 # install the apport exception handler if available
 try:
     import apport_python_hook
@@ -3482,7 +3483,7 @@ It configures the **reportbug** tool, which assists users in reporting bugs in D
 
 Example excerpt:
 
-```
+```text
 # Example configuration file for reportbug(1)
 # Options can be specified in any order
 # usually, no-OPTION will disable OPTION if OPTION is boolean
@@ -3548,7 +3549,7 @@ It configures **DNS (Domain Name System)** resolver settings, translating domain
 
 Example content:
 
-```
+```text
 # Nameservers
 nameserver 192.168.1.1
 nameserver 8.8.8.8
@@ -3581,7 +3582,7 @@ RPC allows programs to execute procedures on remote systems as if they were loca
 
 Example content:
 
-```
+```text
 # This file contains user readable names that can be used in place of rpc
 # program numbers.
 #
@@ -3640,7 +3641,7 @@ bwnfsd          788585389
 
 Excerpt from `/etc/rsyslog.conf`:
 
-```
+```text
 # /etc/rsyslog.conf configuration file for rsyslog
 #
 # For more information install rsyslog-doc and see
@@ -3773,7 +3774,7 @@ It maps well-known service names to their corresponding port numbers, used by ne
 
 Example excerpt:
 
-```
+```text
 # Network services, Internet style
 #
 # Updated from https://www.iana.org/assignments/service-names-port-numbers/
@@ -3848,7 +3849,7 @@ These files exist in default Debian and Ubuntu installations.
 
 Example `/etc/shadow` content:
 
-```
+```text
 root:!:19588:0:99999:7:::
 daemon:*:19588:0:99999:7:::
 bin:*:19588:0:99999:7:::
@@ -3896,7 +3897,7 @@ Used by system utilities and administration tools to determine permissible login
 
 Example content:
 
-```
+```text
 # /etc/shells: valid login shells
 /bin/sh
 /bin/bash
@@ -3967,7 +3968,7 @@ Example excerpts:
 
 **`/etc/ssh/ssh_config`:**
 
-```
+```text
 # /etc/ssh/ssh_config
 # This is the ssh client system-wide configuration file.  See
 # ssh_config(5) for more information.  This file provides defaults for
@@ -4012,7 +4013,7 @@ Host *
 
 **`/etc/ssh/sshd_config`:**
 
-```
+```text
 # /etc/ssh/sshd_config
 # This is the sshd server system-wide configuration file.  See
 # sshd_config(5) for more information.
@@ -4067,7 +4068,7 @@ Key contents:
 
 Excerpt from `/etc/ssl/openssl.cnf`:
 
-```
+```text
 # OpenSSL example configuration file.
 # See doc/man5/config.pod for more info.
 
@@ -4175,7 +4176,7 @@ It contains configuration files for **supercat**, a tool that colorizes text bas
 
 Example configuration (`/etc/supercat/spcrc-crontab`):
 
-```
+```text
 # ============ this file is to colorize crontabs ==========
 #        1         2         3         4         5
 #2345678901234567890123456789012345678901234567890123456789
@@ -4245,7 +4246,7 @@ These exist in default Debian and Ubuntu installations.
 
 Example `sysctl.conf`:
 
-```
+```ini
 # Disable source routing
 net.ipv4.conf.default.accept_source_route = 0
 net.ipv4.conf.all.accept_source_route = 0
@@ -4302,7 +4303,7 @@ It contains configuration files for **sysstat**, a collection of system performa
 
 Example `/etc/sysstat/sysstat`:
 
-```
+```ini
 # sysstat configuration file. See sysstat(5) manual page.
 
 # How long to keep log files (in days).
@@ -4408,15 +4409,15 @@ It contains the **system timezone name**, used by utilities and applications to 
 
 Examples:
 
-```
+```text
 America/New_York
 ```
 
-```
+```text
 Europe/Istanbul
 ```
 
-```
+```text
 Etc/UTC
 ```
 
@@ -4446,7 +4447,7 @@ It contains configuration files for **Ubuntu Advantage**, Canonical’s commerci
 
 Example `/etc/ubuntu-advantage/uaclient.conf`:
 
-```
+```text
 # /etc/ubuntu-advantage/uaclient.conf
 contract_url: https://contracts.canonical.com
 log_level: debug
@@ -4457,7 +4458,7 @@ log_level: debug
 ## /etc/ucf.conf
 
 
----
+---ini
 This file exists in default Debian and Ubuntu installations.
 
 It is associated with the **update configuration files (UCF)** utility, which handles configuration file updates during package installation or upgrade in a user-friendly, automated manner.
@@ -4580,7 +4581,7 @@ Example files:
 
 **`/etc/update-manager/meta-release`:**
 
-```
+```ini
 # /etc/update-manager/meta-release
 # default location for the meta-release file
 #
@@ -4593,7 +4594,7 @@ URI_PROPOSED_POSTFIX = -proposed
 
 **`/etc/update-manager/release-upgrades`:**
 
-```
+```ini
 # /etc/update-manager/release-upgrades
 # Default behavior for the release upgrader.
 #
@@ -4628,14 +4629,14 @@ Example scripts:
 
 **`/etc/update-motd.d/uname`:**
 
-```
+```bash
 #!/bin/sh
 uname -snrvm
 ```
 
 **`/etc/update-motd.d/85-fwupd`:**
 
-```
+```bash
 #!/bin/sh
 if [ -f /run/motd.d/85-fwupd ]; then
         cat /run/motd.d/85-fwupd
@@ -4667,7 +4668,7 @@ It contains configuration files for **UPower**, a power management service that 
 
 Example `/etc/UPower/UPower.conf`:
 
-```
+```text
 # /etc/UPower/Upower.conf
 [UPower]
 
@@ -4733,7 +4734,7 @@ It configures **virtual console settings**, including keyboard layout, font, and
 
 Example content (Ubuntu 24.04):
 
-```
+```ini
 # KEYBOARD CONFIGURATION FILE
 
 # Consult the keyboard(5) manual page.
@@ -4774,7 +4775,7 @@ It contains configuration files for **VMware Tools**, a suite of utilities that 
 
 Example `/etc/vmware-tools/tools.conf` (Ubuntu):
 
-```
+```ini
 [logging]
 # Turns on logging globally. It can still be disabled for each domain.
 # log = true
@@ -4840,7 +4841,7 @@ It configures **extended attributes (xattrs)**, which associate metadata (e.g., 
 
 Example content:
 
-```
+```text
 # /etc/xattr.conf
 #
 # Format:

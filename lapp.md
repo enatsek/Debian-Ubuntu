@@ -6,7 +6,6 @@ sidebar:
 ---
 
 ##### Linux, Apache, PostgreSQL, PHP stack installation and configuration
-
 ## 0. Specs
 
 ---
@@ -35,45 +34,43 @@ In this guide, we will use **PHP** as our server-side scripting language.
 <br>
 
 ## 1. Install Packages
-
 ---
 
 Update package repositories and install Apache:
 
-```
+```bash
 sudo apt update
 sudo apt install --yes apache2
 ```
 
 Install PostgreSQL:
 
-```
+```bash
 sudo apt install --yes postgresql
 ```
 
 Install PHP along with the necessary modules for Apache and Postgresql integration:
 
-```
+```bash
 sudo apt install --yes php libapache2-mod-php php-pgsql
 ```
 
 **Optional:** Depending on your application (e.g., WordPress), you may need additional PHP extensions:
 
-```
+```bash
 sudo apt install --yes php-curl php-gd php-mbstring php-xml php-xmlrpc \
      php-soap php-intl php-zip
 ```
 
 Restart Apache to load the PHP module:
 
-```
+```bash
 sudo systemctl restart apache2
 ```
 
 <br>
 
 ## 2. Test LAPP Stack
-
 ---
 
 We will create a test database, add a table with sample data, and then create a PHP script to retrieve this data and display it in a web page.
@@ -82,19 +79,19 @@ We will create a test database, add a table with sample data, and then create a 
 
 Create a test PostgreSQL user with a password:
 
-```
+```bash
 sudo -u postgres createuser --pwprompt testuser
 ```
 
 Create a test database:
 
-```
+```bash
 sudo -u postgres createdb testdb
 ```
 
 Connect to the PostgreSQL shell:
 
-```
+```bash
 sudo -u postgres psql testdb
 ```
 
@@ -102,13 +99,13 @@ Create a table, populate it with data, and grant the test user access permission
 
 Enter PostgreSQL shell:
 
-```
+```bash
 sudo -u postgres psql testdb
 ```
 
 **Run the following commands in the PostgreSQL shell:**
 
-```
+```sql
 CREATE TABLE Employees (Name char(15), Age int, Occupation char(15));
 INSERT INTO Employees VALUES ('Joe Smith', '26', 'Ninja');
 INSERT INTO Employees VALUES ('John Doe', '33', 'Sleeper');
@@ -121,13 +118,13 @@ GRANT SELECT ON ALL TABLES IN SCHEMA public TO testuser;
 
 Create a new PHP file in the web server's root directory:
 
-```
+```bash
 sudo nano /var/www/html/test.php
 ```
 
 Copy and paste the following content into the file. **Replace `'password'` with the actual password you set for `testuser`:**
 
-```
+```php
 <?php
     $dbh = 'localhost';
     $dbn= 'testdb';
@@ -173,7 +170,9 @@ Copy and paste the following content into the file. **Replace `'password'` with 
 
 Open a web browser on your workstation and navigate to the following URL, replacing `srv` with your server's IP address or hostname:
 
-`http://srv/test.php`
+```http
+http://srv/test.php
+```
 
 You should see a table displaying the data from the `Employees` table.
 

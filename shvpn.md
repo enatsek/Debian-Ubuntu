@@ -8,7 +8,6 @@ sidebar:
 ##### WireGuard VPN server setup for remote access
 
 ## 0. Specs
-
 ---
 
 ### 0.0. The What
@@ -44,7 +43,7 @@ Our central WireGuard server will use the following configuration template. You 
 
 Server Configuration (/etc/wireguard/wg0.conf):
 
-```
+```ini
 [Interface]
 Address = 10.100.0.100/24
 ListenPort = 53
@@ -88,7 +87,7 @@ Notes on the server configuration:
 Our WireGuard clients will use the following configuration templates. Remember to replace the placeholders with the server's public key and each client's respective private key.
 
 
-```
+```ini
 # Client1
 [Interface]
 PrivateKey = client1privkey
@@ -102,7 +101,7 @@ AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25
 ```
 
-```
+```ini
 # Client2
 [Interface]
 PrivateKey = client2privkey
@@ -116,7 +115,7 @@ AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25
 ```
 
-```
+```ini
 # Client3
 [Interface]
 PrivateKey = client3privkey
@@ -148,14 +147,13 @@ Notes on the client configuration:
 <br>
 
 ## 1. Server Configuration
-
 ---
 
 Enable IP Forwarding
 
 The VPN server needs to forward traffic between its physical network interface and the WireGuard tunnel.
 
-```
+```bash
 echo 'net.ipv4.ip_forward=1' | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p                    # Apply the change
 sudo sysctl net.ipv4.ip_forward   # Verify it's set to 1
@@ -166,25 +164,25 @@ Free Port 53 (Ubuntu Systems)
 On Ubuntu, port 53 is often used by the systemd-resolved service. We need to free it or choose a different port for WireGuard. To free port 53, edit the systemd-resolved configuration:
 
 
-```
+```bash
 sudo nano /etc/systemd/resolved.conf
 ```
 
 Find the line (around line 19) that says:
 
-```
+```ini
 #DNSStubListener=yes
 ```
 
 Change it to:
 
-```
+```ini
 DNSStubListener=no
 ```
 
 Save the file and restart the service:
 
-```
+```bash
 sudo systemctl restart systemd-resolved
 ```
 
@@ -193,7 +191,7 @@ Install WireGuard and iptables
 
 We need iptables to configure NAT, which allows clients to access the internet through the server.
 
-```
+```bash
 sudo apt update
 sudo apt install -y wireguard iptables
 ```
@@ -202,7 +200,7 @@ Generate Key Pairs
 
 Create a directory for the keys and generate the key pairs for the server and clients.
 
-```
+```bash
 mkdir wg && cd wg
 wg genkey | tee serverprivkey | wg pubkey > serverpubkey
 wg genkey | tee client1privkey | wg pubkey > client1pubkey
@@ -237,13 +235,13 @@ Create and Activate the WireGuard Configuration
 
 Create the WireGuard configuration file:
 
-```
+```bash
 sudo nano /etc/wireguard/wg0.conf
 ```
 
 Populate the file with the configuration below. Remember to use your actual server private key and client public keys. Also, verify your network interface name (e.g., eth0). You can add as many client ```[Peer]``` sections as needed.
 
-```
+```ini
 [Interface]
 Address = 10.100.0.100/24
 ListenPort = 53
@@ -273,7 +271,7 @@ AllowedIPs = 10.100.0.3/32
 Enable, start, verify the service.
 
 
-```
+```bash
 sudo systemctl enable wg-quick@wg0
 sudo systemctl start wg-quick@wg0
 sudo wg show     # Verify the tunnel status and peers
@@ -282,14 +280,13 @@ sudo wg show     # Verify the tunnel status and peers
 <br>
 
 ## 2. Debian / Ubuntu & Derivatives Client Configuration
-
 ---
 
 This configuration should work on all Debian-based and Ubuntu-based systems, including Mint and MX Linux. It has been tested on Debian 13, Ubuntu 24.04, and Linux Mint 22.2.
 
 Install WireGuard and resolvconf. The resolvconf package is needed to manage DNS settings for the WireGuard interface.
 
-```
+```bash
 sudo apt update
 sudo apt install -y wireguard resolvconf
 ```
@@ -297,15 +294,13 @@ sudo apt install -y wireguard resolvconf
 
 Create the client configuration file:
 
-```
+```bash
 sudo nano /etc/wireguard/wg0.conf
 ```
 
-
 Populate the file with the configuration below, using the correct private key for this client, the server's public key, and the server's public IP address.
 
-
-```
+```ini
 [Interface]
 PrivateKey = SJPFU+D5Eoa3cSseIjWNh44dUQfyyFYxw0m4qGRSrFc=
 Address = 10.100.0.1/32
@@ -320,20 +315,20 @@ PersistentKeepalive = 25
 
 Start the WireGuard tunnel and verify its status:
 
-```
+```bash
 sudo wg-quick up wg0
 sudo wg show     # Verify the tunnel
 ```
 
 Ping the server's tunnel IP:
 
-```
+```bash
 ping 10.100.0.100
 ```
 
 Check your public IP address (it should match your server's IP)
 
-```
+```bash
 curl https://ip.x386.org
 ```
 
@@ -341,21 +336,19 @@ If the displayed IP is your server's IP (in my case, 192.227.167.142), you are s
 
 To deactivate the VPN temporarily:
 
-```
+```bash
 sudo wg-quick down wg0
 ```
 
 To activate the VPN automatically at startup:
 
-```
+```bash
 sudo systemctl enable wg-quick@wg0
 ```
-
 
 <br>
 
 ## 3. Windows Client Configuration
-
 ---
 
 **Tested on Windows 11.**
@@ -365,7 +358,7 @@ Create a configuration file named wg0.conf and save it to a convenient location.
 The file contents should be as follows. Remember to substitute the correct private key for this client, the server's public key, and the server's public IP address.
 
 
-```
+```ini
 [Interface]
 PrivateKey = gCJE0PoqARqSnQgq1v87v7QcSzUn97d0abVM7BpqjFc=
 Address = 10.100.0.2/32
@@ -386,7 +379,6 @@ After installation, the WireGuard application will run. Click "Add Tunnel" at th
 <br>
 
 ## 4. Android Client Configuration
-
 ---
 
 Tested on my Samsung devices.
@@ -396,7 +388,7 @@ Create a configuration file named wg0.conf and transfer it to your Android devic
 The file contents should be as follows. Remember to substitute the correct private key for this client, the server's public key, and the server's public IP address.
 
 
-```
+```ini
 [Interface]
 PrivateKey = gLoXU+1aNQmcK/OtjSUJGnOXt28w/mRo1szjU+XO/XM=
 Address = 10.100.0.3/32
@@ -416,7 +408,6 @@ Open the WireGuard app, tap the "+" button, and select "Import from file or arch
 <br>
 
 ## 5. Other Clients
-
 ---
 
 The process is similar for other operating systems like macOS and iOS. Download the official WireGuard application, import the configuration file (which has the same structure), and activate the tunnel.
@@ -432,7 +423,7 @@ As a case study, we will configure a server for 1,000 clients. We will use scrip
 
 Create and enter a temporary working directory:
 
-```
+```bash
 mkdir /tmp/wg
 cd /tmp/wg
 ```
@@ -441,13 +432,13 @@ cd /tmp/wg
 
 We will create 1,001 key pairs (one for the server and 1,000 for clients). Create the script:
 
-```
+```bash
 nano keys.sh
 ```
 
 Fill it with the following content. To create 10,000 key pairs, for example, you would change the first for loop to ```for i in {1..40}```.
 
-```
+```bash
 #!/bin/bash
 # Create wireguard public/private key pairs for the server and 1000 client
 # Keys will be put on keys directory
@@ -471,7 +462,7 @@ done
 
 Make the script executable and run it:
 
-```
+```bash
 chmod +x keys.sh
 ./keys.sh
 ```
@@ -482,13 +473,13 @@ The keys are now in the /tmp/wg/keys directory.
 
 Create a script to generate the server configuration with 1,000 peers.
 
-```
+```bash
 nano serverconf.sh
 ```
 
 Fill it with the following content. This script uses the 10.100.0.0/16 network, which supports approximately 65,000 clients.
 
-```
+```bash
 #!/bin/bash
 # Create wireguard server configuration for 1,000 clients.
 # Configuration is named as wg0.conf and put in conf directory
@@ -525,7 +516,7 @@ done
 
 Make the script executable and run it:
 
-```
+```bash
 chmod +x serverconf.sh
 ./serverconf.sh
 ```
@@ -537,13 +528,13 @@ The configuration file wg0.conf is now in the /tmp/wg/confs directory and can be
 
 Create a script to generate the 1,000 client configuration files.
 
-```
+```bash
 nano clientconfs.sh
 ```
 
 Fill it with the following content. Remember to set the serverip variable to your server's public IP address.
 
-```
+```bash
 #!/bin/bash
 # Create 1,000 wireguard client configurations.
 # Configurations are put in confs directory and named as wg1-1.conf to 
@@ -574,7 +565,7 @@ done
 
 Make the script executable and run it:
 
-```
+```bash
 chmod +x clientconfs.sh
 ./clientconfs.sh
 ```

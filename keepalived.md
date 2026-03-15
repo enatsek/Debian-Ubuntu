@@ -8,7 +8,6 @@ sidebar:
 ##### High-availability clustering
 
 ## 0. Specs
-
 ---
 
 ### 0.0. The What
@@ -44,13 +43,13 @@ In this tutorial, we'll configure two servers with various Keepalived scenarios 
 <br>
 
 # 1. Scenario 1 - Simple Mode
-
 ---
 
 ### 1.1. Install keepalived
 
 Install on both servers (primary and backup):
-```
+
+```bash
 sudo apt update
 sudo apt -y install keepalived
 ```
@@ -61,13 +60,13 @@ sudo apt -y install keepalived
 
 The configuration directory is `/etc/keepalived/`. Create the main configuration file:
 
-```
+```bash
 sudo nano /etc/keepalived/keepalived.conf
 ```
 
 Add the following configuration:
 
-```
+```text
 global_defs {
     router_id main   # Unique identifier for this node in logs
 }
@@ -89,14 +88,15 @@ vrrp_instance VI_1 {
 
 Similar but with a few differences.
 
-
-```
 Create the configuration file on the backup server:
+
+```bash
+sudo nano /etc/keepalived/keepalived.conf
 ```
 
 Fill as below:
 
-```
+```text
 global_defs {
     router_id backup    # Unique identifier for this node in logs
 }
@@ -118,13 +118,13 @@ vrrp_instance VI_1 {
 
 Run on both servers
 
-```
+```bash
 sudo systemctl start keepalived
 ```
 
 You can check the status of your cluster
 
-```
+```bash
 systemctl status -l keepalived
 ```
 
@@ -144,13 +144,13 @@ To implement this, we add the `nopreempt` directive and remove the `state` decla
 
 On the primary server, edit the configuration:
 
-```
+```bash
 sudo nano /etc/keepalived/keepalived.conf
 ```
 
 Update with the following content:
 
-```
+```text
 global_defs {
     router_id main
 }
@@ -170,14 +170,14 @@ vrrp_instance VI_1 {
 
 On the backup server, edit the configuration:
 
-```
+```bash
 sudo nano /etc/keepalived/keepalived.conf
 ```
 
 Update with the following content:
 
 
-```
+```text
 global_defs {
     router_id backup
 }
@@ -199,12 +199,11 @@ vrrp_instance VI_1 {
 
 Restart Keepalived on both servers to apply the changes:
 
-```
+```bash
 sudo systemctl restart keepalived
 ```
 
 ## 3. Scenario 3 - Apache High Availability
-
 ---
 
 ### 3.0. Overview
@@ -217,13 +216,13 @@ We'll create a custom health check script and integrate it with Keepalived.
 
 On both servers, create the check script:
 
-```
+```bash
 sudo nano /etc/keepalived/check_apache.sh
 ```
 
 Add the following content:
 
-```
+```bash
 #!/bin/bash
 # Simple check: is Apache running?
 # Works for both Apache2 and httpd-based systems.
@@ -237,7 +236,7 @@ fi
 
 Make the script executable:
 
-```
+```bash
 sudo chmod +x /etc/keepalived/check_apache.sh
 ```
 
@@ -245,7 +244,7 @@ sudo chmod +x /etc/keepalived/check_apache.sh
 
 Ensure Apache is installed and running on both servers:
 
-```
+```bash
 sudo apt update
 sudo apt install -y apache2
 ```
@@ -255,13 +254,13 @@ sudo apt install -y apache2
 
 On the primary server, update the configuration:
 
-```
+```bash
 sudo nano /etc/keepalived/keepalived.conf
 ```
 
 Use the following configuration:
 
-```
+```text
 global_defs {
     router_id main
     script_user root           # User context for script execution
@@ -294,12 +293,14 @@ vrrp_instance VI_1 {
 ```
 
 On the backup server, update the configuration:
+
 ```bash
 sudo nano /etc/keepalived/keepalived.conf
 ```
 
 Use the following configuration:
-```bash
+
+```text
 global_defs {
     router_id backup
     script_user root
@@ -335,7 +336,7 @@ vrrp_instance VI_1 {
 
 Restart Keepalived on both servers:
 
-```
+```bash
 sudo systemctl restart keepalived
 ```
 
@@ -343,8 +344,8 @@ sudo systemctl restart keepalived
 
 **Note:** For Nginx or other services, modify the check script accordingly (e.g., check for `nginx` instead of `apache2`).
 
-## 4. Scenario 4 - Active/Active VIPs
 
+## 4. Scenario 4 - Active/Active VIPs
 ---
 
 ### 4.0. Overview
@@ -361,13 +362,13 @@ Both servers remain active simultaneously, but each can take over the other's VI
 
 On the first server, update the configuration:
 
-```
+```bash
 sudo nano /etc/keepalived/keepalived.conf
 ```
 
 On the first server, change as below:
 
-```
+```text
 global_defs {
     router_id first
 }
@@ -397,13 +398,13 @@ vrrp_instance VIP_2 {
 
 On the second server, update the configuration:
 
-```
+```bash
 sudo nano /etc/keepalived/keepalived.conf
 ```
 
 Use the following configuration:
 
-```
+```text
 global_defs {
     router_id second
 }
@@ -435,13 +436,12 @@ vrrp_instance VIP_2 {
 
 Restart Keepalived on both servers:
 
-```
+```bash
 sudo systemctl restart keepalived
 ```
 
 ### 4.3. Optional: Add Service Health Checks
 
 You can enhance this configuration by adding health check scripts (as shown in Scenario 3) to each `vrrp_instance` block to trigger failover based on application health rather than just server availability.
-
 
 

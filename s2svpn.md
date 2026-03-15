@@ -8,7 +8,6 @@ sidebar:
 ##### WireGuard VPN configuration for connecting networks
 
 ## 0. Specs
-
 ---
 
 ### 0.0. The What
@@ -55,13 +54,12 @@ It's different from the VPN you might use on your personal computer, which typic
 <br>
 
 ## 1. Pre-Config and Wireguard Installation
-
 ---
 
 Enable IP Forwarding on both wireguard servers
 Run on **net1-1** and **net2-1**:
 
-```
+```bash
 echo 'net.ipv4.ip_forward=1' | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p                   # Activate the change
 sudo sysctl net.ipv4.ip_forward  # Verify it's set to 1
@@ -70,7 +68,7 @@ sudo sysctl net.ipv4.ip_forward  # Verify it's set to 1
 Install wireguard
 Run on **net1-1** and **net2-1**:
 
-```
+```bash
 sudo apt update
 sudo apt install wireguard -y
 ```
@@ -78,7 +76,6 @@ sudo apt install wireguard -y
 <br>
 
 ## 2. Generate Key Pairs
-
 ---
 
 We need to create public/private key pairs for both WireGuard servers.  
@@ -88,7 +85,7 @@ You can delete or back up the key files after using them in the configurations.
 
 Run on **net1-1** and **net2-1**:
 
-```
+```bash
 wg genkey | tee privatekey | wg pubkey > publickey
 cat privatekey   # Check private key
 cat publickey    # Check public key
@@ -104,7 +101,6 @@ My public and private keys for reference:
 <br>
 
 ## 3. Wireguard Configuration
-
 ---
 
 ### 3.0. Explanations
@@ -130,13 +126,13 @@ We need to configure WireGuard on both servers. The IP addresses for the WireGua
 Create and edit the configuration file.  
 Run on **net1-1**:
 
-```
+```bash
 sudo nano /etc/wireguard/wg0.conf
 ```
 
 Fill it as shown below (remember to replace the variables with your own):
 
-```
+```ini
 [Interface]
 Address = 10.200.0.1/30
 PrivateKey = 8CKa3+nFCemn6ja0RH+soc9lZVzBRiIKjO4UKguYoFk=
@@ -147,7 +143,6 @@ PublicKey = 8ZqdXWlcrJaYgOOrVZI3Aygz90CBnsQa1qtyL4/8LwU=
 Endpoint = 192.168.1.252:51820
 AllowedIPs = 10.200.0.2/32, 192.168.57.0/24
 PersistentKeepalive = 25
-
 ```
 
 ### 3.2. Second Server Configuration
@@ -155,13 +150,13 @@ PersistentKeepalive = 25
 Create and edit the configuration file.  
 Run on **net2-1**:
 
-```
+```bash
 sudo nano /etc/wireguard/wg0.conf
 ```
 
 Fill it as shown below (remember to replace the variables with your own):
 
-```
+```ini
 [Interface]
 Address = 10.200.0.2/30
 PrivateKey = QE3DmQNIX4WePgJskO6oERq2toIqcrSVYRxONq+Fa0A=
@@ -179,7 +174,7 @@ PersistentKeepalive = 25
 Enable the configuration (to run at startup) and start the tunnel.  
 Run on **net1-1** and **net2-1**:
 
-```
+```bash
 sudo systemctl enable wg-quick@wg0
 sudo wg-quick up wg0
 sudo wg show     # Verify the tunnel status
@@ -189,14 +184,14 @@ Test connectivity:
 
 Run on **net1-1**:
 
-```
+```bash
 ping 10.200.0.2             # Ping the other end of the VPN tunnel
 ping 192.168.57.1           # Ping the other server's private IP
 ```
 
 Run on net2-1
 
-```
+```bash
 ping 10.200.0.1             # Ping the other end of the VPN tunnel
 ping 192.168.56.1           # Ping the other server's private IP
 ```
@@ -206,7 +201,6 @@ If the pings receive replies, the VPN tunnel is established successfully. To ena
 <br>
 
 ## 4. Adding Routes
-
 ---
 
 ### 4.0. Explanations
@@ -221,7 +215,7 @@ Otherwise, you must add the routes manually on each host.
 
 For Windows hosts, it is straightforward. Use an elevated Command Prompt:
 
-```
+```bash
 # Run on net1 hosts
 route add -p 192.168.57.0 MASK 255.255.255.0 192.168.56.1
 # Run on net2 hosts
@@ -230,7 +224,7 @@ route add -p 192.168.56.0 MASK 255.255.255.0 192.168.57.1
 
 For Linux hosts, a similar temporary command exists:
 
-```
+```bash
 # Run on net1 hosts
 sudo ip route add 192.168.57.0/24 via 192.168.56.1
 # Run on net2 hosts
@@ -246,7 +240,7 @@ The method for adding persistent routes depends on the Linux distribution and it
 
 A sample configuration for **net1-2** could be as follows. Edit `/etc/network/interfaces`:
 
-```
+```text
 # /etc/network/interfaces
 auto lo
 iface lo inet loopback
@@ -266,7 +260,7 @@ iface enp0s3 inet static
 
 Similarly, a sample configuration for **net2-2**:
 
-```
+```text
 # /etc/network/interfaces
 auto lo
 iface lo inet loopback
@@ -286,12 +280,12 @@ iface enp0s3 inet static
 
 To apply the configuration:
 
-```
+```bash
 sudo systemctl restart networking
 ```
 or
 
-```
+```bash
 sudo ifdown enp0s3 && sudo ifup enp0s3
 ```
 
@@ -300,7 +294,7 @@ sudo ifdown enp0s3 && sudo ifup enp0s3
 
 A sample configuration for **net1-2** could be as follows. Edit `/etc/netplan/01-netcfg.yaml`:
 
-```
+```yaml
 # /etc/netplan/01-netcfg.yaml
 network:
   version: 2
@@ -320,7 +314,7 @@ network:
 
 Similarly, a sample configuration for **net2-2**:
 
-```
+```yaml
 network:
   version: 2
   renderer: NetworkManager
@@ -340,7 +334,7 @@ network:
 
 To apply the configuration:
 
-```
+```bash
 sudo netplan apply
 ```
 
@@ -350,20 +344,20 @@ You can configure the route through the GUI Network Settings. It is also possibl
 
 First, you need the name of the network connection. The following command will list them:
 
-```
+```bash
 nmcli connection show
 ```
 
 Add a route for **net1-2**:
 
-```
+```bash
 # Use the appropriate connection name from the command above
 sudo nmcli connection modify "Wired connection 1" +ipv4.routes "192.168.57.0/24 192.168.56.1"
 ```
 
 Add a route for **net2-2**:
 
-```
+```bash
 # Use the appropriate connection name from the command above
 sudo nmcli connection modify "Wired connection 1" +ipv4.routes "192.168.56.0/24 192.168.57.1"
 ```
@@ -371,7 +365,7 @@ sudo nmcli connection modify "Wired connection 1" +ipv4.routes "192.168.56.0/24 
 
 Apply the configuration:
 
-```
+```bash
 # Use the appropriate connection name from the command above
 sudo nmcli connection up "Wired connection 1"
 ```

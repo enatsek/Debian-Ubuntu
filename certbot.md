@@ -9,7 +9,6 @@ sidebar:
 ##### Automated SSL certificate management with Let's Encrypt for Apache and Nginx
 
 ## 0. Specs
-
 ---
 
 ### 0.0. The What
@@ -37,7 +36,6 @@ The certificates are free but need to be renewed every 90 days. This tutorial gu
 <br>
 
 ## 1. Preliminary Work
-
 ---
 
 Depending on your choice of HTTP server, Apache2 or Nginx should be installed before.
@@ -46,20 +44,20 @@ Depending on your choice of HTTP server, Apache2 or Nginx should be installed be
 
 Install Apache2
 
-```
+```bash
 sudo apt update
 sudo apt install apache2 -y
 ```
 
 Create a configuration file:
 
-```
+```bash
 sudo nano /etc/apache2/sites-available/srv1.386387.xyz.conf
 ```
 
 Fill it with the following content:
 
-```
+```apache
 <VirtualHost *:80>
     ServerAdmin webmaster@386387.xyz	
     ServerName srv1.386387.xyz
@@ -71,14 +69,14 @@ Fill it with the following content:
 
 Enable the site and reload Apache:
 
-```
+```bash
 sudo a2ensite srv1.386387.xyz.conf
 sudo systemctl reload apache2
 ```
 
 HTML files should be placed in `/var/www/srv1`. Enable the necessary Apache modules to allow SSL and redirection:
 
-```
+```bash
 sudo a2enmod ssl
 sudo a2enmod rewrite
 sudo systemctl restart apache2
@@ -88,20 +86,20 @@ sudo systemctl restart apache2
 
 Install Nginx
 
-```
+```bash
 sudo apt update
 sudo apt install nginx -y
 ```
 
 Create a server block configuration file:
 
-```
+```bash
 sudo nano /etc/nginx/sites-available/srv1.386387.xyz
 ```
 
 Fill it with the following content:
 
-```
+```nginx
 server {
    listen 80;
    listen [::]:80;
@@ -119,7 +117,7 @@ server {
 
 Enable the site by creating a symbolic link and reload Nginx:
 
-```
+```bash
 sudo ln -s /etc/nginx/sites-available/srv1.386387.xyz \
     /etc/nginx/sites-enabled/srv1.386387.xyz
 sudo systemctl reload nginx
@@ -130,10 +128,11 @@ HTML files should be placed in `/var/www/srv1`.
 <br>
 
 ## 2. Certbot
-
 ---
+
 ### 2.1. Install Certbot
-```
+
+```bash
 sudo apt update
 sudo apt install certbot -y
 ```
@@ -147,7 +146,7 @@ Run Certbot to obtain the certificates. When prompted:
 4.  Decide whether to share your email with the EFF.
 5.  Enter the web root directory for your server (`/var/www/srv1` in this example).
 
-```
+```bash
 sudo certbot certonly -d srv1.386387.xyz
 ```
 
@@ -157,13 +156,13 @@ Certificates are installed to /etc/letsencrypt/live/srv1.386387.xyz/
 
 Create an SSL configuration file for the site:
 
-```
+```bash
 sudo nano /etc/apache2/sites-available/srv1.386387.xyz-ssl.conf
 ```
 
 Fill it with the following content:
 
-```
+```apache
 <VirtualHost *:443>
  ServerName srv1.386387.xyz
  DocumentRoot /var/www/srv1
@@ -177,7 +176,7 @@ Fill it with the following content:
 
 Enable the SSL site and reload Apache:
 
-```
+```bash
 sudo a2ensite srv1.386387.xyz-ssl.conf
 sudo systemctl reload apache2
 ```
@@ -188,13 +187,13 @@ Your SSL site is now accessible at `https://srv1.386387.xyz`. The next section c
 
 Create an SSL server block configuration file:
 
-```
+```bash
 sudo nano /etc/nginx/sites-available/srv1.386387.xyz-ssl
 ```
 
 Fill it with the following content:
 
-```
+```nginx
 server {
    listen 443 ssl;
    listen [::]:443 ssl;
@@ -215,7 +214,7 @@ server {
 
 Enable the SSL site and reload Nginx:
 
-```
+```bash
 sudo ln -s /etc/nginx/sites-available/srv1.386387.xyz-ssl \
     /etc/nginx/sites-enabled/srv1.386387.xyz-ssl
 sudo systemctl reload nginx
@@ -223,12 +222,11 @@ sudo systemctl reload nginx
 
 Your SSL site is now accessible at `https://srv1.386387.xyz`. The next section covers important fine-tuning.
 
-
 <br>
 
 ## 3. Fine Tunings
-
 ---
+
 ### 3.1. HTTP to HTTPS Redirect - Apache2
 
 While `https://srv1.386387.xyz` now uses SSL, `http://srv1.386387.xyz` still does not.
@@ -237,13 +235,13 @@ We need to redirect all HTTP traffic to HTTPS, with one exception: Certbot's ren
 
 Edit the HTTP site configuration file:
 
-```
+```bash
 sudo nano /etc/apache2/sites-available/srv1.386387.xyz.conf
 ```
 
 Modify it as follows to include the redirection rules:
 
-```
+```apache
 <VirtualHost *:80>
     ServerAdmin webmaster@386387.xyz	
     ServerName srv1.386387.xyz
@@ -262,11 +260,11 @@ Modify it as follows to include the redirection rules:
 
 Reload Apache to apply the changes:
 
-```
+```bash
 sudo systemctl reload apache2
 ```
 
-### 3.1. HTTP to HTTPS Redirect - Nginx
+### 3.2. HTTP to HTTPS Redirect - Nginx
 
 While `https://srv1.386387.xyz` now uses SSL, `http://srv1.386387.xyz` still does not.
 
@@ -274,11 +272,11 @@ We need to redirect all HTTP traffic to HTTPS, with one exception: Certbot's ren
 
 Edit the HTTP server block configuration file:
 
-```
+```bash
 sudo nano /etc/nginx/sites-available/srv1.386387.xyz
 ```
 
-```
+```nginx
 server {
    listen 80;
    listen [::]:80;
@@ -301,7 +299,7 @@ server {
 
 Reload Nginx to apply the changes:
 
-```
+```bash
 sudo systemctl reload nginx
 ```
 
@@ -309,13 +307,14 @@ sudo systemctl reload nginx
 
 Test if the certificate renewal process works correctly with a dry run:
 
-```
+```bash
 sudo certbot renew --dry-run
 ```
 
 Certbot automatically installs a cron job or systemd timer to handle renewal. 
 You can check the timers with:
-```
+
+```bash
 systemctl list-timers
 ```
 
@@ -328,13 +327,13 @@ Certbot executes all scripts in the `/etc/letsencrypt/renewal-hooks/deploy/` dir
 
 Create the script:
 
-```
+```bash
 sudo nano /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
 ```
 
 Add the following content, including only the services you use:
 
-```
+```bash
 #!/bin/bash
 systemctl reload apache2     # If you have apache2
 systemctl reload nginx       # If you have nginx
@@ -344,7 +343,7 @@ systemctl reload dovecot     # If you have dovecot
 
 Make the script executable
 
-```
+```bash
 sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadall.sh
 ```
 

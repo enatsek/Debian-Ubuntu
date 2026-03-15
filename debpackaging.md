@@ -5,10 +5,9 @@ sidebar:
    label: Debian Packaging
 ---
 
-##### Creating and managing .deb packages
+##### Creating and Managing .deb Packages
 
 ## 0. Specs
-
 ---
 
 ### 0.1. The What
@@ -37,7 +36,6 @@ This tutorial is introductory and does not cover every detail. Its purpose is to
 <br>
 
 ## 1. Basic Information
-
 ---
 
 ### 1.1. Package Types:
@@ -78,21 +76,21 @@ A `.deb` package follows a specific naming format and contains three main files:
 
 **Install a package:**
 
-```
+```bash
 sudo apt install ./<package>
 sudo apt install ./test.deb
 ```
 
 **Remove a package:**
 
-```
+```bash
 sudo apt remove <appname>
 sudo apt remove test
 ```
 
 **Purge a package** (removes configuration files as well):
 
-```
+```bash
 sudo apt purge <appname>
 sudo apt purge test
 ```
@@ -100,7 +98,6 @@ sudo apt purge test
 <br>
 
 ## 2. Package Control Files
-
 ---
 
 Control files are located in the `control.tar.zst` archive. Some key files were listed in Section 1.2. Below is a more comprehensive list with brief descriptions; important files are covered in greater detail.
@@ -163,7 +160,7 @@ Most fields have single-line values, but some support multiple lines. For multi-
 
 **Example: `apache2` control file (Debian 13):**
 
-```
+```text
 Package: apache2
 Version: 2.4.65-2
 Architecture: amd64
@@ -188,7 +185,7 @@ Description: Apache HTTP Server
 
 **Example: `openssh-server` control file (Debian 13):**
 
-```
+```text
 Package: openssh-server
 Source: openssh
 Version: 1:10.0p1-7
@@ -235,7 +232,7 @@ Lists configuration files that should be preserved during upgrades. Users are wa
 
 **Example from `openssh-server` (Ubuntu 22.04 LTS):**
 
-```
+```text
 /etc/default/ssh
 /etc/init.d/ssh
 /etc/pam.d/sshd
@@ -260,7 +257,7 @@ Script executed **before** unpacking the package. Must be idempotent (can run mo
 
 **Excerpt from `apache2` `preinst`:**
 
-```
+```bash
 case "$1" in
     upgrade|install)
 
@@ -295,7 +292,7 @@ Script executed **after** unpacking the package. Must be idempotent, start with 
 
 **Excerpt from `apache2` `postinst`:**
 
-```
+```bash
 is_fresh_install()
 {
 	if [ -z "$2" ] ; then
@@ -305,7 +302,7 @@ is_fresh_install()
 }
 ```
 
-```
+```bash
 case "$1" in
 	configure)
 		enable_default_mpm $@
@@ -340,7 +337,7 @@ Script executed **before** removing a package. Must be idempotent, start with a 
 
 **Example from `mariadb-server` `prerm`:**
 
-```
+```bash
 #!/bin/sh
 set -e
 # Automatically added by dh_installsystemd/13.24.2
@@ -370,7 +367,7 @@ Script executed **after** removing a package. Must be idempotent, start with a s
 
 **Excerpt from `openssh-server` `postrm`:**
 
-```
+```bash
 if [ "$1" = remove ] && [ -d /run/systemd/system ] ; then
 	systemctl --system daemon-reload >/dev/null || true
 fi
@@ -387,7 +384,7 @@ Script run **before** `preinst`, before any pre-dependencies are satisfied. Used
 
 **Example from `mariadb-server` `config`:**
 
-```
+```bash
 #!/bin/bash
 
 set -e
@@ -416,7 +413,7 @@ Contains templates for user prompts (used with `debconf`).
 
 **Excerpt from `openssh-server` `templates`:**
 
-```
+```text
 Template: openssh-server/password-authentication
 Type: boolean
 Default: true
@@ -432,7 +429,7 @@ MD5 hashes of package files for integrity verification.
 
 **Excerpt from `openssh-server` `md5sums`:**
 
-```
+```text
 4b50d38888a7c2093ea4928dca327287  usr/lib/openssh/ssh-session-cleanup
 36b4eaabb3472c543e7e9e7c0c80a014  usr/lib/openssh/sshd-auth
 269cc6f51c160b60b0f714ee2f1f434d  usr/lib/openssh/sshd-session
@@ -470,7 +467,7 @@ Declares package relationships with system triggers.
 
 **Example from `mariadb-server` `triggers`:**
 
-```
+```text
 interest-noawait /etc/mysql
 interest-noawait /etc/systemd/system/mariadb.service.d
 ```
@@ -485,22 +482,22 @@ Contain shared library information.
 
 **Example from `slapd` `shlibs`:**
 
-```
+```text
 libslapi 2 slapd (>= 2.6.10+dfsg)
 ```
 
 <br>
 
 ## 3. Package Data Files
-
 ---
+
 ### 3.1. Basics
 
 Data files reside in the `data.tar.zst` archive. This archive contains files organized in their corresponding directory structure. During installation, each file is extracted to its appropriate location in the filesystem.
 
 **Example: Directory structure of the `openssh-server` package (Ubuntu 22.04 LTS):**
 
-```
+```ansi
 ├── etc
 │   ├── default
 │   │   └── ssh
@@ -569,12 +566,11 @@ Data files include binaries, static files, dynamic files, configurations, and mo
 <br>
 
 ## 4. Package Installation Process
-
 ---
 
 The installation process of a `.deb` package involves multiple steps, including script execution and dependency management. Below is a simplified overview of the flow:
 
-```
+```text
 If there is a previous version of the package:
   Call for the old package: "old-prerm upgrade new-version"
   If return status is not 0:
@@ -682,12 +678,11 @@ If there were conflicting packages:
 <br>
 
 ## 5. Package Removal/Purge Process
-
 ---
 
 The removal or purging of a package follows a structured sequence:
 
-```
+```text
 Run: prerm remove
 If return status is not 0:
   If failure is due to conflict:
@@ -713,14 +708,13 @@ If purging (not just removing):
 <br>
 
 ## 6. .deb Package Preparation Checklist
-
 ---
 
 ### 6.1. Create File and Folder Structure for the Package
 
 A minimal directory structure for a package includes:
 
-```
+```text
 ProgramName-Version/
 ├── DEBIAN/
 │   └── control
@@ -731,7 +725,7 @@ ProgramName-Version/
 
 Additional files and directories you may need:
 
-```
+```text
 ProgramName-Version/
 ├── DEBIAN/
 │   ├── control
@@ -765,13 +759,13 @@ Place your program executable, control files, scripts, and other resources into 
 
 Once all files are in place, ensure executable files have the correct permissions:
 
-```
+```bash
 chmod a+x ProgramName-Version/usr/bin/ProgramName
 ```
 
 Then build the package using `dpkg-deb`:
 
-```
+```bash
 dpkg-deb -Z xz --build --root-owner-group ProgramName-Version
 ```
 
@@ -780,7 +774,6 @@ The resulting `.deb` file (e.g., `ProgramName-Version.deb`) is your ready-to-use
 <br>
 
 ## 7. A Very Simple Package
-
 ---
 
 We will now create a very simple package named **"distro"**. This package contains a Python script that displays the Unix distribution name and version information.
@@ -791,19 +784,19 @@ The package includes only the executable script and the control file—no config
 
 First, create a `packages` directory in your home folder to organize your work:
 
-```
+```bash
 mkdir ~/packages
 ```
 
 Package naming follows the format: `packagename_version-revision_architecture.deb`. Create a folder for our package:
 
-```
+```bash
 mkdir ~/packages/distro_1.0.0-1_all
 ```
 
 Create subdirectories for the executable and control files:
 
-```
+```bash
 mkdir -p ~/packages/distro_1.0.0-1_all/usr/bin
 mkdir ~/packages/distro_1.0.0-1_all/DEBIAN
 ```
@@ -812,13 +805,13 @@ mkdir ~/packages/distro_1.0.0-1_all/DEBIAN
 
 Create the Python script:
 
-```
+```bash
 nano ~/packages/distro_1.0.0-1_all/usr/bin/distro
 ```
 
 Add the following content:
 
-```
+```bash
 #!/usr/bin/env python3
 def distro_version():
     d = {}
@@ -843,7 +836,7 @@ print(distro, version)
 
 Make the script executable:
 
-```
+```bash
 chmod +x ~/packages/distro_1.0.0-1_all/usr/bin/distro
 ```
 
@@ -851,13 +844,13 @@ chmod +x ~/packages/distro_1.0.0-1_all/usr/bin/distro
 
 Create the `control` file:
 
-```
+```bash
 nano ~/packages/distro_1.0.0-1_all/DEBIAN/control
 ```
 
 Add the following content:
 
-```
+```text
 Package: distro
 Version: 1.0.0-1
 Architecture: all
@@ -873,7 +866,7 @@ Description: Prints Linux Distribution and Name
 
 Navigate to the packages directory and build the package:
 
-```
+```bash
 cd ~/packages
 dpkg-deb -Z xz --build --root-owner-group distro_1.0.0-1_all 
 ```
@@ -885,7 +878,6 @@ Your package, `distro_1.0.0-1_all.deb`, is now located in the `~/packages` folde
 <br>
 
 ## 8. A More Complex Package: Watchbox
-
 ---
 
 Our next package, **watchbox**, is more complex. It is a Python script designed to run as a systemd service.
@@ -914,7 +906,7 @@ For more details, see: [https://github.com/enatsek/watchbox](https://github.com/
 
 Download the necessary files from GitHub to a temporary location:
 
-```
+```bash
 wget https://raw.githubusercontent.com/enatsek/watchbox/main/watchbox \
      -P /tmp
 wget https://raw.githubusercontent.com/enatsek/watchbox/main/watchbox.conf \
@@ -927,7 +919,7 @@ wget https://raw.githubusercontent.com/enatsek/watchbox/main/watchbox.service \
 
 The package will have the following structure:
 
-```
+```text
 /packages/
 ~/packages/watchbox_0.9-1_all/
 ├── DEBIAN/
@@ -950,7 +942,7 @@ The package will have the following structure:
 
 Create the directories:
 
-```
+```bash
 mkdir -p ~/packages/watchbox_0.9-1_all/DEBIAN/
 mkdir -p ~/packages/watchbox_0.9-1_all/etc
 mkdir -p ~/packages/watchbox_0.9-1_all/lib/systemd/system/
@@ -959,7 +951,7 @@ mkdir -p ~/packages/watchbox_0.9-1_all/usr/bin/
 
 ### 8.4. Copy Watchbox Files to Their Locations
 
-```
+```bash
 cp /tmp/watchbox.conf ~/packages/watchbox_0.9-1_all/etc/
 cp /tmp/watchbox.service ~/packages/watchbox_0.9-1_all/lib/systemd/system/
 cp /tmp/watchbox -p ~/packages/watchbox_0.9-1_all/usr/bin/
@@ -967,7 +959,7 @@ cp /tmp/watchbox -p ~/packages/watchbox_0.9-1_all/usr/bin/
 
 Make the script executable:
 
-```
+```bash
 chmod +x ~/packages/watchbox_0.9-1_all/usr/bin/watchbox
 ```
 
@@ -975,13 +967,13 @@ chmod +x ~/packages/watchbox_0.9-1_all/usr/bin/watchbox
 
 **Control File (`control`):**
 
-```
+```bash
 nano ~/packages/watchbox_0.9-1_all/DEBIAN/control
 ```
 
 Add the following content:
 
-```
+```text
 Package: watchbox
 Version: 0.9-1
 Architecture: amd64
@@ -1004,25 +996,25 @@ Description: Automated Service Checking Tool
 
 **Configuration File List (`conffiles`):**
 
-```
+```bash
 nano ~/packages/watchbox_0.9-1_all/DEBIAN/conffiles
 ```
 
 Add:
 
-```
+```text
 /etc/watchbox.conf
 ```
 
 **Post-Installation Script (`postinst`):**
 
-```
+```bash
 nano ~/packages/watchbox_0.9-1_all/DEBIAN/postinst
 ```
 
 Add:
 
-```
+```bash
 #!/bin/bash
 systemctl enable watchbox
 systemctl start watchbox
@@ -1030,26 +1022,26 @@ systemctl start watchbox
 
 Make it executable:
 
-```
+```bash
 chmod +x ~/packages/watchbox_0.9-1_all/DEBIAN/postinst
 ```
 
 **Pre-Removal Script (`prerm`):**
 
-```
+```bash
 nano ~/packages/watchbox_0.9-1_all/DEBIAN/prerm
 ```
 
 Fill as below (Stops watchbox service)
 
-```
+```bash
 #!/bin/bash
 systemctl stop watchbox
 ```
 
 Make it executable:
 
-```
+```bash
 chmod +x ~/packages/watchbox_0.9-1_all/DEBIAN/prerm
 ```
 
@@ -1057,7 +1049,7 @@ chmod +x ~/packages/watchbox_0.9-1_all/DEBIAN/prerm
 
 Navigate to the packages directory and build:
 
-```
+```bash
 cd ~/packages
 dpkg-deb -Z xz --build --root-owner-group watchbox_0.9-1_all 
 ```

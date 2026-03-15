@@ -8,9 +8,8 @@ sidebar:
 ##### Regex tutorial for text processing
 
 ## 0. Specs
-
-
 ---
+
 ### 0.1. The What
 
 Regular expressions, often abbreviated as regex or regexp, are sequences of characters that define search patterns in text. They are widely used in programming and text processing for tasks like searching, replacing, and validating input.
@@ -29,8 +28,8 @@ Regex and its usage are independent of operating systems. I tested these pattern
 <br>
 
 ## 1. Basics
-
 ---
+
 ### 1.1. A String Itself
 
 Obviously, every string is a match for itself.
@@ -78,6 +77,7 @@ Obviously, every string is a match for itself.
 - `\b` → Word boundary (zero-width position at the start or end of a word)
 
 ### 1.6. Escape Characters
+
 Any operator or quantifier can be escaped with \ to resemble itself
 
 Any special character (operator or quantifier) can be escaped with `\` to match its literal value.
@@ -99,8 +99,8 @@ When used inside a character class `[]`, the backslash is not always necessary f
 <br>
 
 ## 2. Quantifiers and Boundaries
-
 ---
+
 ### 2.1. `*` Quantifier (Zero or More)
 
 A `*` quantifier after a character or group means **0 or more occurrences** of it.
@@ -188,8 +188,8 @@ Lazy versions of quantifiers:
 <br>
 
 ## 3. Subexpressions and Backreferences
-
 ---
+
 ### 3.1. Subexpressions
 
 A subexpression is a group of characters or operators in parentheses. They are used to apply quantifiers to entire expressions or for capturing.
@@ -233,7 +233,6 @@ Backreferences are particularly useful in find-and-replace operations. In the re
 <br>
 
 ## 4. Regex Examples
-
 ---
 
 Please note: these examples are not perfect. You may find or write more robust versions for production use.

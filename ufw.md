@@ -8,7 +8,6 @@ sidebar:
 ##### Firewall configuration and management
 
 ## 0. Specs
-
 ---
 
 ### 0.1. The What
@@ -33,7 +32,6 @@ Prepared for and tested on Debian 13/12 and Ubuntu 24.04/22.04 LTS Server.
 <br>
 
 ## 1. Firewall Architecture 
-
 ---
 
 ### 1.1. Netfilter
@@ -55,14 +53,13 @@ UFW is the higher-level firewall program provided by Ubuntu (Canonical). Other d
 <br>
 
 ## 2. UFW Basics
-
 ---
 
 ### 2.1. Installation
 
 UFW is installed by default on Ubuntu Server (though initially inactive). On Debian, install it with:
 
-```
+```bash
 sudo apt update
 sudo apt install ufw --yes
 ```
@@ -71,13 +68,13 @@ sudo apt install ufw --yes
 
 Check UFW's current status (should be inactive initially):
 
-```
+```bash
 sudo ufw status
 ```
 
 For more detailed information:
 
-```
+```bash
 sudo ufw status verbose
 ```
 
@@ -89,31 +86,31 @@ UFW is disabled by default.
 
 First, allow SSH:
 
-```
+```bash
 sudo ufw allow ssh
 ```
 
 Now enable UFW:
 
-```
+```bash
 sudo ufw enable
 ```
 
 To disable UFW:
 
-```
+```bash
 sudo ufw disable
 ```
 
 To clear all rules and disable UFW:
 
-```
+```bash
 sudo ufw reset
 ```
 
 Enable or disable logging:
 
-```
+```bash
 sudo ufw logging on
 sudo ufw logging off
 ```
@@ -122,49 +119,49 @@ sudo ufw logging off
 
 Rule addition can be done using simple or complex syntax. Both of the following commands achieve the same result: allowing incoming HTTP traffic.
 
-```
+```bash
 sudo ufw allow 80
 sudo ufw allow in proto tcp from any to any port 80
 ```
 
 Remove a rule for port 80:
 
-```
+```bash
 sudo ufw delete allow 80
 ```
 
 List rules with numbers for easy reference:
 
-```
+```bash
 sudo ufw status numbered
 ```
 
 Delete a rule by its number:
 
-```
+```bash
 sudo ufw delete 2
 ```
 
 Show all added rules:
 
-```
+```bash
 sudo ufw show added
 ```
 
 Display rules in raw format:
 
-```
+```bash
 sudo ufw show raw
 ```
 
 <br>
 
 ## 3. Allowing and Denying in Detail
-
 ---
+
 ### 3.1. Long Format
 
-```
+```bash
 sudo ufw allow in on enp0s3 proto tcp from any to any port 22
 ```
 
@@ -188,59 +185,59 @@ Most parameters from the long format can be omitted for simplicity.
 
 Allow or deny traffic from a specific IP:
 
-```
+```bash
 sudo ufw deny from 192.168.1.11
 sudo ufw allow from 192.168.1.11
 ```
 
 Allow or deny traffic from a network:
 
-```
+```bash
 sudo ufw allow from 192.168.0.0/24
 sudo ufw deny from 192.168.0.0/24
 ```
 
 Allow or deny incoming UDP packets on port 53 (DNS):
 
-```
+```bash
 sudo ufw allow 53/udp
 sudo ufw deny 53/udp
 ```
 
 Allow all incoming HTTP and HTTPS (TCP):
 
-```
+```bash
 sudo ufw allow proto tcp from any to any port 80,443
 ```
 
 Allow access to MySQL from a specific IP:
 
-```
+```bash
 sudo ufw allow from 192.168.1.11 to any port 3306
 ```
 
 Allow access to PostgreSQL from a network:
 
-```
+```bash
 sudo ufw allow from 192.168.1.0/24 to any port 5432
 ```
 
 Block outgoing SMTP traffic:
 
-```
+```bash
 sudo ufw deny out 25
 ```
 
 Allow a range of ports:
 
-```
+```bash
 sudo ufw allow 6000:6007/tcp
 sudo ufw allow 6000:6007/udp
 ```
 
 Allow incoming HTTP on a specific interface:
 
-```
+```bash
 sudo ufw allow in on enp0s3 to any port 80
 ```
 
@@ -250,20 +247,19 @@ Rules are processed from top to bottom. When a matching rule is found, subsequen
 
 By default, new rules are appended to the bottom. To insert a rule at a specific position (e.g., at the top):
 
-```
+```bash
 sudo ufw insert 1 deny from 192.168.1.0/24 to any
 ```
 
 UFW can use service names instead of port numbers (read from `/etc/services`):
 
-```
+```bash
 sudo ufw allow ssh
 ```
 
 <br>
 
 ## 4. Case Study 1
-
 ---
 
 ### 4.0. Scenario
@@ -278,19 +274,19 @@ sudo ufw allow ssh
 
 Reset all previous configurations and disable UFW (Restart):
 
-```
+```bash
 sudo ufw reset
 ```
 
 Allow incoming SSH (port 22/TCP) from `192.168.1.108`:
 
-```
+```bash
 sudo ufw allow in proto tcp from 192.168.1.108 to any port 22
 ```
 
 Enable UFW:
 
-```
+```bash
 sudo ufw enable
 ```
 
@@ -300,13 +296,13 @@ sudo ufw enable
 
 Add the MariaDB deny exception (must come before the allow rule):
 
-```
+```bash
 sudo ufw deny in proto tcp from 192.168.1.231 to any port 3306
 ```
 
 Allow MariaDB for the network:
 
-```
+```bash
 sudo ufw allow in proto tcp from 192.168.1.0/24 to any port 3306
 ```
 
@@ -314,7 +310,7 @@ sudo ufw allow in proto tcp from 192.168.1.0/24 to any port 3306
 
 Allow HTTP and HTTPS for all:
 
-```
+```bash
 sudo ufw allow in proto tcp from any to any port 80
 sudo ufw allow in proto tcp from any to any port 443
 ```
@@ -323,7 +319,7 @@ sudo ufw allow in proto tcp from any to any port 443
 
 Block outgoing SMTP traffic:
 
-```
+```bash
 sudo ufw deny out proto tcp from any to any port 25
 ```
 
@@ -333,11 +329,11 @@ Add another MariaDB exception for IP `192.168.1.232`.
 
 First, check the current rules:
 
-```
+```bash
 sudo ufw status numbered
 ```
 
-```
+```text
 Status: active
      To                         Action      From
      --                         ------      ----
@@ -354,19 +350,19 @@ Status: active
 
 If we add the new rule with the default command:
 
-```
+```bash
 sudo ufw deny in proto tcp from 192.168.1.232 to any port 3306
 ```
 
 Verify the updated rules:
 
-```
+```bash
 sudo ufw status numbered
 ```
 
 Output:
 
-```
+```text
 Status: active
      To                         Action      From
      --                         ------      ----
@@ -386,25 +382,25 @@ It will be appended at the end (position 7 for IPv4), after the allow rule, maki
 
 Delete the useless rule:
 
-```
+```bash
 sudo ufw delete 7
 ```
 
 Insert the new rule at position 3 (before the network allow rule):
 
-```
+```bash
 sudo ufw insert 3 deny in proto tcp from 192.168.1.232 to any port 3306
 ```
 
 Verify the updated rules:
 
-```
+```bash
 sudo ufw status numbered
 ```
 
 Output:
 
-```
+```text
 Status: active
      To                         Action      From
      --                         ------      ----
@@ -423,7 +419,6 @@ Status: active
 <br>
 
 ## 5. Case Study 2
-
 ---
 
 ### 5.0. Scenario
@@ -437,19 +432,19 @@ Status: active
 
 Reset all previous configurations and disable UFW (Restart):
 
-```
+```bash
 sudo ufw reset
 ```
 
 Allow SSH from `192.168.1.108` on interface `enp0s3`:
 
-```
+```bash
 sudo ufw allow in on enp0s3 proto tcp from 192.168.1.108 to any port 22
 ```
 
 Enable UFW:
 
-```
+```bash
 sudo ufw enable
 ```
 
@@ -457,7 +452,7 @@ sudo ufw enable
 
 Allow SSH from any IP on interface `enp0s8`:
 
-```
+```bash
 sudo ufw allow in on enp0s8 proto tcp from any to any port 22
 ```
 
@@ -465,20 +460,20 @@ sudo ufw allow in on enp0s8 proto tcp from any to any port 22
 
 Allow HTTP and HTTPS from any IP on interface `enp0s3`:
 
-```
+```bash
 sudo ufw allow in on enp0s3 proto tcp from any to any port 80
 sudo ufw allow in on enp0s3 proto tcp from any to any port 443
 ```
 
 View the configured rules:
 
-```
+```bash
 sudo ufw status numbered
 ```
 
 Output:
 
-```
+```text
 Status: active
      To                         Action      From
      --                         ------      ----
@@ -490,6 +485,4 @@ Status: active
 [ 6] 80/tcp (v6) on enp0s3      ALLOW IN    Anywhere (v6)             
 [ 7] 443/tcp (v6) on enp0s3     ALLOW IN    Anywhere (v6)                 
 ```
-
-
 

@@ -8,8 +8,8 @@ sidebar:
 #####  Managing Debian, Ubuntu, Red Hat, Alpine, and Devuan systems
 
 ## 0. Specs
-
 ---
+
 ### 0.1. The What
 
 Although my tutorials (and my learning journey) focus on Debian and Ubuntu Linux distributions, administrators may occasionally need to work with other Linux distributions as well.
@@ -31,6 +31,7 @@ Distributions covered:
 
 
 ### 0.2. Resources:
+
 - [access.redhat.com](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9)
 - [wiki.alpinelinux.org](https://wiki.alpinelinux.org/wiki/Main_Page)
 - [wiki.debian.org](https://wiki.debian.org/)
@@ -39,51 +40,51 @@ Distributions covered:
 <br>
 
 ## 1. Debian 13 & 12
-
 ---
+
 ### 1.1. Package Management
 
 Commands require root or sudo privileges.
 
 #### 1.1.1. Update Cache
 
-```
+```bash
 sudo apt update
 ```
 
 #### 1.1.2. Upgrade Packages
 
-```
+```bash
 sudo apt upgrade
 ```
 
 #### 1.1.3. Install a Package
 
-```
+```bash
 sudo apt install apache2
 ```
 
 #### 1.1.4. Remove a Package
 
-```
+```bash
 sudo apt remove apache2
 ```
 
 #### 1.1.5. Search for a Package
 
-```
+```bash
 sudo apt search apache2
 ```
 
 #### 1.1.6. Clean Unused Packages
 
-```
+```bash
 sudo apt autoremove
 ```
 
 #### 1.1.7. Show Package Information
 
-```
+```bash
 sudo apt show apache2
 ```
 
@@ -93,13 +94,13 @@ sudo apt show apache2
 
 Network adapter names typically follow patterns like `enp0s3`. To find the exact name:
 
-```
+```bash
 ls /sys/class/net
 ```
 
 The interface with an `en*` format is usually your network adapter. If unsure, use:
 
-```
+```bash
 ip a
 ```
 
@@ -107,13 +108,13 @@ ip a
 
 Edit the network interfaces file (replace `enp0s3` with your actual interface name):
 
-```
+```bash
 sudo nano /etc/network/interfaces
 ```
 
 **Static IP configuration:**
 
-```
+```text
 auto enp0s3
 iface enp0s3 inet static
    address 192.168.1.135/24
@@ -124,20 +125,20 @@ iface enp0s3 inet static
 
 **DHCP configuration:**
 
-```
+```text
 auto enp0s3
 iface enp0s3 inet dhcp
 ```
 
 #### 1.2.3. DNS Addresses
 
-```
+```bash
 sudo nano /etc/resolv.conf
 ```
 
 Add DNS servers:
 
-```
+```text
 nameserver 46.196.235.35
 nameserver 178.233.140.110
 nameserver 46.197.15.60
@@ -147,13 +148,13 @@ nameserver 46.197.15.60
 
 Replace `enp0s3` with your interface name:
 
-```
+```bash
 sudo ifdown enp0s3 && sudo ifup enp0s3
 ```
 
 Alternatively:
 
-```
+```bash
 sudo systemctl restart networking.service
 ```
 
@@ -163,7 +164,7 @@ sudo systemctl restart networking.service
 
 #### 1.3.1. Install Packages
 
-```
+```bash
 sudo apt update
 sudo apt install --yes apache2 mariadb-server php \
    libapache2-mod-php php-mysql
@@ -175,13 +176,13 @@ We'll create a test database, table, and PHP file to verify all components work 
 
 **Create test database and user:**
 
-```
+```bash
 sudo mariadb
 ```
 
 Run in MariaDB shell:
 
-```
+```sql
 CREATE DATABASE mysampledb;
 USE mysampledb;
 CREATE TABLE Employees (Name char(15), Age int(3), Occupation char(15));
@@ -194,13 +195,13 @@ exit
 
 **Create test PHP file:**
 
-```
+```bash
 sudo nano /var/www/html/test.php
 ```
 
 Add the following content:
 
-```
+```php
 <?php
    $mycon = new mysqli("localhost", "appuser", "password", "mysampledb");
    if ($mycon->connect_errno)
@@ -255,20 +256,21 @@ Add the following content:
 In Debian, services are typically enabled and started automatically upon installation.
 
 #### 1.4.1. Check Service Status
-```
+
+```bash
 systemctl status apache2
 ```
  
 #### 1.4.2. Start/Stop a Service
 
-```
+```bash
 sudo systemctl stop apache2
 sudo systemctl start apache2
 ```
 
 Force stop:
 
-```
+```bash
 sudo systemctl kill apache2
 ```
 
@@ -276,18 +278,19 @@ sudo systemctl kill apache2
 
 Reloads configuration without stopping:
 
-```
+```bash
 sudo systemctl reload apache2
 ```
 
 #### 1.4.4. Restart a Service
 
-```
+```bash
 sudo systemctl restart apache2
 ```
 
 #### 1.4.5. Enable/Disable a Service
-```
+
+```bash
 sudo systemctl enable apache2
 sudo systemctl disable apache2
 ```
@@ -304,43 +307,43 @@ Commands require root or sudo privileges.
 
 #### 2.1.1. Update Cache
 
-```
+```bash
 sudo apt update
 ```
 
 #### 2.1.2. Upgrade Packages
 
-```
+```bash
 sudo apt upgrade
 ```
 
 #### 2.1.3. Install a Package
 
-```
+```bash
 sudo install apache2
 ```
 
 #### 2.1.4. Remove a Package
 
-```
+```bash
 sudo remove apache2
 ```
 
 #### 2.1.5. Search for a Package
 
-```
+```bash
 sudo search apache2
 ```
 
 #### 2.1.6. Clean Unused Packages
 
-```
+```bash
 sudo autoremove
 ```
 
 #### 2.1.7. Show Package Information
 
-```
+```bash
 sudo show apache2
 ```
  
@@ -350,13 +353,13 @@ sudo show apache2
 
 Network adapter names typically follow patterns like `enp0s3`. To find the exact name:
 
-```
+```bash
 ls /sys/class/net
 ```
 
 The interface with an `en*` format is usually your network adapter. If unsure, use:
 
-```
+```bash
 ip a
 ```
 
@@ -364,13 +367,13 @@ ip a
 
 Ubuntu uses Netplan for network configuration. Edit the configuration file (filename may vary):
 
-```
+```bash
 sudo nano /etc/netplan/00-installer-config.yaml
 ```
 
 Replace `enp0s3` with your interface name and adjust IP settings:
 
-```
+```yaml
 network:
   ethernets:
     enp0s3:
@@ -390,7 +393,7 @@ network:
 
 #### 2.2.3. Apply Netplan Configuration
 
-```
+```bash
 sudo netplan apply
 ```
 
@@ -401,7 +404,7 @@ sudo netplan apply
 
 #### 2.3.1. Install Packages
 
-```
+```bash
 sudo apt update
 sudo apt install --yes apache2 mariadb-server php \
     libapache2-mod-php php-mysql
@@ -417,20 +420,20 @@ As a Debian derivative, Ubuntu behaves similarly for service management.
 
 #### 2.4.1. Check Service Status
 
-```
+```bash
 systemctl status apache2
 ```
 
 #### 2.4.2. Start/Stop a Service
 
-```
+```bash
 sudo systemctl stop apache2
 sudo systemctl start apache2
 ```
 
 Force stop:
 
-```
+```bash
 sudo systemctl kill apache2
 ```
 
@@ -438,19 +441,19 @@ sudo systemctl kill apache2
 
 Reads configuration file again
 
-```
+```bash
 sudo systemctl reload apache2
 ```
 
 #### 2.4.4. Restart a Service
 
-```
+```bash
 sudo systemctl restart apache2
 ```
 
 #### 2.4.5. Enable/Disable a Service
 
-```
+```bash
 sudo systemctl enable apache2
 sudo systemctl disable apache2
 ```
@@ -458,7 +461,6 @@ sudo systemctl disable apache2
 <br>
 
 ## 3. RHEL (AlmaLinux, Rocky Linux) 10.x, 9.x
-
 ---
 
 AlmaLinux and Rocky Linux are RHEL-compatible distributions, meaning commands and configurations for RHEL work on these distributions as well.
@@ -469,7 +471,7 @@ Commands require root or sudo privileges.
 
 #### 3.1.1. Check for Updates
 
-```
+```bash
 sudo dnf check-update
 ```
 
@@ -477,37 +479,37 @@ It is always called when installing or updating packages. So it is not necessary
 
 #### 3.1.2. Upgrade Packages
 
-```
+```bash
 sudo dnf upgrade
 ```
 
 #### 3.1.3. Install a Package
 
-```
+```bash
 sudo dnf install httpd
 ```
 
 #### 3.1.4. Remove a Package
 
-```
+```bash
 sudo dnf remove httpd
 ```
 
 #### 3.1.5. Search for a Package
 
-```
+```bash
 sudo dnf search httpd
 ```
 
 #### 3.1.6. Clean Unused Packages
 
-```
+```bash
 sudo dnf autoremove
 ```
 
 #### 3.1.7. Show Package Information
 
-```
+```bash
 sudo dnf info httpd
 ```
  
@@ -517,13 +519,13 @@ sudo dnf info httpd
 
 Network adapter names typically follow patterns like `enp0s3`. To find the exact name:
 
-```
+```bash
 ls /sys/class/net
 ```
 
 The interface with an `en*` format is usually your network adapter. If unsure, use:
 
-```
+```bash
 ip a
 ```
 
@@ -531,7 +533,7 @@ ip a
 
 Replace `enp0s3` with your interface name:
 
-```
+```bash
 sudo nmcli con modify 'enp0s3' ifname enp0s3 ipv4.method manual \
    ipv4.addresses 192.168.1.156/24 gw4 192.168.1.1
 sudo nmcli con modify 'enp0s3' ipv4.dns 8.8.8.8
@@ -539,7 +541,7 @@ sudo nmcli con modify 'enp0s3' ipv4.dns 8.8.8.8
 
 #### 3.2.3. Restart Network Connection
 
-```
+```bash
 sudo nmcli con down 'enp0s3' && sudo nmcli con up 'enp0s3'
 ```
 
@@ -549,13 +551,13 @@ Note: Package names differ from Debian/Ubuntu (e.g., `httpd` instead of `apache2
 
 #### 3.3.1. Install Packages
 
-```
+```bash
 sudo dnf -y install httpd mariadb-server php php-mysqlnd
 ```
 
 #### 3.3.2. Enable and Start Services
 
-```
+```bash
 sudo systemctl enable --now httpd
 sudo systemctl enable --now mariadb
 ```
@@ -564,7 +566,7 @@ sudo systemctl enable --now mariadb
 
 RHEL enables the firewall by default. Open HTTP and HTTPS ports:
 
-```
+```bash
 sudo firewall-cmd --add-service=http --add-service=https
 sudo firewall-cmd --add-service=http --add-service=https --permanent
 ```
@@ -579,26 +581,26 @@ Unlike Debian-based systems, RHEL does not automatically enable or start service
 
 #### 3.4.1. Check Service Status
 
-```
+```bash
 systemctl status httpd
 ```
  
 #### 3.4.2. Start/Stop a Service
 
-```
+```bash
 sudo systemctl stop httpd
 sudo systemctl start httpd
 ```
 
 Force stop:
 
-```
+```bash
 sudo systemctl kill httpd
 ```
 
 #### 3.4.3. Reload a Service
 
-```
+```bash
 sudo systemctl reload httpd
 ```
 
@@ -606,13 +608,13 @@ sudo systemctl reload httpd
 
 Stops and Starts
 
-```
+```bash
 sudo systemctl restart httpd
 ```
 
 #### 3.4.5. Enable/Disable a Service
 
-```
+```bash
 sudo systemctl enable httpd
 sudo systemctl disable httpd
 ```
@@ -620,39 +622,39 @@ sudo systemctl disable httpd
 <br>
 
 ## 4. Alpine Linux 3.23
-
 ---
+
 ### 4.1. Package Management
 
 Commands require root or sudo privileges.
 
 #### 4.1.1. Update Cache
 
-```
+```bash
 sudo apk update
 ```
 
 #### 4.1.2. Upgrade Packages
 
-```
+```bash
 sudo apk upgrade
 ```
 
 #### 4.1.3. Install a Package
 
-```
+```bash
 sudo apk add apache2
 ```
 
 #### 4.1.4. Remove a Package
 
-```
+```bash
 sudo apk del apache2
 ```
 
 #### 4.1.5. Search for a Package
 
-```
+```bash
 sudo apk search apache2
 ```
 
@@ -662,7 +664,7 @@ Not available in Alpine's package manager.
 
 #### 4.1.7. Show Package Information
 
-```
+```bash
 sudo apk info apache2
 ```
  
@@ -672,13 +674,13 @@ sudo apk info apache2
 
 Alpine typically uses `eth0` style names:
 
-```
+```bash
 ls /sys/class/net
 ```
 
 or
 
-```
+```bash
 ip a
 ```
 
@@ -686,13 +688,13 @@ ip a
 
 Edit network interfaces (replace `eth0` with your interface name):
 
-```
+```bash
 sudo nano /etc/network/interfaces
 ```
 
 File contents will be like below
 
-```
+```text
 auto lo
 iface lo inet loopback
 
@@ -708,11 +710,11 @@ iface eth0 inet static
 
 Configure DNS:
 
-```
+```bash
 sudo nano /etc/resolv.conf
 ```
 
-```
+```text
 nameserver 192.168.0.1
 nameserver 8.8.8.8
 ```
@@ -720,7 +722,7 @@ nameserver 8.8.8.8
 
 #### 4.2.3. Restart Network Adapter
 
-```
+```bash
 sudo ifdown eth0 && sudo ifup eth0
 ```
 
@@ -728,20 +730,20 @@ sudo ifdown eth0 && sudo ifup eth0
 
 #### 4.3.1. Install Packages
 
-```
+```bash
 sudo apk add apache2 php php-mysqli php-apache2 mariadb mariadb-client
 ```
 
 #### 4.3.2. Enable and Start Apache
 
-```
+```bash
 sudo rc-update add apache2 default
 sudo rc-service apache2 start
 ```
 
 #### 4.3.3. Initialize and Enable Mariadb
 
-```
+```bash
 sudo mysql_install_db --user=mysql --datadir=/var/lib/mysql
 sudo rc-update add mariadb default
 sudo rc-service mariadb start
@@ -757,32 +759,32 @@ Alpine uses OpenRC as its init system.
 
 #### 4.4.1. Check Service Status
 
-```
+```bash
 rc-service apache2 status
 ```
  
 #### 4.4.2. Start/Stop a Service
 
-```
+```bash
 sudo rc-service apache2 stop
 sudo rc-service apache2 start
 ```
 
 #### 4.4.3. Reload a Service
 
-```
+```bash
 sudo rc-service apache2 reload
 ```
 
 #### 4.4.4. Restart a Service
 
-```
+```bash
 sudo rc-service apache2 restart
 ```
 
 #### 4.4.5. Enable/Disable a Service
 
-```
+```bash
 sudo rc-update add apache2 default
 sudo rc-update del apache2 default
 ```
@@ -790,7 +792,6 @@ sudo rc-update del apache2 default
 <br>
 
 ## 5. Devuan 6 & 5
-
 ---
 
 Devuan is a Debian derivative without systemd. Devuan 6 & 5 are based on Debian 13 & 12.
@@ -801,43 +802,43 @@ Commands require root or sudo privileges.
 
 #### 5.1.1. Update Cache
 
-```
+```bash
 sudo apt update
 ```
 
 #### 5.1.2. Upgrade Packages
 
-```
+```bash
 sudo apt upgrade
 ```
 
 #### 5.1.3. Install a Package
 
-```
+```bash
 sudo apt install apache2
 ```
 
 #### 5.1.4. Remove a Package
 
-```
+```bash
 sudo apt remove apache2
 ```
 
 #### 5.1.5. Search for a Package
 
-```
+```bash
 sudo apt search apache2
 ```
 
 #### 5.1.6. Clean Unused Packages
 
-```
+```bash
 sudo apt autoremove
 ```
 
 #### 5.1.7. Show Package Information
 
-```
+```bash
 sudo apt show apache2
 ```
  
@@ -847,13 +848,13 @@ sudo apt show apache2
 
 Devuan typically uses `eth0` style names:
 
-```
+```bash
 ls /sys/class/net
 ```
 
 or
 
-```
+```bash
 ip a
 ```
 
@@ -861,13 +862,13 @@ ip a
 
 Edit network interfaces (replace `eth0` with your interface name):
 
-```
+```bash
 sudo nano /etc/network/interfaces
 ```
 
 **Static IP:**
 
-```
+```text
 auto eth0
 iface eth0 inet static
    address 192.168.1.176/24
@@ -878,18 +879,18 @@ iface eth0 inet static
 
 **DHCP:**
 
-```
+```text
 auto eth0
 iface eth0 inet dhcp
 ```
  
 #### 5.2.3. DNS Configuration
 
-```
+```bash
 sudo nano /etc/resolv.conf
 ```
 
-```
+```text
 nameserver 46.196.235.35
 nameserver 178.233.140.110
 nameserver 46.197.15.60
@@ -898,7 +899,7 @@ nameserver 46.197.15.60
 
 #### 5.2.4. Restart Network Adapter
 
-```
+```bash
 sudo ifdown eth0 && sudo ifup eth0
 ```
 
@@ -908,7 +909,7 @@ sudo ifdown eth0 && sudo ifup eth0
 
 #### 5.3.1. Install Packages
 
-```
+```bash
 sudo apt update
 sudo apt install --yes apache2 mariadb-server php libapache2-mod-php php-mysql
 ```
@@ -928,14 +929,14 @@ This tutorial assumes sysvinit.
 
 #### 5.4.1. Check Service Status
 
-```
+```bash
 sudo service apache2 status 
 ```
  
 
 #### 5.4.2. Start/Stop a Service
 
-```
+```bash
 sudo service apache2 stop
 sudo service apache2 start
 ```
@@ -943,19 +944,20 @@ sudo service apache2 start
 
 #### 5.4.3. Reload a Service
 
-```
+```bash
 sudo service apache2 reload
 ```
 
 
 #### 5.4.4. Restart a Service
 
-```
+```bash
 sudo service apache2 restart
 ```
 
 #### 5.4.5. Enable/Disable a Service
-```
+
+```bash
 sudo update-rc.d apache2 defaults
 sudo update-rc.d apache2 remove
 ```

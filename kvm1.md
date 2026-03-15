@@ -8,8 +8,8 @@ sidebar:
 ##### Introduction to KVM virtualization 
 
 ## 0. Specs
-
 ---
+
 ### 0.0. The What
 KVM Virtualization Tutorial 1 for Debian and Ubuntu Server.
 
@@ -57,12 +57,12 @@ This tutorial aims to bring you (and me) to a moderate level of virtualization a
 <br>
 
 ## 1. Installation and Configuration
-
 ---
+
 ### 1.1. Installation
 Install necessary packages:
 
-```
+```bash
 sudo apt update
 sudo apt install libvirt-clients libvirt-daemon-system qemu-kvm \
      virtinst virt-manager virt-viewer bridge-utils --yes
@@ -70,7 +70,7 @@ sudo apt install libvirt-clients libvirt-daemon-system qemu-kvm \
 
 Add your user to the libvirt group (replace `exforge` with your username):
 
-```
+```bash
 sudo usermod -aG libvirt exforge
 ```
 
@@ -84,13 +84,13 @@ By default, KVM creates a virtual bridge named `virbr0`. This bridge allows VMs 
 
 First, disable netfilter (enabled on bridges by default):
 
-```
+```bash
 sudo nano /etc/sysctl.d/bridge.conf
 ```
 
 Add the following lines (file is initially empty):
 
-```
+```ini
 net.bridge.bridge-nf-call-ip6tables=0
 net.bridge.bridge-nf-call-iptables=0
 net.bridge.bridge-nf-call-arptables=0
@@ -98,19 +98,19 @@ net.bridge.bridge-nf-call-arptables=0
 
 Create a udev rule to apply these settings:
  
-```
+```bash
 sudo nano /etc/udev/rules.d/99-bridge.rules
 ```
 
 Add this line (file is initially empty):
 
-```
+```text
 ACTION=="add", SUBSYSTEM=="module", KERNEL=="br_netfilter", RUN+="/sbin/sysctl -p /etc/sysctl.d/bridge.conf"
 ```
 
 Reboot to apply changes:
 
-```
+```bash
 sudo reboot
 ```
 
@@ -118,14 +118,14 @@ Remove the default KVM bridge. List networks with `ip link` to see `virbr0`.
 
 Delete and undefine KVM networks:
 
-```
+```bash
 virsh net-destroy default
 virsh net-undefine default
 ```
 
 If errors occur, force removal:
 
-```
+```bash
 sudo ip link delete virbr0 type bridge
 ```
 
@@ -133,19 +133,19 @@ Run `ip link` again to confirm `virbr0` is removed. Note your physical interface
 
 Back up your network configuration file (if `50-cloud-init.yaml` doesn't exist, look for another `.yaml` file):
 
-```
+```bash
 sudo cp /etc/netplan/50-cloud-init.yaml{,.backup}
 ```
 
 Edit your network configuration:
 
-```
+```bash
 sudo nano /etc/netplan/50-cloud-init.yaml
 ```
 
 Replace the content with the following (adjust `enp3s0f0` to your interface name, and use your local network IP and gateway):
 
-```
+```yaml
 network:
   ethernets:
     enp3s0f0:
@@ -174,7 +174,7 @@ network:
 
 Apply changes (SSH connection may drop; reconnect if needed):
 
-```
+```bash
 sudo netplan apply
 ```
 
@@ -185,13 +185,13 @@ By default, KVM creates a virtual bridge named `virbr0`. This bridge allows VMs 
 
 First, disable netfilter (enabled on bridges by default):
 
-```
+```bash
 sudo nano /etc/sysctl.d/bridge.conf
 ```
 
 Add the following lines (file is initially empty):
 
-```
+```text
 net.bridge.bridge-nf-call-ip6tables=0
 net.bridge.bridge-nf-call-iptables=0
 net.bridge.bridge-nf-call-arptables=0
@@ -199,37 +199,37 @@ net.bridge.bridge-nf-call-arptables=0
 
 Create a udev rule to apply these settings:
 
-```
+```bash
 sudo nano /etc/udev/rules.d/99-bridge.rules
 ```
 
 Add this line (file is initially empty):
 
-```
+```text
 ACTION=="add", SUBSYSTEM=="module", KERNEL=="br_netfilter", RUN+="/sbin/sysctl -p /etc/sysctl.d/bridge.conf"
 ```
 
 Reboot to apply changes:
 
-```
+```bash
 sudo reboot
 ```
 
 Back up your network configuration file:
 
-```
+```bash
 sudo cp /etc/network/interfaces{,.backup}
 ```
 
 Edit your network configuration:
 
-```
+```bash
 sudo nano /etc/network/interfaces
 ```
 
 Replace the content with the following (adjust `enp3s0f0` to your interface name, and use your local network IP and gateway):
 
-```
+```text
 # This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
 
@@ -260,18 +260,18 @@ iface br0 inet static
 
 Apply changes (SSH connection may drop; reconnect if needed):
 
-```
+```bash
 sudo systemctl restart networking.service
 ```
 
 ### 1.3. Add Our Bridge to KVM
 Create an XML file for the bridge definition:
 
-```
+```bash
 nano host-bridge.xml
 ```
 
-```
+```xml
 <network>
   <name>host-bridge</name>
   <forward mode="bridge"/>
@@ -281,7 +281,7 @@ nano host-bridge.xml
 
 Define, start, and enable autostart for the bridge:
 
-```
+```bash
 virsh net-define host-bridge.xml
 virsh net-start host-bridge
 virsh net-autostart host-bridge
@@ -293,7 +293,7 @@ Set up directories for disk images and installation ISOs:
 - `/srv/kvm` for VM disk images
 - `/srv/isos` for installation ISO images
 
-```
+```bash
 sudo mkdir /srv/kvm /srv/isos
 sudo virsh pool-create-as srv-kvm dir --target /srv/kvm
 ```
@@ -304,10 +304,9 @@ At this point, you may want to copy some installation ISOs to the server's `/srv
 
 
 
-
 ## 2. VM Creation
-
 ---
+
 ### 2.1. Create the First VM
 Now it's time to create our first virtual machine.
 
@@ -317,7 +316,7 @@ I've already copied the Ubuntu Server ISO `ubuntu-24.04.2-live-server-amd64.iso`
 
 Install a VM named `testkvm`:
 
-```
+```bash
 sudo virt-install --name testkvm \
     --connect qemu:///system  --virt-type kvm \
     --memory 1024 --vcpus 1 \
@@ -346,9 +345,10 @@ Parameters explained:
 
 
 ### 2.2. OS Variant List
+
 Many OS variants are available. Find yours with:
 
-```
+```bash
 sudo apt install libosinfo-bin --yes
 osinfo-query os
 ```
@@ -360,7 +360,7 @@ A graphical desktop is required to connect via VNC. Install `virt-viewer` on you
 
 **Run on your workstation:** 
 
-```
+```bash
 sudo apt update
 sudo apt install virt-viewer --yes
 virt-viewer --connect qemu+ssh://exforge@elma/system testkvm
@@ -377,7 +377,7 @@ Our server lacks a graphical interface (like most servers). For graphical manage
 
 **Run on your workstation:**
 
-```
+```bash
 sudo apt update
 sudo apt install virt-manager --yes
 virt-manager
@@ -389,17 +389,19 @@ The application appears in the Applications Menu as "Virtual Machine Manager."
 
 
 ## 4. Installing VMs from Pre-built Images
-
 ---
+
 Installing an OS from scratch is time-consuming. An alternative is using pre-built cloud images with cloud-init configuration.
 
 ### 4.0. Installing cloud-image-utils
-```
+
+```bash
 sudo apt update
 sudo apt install cloud-image-utils --yes
 ```
 
 ### 4.1. Acquiring Cloud Images
+
 Search for cloud images:
 
 - **Ubuntu**: [cloud-images.ubuntu.com](https://cloud-images.ubuntu.com/)
@@ -407,32 +409,33 @@ Search for cloud images:
 
 Download the latest images (e.g., Ubuntu 24.04 Noble and Debian 13 Trixie) to `/srv/isos`.
 
-```
+```bash
 cd /srv/isos
 sudo wget https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img
 sudo wget https://cloud.debian.org/images/cloud/trixie/latest/debian-13-generic-amd64.qcow2
 ```
 
 ### 4.2. Creating a New Image From the Original Image
+
 Create new images with increased size (20 GB) and convert to qcow2 format.
 
 **Ubuntu image:**
 
-```
+```bash
 sudo qemu-img create -b /srv/isos/noble-server-cloudimg-amd64.img \
     -F qcow2 -f qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 20G
 ```
 
 **Debian image:**
 
-```
+```bash
 sudo qemu-img create -b /srv/isos/debian-13-generic-amd64.qcow2 \
     -F qcow2 -f qcow2 /srv/kvm/debiansrv-cloudimg.qcow2 20G
 ```
 
 
-
 ### 4.3. Cloud-init Configuration
+
 The next step is to crate a cloud-init config file. This file contains instructions for the cloud image. There is a wide range of instructions like; creating a user, creating and filling files, adding apt repositories, running initial commands, installing packages, reboot and poweroff after finishing, disk and configuration. See below url for details:
 
 [cloudinit.readthedocs.io](https://cloudinit.readthedocs.io/en/latest/reference/examples.html)
@@ -449,7 +452,7 @@ Our cloud-init file will configure the following:
 
 First, generate a password hash:
 
-```
+```bash
 sudo apt install whois --yes
 mkpasswd --method=SHA-512 --rounds=4096
 ```
@@ -459,19 +462,19 @@ Enter the desired password and copy the hash output.
 
 We will create configuration files in `/srv/init`. Create the folder:
 
-```
+```bash
 sudo mkdir /srv/init
 ```
 
 **Ubuntu cloud-init configuration:**
 
-```
+```bash
 sudo nano /srv/init/ubuntu-cloud-init.cfg
 ```
 
 Fill as below (Remember updating password with the hash you get):
 
-```
+```yaml
 #cloud-config
 hostname: ubuntu24
 fqdn: ubuntu24.x386.org
@@ -492,13 +495,13 @@ packages: qemu-guest-agent
 **Debian cloud-init configuration:**
 
 
-```
+```bash
 sudo nano /srv/init/debian-cloud-init.cfg
 ```
 
 Fill as below (Again remember updating password with the hash you get):
 
-```
+```yaml
 #cloud-config
 hostname: debian13
 fqdn: debian13.x386.org
@@ -518,15 +521,16 @@ packages: qemu-guest-agent
 
 
 ### 4.4. Cloud-init Network Configuration
+
 For static IP configuration, create network config files.
 
 **Ubuntu network configuration:**
 
-```
+```bash
 sudo nano /srv/init/ubuntu-network-init.cfg
 ```
 
-```
+```yaml
 #cloud-config
 version: 2
 ethernets:
@@ -540,13 +544,13 @@ ethernets:
 
 **Debian network configuration:**
 
-```
+```bash
 sudo nano /srv/init/debian-network-init.cfg
 ```
 
 Fill as below:
 
-```
+```yaml
 #cloud-config
 version: 2
 ethernets:
@@ -561,11 +565,12 @@ ethernets:
 Adjust IP addresses according to your network.
 
 ### 4.5. Creating Cloud-init Seed Images
+
 Create seed images containing cloud-init and network configurations.
 
 **Ubuntu seed image:**
 
-```
+```bash
 sudo cloud-localds --network-config /srv/init/ubuntu-network-init.cfg \
    /srv/kvm/ubuntu24-seed.qcow2 \
    /srv/init/ubuntu-cloud-init.cfg
@@ -573,16 +578,17 @@ sudo cloud-localds --network-config /srv/init/ubuntu-network-init.cfg \
 
 **Debian seed image:**
 
-```
+```bash
 sudo cloud-localds --network-config /srv/init/debian-network-init.cfg \
    /srv/kvm/debian13-seed.qcow2 \
    /srv/init/debian-cloud-init.cfg
 ```
 
 ### 4.6. Start VMs from Cloud Images
+
 **Ubuntu Server VM:**
 
-```
+```bash
 virt-install --name ubuntu24 \
   --connect qemu:///system \
   --virt-type kvm --memory 2048 --vcpus 2 \
@@ -598,7 +604,7 @@ virt-install --name ubuntu24 \
 
 **Debian Server VM:**
 
-```
+```bash
 virt-install --name debian13 \
   --connect qemu:///system \
   --virt-type kvm --memory 2048 --vcpus 2 \
@@ -618,15 +624,16 @@ Cloud-init may take several minutes to complete. Connect via virt-viewer:
 
 ** Run on your workstation **
 
-```
+```bash
 virt-viewer --connect qemu+ssh://exforge@elma/system ubuntu24
 virt-viewer --connect qemu+ssh://exforge@elma/system debian13
 ```
 
 ### 4.7. Disable Cloud-init After Initial Configuration
+
 On each VM, run:
 
-```
+```bash
 sudo touch /etc/cloud/cloud-init.disabled
 ```
 
@@ -653,8 +660,8 @@ Script parameters could include:
 
 
 ## 5. virsh: Shell Based VM Management
-
 ---
+
 virt-manager handles basic management tasks, but advanced administration requires the command-line interface.
 
 The `virsh` command offers extensive capabilities. I'll cover the most useful commands here (in my opinion).
@@ -666,52 +673,55 @@ In all examples, replace `NAME` with your VM's name.
 ### 5.0. Environment Variable Set
 On Debian, to run `virsh` commands without `sudo`, set an environment variable:
 
-```
+```bash
 export LIBVIRT_DEFAULT_URI='qemu:///system'
 ```
 
 For permanent setup, add to your shell profile:
 
-```
+```bash
 nano ~/.bashrc
 ```
 
 Add this line:
 
-```
+```bash
 export LIBVIRT_DEFAULT_URI='qemu:///system'
 ```
 
 Then reload:
 
-```
+```bash
 source ~/.bashrc
 ```
 
 ### 5.1. Host Information
+
 Display host system details:
 
-```
+```bash
 virsh nodeinfo
 ```
 
 ### 5.2. List VMs and Their States
+
 List running VMs:
 
-```
+```bash
 virsh list
 ```
 
 List all VMs (running and stopped):
 
-```
+```bash
 virsh list --all
 ```
 
 ### 5.3. VM Lifecycle Management
+
 Start, stop, reboot, force stop, or remove a VM:
 
-```
+```bash
 virsh start NAME                  # Start VM
 virsh shutdown NAME               # Graceful shutdown
 virsh reboot NAME                 # Reboot VM
@@ -721,25 +731,28 @@ virsh undefine NAME --remove-all-storage  # Remove VM with all storage
 ```
 
 ### 5.4. Pause and Resume VM
+
 Suspend and resume VM execution:
 
-```
+```bash
 virsh suspend NAME                # Pause VM
 virsh resume NAME                 # Resume VM
 ```
 
 ### 5.5. Autostart Configuration
+
 Configure VM to start automatically with host boot:
 
-```
+```bash
 virsh autostart NAME              # Enable autostart
 virsh autostart --disable NAME    # Disable autostart
 ```
 
 ### 5.6. VM Information
+
 Display various VM details:
 
-```
+```bash
 virsh dominfo NAME                # General VM information
 virsh domid NAME                  # VM ID
 virsh domuuid NAME                # VM UUID
@@ -749,19 +762,20 @@ virsh domdisplay NAME             # VNC/display connection details
 
 
 ### 5.7. VM Memory Management
+
 VMs have two memory parameters:
 - **Current Memory**: Currently allocated RAM
 - **Maximum Memory**: Maximum allocatable RAM
 
 View current allocation:
 
-```
+```bash
 virsh dominfo NAME
 ```
 
 Change maximum memory (requires shutdown and start to activate):
 
-```
+```bash
 virsh setmaxmem NAME 2G --config
 ```
 
@@ -769,7 +783,7 @@ virsh setmaxmem NAME 2G --config
 
 Change current memory allocation:
 
-```
+```bash
 virsh setmem NAME 2G              # Current session only
 virsh setmem NAME 2G --live       # Live change (immediate)
 virsh setmem NAME 2G --config     # Persistent after shutdown/start
@@ -781,6 +795,7 @@ virsh setmem NAME 2G --live --config  # Immediate + persistent
 **Beware of Shutdown and Start. Reboots do not count.**
  
 ### 5.8. VM vCPU Management
+
 VMs have two vCPU parameters:
 - **Current**: Active vCPUs
 - **Maximum**: Maximum allocatable vCPUs
@@ -798,7 +813,7 @@ A cartesian product gives us 4 values:
 
 View vCPU information:
 
-```
+```bash
 virsh vcpucount NAME
 ```
 
@@ -808,14 +823,14 @@ So when I say shutdown and start, I mean shutdown first, wait a while (from 0.00
 
 Change maximum vCPUs (config state only - requires shutdown and start to activate):
 
-```
+```bash
 virsh setvcpus NAME NUMBER --maximum --config
 virsh setvcpus ubuntu24 3 --maximum --config
 ```
 
 Change current vCPU count:
 
-```
+```bash
 virsh setvcpus NAME 3             # Current session
 virsh setvcpus NAME 3 --live      # Live change
 virsh setvcpus NAME 3 --config    # Persistent change
@@ -828,22 +843,23 @@ virsh setvcpus ubuntu24 3 --live --config
 
 **Important**: After increasing vCPUs on a running VM, new vCPUs may be offline. Check online status on the VM:
 
-```
+```bash
 lscpu | head
 ```
 
 Activate offline vCPU (on the VM):
 
-```
+```bash
 sudo sh -c 'echo 1 > /sys/devices/system/cpu/cpu2/online'
 ```
 
 Replace `cpu2` with the appropriate vCPU number (starting from 0).
 
 ### 5.9. Snapshots
+
 Create a live snapshot:
 
-```
+```bash
 virsh snapshot-create-as VMNAME \
   --name SNAPSHOTNAME \
   --description "Description text"
@@ -851,7 +867,7 @@ virsh snapshot-create-as VMNAME \
 
 Example:
 
-```
+```bash
 virsh snapshot-create-as ubuntu24 \
   --name ss1-ubuntu24 \
   --description "First snapshot of Ubuntu24"
@@ -859,7 +875,7 @@ virsh snapshot-create-as ubuntu24 \
 
 Manage snapshots:
 
-```
+```bash
 virsh snapshot-revert VMNAME --current            # Revert to current snapshot
 virsh snapshot-revert VMNAME --snapshotname SNAPSHOTNAME  # Revert to specific
 virsh snapshot-current VMNAME --name              # Show current snapshot
@@ -869,17 +885,18 @@ virsh snapshot-list VMNAME                        # List all snapshots
 ```
 
 ### 5.10. Attach Another Disk to a VM
+
 Add a secondary disk to a VM (e.g., 20GB for Ubuntu24).
 
 Create a new disk image:
 
-```
+```bash
 sudo qemu-img create -f qcow2 /srv/kvm/ubuntu24-disk2.qcow2 20G
 ```
 
 Identify disk naming on VM (run on VM):
 
-```
+```bash
 lsblk -o name -d | grep vd
 ```
 
@@ -887,7 +904,7 @@ Typical names: `vda` (primary), `vdb` (secondary), etc.
 
 Attach disk to VM:
 
-```
+```bash
 virsh attach-disk ubuntu24 \
   /srv/kvm/ubuntu24-disk2.qcow2 \
   vdb \
@@ -901,7 +918,7 @@ Options:
 
 Detach disk:
 
-```
+```bash
 virsh detach-disk ubuntu24 vdb --persistent
 ```
 
@@ -910,7 +927,7 @@ As in virsh attach-disk, you can change --persistent option to --live or  --conf
 ### 5.11. Other virsh Commands
 Get the list of all virsh subcommands:
 
-```
+```bash
 virsh --help
 ```
 
@@ -919,39 +936,41 @@ virsh --help
 
 
 ## 6. qemu-img: Shell Based Image Management
-
 ---
+
 `qemu-img` manipulates VM disk images. **Important**: Always stop the VM before using `qemu-img` on its images.
 
 Complete documentation: [www.qemu.org](https://www.qemu.org/docs/master/tools/qemu-img.html)
 
 ### 6.1. Get Basic Image Information
-```
+
+```bash
 qemu-img info FILENAME
 ```
 
 Example for Ubuntu24 VM:
 
-```
+```bash
 qemu-img info /srv/kvm/ubuntusrv-cloudimg.qcow2
 ```
 
 ### 6.2. Creating an Image
+
 Create a new image:
 
-```
+```bash
 qemu-img create -f FORMAT FILENAME SIZE
 ```
 
 Example (from section 5.10):
 
-```
+```bash
 sudo qemu-img create -f qcow2 /srv/kvm/ubuntu24-disk2.qcow2 20G
 ```
 
 Create an image backed by another image (differencing image):
 
-```
+```bash
 sudo qemu-img create \
   -b BACKINGFILENAME \
   -F BACKINGFILEFORMAT \
@@ -962,7 +981,7 @@ sudo qemu-img create \
 
 Example (from section 4.2):
 
-```
+```bash
 sudo qemu-img create \
   -b /srv/isos/noble-server-cloudimg-amd64.img \
   -F qcow2 \
@@ -985,7 +1004,7 @@ Common formats:
 
 Convert between formats:
 
-```
+```bash
 qemu-img convert \
   -f SOURCEFORMAT \
   -O DESTINATIONFORMAT \
@@ -995,15 +1014,16 @@ qemu-img convert \
 
 
 ### 6.4. Resize a Disk Image.
+
 Increase or decrease image size:
 
-```
+```bash
 sudo qemu-img resize FILENAME [+|-]SIZE
 ```
 
 Increase Ubuntu24 image by 5GB:
 
-```
+```bash
 sudo qemu-img resize /srv/kvm/ubuntusrv-cloudimg.qcow2 +5G
 ```
 
@@ -1015,7 +1035,8 @@ sudo qemu-img resize /srv/kvm/ubuntusrv-cloudimg.qcow2 +5G
 
 
 ### 6.5. Check an Image For Errors
-```
+
+```bash
 qemu-img check FILENAME
 ```
 
@@ -1025,73 +1046,75 @@ Use if you suspect image corruption.
 
 
 ## 7. Export and Import of VMs
-
 ---
+
 Migrate VMs between hosts or create backups.
 
 ### 7.1. Export
----
+
 **Important**: Shut down the VM before export for data consistency.
 
 Create backup directory:
-```
+
+```bash
 mkdir /tmp/kvmbackup
 ```
 
 Export VM definition (XML):
 
-```
+```bash
 virsh dumpxml ubuntu24 > /tmp/kvmbackup/ubuntu24.xml
 ```
 
 Identify disk images from XML:
 
-```
+```bash
 grep "source file" /tmp/kvmbackup/ubuntu24.xml
 ```
 
 Example output:
 
-```
+```text
       <source file='/srv/kvm/ubuntu24-seed.qcow2'/>
       <source file='/srv/kvm/ubuntusrv-cloudimg.qcow2'/>
 ```
 
 Copy disk images to backup location:
 
-```
+```bash
 cp /srv/kvm/ubuntu24-seed.qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 \
    /tmp/kvmbackup
 ```
 
 Create archive:
 
-```
+```bash
 tar -cf /tmp/ubuntu24.tar -C /tmp/kvmbackup .
 ```
 
 You have to copy this file to another server, before importing there.
 
 ### 7.2. Import
+
 **Important**: Remove or rename VM on source host to avoid IP conflicts.
 
 Copy archive to new host, then:
 
 Create import directory:
 
-```
+```bash
 mkdir /tmp/import
 ```
 
 Extract archive:
 
-```
+```bash
 tar -xf /tmp/ubuntu24.tar -C /tmp/import
 ```
 
 Copy disk images to storage location:
 
-```
+```bash
 sudo cp \
   /tmp/import/ubuntu24-seed.qcow2 \
   /tmp/import/ubuntusrv-cloudimg.qcow2 \
@@ -1100,13 +1123,13 @@ sudo cp \
  
 Define VM from XML:
 
-```
+```bash
 virsh define /tmp/import/ubuntu24.xml
 ```
 
 Start VM:
 
-```
+```bash
 virsh start ubuntu24
 ```
 
@@ -1116,47 +1139,48 @@ virsh start ubuntu24
 
 
 ## 8. libguestfs: VM Disk Management
-
 ---
+
 Tools for accessing and modifying VM disk images without starting the VM.
 
 Documentation: [libguestfs.org](https://libguestfs.org/)
 
 ### 8.1. Installation
-```
+
+```bash
 sudo apt update
 sudo apt-get --yes install libguestfs-tools
 ```
 
 ### 8.2. Mounting VM's Disks
+
 Mount VM disk read-only (safer):
 
-```
+```bash
 sudo guestmount -d ubuntu24 -i --ro /mnt
 ```
 
 Mount with write access (use with caution -  VM must be shut down):
 
-```
+```bash
 sudo guestmount -d ubuntu24 -i /mnt
 ```
 
 Unmount:
 
-
-```
+```bash
 sudo guestunmount /mnt
 ```
 
-
 Details for guestmount and guestunmount commands:
 
-```
+```bash
 guestmount --help
 guestunmount --help
 ```
 
 ### 8.3. Common libguestfs Commands
+
 - **guestfish**: Interactive shell for disk manipulation
 - **guestmount**: Mount guest filesystem on host
 - **guestunmount**: Unmount guest filesystem
@@ -1174,13 +1198,13 @@ guestunmount --help
 
 **Example**: Copy file from VM:
 
-```
+```bash
 sudo virt-copy-out -d ubuntu24 /etc/hostname /tmp/
 ```
 
 **Example**: List files in VM:
 
-```
+```bash
 sudo virt-ls -d ubuntu24 /etc/
 ```
 

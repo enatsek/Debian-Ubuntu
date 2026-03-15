@@ -8,7 +8,6 @@ sidebar:
 ##### Primary and replica DNS server configuration 
 
 ## 0. Specs
-
 ---
 
 ### 0.0. The What
@@ -52,25 +51,24 @@ This tutorial has been tested with various combinations including Debian 12/13 a
 <br>
 
 ## 1. Primary DNS Server Configuration
-
 ---
 
 Install BIND9 (the DNS server software):
 
-```
+```bash
 sudo apt update
 sudo apt -y install bind9
 ```
 
 Edit the main configuration file to set global options:
 
-```
+```bash
 sudo nano /etc/bind/named.conf.options
 ```
 
 Modify the `options` block as follows:
 
-```
+```text
 options {
    # Cache Directory
    directory "/var/cache/bind";
@@ -91,13 +89,13 @@ options {
 
 Define the forward and reverse zones by editing the local configuration file:
 
-```
+```bash
 sudo nano /etc/bind/named.conf.local
 ```
 
 Fill as below
 
-```
+```text
 // Forward zone
 zone "386387.xyz" IN {
    type master;
@@ -114,13 +112,13 @@ zone "1.168.192.in-addr.arpa" IN {
 
 Create and populate the forward zone file:
 
-```
+```bash
 sudo nano /etc/bind/forward.386387.xyz
 ```
 
 Add the following content:
 
-```
+```text
 $TTL 1D
 @ IN SOA ns1.386387.xyz. hostmaster.386387.xyz. (
    2025111001 ; serial
@@ -150,13 +148,13 @@ mailsrv         IN      CNAME   mail.386387.xyz.
 
 Create and populate the reverse zone file:
 
-```
+```bash
 sudo nano /etc/bind/reverse.386387.xyz
 ```
 
 Add the following content:
 
-```
+```text
 $TTL 1D
 @    IN   SOA    ns1.386387.xyz. hostmaster.386387.xyz. (
    2025111001 ; Serial
@@ -181,7 +179,7 @@ ns2  IN    A      192.168.1.202
 
 Validate all configuration files for syntax errors:
 
-```
+```bash
 sudo named-checkconf /etc/bind/named.conf.options
 sudo named-checkconf /etc/bind/named.conf.local
 sudo named-checkzone 386387.xyz /etc/bind/forward.386387.xyz
@@ -191,25 +189,24 @@ sudo named-checkzone 386387.xyz /etc/bind/reverse.386387.xyz
 <br>
 
 ## 2. Replica DNS Server Configuration
-
 ---
 
 Install BIND9 on the replica server:
 
-```
+```bash
 sudo apt update
 sudo apt -y install bind9
 ```
 
 Edit the main configuration file:
 
-```
+```bash
 sudo nano /etc/bind/named.conf.options
 ```
 
 Use the same configuration as the primary server, but without the `allow-transfer` directive:
 
-```
+```text
 options {
    # Cache Directory
    directory "/var/cache/bind";
@@ -228,13 +225,13 @@ options {
 
 Configure the replica zones to sync from the primary server:
 
-```
+```bash
 sudo nano /etc/bind/named.conf.local
 ```
 
 Fill as below
 
-```
+```text
 zone "386387.xyz" IN {
    type slave;
    masters { 192.168.1.201; };
@@ -251,7 +248,7 @@ Note that the zone files are located in `/var/lib/bind/` and will be automatical
 
 Validate the configuration files:
 
-```
+```bash
 sudo named-checkconf /etc/bind/named.conf.options
 sudo named-checkconf /etc/bind/named.conf.local
 ```
@@ -259,13 +256,13 @@ sudo named-checkconf /etc/bind/named.conf.local
 <br>
 
 ## 3. Final Touch
-
 ---
+
 ### 3.1. Start the DNS Services
 
 Restart BIND9 on both servers to apply the configuration:
 
-```
+```bash
 sudo systemctl restart bind9
 ```
 
@@ -274,19 +271,22 @@ sudo systemctl restart bind9
 Your name servers should now be operational. You can test them using the `dig` command from any host on the network:
 
 Test forward lookup (hostname to IP):
-```
+
+```bash
 dig @192.168.1.201 mail.386387.xyz
 dig @192.168.1.202 filesrv.386387.xyz
 ```
 
 Test reverse lookup (IP to hostname):
-```
+
+```bash
 dig @192.168.1.201 -x 192.168.1.171
 dig @192.168.1.202 -x 192.168.1.172
 ```
 
 Test zone transfer (should only work from replica to primary):
-```
+
+```bash
 dig @192.168.1.201 386387.xyz AXFR
 ```
 

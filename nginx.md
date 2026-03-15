@@ -8,13 +8,14 @@ sidebar:
 ##### Nginx HTTP server configuration with SSL support and LEMP stack
 
 ## 0. Specs
-
 ---
 
 ### 0.0. The What
+
 Nginx is an open-source web server that also functions as a reverse proxy, load balancer, and HTTP cache. It is known for its high performance, low resource usage, and efficient handling of simultaneous connections.
 
 ### 0.1. Environment
+
 I used Debian and Ubuntu server editions, specifically Debian 12 & 13, and Ubuntu 22.04 & 24.04 LTS Servers.
 
 I have a test domain name: 386387.xyz, which I used for testing.
@@ -43,26 +44,25 @@ All the following domain names point to my test server:
 
 
 ## 1. Installation and Configuration Files
-
-
 ---
+
 ### 1.1. Installation
 Update package repositories and install the Nginx package:
 
-```
+```bash
 sudo apt update
 sudo apt install nginx --yes
 ```
 
 When installed on Debian and Ubuntu, Nginx (like other service packages) starts automatically. Check the service status:
 
-```
+```bash
 systemctl status nginx
 ```
 
 The Debian package maintainers include a sample page for the web server. You can view it:
 
-```
+```bash
 sudo nano /var/www/html/index.nginx-debian.html
 ```
 
@@ -101,13 +101,13 @@ This script enables a site configuration by creating a symbolic link in `sites-e
 
 Create the script:
 
-```
+```bash
 sudo nano /usr/local/bin/nxensite
 ```
 
 Fill as below:
 
-```
+```bash
 #!/bin/bash
 if [ -z "$1" ]; then
     echo "Usage: nxensite <site-name>"
@@ -128,13 +128,13 @@ echo "Enabled site: $1"
 
 Make it executable:
 
-```
+```bash
 sudo chmod +x /usr/local/bin/nxensite
 ```
 
 After enabling a site, reload Nginx:
 
-```
+```bash
 sudo systemctl reload nginx
 ```
 
@@ -144,13 +144,13 @@ This script disables a site configuration by removing its symbolic link from `si
 
 Create the script:
 
-```
+```bash
 sudo nano /usr/local/bin/nxdissite
 ```
 
 Fill as below:
 
-```
+```bash
 #!/bin/bash
 if [ -z "$1" ]; then
     echo "Usage: nxdissite <site-name>"
@@ -171,13 +171,13 @@ echo "Disabled site: $1"
 
 Make it executable:
 
-```
+```bash
 sudo chmod +x /usr/local/bin/nxdissite
 ```
 
 After disabling a site, reload Nginx:
 
-```
+```bash
 sudo systemctl reload nginx
 ```
 
@@ -187,13 +187,13 @@ This script enables a module by creating a symbolic link in `modules-enabled/` f
 
 Create the script:
 
-```
+```bash
 sudo nano /usr/local/bin/nxenmod
 ```
 
 Fill as below:
 
-```
+```bash
 #!/bin/bash
 if [ -z "$1" ]; then
     echo "Usage: nxenmod <module-name>"
@@ -214,13 +214,13 @@ echo "Enabled module: $1"
 
 Make it executable:
 
-```
+```bash
 sudo chmod +x /usr/local/bin/nxenmod
 ```
 
 After enabling a module, restart Nginx:
 
-```
+```bash
 sudo systemctl restart nginx
 ```
 
@@ -230,13 +230,13 @@ This script disables a module by removing its symbolic link from `modules-enable
 
 Create the script:
 
-```
+```bash
 sudo nano /usr/local/bin/nxdismod
 ```
 
 Fill as below:
 
-```
+```bash
 #!/bin/bash
 if [ -z "$1" ]; then
     echo "Usage: nxdismod <module-name>"
@@ -256,13 +256,13 @@ echo "Disabled module: $1"
 
 Make it executable:
 
-```
+```bash
 sudo chmod +x /usr/local/bin/nxdismod
 ```
 
 After disabling a module, restart Nginx:
 
-```
+```bash
 sudo systemctl restart nginx
 ```
 
@@ -270,9 +270,8 @@ sudo systemctl restart nginx
 
 
 ## 2. Creating Our First Website
-
-
 ---
+
 ### 2.0. Explanations
 
 When Nginx is installed, it creates a configuration file named `default` in the `sites-available/` directory.
@@ -287,23 +286,24 @@ Similar to Apache, there are four steps to create a website on Nginx:
 4. Reload the Nginx service.
 
 ### 2.1. Configure the Website
+
 #### 2.1.1. Prepare Website Home
 
 Create a home directory for our website:
 
-```
+```bash
 sudo mkdir /var/www/386387.xyz
 ```
 
 Create a sample home page:
 
-```
+```bash
 sudo nano /var/www/386387.xyz/index.html
 ```
 
 Fill as below:
 
-```
+```html
 <html>
 <title>386387.xyz Test Page</title>
 <body>
@@ -315,13 +315,13 @@ Fill as below:
 
 Set proper ownership (Nginx runs as www-data):
 
-```
+```bash
 sudo chown -R www-data:www-data /var/www/386387.xyz
 ```
 
 Set directory permissions to 755 and file permissions to 644:
 
-```
+```bash
 sudo find /var/www/386387.xyz -type d -exec chmod 755 {} \;
 sudo find /var/www/386387.xyz -type f -exec chmod 644 {} \;
 ```
@@ -330,19 +330,19 @@ sudo find /var/www/386387.xyz -type f -exec chmod 644 {} \;
 
 Disable the default site configuration (we don't need it anymore):
 
-```
+```bash
 sudo nxdissite default
 ```
 
 Create the site configuration file:
 
-```
+```bash
 sudo nano /etc/nginx/sites-available/386387.xyz
 ```
 
 Fill as below:
 
-```
+```nginx
 server {
    listen 80;
    listen [::]:80;
@@ -357,8 +357,6 @@ server {
    server_tokens off;
 }
 ```
-
-Line by line explanation of the configuration file
 
 Line-by-line explanation:
 
@@ -377,16 +375,17 @@ Line-by-line explanation:
 - `}`: End of server block.
 
 #### 2.1.3. Enable the Website
+
 Enable the site and reload Nginx:
 
-```
+```bash
 sudo nxensite 386387.xyz
 sudo systemctl reload nginx
 ```
 
 Test the website (assuming 386387.xyz points to your server's IP):
 
-```
+```http
 http://386387.xyz
 ```
 
@@ -399,7 +398,7 @@ Let's Encrypt certificates are valid for 90 days and must be renewed periodicall
 
 Install Certbot:
 
-```
+```bash
 sudo apt update
 sudo apt install certbot --yes
 ```
@@ -408,7 +407,7 @@ sudo apt install certbot --yes
 
 Obtain certificates with Certbot:
 
-```
+```bash
 sudo certbot certonly -d 386387.xyz,www.386387.xyz --agree-tos --webroot
 ```
 
@@ -425,7 +424,7 @@ Certbot will:
 
 Certificates are installed at:
 
-```
+```text
 Certificate is saved at: /etc/letsencrypt/live/386387.xyz/fullchain.pem
 Key is saved at:         /etc/letsencrypt/live/386387.xyz/privkey.pem
 ```
@@ -434,13 +433,13 @@ Key is saved at:         /etc/letsencrypt/live/386387.xyz/privkey.pem
 
 Create a configuration for the HTTPS site:
 
-```
+```bash
 sudo nano /etc/nginx/sites-available/386387.xyz-ssl
 ```
 
 Fill as below:
 
-```
+```nginx
 server {
    listen 443 ssl;
    listen [::]:443 ssl;
@@ -466,7 +465,7 @@ SSL-specific directives:
 
 Enable the HTTPS configuration and reload Nginx:
 
-```
+```bash
 sudo nxensite 386387.xyz-ssl
 sudo systemctl reload nginx
 ```
@@ -475,13 +474,13 @@ sudo systemctl reload nginx
 
 While our HTTPS site works, users accessing `http://386387.xyz` still reach the plain HTTP site. To redirect all HTTP traffic to HTTPS, modify the HTTP site configuration:
 
-```
+```bash
 sudo nano /etc/nginx/sites-available/386387.xyz
 ```
 
 Update to include redirection rules:
 
-```
+```nginx
 server {
    listen 80;
    listen [::]:80;
@@ -505,7 +504,7 @@ The added rules:
 
 Reload Nginx:
 
-```
+```bash
 sudo systemctl reload nginx
 ```
 
@@ -516,20 +515,20 @@ Certbot automatically renews certificates before they expire, but Nginx continue
 
 Certbot executes all scripts in `/etc/letsencrypt/renewal-hooks/deploy` after successful renewal. Create a script:
 
-```
+```bash
 sudo nano /etc/letsencrypt/renewal-hooks/deploy/reloadnginx.sh
 ```
 
 Fill as below:
 
-```
+```bash
 #!/bin/bash
 systemctl reload nginx
 ```
 
 Make the script executable:
 
-```
+```bash
 sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadnginx.sh
 ```
 
@@ -539,9 +538,8 @@ Now Nginx will automatically reload whenever Certbot renews certificates.
 
 
 ## 3. Adding More Sites to Our Server
-
-
 ---
+
 ### 3.0. Explanations
 
 Nginx can host multiple websites simultaneously. There's no inherent limit to the number of sites you can host, constrained only by your server's CPU and RAM resources.
@@ -558,11 +556,12 @@ We'll add several sites with different configurations:
 These examples will use HTTP only; you can add HTTPS following the steps in section 2.2.
 
 ### 3.1. Local Access Only
+
 This site will only allow access from the server itself, blocking all external IPs. Such configurations are useful for administrative or internal management interfaces.
 
 Create the site directory and set proper permissions:
 
-```
+```bash
 sudo mkdir /var/www/srv1
 sudo touch /var/www/srv1/index.html
 sudo chown -R www-data:www-data /var/www/srv1
@@ -572,13 +571,13 @@ sudo find /var/www/srv1 -type f -exec chmod 644 {} \;
 
 Create the sample HTML content:
 
-```
+```bash
 sudo nano /var/www/srv1/index.html
 ```
 
 Fill as below:
 
-```
+```html
 <html>
 <title>srv1.386387.xyz Test Page</title>
 <body>
@@ -590,11 +589,11 @@ Fill as below:
 
 Create the site configuration:
 
-```
+```bash
 sudo nano /etc/nginx/sites-available/srv1
 ```
 
-```
+```nginx
 server {
    listen 127.0.0.1:80;
    root /var/www/srv1;
@@ -611,23 +610,24 @@ server {
 
 Enable the site and reload Nginx:
 
-```
+```bash
 sudo nxensite srv1
 sudo systemctl reload nginx
 ```
 
 You won't be able to access `http://srv1.386387.xyz` from external systems, but running this command on the server will retrieve the HTML:
 
-```
+```bash
 curl 127.0.0.1
 ```
 
 ### 3.2. Only Accessible by Specific IPs
+
 This site will only be accessible from two specified IP addresses. This configuration is useful for serving content to specific users or locations.
 
 Create the site directory and set permissions:
 
-```
+```bash
 sudo mkdir /var/www/srv2
 sudo touch /var/www/srv2/index.html
 sudo chown -R www-data:www-data /var/www/srv2
@@ -637,13 +637,13 @@ sudo find /var/www/srv2 -type f -exec chmod 644 {} \;
 
 Create the sample HTML content:
 
-```
+```bash
 sudo nano /var/www/srv2/index.html
 ```
 
 Fill as below:
 
-```
+```html
 <html>
 <title>srv2.386387.xyz Test Page</title>
 <body>
@@ -655,13 +655,13 @@ Fill as below:
 
 Create the site configuration with IP restrictions:
 
-```
+```bash
 sudo nano /etc/nginx/sites-available/srv2
 ```
 
 Fill as below:
 
-```
+```nginx
 server {
    listen 80;
    root /var/www/srv2;
@@ -678,7 +678,7 @@ server {
 
 Enable the site and reload Nginx:
 
-```
+```bash
 sudo nxensite srv2
 sudo systemctl reload nginx
 ```
@@ -687,7 +687,7 @@ Only the specified IPs can access `http://srv2.386387.xyz`; others will receive 
 
 You can add more IPs or entire subnets:
 
-```
+```text
       allow 195.174.44.0/24;
 ```
 
@@ -697,7 +697,7 @@ Some applications provide locally-running web servers (e.g., Rspamd). Using Ngin
 
 First, simulate a local web server. Open a terminal and run:
 
-```
+```bash
 mkdir /tmp/test
 echo Test > /tmp/test/index.html
 cd /tmp/test
@@ -706,19 +706,19 @@ python3 -m http.server 8080 --bind 127.0.0.1
 
 This Python server runs locally on port 8080. Test it in another terminal:
 
-```
+```bash
 curl 127.0.0.1:8080
 ```
 
 This Python server runs locally on port 8080. Test it in another terminal:
 
-```
+```bash
 sudo nano /etc/nginx/sites-available/srv3
 ```
 
 Fill as below:
 
-```
+```nginx
 server {
    listen 80;
    server_name srv3.386387.xyz;
@@ -740,7 +740,7 @@ Key proxy directives:
 
 Enable the site and reload Nginx:
 
-```
+```bash
 sudo nxensite srv3
 sudo systemctl reload nginx
 ```
@@ -756,7 +756,7 @@ Nginx serves default error pages, but you can customize them. The most common er
 
 Create the site directory and files:
 
-```
+```bash
 sudo mkdir /var/www/srv4
 sudo touch /var/www/srv4/index.html
 sudo touch /var/www/srv4/404.html
@@ -767,13 +767,13 @@ sudo find /var/www/srv4 -type f -exec chmod 644 {} \;
 
 Create the main page:
 
-```
+```bash
 sudo nano /var/www/srv4/index.html
 ```
 
 Fill as below:
 
-```
+```html
 <html>
 <title>srv4.386387.xyz Test Page</title>
 <body>
@@ -785,13 +785,13 @@ Fill as below:
 
 Create the custom 404 page:
 
-```
+```bash
 sudo nano /var/www/srv4/404.html
 ```
 
 Fill as below:
 
-```
+```html
 <html>
 <title>I cannot find the page</title>
 <body>
@@ -803,13 +803,13 @@ Fill as below:
 
 Create the site configuration with custom error document:
 
-```
+```bash
 sudo nano /etc/nginx/sites-available/srv4
 ```
 
 Fill as below:
 
-```
+```nginx
 server {
    listen 80;
    listen [::]:80;
@@ -831,7 +831,7 @@ The `internal` directive prevents direct access to the error page.
 
 Enable the site and reload Nginx:
 
-```
+```bash
 sudo nxensite srv4
 sudo systemctl reload nginx
 ```
@@ -844,7 +844,7 @@ While web servers typically use ports 80 (HTTP) and 443 (HTTPS), you might need 
 
 Create the site directory and files:
 
-```
+```bash
 sudo mkdir /var/www/srv5
 sudo touch /var/www/srv5/index.html
 sudo chown -R www-data:www-data /var/www/srv5
@@ -854,13 +854,13 @@ sudo find /var/www/srv5 -type f -exec chmod 644 {} \;
 
 Create the sample HTML content:
 
-```
+```bash
 sudo nano /var/www/srv5/index.html
 ```
 
 Fill as below:
 
-```
+```html
 <html>
 <title>srv5.386387.xyz Test Page</title>
 <body>
@@ -872,13 +872,13 @@ Fill as below:
 
 Create the site configuration for port 8080:
 
-```
+```bash
 sudo nano /etc/nginx/sites-available/srv5
 ```
 
 Fill as below:
 
-```
+```nginx
 server {
    listen 8080;
    root /var/www/srv5;
@@ -895,7 +895,7 @@ server {
 
 Enable the site and reload Nginx:
 
-```
+```bash
 sudo nxensite srv5
 sudo systemctl reload nginx
 ```
@@ -908,7 +908,7 @@ For privacy or performance reasons, you might want to disable access logging for
 
 Create the site directory and files:
 
-```
+```bash
 sudo mkdir /var/www/srv6
 sudo touch /var/www/srv6/index.html
 sudo chown -R www-data:www-data /var/www/srv6
@@ -918,13 +918,13 @@ sudo find /var/www/srv6 -type f -exec chmod 644 {} \;
 
 Create the sample HTML content:
 
-```
+```bash
 sudo nano /var/www/srv6/index.html
 ```
 
 Fill as below:
 
-```
+```html
 <html>
 <title>srv6.386387.xyz Test Page</title>
 <body>
@@ -936,13 +936,13 @@ Fill as below:
 
 Create the site configuration without access logs:
 
-```
+```bash
 sudo nano /etc/nginx/sites-available/srv6
 ```
 
 Fill as below:
 
-```
+```nginx
 server {
    listen 80;
    root /var/www/srv6;
@@ -960,7 +960,7 @@ server {
 
 Enable the site and reload Nginx:
 
-```
+```bash
 sudo nxensite srv6
 sudo systemctl reload nginx
 ```
@@ -969,25 +969,23 @@ Access the site at `http://srv6.386387.xyz`. No access logs will be recorded.
 
 To also disable error logging:
 
-```
+```text
    error_log /var/log/nginx/srv6.error.log;
 ```
 
 as
 
-```
+```text
    error_log /dev/null crit;
 ```
 
 <br>
 
 
-<details markdown='1'>
-<summary>
+
 ## 4. LEMP Stack
-
-
 ---
+
 - **L**: Linux (Debian or Ubuntu in our case)
 - **E**: Nginx (pronounced "Engine-X")
 - **M**: MariaDB (or MySQL)
@@ -996,13 +994,14 @@ as
 We'll install MariaDB and PHP, then configure Nginx to work with them.
 
 ### 4.1. Install Mariadb, PHP and Necessary Dependencies.
+
 Install the required packages:
 
 - `php-cli`: PHP command-line interface
 - `php-fpm`: PHP FastCGI Process Manager (required for Nginx)
 - `php-mysql`: PHP extension for MySQL/MariaDB connectivity
 
-```
+```bash
 sudo apt install --yes mariadb-server php-cli php-fpm php-mysql
 ```
 
@@ -1012,13 +1011,13 @@ Let's modify the srv6.386387.xyz site for PHP testing.
 
 Edit the site configuration:
 
-```
+```bash
 sudo nano /etc/nginx/sites-available/srv6
 ```
 
 Update to include PHP processing:
 
-```
+```nginx
 server {
    listen 80;
    root /var/www/srv6;
@@ -1043,7 +1042,7 @@ Key additions:
 
 Reload Nginx:
 
-```
+```bash
 sudo systemctl reload nginx
 ```
  
@@ -1055,13 +1054,13 @@ We'll create a test database, table, and PHP script to retrieve and display data
 
 Connect to MariaDB:
 
-```
+```bash
 sudo mariadb
 ```
 
 Run the following SQL commands:
 
-```
+```sql
 CREATE DATABASE mysampledb;
 USE mysampledb;
 CREATE TABLE Employees (Name char(15), Age int(3), Occupation char(15));
@@ -1073,13 +1072,14 @@ exit
 ```
 
 #### 4.3.2. Create Test PHP Script
-```
+
+```bash
 sudo nano /var/www/srv6/test.php
 ```
 
 Fill as below:
 
-```
+```php
 <?php
    $mycon = new mysqli("localhost", "appuser", "password", "mysampledb");
    if ($mycon->connect_errno)

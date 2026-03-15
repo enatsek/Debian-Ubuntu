@@ -8,7 +8,6 @@ sidebar:
 ##### Web-based database management (PHPMyAdmin alternative)
 
 ## 0. Specs
-
 ---
 
 ### 0.1. The What
@@ -28,12 +27,11 @@ In this configuration, I wanted to bind Adminer to a specific site configuration
 <br>
 
 ## 1. Install Adminer
-
 ---
 
 While it's possible to download the Adminer PHP files directly, I prefer installing the package. This way, all upgrades will be managed by Debian/Ubuntu's package management system.
 
-```
+```bash
 sudo apt update
 sudo apt install adminer --yes
 ```
@@ -41,35 +39,35 @@ sudo apt install adminer --yes
 <br>
 
 ## 2. DB Admin User
-
 ---
+
 We need to create a database admin user to log into Adminer and manage the databases.
 
-```
+```bash
 sudo mariadb
 ```
 
 Run the following in the MariaDB shell:
 
-```
+```sql
 grant all on *.* to 'dbadmin'@'localhost' identified by 'PaSswOrD1234';
 exit;
 ```
 
 <br>
 
-
 ## 3. Prepare a Web Site
-
 ---
+
 ### 3.1. Create a Web Site Config File and Fill it
-```
+
+```bash
 sudo nano /etc/apache2/sites-available/adminer.386387.xyz.conf
 ```
 
 Add the following configuration. If you have more than one IP that needs access to Adminer, add them to the `Require ip` line. If you don't need IP-based access control, remove the entire `<Directory>` section (lines 2-4).
 
-```
+```apache
 <VirtualHost *:80>
     <Directory /usr/share/adminer/adminer>
        Require ip 192.168.1.56
@@ -85,7 +83,7 @@ Add the following configuration. If you have more than one IP that needs access 
 
 ### 3.2. Create the Site Directory and Set Permissions
 
-```
+```bash
 sudo mkdir /var/www/adminer
 sudo chown www-data:www-data /var/www/adminer
 sudo chmod 770 /var/www/adminer
@@ -94,7 +92,8 @@ sudo chmod 770 /var/www/adminer
 You can optionally place an `index.html` file in the home directory, but I prefer leaving it empty and accessing Adminer directly through its subdirectory.
 
 ### 3.3. Enable the Site and Reload Apache
-```
+
+```bash
 sudo a2ensite adminer.386387.xyz.conf
 sudo systemctl reload apache2
 ```
@@ -102,7 +101,6 @@ sudo systemctl reload apache2
 <br>
 
 ## 4. Run Adminer
-
 ---
 
 Your web-based database management tool is now ready:
@@ -119,7 +117,6 @@ Your web-based database management tool is now ready:
 <br>
 
 ## 5. Security
-
 ---
 
 You should enable HTTPS, especially if you plan to expose your site to the internet. HTTPS is also recommended for local network sites for enhanced security.

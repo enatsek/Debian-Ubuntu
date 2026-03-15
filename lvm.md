@@ -8,9 +8,8 @@ sidebar:
 ##### Flexible disk management with LVM
 
 ## 0. Specs
-
-
 ---
+
 ### 0.1. The What
 
 Logical Volume Manager (LVM) is a powerful tool for managing disk storage in Linux. It allows system administrators to create, resize, and manage disk partitions more flexibly than traditional partitioning methods.
@@ -23,7 +22,7 @@ It is also possible to install the OS without LVM and add it later. However, to 
 
 If the OS was installed without LVM, you can install the LVM package as follows:
 
-```
+```bash
 sudo apt update
 sudo apt -y install lvm2
 ```
@@ -38,6 +37,7 @@ Tested on the following distributions:
 - Ubuntu 24.04 LTS Server
 
 ### 0.3. Sources
+
 - [Red Hat Documentation](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/configuring_and_managing_logical_volumes/index)  
 - [Deepseek](https://www.deepseek.com/)
 - [ChatGPT](https://chatgpt.com/)
@@ -46,9 +46,8 @@ Tested on the following distributions:
 
 
 ## 1. Layers of LVM
-
-
 ---
+
 ### 1.0. Abstract
 
 LVM is structured in three layers:
@@ -109,14 +108,13 @@ Stripes data evenly across multiple physical volumes to enhance I/O performance.
 
 
 ## 2. Physical Volume Commands
-
-
 ---
+
 ### 2.1. pvs
 
 Displays physical volume information in a configurable format, showing one line per physical volume.
 
-```
+```bash
 sudo pvs
 sudo pvs /dev/sdb
 ```
@@ -125,8 +123,7 @@ sudo pvs /dev/sdb
 
 Scans all supported LVM block devices for physical volumes.
 
-
-```
+```bash
 sudo pvscan
 ```
 
@@ -136,14 +133,14 @@ Locates and identifies physical volumes on the system and updates the LVM metada
 
 Provides a verbose multi-line output for each physical volume.
 
-```
+```bash
 sudo pvdisplay
 sudo pvdisplay /dev/sdb
 ```
 
 Display a mapping of physical extents to corresponding logical volumes:
 
-```
+```bash
 sudo pvdisplay -m /dev/sdb
 ```
 
@@ -151,7 +148,7 @@ sudo pvdisplay -m /dev/sdb
 
 Initializes a physical volume for use by LVM.
 
-```
+```bash
 sudo pvcreate /dev/sdb
 sudo pvcreate /dev/sdb1
 ```
@@ -164,7 +161,7 @@ After initialization, you can create or extend volume groups using `vgcreate` or
 
 Removes LVM metadata from a physical volume.
 
-```
+```bash
 sudo pvremove /dev/sdb
 sudo pvremove /dev/sdb1
 ```
@@ -179,7 +176,7 @@ Moves allocated physical extents from one physical volume to another within the 
 
 Move all data from `/dev/sda1` to `/dev/sdb1` (both must be in the same VG):
 
-```
+```bash
 sudo pvmove /dev/sda1 /dev/sdb1
 ```
 
@@ -187,7 +184,7 @@ sudo pvmove /dev/sda1 /dev/sdb1
 
 Resizes a physical volume.
 
-```
+```bash
 sudo pvresize /dev/sdb1
 ```
 
@@ -199,13 +196,13 @@ Changes properties (allocatable, UUID, tags, etc.) of a physical volume.
 
 Make `/dev/sdb1` allocatable:
 
-```
+```bash
 sudo pvchange -x y /dev/sdb1
 ```
 
 Deactivate (disable) the physical volume in verbose mode:
 
-```
+```bash
 sudo pvchange -x y /dev/sdb1
 ```
 
@@ -215,23 +212,21 @@ Checks and repairs LVM metadata on physical volumes.
 
 Check a PV:
 
-```
+```bash
 sudo pvck /dev/sdb1
 ```
 
 <br>
 
 
-
 ## 3. Volume Group Commands
-
-
 ---
+
 ### 3.1. vgs
 
 This command provides volume group information in a configurable form, displaying one line per volume group.
 
-```
+```bash
 sudo vgs
 sudo vgs myvg
 ```
@@ -240,7 +235,7 @@ sudo vgs myvg
 
 Scans all supported LVM block devices in the system for volume groups and updates the LVM metadata cache.
 
-```
+```bash
 sudo vgscan
 ```
 
@@ -248,7 +243,7 @@ sudo vgscan
 
 Displays volume group properties such as size, extents, number of physical volumes, and other details in a fixed format.
 
-```
+```bash
 sudo vgdisplay
 sudo vgdisplay myvg
 ```
@@ -259,7 +254,7 @@ Creates a new volume group.
 
 Create a new volume group named `myvg` using the physical volume `/dev/sdb1`:
 
-```
+```bash
 sudo vgcreate myvg /dev/sdb1
 ```
 
@@ -273,7 +268,7 @@ Adds physical volumes to an existing volume group.
 
 Add physical volume `/dev/sdb2` to the volume group `myvg`:
 
-```
+```bash
 sudo vgextend myvg /dev/sdb2
 ```
 
@@ -285,7 +280,7 @@ Removes one or more physical volumes from a volume group.
 
 Remove `/dev/sdb2` from volume group `myvg`:
 
-```
+```bash
 sudo vgreduce myvg /dev/sdb1
 ```
 
@@ -295,7 +290,7 @@ sudo vgreduce myvg /dev/sdb1
 
 Removes a volume group.
 
-```
+```bash
 sudo vgremove myvg
 ```
 
@@ -307,7 +302,7 @@ Changes the attributes of a volume group.
 
 Activate (enable) the volume group `myvg`:
 
-```
+```bash
 sudo vgchange -a y myvg
 ```
 
@@ -317,7 +312,7 @@ sudo vgchange -a y myvg
 
 Renames a volume group.
 
-```
+```bash
 sudo vgrename oldvg newvg
 ```
 
@@ -325,13 +320,13 @@ sudo vgrename oldvg newvg
 
 Checks the consistency of volume group metadata.
 
-```
+```bash
 sudo vgck
 ```
 
 The `--updatemetadata` flag rewrites VG metadata to correct inconsistencies:
 
-```
+```bash
 sudo vgck --updatemetadata myvg -v
 ```
 
@@ -352,14 +347,13 @@ sudo vgck --updatemetadata myvg -v
 
 
 ## 4. Logical Volume Commands
-
-
 ---
+
 ### 4.1. lvs
 
 Provides logical volume information in a configurable form, displaying one line per logical volume.
 
-```
+```bash
 sudo lvs
 sudo lvs /dev/vg_name/lv_name
 sudo lvs /dev/myvg/mylv
@@ -367,7 +361,7 @@ sudo lvs /dev/myvg/mylv
 
 To list all LVs in a specific VG:
 
-```
+```bash
 sudo lvs /dev/vg_name
 sudo lvs /dev/myvg
 ```
@@ -376,7 +370,7 @@ sudo lvs /dev/myvg
 
 Scans for and lists all logical volumes in the system.
 
-```
+```bash
 sudo lvscan
 ```
 
@@ -384,14 +378,14 @@ sudo lvscan
 
 Displays logical volume properties, such as size, layout, and mapping, in a fixed format.
 
-```
+```bash
 sudo lvdisplay
 sudo lvdisplay myvg/mylv
 ```
 
 To display sizes in megabytes:
 
-```
+```bash
 sudo lvdisplay --unit m myvg/mylv
 ```
 
@@ -401,26 +395,26 @@ Creates a new logical volume within a volume group.
 
 Create a new LV named `mylv` in the `myvg` volume group with a size of 11 GB:
 
-```
+```bash
 sudo lvcreate -L 11G -n mylv myvg
 ```
 
 Format the newly created logical volume:
 
-```
+```bash
 sudo mkfs -t ext4 /dev/myvg/mylv
 ```
 
 Mount it:
 
-```
+```bash
 sudo mkdir /mnt/point
 sudo mount /dev/myvg/mylv /mnt/point
 ```
 
 Unmount it:
 
-```
+```bash
 sudo umount /mnt/point
 ```
 
@@ -430,13 +424,13 @@ Extends the size of a logical volume.
 
 Extend the `mylv` logical volume by 2 GB:
 
-```
+```bash
 sudo lvextend -L +2G myvg/mylv
 ```
  
 Resize the filesystem to use the new space:
 
-```
+```bash
 sudo resize2fs /dev/myvg/mylv
 ```
 
@@ -451,13 +445,13 @@ Reduces the size of a logical volume.
 
 Reduce the logical volume mylv in the volume group myvg by 1 GB:
 
-```
+```bash
 sudo lvreduce -L -1G myvg/mylv
 ```
 
 Resize the file system (you may need to unmount the LV)
 
-```
+```bash
 sudo resize2fs /dev/myvg/mylv
 ```
 
@@ -467,7 +461,7 @@ Removes a logical volume.
 
 Remove the logical volume `mylv` in the volume group `myvg`:
 
-```
+```bash
 sudo lvremove myvg/mylv
 ```
 
@@ -480,25 +474,25 @@ Changes the attributes and status of a logical volume, such as activation state 
 
 Deactivate the logical volume `mylv` in the volume group `myvg`:
 
-```
+```bash
 sudo lvchange -a n myvg/mylv
 ```
 
 Activate it:
 
-```
+```bash
 sudo lvchange -a y myvg/mylv
 ```
 
 Set the logical volume to read-only:
 
-```
+```bash
 sudo lvchange -p r myvg/mylv
 ```
 
 Set it back to read/write:
 
-```
+```bash
 sudo lvchange -p rw myvg/mylv
 ```
 
@@ -506,7 +500,7 @@ sudo lvchange -p rw myvg/mylv
 
 Renames a logical volume.
 
-```
+```bash
 sudo lvrename myvg mylv mynewlv2
 ```
 
@@ -520,8 +514,6 @@ sudo lvrename myvg mylv mynewlv2
 
 
 ## 5. Case Study 1 - Installing LVM and Manipulating Disks, PVs, VGs, LVs
-
-
 ---
 
 ### 5.0. Specs
@@ -556,7 +548,7 @@ We have a system installed without LVM.
 
 ### 5.1. Install LVM Packages
 
-```
+```bash
 sudo apt update
 sudo apt -y install lvm2
 ```
@@ -565,7 +557,7 @@ sudo apt -y install lvm2
 
 Output of `lsblk -i` command before adding the disk:
 
-```
+```text
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -579,7 +571,7 @@ I'm adding a 20 GB disk to my VM.
 
 Output of the `lsblk -i` command after adding the disk:
 
-```
+```text
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -594,7 +586,7 @@ This means my new disk is `/dev/sdb`. **In the following steps, change `/dev/sdb
 
 Mark `/dev/sdb` as a Physical Volume:
 
-```
+```bash
 sudo pvcreate /dev/sdb
 ```
 
@@ -602,7 +594,7 @@ sudo pvcreate /dev/sdb
 
 Create a Volume Group named `myvg` using `/dev/sdb`:
 
-```
+```bash
 sudo vgcreate myvg /dev/sdb
 ```
 
@@ -610,7 +602,7 @@ sudo vgcreate myvg /dev/sdb
 
 Create the Logical Volume using the maximum available space and name it `mylv`:
 
-```
+```bash
 sudo lvcreate -l +100%FREE -n mylv myvg
 ```
 
@@ -618,7 +610,7 @@ sudo lvcreate -l +100%FREE -n mylv myvg
 
 Format it as Ext4:
 
-```
+```bash
 sudo mkfs -t ext4 /dev/myvg/mylv
 ```
 
@@ -626,37 +618,37 @@ sudo mkfs -t ext4 /dev/myvg/mylv
 
 Create a mount point:
 
-```
+```bash
 sudo mkdir /mnt/mylv
 ```
 
 Mount `mylv` to the mount point `/mnt/mylv`:
 
-```
+```bash
 sudo mount /dev/myvg/mylv /mnt/mylv
 ```
  
 To make the mount persistent, add it to `/etc/fstab`:
 
-```
+```bash
 sudo nano /etc/fstab
 ```
 
 Add this line to the end of the file:
 
-```
+```text
 /dev/myvg/mylv    /mnt/mylv    ext4    defaults    0 0
 ```
 
 Check with `lsblk`:
 
-```
+```bash
 lsblk -i
 ```
 
 Output:
 
-```
+```text
 NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda           8:0    0 22.9G  0 disk 
 |-sda1        8:1    0   22G  0 part /
@@ -668,13 +660,13 @@ sdb           8:16   0   20G  0 disk
 
 Check with `df -h`:
 
-```
+```bash
 df -h
 ```
 
 Output:
 
-```
+```text
 Filesystem             Size  Used Avail Use% Mounted on
 udev                   457M     0  457M   0% /dev
 tmpfs                   97M  544K   96M   1% /run
@@ -689,19 +681,19 @@ tmpfs                   97M     0   97M   0% /run/user/1000
 
 Create a directory for files:
 
-```
+```bash
 sudo mkdir /mnt/mylv/tmp
 ```
 
 Make it writable for everyone:
 
-```
+```bash
 sudo chmod 777 /mnt/mylv/tmp
 ```
 
 Create 3 files of 500 MB each:
 
-```
+```bash
 < /dev/urandom tr -dc "[:space:][:print:]" | head -c500M > /mnt/mylv/tmp/file1
 < /dev/urandom tr -dc "[:space:][:print:]" | head -c500M > /mnt/mylv/tmp/file2
 < /dev/urandom tr -dc "[:space:][:print:]" | head -c500M > /mnt/mylv/tmp/file3
@@ -709,7 +701,7 @@ Create 3 files of 500 MB each:
 
 Check the contents:
 
-```
+```bash
 ls -al /mnt/mylv/tmp
 ```
 
@@ -719,7 +711,7 @@ I'm adding a 30 GB disk to my VM.
 
 Output of `lsblk -i` after adding the disk:
 
-```
+```text
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda           8:0    0 22.9G  0 disk 
@@ -737,7 +729,7 @@ This means my new disk is `/dev/sdc`. **Change `/dev/sdc` to your actual disk de
 
 Mark `/dev/sdc` as a Physical Volume:
 
-```
+```bash
 sudo pvcreate /dev/sdc
 ```
 
@@ -745,7 +737,7 @@ sudo pvcreate /dev/sdc
 
 Add `/dev/sdc` to the Volume Group `myvg`:
 
-```
+```bash
 sudo vgextend myvg /dev/sdc
 ```
 
@@ -753,7 +745,7 @@ sudo vgextend myvg /dev/sdc
 
 Extend the `mylv` Logical Volume to use all available free space:
 
-```
+```bash
 sudo lvextend -l +100%FREE  myvg/mylv
 ```
 
@@ -761,19 +753,19 @@ sudo lvextend -l +100%FREE  myvg/mylv
 
 Resize the filesystem to use the new space:
 
-```
+```bash
 sudo resize2fs /dev/myvg/mylv
 ```
 
 Check the new size with `df -h`:
 
-```
+```bash
 df -h
 ```
 
 Output:
 
-```
+```text
 Filesystem             Size  Used Avail Use% Mounted on
 udev                   457M     0  457M   0% /dev
 tmpfs                   97M  548K   96M   1% /run
@@ -785,13 +777,13 @@ tmpfs                  5.0M     0  5.0M   0% /run/lock
 
 Add another large file:
 
-```
+```bash
 < /dev/urandom tr -dc "[:space:][:print:]" | head -c500M > /mnt/mylv/tmp/file4
 ```
 
 Check the contents:
 
-```
+```bash
 ls -al /mnt/mylv/tmp
 ```
 
@@ -801,7 +793,7 @@ I'm adding a 50 GB disk to my VM.
 
 Output of `lsblk -i` after adding the disk:
 
-```
+```text
 NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda           8:0    0 22.9G  0 disk 
 |-sda1        8:1    0   22G  0 part /
@@ -820,7 +812,7 @@ This means my new disk is `/dev/sdd`. **Change `/dev/sdd` to your actual disk de
 
 Mark `/dev/sdd` as a Physical Volume:
 
-```
+```bash
 sudo pvcreate /dev/sdd
 ```
 
@@ -828,7 +820,7 @@ sudo pvcreate /dev/sdd
 
 Add `/dev/sdd` to the Volume Group `myvg`:
 
-```
+```bash
 sudo vgextend myvg /dev/sdd
 ```
 
@@ -836,13 +828,13 @@ sudo vgextend myvg /dev/sdd
 
 Move data from the 20 GB disk (`sdb`) to the 50 GB disk (`sdd`):
 
-```
+```bash
 sudo pvmove /dev/sdb /dev/sdd
 ```
 
 Move data from the 30 GB disk (`sdc`) to the 50 GB disk (`sdd`):
 
-```
+```bash
 sudo pvmove /dev/sdc /dev/sdd
 ```
 
@@ -852,14 +844,14 @@ sudo pvmove /dev/sdc /dev/sdd
 
 First, remove them from the Volume Group:
 
-```
+```bash
 sudo vgreduce myvg /dev/sdb
 sudo vgreduce myvg /dev/sdc
 ```
 
 Now, remove the Physical Volume metadata from the disks:
 
-```
+```bash
 sudo pvremove /dev/sdb
 sudo pvremove /dev/sdc
 ```
@@ -870,7 +862,7 @@ At this step, we physically remove (or detach) the 20 GB and 30 GB disks from th
 
 Output of `lsblk -i` after removing the disks:
 
-```
+```text
 NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda           8:0    0 22.9G  0 disk 
 |-sda1        8:1    0   22G  0 part /
@@ -884,17 +876,13 @@ As you can see, `/dev/sdd` has become `/dev/sdb`, but this is not a problem. Our
 
 Check the contents to confirm data integrity:
 
-```
+```bash
 ls -al /mnt/mylv/tmp
 ```
 
 <br>
 
-
-
 ## 6. Case Study 2 - LVM and Snapshot
-
-
 ---
 
 A snapshot creates a point-in-time copy of a Logical Volume (LV). When files are changed on the original volume after the snapshot is taken, the original data blocks are preserved in the snapshot space. This allows you to revert to the snapshot state if needed.
@@ -931,7 +919,7 @@ We have a system installed with LVM.
 
 Output of `lsblk -i` command before adding the disk:
 
-```
+```text
 NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda               8:0    0   20G  0 disk 
 |-sda1            8:1    0  487M  0 part /boot
@@ -949,21 +937,21 @@ When installing with LVM, Debian lets you choose the VG name (I chose `myvg`). D
 
 Output of `sudo pvs` before adding the disk:
 
-```
+```text
   PV         VG   Fmt  Attr PSize   PFree
   /dev/sda5  myvg lvm2 a--  <19.52g    0 
 ```
 
 Output of `sudo lvscan` before adding the disk:
 
-```
+```text
   ACTIVE            '/dev/myvg/root' [18.56 GiB] inherit
   ACTIVE            '/dev/myvg/swap_1' [980.00 MiB] inherit
 ```
 
 Output of `df -h` before adding the disk:
 
-```
+```text
 Filesystem             Size  Used Avail Use% Mounted on
 udev                   458M     0  458M   0% /dev
 tmpfs                   97M  544K   96M   1% /run
@@ -980,7 +968,7 @@ I'm adding a 20 GB disk to my VM.
 
 Output of `lsblk -i` after adding the disk:
 
-```
+```text
 NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda               8:0    0   20G  0 disk 
 |-sda1            8:1    0  487M  0 part /boot
@@ -997,7 +985,7 @@ This means my new disk is `/dev/sdb`. **Change `/dev/sdb` to your actual disk de
 
 Mark `/dev/sdb` as a Physical Volume:
 
-```
+```bash
 sudo pvcreate /dev/sdb
 ```
 
@@ -1005,7 +993,7 @@ sudo pvcreate /dev/sdb
 
 Add `/dev/sdb` to the Volume Group `myvg`:
 
-```
+```bash
 sudo vgextend myvg /dev/sdb
 ```
 
@@ -1013,7 +1001,7 @@ sudo vgextend myvg /dev/sdb
 
 Extend the root LV to use all available free space:
 
-```
+```bash
 sudo lvextend -l +100%FREE  myvg/root
 ```
 
@@ -1021,13 +1009,13 @@ sudo lvextend -l +100%FREE  myvg/root
 
 Resize the filesystem to use the new space:
 
-```
+```bash
 sudo resize2fs /dev/myvg/root
 ```
 
 Output of `df -h` after expanding:
 
-```
+```bash
 Filesystem             Size  Used Avail Use% Mounted on
 udev                   458M     0  458M   0% /dev
 tmpfs                   97M  548K   96M   1% /run
@@ -1044,7 +1032,7 @@ I'm adding a 30 GB disk to my VM.
 
 Output of `lsblk -i` command after adding the disk:
 
-```
+```bash
 sda               8:0    0   20G  0 disk 
 |-sda1            8:1    0  487M  0 part /boot
 |-sda2            8:2    0    1K  0 part 
@@ -1062,7 +1050,7 @@ This means my new disk is `/dev/sdc`. **Change `/dev/sdc` to your actual disk de
 
 Mark `/dev/sdc` as a Physical Volume:
 
-```
+```bash
 sudo pvcreate /dev/sdc
 ```
 
@@ -1070,7 +1058,7 @@ sudo pvcreate /dev/sdc
 
 Add `/dev/sdc` to the Volume Group `myvg`:
 
-```
+```bash
 sudo vgextend myvg /dev/sdc
 ```
 
@@ -1080,7 +1068,7 @@ sudo vgextend myvg /dev/sdc
 
 Create a 2 GB snapshot named `mysnapshot` of the `root` LV:
 
-```
+```bash
 sudo lvcreate --type snapshot -n mysnapshot -L 2G --snapshot /dev/myvg/root
 ```
 
@@ -1090,14 +1078,14 @@ sudo lvcreate --type snapshot -n mysnapshot -L 2G --snapshot /dev/myvg/root
 
 To demonstrate the snapshot, we'll make significant changes by installing software:
 
-```
+```bash
 sudo apt update
 sudo apt install -y apache2 mariadb-server
 ```
 
 Check the snapshot status to see if it's tracking changes:
 
-```
+```bash
 sudo lvs -o lv_name,lv_size,origin
 ```
 
@@ -1105,13 +1093,13 @@ sudo lvs -o lv_name,lv_size,origin
 
 Create a temporary mount point:
 
-```
+```bash
 sudo mkdir /mnt/mysnapshot
 ```
 
 Mount the snapshot (read-only is safer for inspection):
 
-```
+```bash
 sudo mount -o ro /dev/myvg/mysnapshot /mnt/mysnapshot
 ```
 
@@ -1119,7 +1107,7 @@ Browse `/mnt/mysnapshot` to see the state of the root filesystem at the time the
 
 Unmount it:
 
-```
+```bash
 sudo umount /mnt/mysnapshot
 ```
 
@@ -1127,7 +1115,7 @@ sudo umount /mnt/mysnapshot
 
 If the snapshot is running low on space (check with `sudo lvs`), extend it to allow more changes to be tracked:
 
-```
+```bash
 sudo lvextend -L+1G /dev/myvg/mysnapshot
 ```
 
@@ -1140,7 +1128,7 @@ Reverting merges the snapshot back into the original volume, restoring it to the
 
 Schedule the merge:
 
-```
+```bash
 sudo lvconvert --merge myvg/mysnapshot
 ```
 
@@ -1148,7 +1136,7 @@ You will see a message like: *"Delayed merge scheduled for activation after next
 
 Reboot the system. The merge will occur during the early boot process:
 
-```
+```bash
 sudo reboot
 ```
 
@@ -1158,8 +1146,6 @@ sudo reboot
 
 
 ## 7. Case Study 3 - Export and Import of LVM
-
-
 ---
 
 It is possible to export and import entire Volume Groups (with their Logical Volumes) between systems. The process involves: unmounting the LVs, deactivating and exporting the VG, moving the physical disks to the new system, then importing, activating, and remounting the VG.
@@ -1191,7 +1177,7 @@ We have two systems installed without LVM: **srva** and **srvb**. We will create
 
 ### 7.1. Install LVM on srva
 
-```
+```bash
 sudo apt update
 sudo apt -y install lvm2
 ```
@@ -1200,7 +1186,7 @@ sudo apt -y install lvm2
 
 Output of `lsblk -i` before adding the disk:
 
-```
+```text
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -1214,7 +1200,7 @@ I'm adding a 20 GB disk to my VM.
 
 Output of `lsblk -i` after adding the disk:
 
-```
+```text
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -1229,7 +1215,7 @@ This means my new disk is `/dev/sdb`. **Change `/dev/sdb` to your actual disk de
 
 Mark `/dev/sdb` as a Physical Volume:
 
-```
+```bash
 sudo pvcreate /dev/sdb
 ```
 
@@ -1237,7 +1223,7 @@ sudo pvcreate /dev/sdb
 
 Create a Volume Group named `myvg` using `/dev/sdb`:
 
-```
+```bash
 sudo vgcreate myvg /dev/sdb
 ```
 
@@ -1245,19 +1231,19 @@ sudo vgcreate myvg /dev/sdb
 
 First LV is 10 GB:
 
-```
+```bash
 sudo lvcreate -L 10G -n mylv1 myvg
 ```
 
 Second LV uses the remaining space (~10 GB):
 
-```
+```bash
 sudo lvcreate -l +100%FREE -n mylv2 myvg
 ```
 
 ### 7.6. Create Filesystems in the LVs
 
-```
+```bash
 sudo mkfs -t ext4 /dev/myvg/mylv1
 sudo mkfs -t ext4 /dev/myvg/mylv2
 ```
@@ -1266,14 +1252,14 @@ sudo mkfs -t ext4 /dev/myvg/mylv2
 
 Create mount points:
 
-```
+```bash
 sudo mkdir /mnt/mylv1
 sudo mkdir /mnt/mylv2
 ```
 
 Mount the LVs:
 
-```
+```bash
 sudo mount /dev/myvg/mylv1 /mnt/mylv1
 sudo mount /dev/myvg/mylv2 /mnt/mylv2
 ```
@@ -1282,14 +1268,14 @@ sudo mount /dev/myvg/mylv2 /mnt/mylv2
 
 Make the mount points writable for everyone (for testing):
 
-```
+```bash
 sudo chmod 777 /mnt/mylv1
 sudo chmod 777 /mnt/mylv2
 ```
 
 Create 2 files of 100 MB for each LV:
 
-```
+```bash
 < /dev/urandom tr -dc "[:space:][:print:]" | head -c100M > /mnt/mylv1/d1f1
 < /dev/urandom tr -dc "[:space:][:print:]" | head -c100M > /mnt/mylv1/d1f2
 < /dev/urandom tr -dc "[:space:][:print:]" | head -c100M > /mnt/mylv2/d2f1
@@ -1298,14 +1284,14 @@ Create 2 files of 100 MB for each LV:
 
 Check the contents:
 
-```
+```bash
 ls -al /mnt/mylv1
 ls -al /mnt/mylv2
 ```
 
 ### 7.9. Unmount Logical Volumes
 
-```
+```bash
 sudo umount /mnt/mylv1
 sudo umount /mnt/mylv2
 ```
@@ -1314,13 +1300,13 @@ sudo umount /mnt/mylv2
 
 Deactivate the entire Volume Group:
 
-```
+```bash
 sudo vgchange -an myvg
 ```
 
 Verify with `pvscan` (it should show the PV as belonging to `myvg` but not active):
 
-```
+```bash
 sudo pvscan
 ```
 
@@ -1328,7 +1314,7 @@ sudo pvscan
 
 Export the Volume Group (this removes it from the system's LVM metadata cache):
 
-```
+```bash
 sudo vgexport myvg
 ```
 
@@ -1336,7 +1322,7 @@ Now you can safely unplug or detach the 20 GB disk from **srva**.
 
 Output of `lsblk -i` after removing the disk from **srva**:
 
-```
+```text
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -1346,7 +1332,7 @@ sda      8:0    0 22.9G  0 disk
 
 ### 7.12. Install LVM on srvb
 
-```
+```bash
 sudo apt update
 sudo apt -y install lvm2
 ```
@@ -1355,7 +1341,7 @@ sudo apt -y install lvm2
 
 Output of `lsblk -i` on **srvb** before adding the disk:
 
-```
+```text
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -1369,7 +1355,7 @@ I'm adding the 20 GB disk to my **srvb** VM.
 
 Output of `lsblk -i` after adding the disk to **srvb**:
 
-```
+```text
 NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
 sda      8:0    0 22.9G  0 disk 
 |-sda1   8:1    0   22G  0 part /
@@ -1383,7 +1369,8 @@ This means the disk is now `/dev/sdb` on **srvb**.
 ### 7.14. Import the Volume Group
 
 Scan for and import the exported Volume Group `myvg`:
-```
+
+```bash
 sudo vgimport myvg
 ```
 
@@ -1391,7 +1378,7 @@ sudo vgimport myvg
 
 Activate the Volume Group and its logical volumes:
 
-```
+```bash
 sudo vgchange -ay myvg
 ```
 
@@ -1399,7 +1386,7 @@ sudo vgchange -ay myvg
 
 Create mount points and mount the LVs:
 
-```
+```bash
 sudo mkdir /mnt/mylv1 /mnt/mylv2
 sudo mount /dev/myvg/mylv1 /mnt/mylv1
 sudo mount /dev/myvg/mylv2 /mnt/mylv2
@@ -1407,7 +1394,7 @@ sudo mount /dev/myvg/mylv2 /mnt/mylv2
 
 Verify the data is intact:
 
-```
+```bash
 ls -al /mnt/mylv1
 ls -al /mnt/mylv2
 ```
@@ -1416,8 +1403,6 @@ ls -al /mnt/mylv2
 
 
 ## 8. Uncovered Subjects
-
-
 ---
 
 The following LVM subjects are not covered in this tutorial:

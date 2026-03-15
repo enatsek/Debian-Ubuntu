@@ -8,8 +8,8 @@ sidebar:
 ##### High-availability load balancing with SSL/TLS and keepalived
 
 ## 0. Specs
-
 ---
+
 ### 0.1. The What
 
 HAProxy is a free, open-source software that acts as a high-availability load balancer and proxy for TCP and HTTP-based applications. It efficiently distributes requests across multiple servers and is widely used by high-traffic websites. HAProxy offers features like SSL termination, caching, and health checking.
@@ -53,12 +53,11 @@ Users will only see the floating IP (`192.168.1.200`) of the Load Balancers and 
 <br>
 
 ## 1. Install and Configure Load Balancers
-
 ---
 
 **Install Keepalived (on srvlb1 and srvlb2)**
 
-```
+```bash
 sudo apt update
 sudo apt install keepalived --yes
 ```
@@ -67,13 +66,13 @@ sudo apt install keepalived --yes
 
 Create a configuration file:
 
-```
+```bash
 sudo nano /etc/keepalived/keepalived.conf
 ```
 
 Fill it with the following content. Remember to replace `enp0s3` with your actual network adapter name.
 
-```
+```text
 global_defs {
 	router_id node1
 }
@@ -93,13 +92,13 @@ vrrp_instance VI_1 {
 
 Create a configuration file:
 
-```
+```bash
 sudo nano /etc/keepalived/keepalived.conf
 ```
 
 Fill it with the following content. Again, remember to replace `enp0s3` with your network adapter name.
 
-```
+```text
 global_defs {
 	router_id node2
 }
@@ -117,39 +116,38 @@ vrrp_instance VI_1 {
 
 **Start Keepalived on Both Load Balancers (srvlb1 and srvlb2)**
 
-```
+```bash
 sudo systemctl start keepalived
 ```
 
 You can check the status of Keepalived with:
 
-```
+```bash
 sudo systemctl status -l keepalived
 ```
 
 **Install HAProxy on Both Load Balancers (srvlb1 and srvlb2)**
 
-```
+```bash
 sudo apt install haproxy --yes
 ```
 
 Stop the service for now; we will restart it after configuration:
 
-```
+```bash
 sudo systemctl stop haproxy
 ```
 
 <br>
 
 ## 2. Install and Configure Application/Web Servers
-
 ---
 
 ### 2.1. Install and Configure Apache
 
 Install Apache, MariaDB, and Galera Cluster on all App/Web servers (srvaw1, srvaw2, and srvaw3):
 
-```
+```bash
 sudo apt update
 sudo apt install apache2 mariadb-server galera-4 --yes
 ```
@@ -158,14 +156,14 @@ Create a default web page for each server. For testing purposes, we'll include t
 
 Delete the original file and create a new one on each server (srvaw1, srvaw2, and srvaw3):
 
-```
+```bash
 sudo rm /var/www/html/index.html
 sudo nano /var/www/html/index.html
 ```
 
 **For srvaw1:**
 
-```
+```html
 <html>
 <title>SrvAW1</title>
 <body>
@@ -177,7 +175,7 @@ sudo nano /var/www/html/index.html
 
 **For srvaw2:**
 
-```
+```html
 <html>
 <title>SrvAW2</title>
 <body>
@@ -189,7 +187,7 @@ sudo nano /var/www/html/index.html
 
 **For srvaw3:**
 
-```
+```html
 <html>
 <title>SrvAW3</title>
 <body>
@@ -201,13 +199,11 @@ sudo nano /var/www/html/index.html
 
 **Apache Configuration for Logs**
 
-**Apache Configuration for Logs**
-
 Since web access is forwarded through the load balancer, the App/Web servers will see the Load Balancer's IP as the client IP. As a result, all access and error logs will show the LB's IP instead of the real client IP. To log the correct client IPs, some configuration is required.
 
 Enable the Apache2 `remoteip` module on all App/Web servers (srvaw1, srvaw2, and srvaw3):
 
-```
+```bash
 sudo a2enmod remoteip
 ```
 
@@ -215,13 +211,13 @@ Configure Apache to use the `X-Forwarded-For` header (added by the load balancer
 
 Edit the Apache configuration file on all app/web servers (srvaw1, srvaw2, and srvaw3):
 
-```
+```bash
 sudo nano /etc/apache2/apache2.conf
 ```
 
 Around line 212, add the first two lines and modify the next two lines as shown below. Remember to use your LB IPs.
 
-```
+```apache
 RemoteIPHeader X-Forwarded-For
 RemoteIPInternalProxy 192.168.1.201 192.168.1.202
 LogFormat "%v:%p %a %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" vhost_combined
@@ -230,7 +226,7 @@ LogFormat "%a %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" combine
 
 Restart Apache on all app/web servers (srvaw1, srvaw2, and srvaw3):
 
-```
+```bash
 sudo systemctl restart apache2
 ```
 
@@ -240,7 +236,7 @@ sudo systemctl restart apache2
 
 Run the security script to apply basic security settings to MariaDB (srvaw1, srvaw2, and srvaw3):
 
-```
+```bash
 sudo mariadb-secure-installation
 ```
 
@@ -260,13 +256,14 @@ You will be asked a series of questions. Here are recommended answers:
 **Create a MariaDB User for Remote Access**
 
 Create a user for testing from your workstation. Remember to use your LB IPs and a secure password. Run this on all App/Web servers (srvaw1, srvaw2, and srvaw3):
-```
+
+```bash
 sudo mariadb
 ```
 
 In the MariaDB shell, execute:
 
-```
+```sql
 GRANT ALL ON *.* TO 'admin'@'192.168.1.201' IDENTIFIED BY 'Password12';
 GRANT ALL ON *.* TO 'admin'@'192.168.1.202' IDENTIFIED BY 'Password12';
 FLUSH PRIVILEGES;
@@ -277,7 +274,7 @@ EXIT;
 
 Temporarily stop MariaDB on all app/web servers before configuration (srvaw1, srvaw2, and srvaw3):
 
-```
+```bash
 sudo systemctl stop mariadb
 ```
 
@@ -285,31 +282,31 @@ Configure MariaDB to listen on all interfaces. This is necessary for the cluster
 
 Edit the configuration file on all app/web servers (srvaw1, srvaw2, and srvaw3):
 
-```
+```bash
 sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
 ```
 
 Find the following line (around lines 27-30):
 
-```
+```ini
 bind-address = 127.0.0.1
 ```
 
 Change it to:
 
-```
+```ini
 bind-address = 0.0.0.0
 ```
 
 Create a new configuration file for the cluster on all app/web servers (srvaw1, srvaw2, and srvaw3):
 
-```
+```bash
 sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
 ```
 
 Fill it with the following content, replacing the IP addresses with your own:
 
-```
+```ini
 [galera]
 innodb_autoinc_lock_mode = 2
 wsrep_cluster_name    = "x386_cluster"
@@ -326,7 +323,7 @@ binlog_format = ROW
 
 Initialize the cluster on the first App/Web server (srvaw1):
 
-```
+```bash
 sudo galera_new_cluster
 ```
 
@@ -334,7 +331,7 @@ This command will start MariaDB on this node.
 
 Now start MariaDB on the other nodes (srvaw2 and srvaw3):
 
-```
+```bash
 sudo systemctl start mariadb
 ```
 
@@ -347,13 +344,13 @@ We will configure HAProxy to load balance the three web servers (192.168.1.203, 
 
 **Configure HAProxy on both Load Balancers (srvlb1 and srvlb2):**
 
-```
+```bash
 sudo nano /etc/haproxy/haproxy.cfg
 ```
 
 Add the following configuration to the end of the file:
 
-```
+```text
 # define frontend for apache
 frontend fe_http_80
         # listen to port 80
@@ -374,7 +371,7 @@ backend be_http_80
 
 **Restart HAProxy on both Load Balancers (srvlb1 and srvlb2):**
 
-```
+```bash
 sudo systemctl restart haproxy
 ```
 
@@ -415,8 +412,8 @@ You can now connect to the website at `http://192.168.1.200` from different work
 <br>
 
 ## 4. Configure Mariadb Load Balancing
-
 ---
+
 **Notes:**
 
 Load Balancing an application is similar to load balancing a web server. 
@@ -425,13 +422,13 @@ The key is to identify the TCP/IP port the application uses and configure HAProx
 
 **Configure HAProxy on both Load Balancers (srvlb1 and srvlb2):**
 
-```
+```bash
 sudo nano /etc/haproxy/haproxy.cfg
 ```
 
 Add the following configuration to the end of the file:
 
-```
+```text
 # define frontend for mariadb
 frontend fe_mariadb_3306
         mode            tcp
@@ -452,7 +449,7 @@ backend be_mariadb_3306
 
 We can reload the configuration to apply these changes without interrupting the existing web server load balancing:
 
-```
+```bash
 sudo systemctl reload haproxy
 ```
 
@@ -464,26 +461,26 @@ You can connect from your workstation using the following command.
 
 Use the password you set in section 2.2.
 
-```
+```bash
 mariadb -u admin -p -h 192.168.1.200
 ```
 
 Once connected to the MariaDB shell, you can run the following command to identify which server you are connected to:
 
-```
+```sql
 SHOW VARIABLES LIKE 'hostname';
 ```
 
 <br>
 
 ## 5. More on HAProxy Configuration Options
-
 ---
+
 ### 5.1. Default Configuration File
 
 The default configuration file is `/etc/haproxy/haproxy.cfg`. Its initial contents are similar to the following:
 
-```
+```text
 global
         log /dev/log    local0
         log /dev/log    local1 notice
@@ -555,7 +552,7 @@ This section defines the pool of servers (IPs and ports) to which requests are f
 
 This is a third type of section that combines the `frontend` and `backend` definitions into a single block. It is useful for simpler configurations. Here is a basic example:
 
-```
+```text
 listen myproxy
      bind *:80
      server srv1 192.168.1.181:80
@@ -564,7 +561,6 @@ listen myproxy
 <br>
 
 ## 6. Load Balancing Algorithms
-
 ---
 
 HAProxy supports several load balancing algorithms. Here are the most common ones:
@@ -583,7 +579,7 @@ We used this algorithm for our Apache and MariaDB load balancers. It is a simple
 
 **Example frontend and backend configuration:**
 
-```
+```text
 frontend fe_http_80
         bind *:80
         default_backend    be_http_80
@@ -600,7 +596,7 @@ Weighted Round Robin is similar to the standard Round Robin but allows you to as
 
 **Example configuration where `srv1` and `srv2` handle twice as much traffic as `srv3`:**
 
-```
+```text
 frontend fe_http_80
         bind *:80
         default_backend    be_http_80
@@ -624,7 +620,7 @@ The Leastconn algorithm distribributes traffic to the server with the fewest act
 **Example frontend and backend configuration:**
 
 
-```
+```text
 frontend fe_mariadb_3306
         mode            tcp
         bind *:3306
@@ -639,7 +635,7 @@ backend be_mariadb_3306
 
 With this algorithm, a newly added server might immediately receive all new traffic because it has zero connections. To avoid this, use the `slowstart` parameter followed by a time period:
 
-```
+```text
         server   srv4 192.168.1.232:3306 check slowstart 60s
 ```
 
@@ -649,7 +645,7 @@ Weighted Leastconn is similar to the standard Leastconn algorithm but incorporat
 
 **Example configuration where `srv1` and `srv2` can handle twice as many connections as `srv3`:**
 
-```
+```text
 frontend fe_mariadb_3306
         mode            tcp
         bind *:3306
@@ -668,7 +664,7 @@ This algorithm is highly useful for load balancing static web servers with cachi
 
 **Example frontend and backend configuration:**
 
-```
+```text
 frontend fe_http_80
         bind *:80
         default_backend    be_http_80
@@ -683,7 +679,7 @@ This algorithm can also be used in weighted mode to better utilize faster server
 
 **Example with weights, where `srv1` and `srv2` handle more traffic:**
 
-```
+```text
 frontend fe_http_80
         bind *:80
         default_backend    be_http_80
@@ -700,7 +696,7 @@ This algorithm uses servers sequentially. It directs connections to the first se
 
 **Example configuration where each server handles up to 50 connections:**
 
-```
+```text
 frontend fe_http_80
         bind *:80
         default_backend    be_http_80
@@ -714,7 +710,6 @@ backend be_http_80
 <br>
 
 ## 7. URL Redirection
-
 ---
 
 HAProxy can redirect requests based on the URL path, URL parameters, HTTP headers, or the HTTP host address. This functionality can significantly optimize traffic handling in various scenarios.
@@ -729,13 +724,13 @@ Assume we have three folders on our web servers: `folder1`, `folder2`, and `fold
 
 Edit the HAProxy configuration file on the load balancers:
 
-```
+```bash
 sudo nano /etc/haproxy/haproxy.cfg
 ```
 
 Remove the previously added backend and frontend sections for HTTP and add the following to the end of the file:
 
-```
+```text
 frontend fe_http_80
 	bind *:80
 	acl acl_folder1 path_beg -i /folder1
@@ -764,13 +759,13 @@ backend be_http_80
 To apply the changes, you can restart HAProxy:
 
 
-```
+```bash
 sudo systemctl restart haproxy
 ```
 
 If HAProxy is already active and you want to avoid dropping connections, reload it instead:
 
-```
+```bash
 sudo systemctl reload haproxy
 ```
  
@@ -808,32 +803,38 @@ There are other conditions for matching URL paths. Here is a list:
 **URL Path ACL Examples**
 
 An ACL for an exact info page:
-```
+
+```text
 acl acl_info path -i /info/info.html
 ```
 
 An ACL for JPG and PNG images:
-```
+
+```text
 acl acl_image path_end .jpg .png
 ```
 
 An ACL for image directories:
-```
+
+```text
 acl acl_image2 path_dir -i /images
 ```
 
 An ACL for URL paths longer than 20 characters:
-```
+
+```text
 acl acl_long path_len gt 20
 ```
 
 An ACL for paths containing "cart":
-```
+
+```text
 acl acl_cart path_sub -i cart
 ```
 
 An ACL for images using a regular expression:
-```
+
+```text
 acl acl_image3 path_reg (jpg|jpeg|bmp|gif|png)
 ```
 
@@ -856,7 +857,7 @@ We want to redirect:
 
 A sample frontend configuration would be:
 
-```
+```text
 frontend fe_blocks
 	bind *:80
 	acl acl_block1 url_param(block_number) -i -m str first
@@ -871,6 +872,7 @@ frontend fe_blocks
 The `-i` directive enables case-insensitive matching. The `-m str` directive enables exact string matching for the values provided.
 
 ### 7.3. HTTP Header Redirection
+
 HTTP headers contain information such as `User-Agent`, `Host` (the website address), `Content-Type`, and `Referer`. For a full list, please refer to:  
 [https://en.wikipedia.org/wiki/List_of_HTTP_header_fields](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields)
 
@@ -884,8 +886,7 @@ A `Host` header might look like this:
 
 The following frontend configuration redirects requests from mobile devices to a specific backend based on the `User-Agent` header.
 
-
-```
+```text
 frontend be_http
 	bind *:80
 	acl acl_mobile req.hdr(User-Agent) -i -m reg (android|iphone)
@@ -896,7 +897,6 @@ frontend be_http
 <br>
 
 ## 8. Enabling HTTPS at HAProxy
-
 ---
 
 This section covers enabling HTTPS in HAProxy using free TLS (SSL) certificates from Let's Encrypt, managed by the Certbot tool for automatic renewals every 90 days.
@@ -925,7 +925,7 @@ We start with freshly installed servers.
 
 **Install HAProxy on the Load Balancer (`www.386387.xyz`):**
 
-```
+```bash
 sudo apt update
 sudo apt install haproxy --yes
 sudo systemctl stop haproxy
@@ -933,21 +933,21 @@ sudo systemctl stop haproxy
 
 **Install Apache on the Web Servers (`srv1.386387.xyz` and `srv2.386387.xyz`):**
 
-```
+```bash
 sudo apt update
 sudo apt install apache2 --yes
 ```
 
 **Create a test page on each web server:**
 
-```
+```bash
 sudo rm /var/www/html/index.html
 sudo nano /var/www/html/index.html
 ```
 
 **For `srv1.386387.xyz`:**
 
-```
+```html
 <html>
 <title>SrvAW1</title>
 <body>
@@ -959,7 +959,7 @@ sudo nano /var/www/html/index.html
 
 **For `srv2.386387.xyz`:**
 
-```
+```html
 <html>
 <title>SrvAW1</title>
 <body>
@@ -971,7 +971,7 @@ sudo nano /var/www/html/index.html
 
 ### 8.2. Install and Configure Apache on the Load Balancer (Run on `www.386387.xyz`)
 
-```
+```bash
 sudo apt update
 sudo apt install apache2 --yes
 ```
@@ -980,13 +980,13 @@ Apache might fail to start due to port 80 being occupied by HAProxy. This is exp
 
 **Configure Apache to bind only to the loopback interface:**
 
-```
+```bash
 sudo nano /etc/apache2/ports.conf
 ```
 
 Modify the file to look like this:
 
-```
+```apache
 Listen 127.0.0.1:80
 <IfModule ssl_module>
         Listen 127.0.0.1:443
@@ -998,13 +998,13 @@ Listen 127.0.0.1:80
 
 **Configure the default virtual host:**
 
-```
+```bash
 sudo nano /etc/apache2/sites-available/000-default.conf
 ```
 
 Update the file with your domain(s):
 
-```
+```apache
 <VirtualHost 127.0.0.1:80>
         ServerAdmin webmaster@localhost
         ServerName www.386387.xyz
@@ -1017,13 +1017,13 @@ Update the file with your domain(s):
 
 **Create the Let's Encrypt challenge directory:**
 
-```
+```bash
 sudo mkdir -p /var/www/html/.well-known/acme-challenge
 ```
 
 **Restart Apache:**
 
-```
+```bash
 sudo systemctl restart apache2
 ```
 
@@ -1031,13 +1031,13 @@ sudo systemctl restart apache2
 
 Edit the HAProxy configuration file
 
-```
+```bash
 sudo nano /etc/haproxy/haproxy.cfg
 ```
 
 Add the following to the end of the file. Replace the IP address in the `bind` directive with your Load Balancer's public IP (find it using `ip a`).
 
-```
+```text
 frontend fe_http
         bind 159.203.70.143:80
         acl acl_acme path_beg -i /.well-known/acme-challenge
@@ -1048,7 +1048,7 @@ backend be_acme
 
 **Restart HAProxy:**
 
-```
+```bash
 sudo systemctl restart haproxy
 ```
 
@@ -1056,14 +1056,14 @@ sudo systemctl restart haproxy
 
 **Install Certbot:**
 
-```
+```bash
 sudo apt update
 sudo apt install --yes  certbot
 ```
 
 **Generate certificates using the webroot plugin. Replace the domains with your own:**
 
-```
+```bash
 sudo certbot certonly --webroot --webroot-path /var/www/html \
    -d www.386387.xyz,386387.xyz
 ```
@@ -1074,13 +1074,13 @@ Let's Encrypt certificates are stored in `/etc/letsencrypt/live/`. Your director
 
 **Find your certificate directory:**
 
-```
+```bash
 sudo ls -al /etc/letsencrypt/live
 ```
 
 HAProxy requires the certificate and private key to be in a single file. Replace `www.386387.xyz` with your actual domain name from the command above.
 
-```
+```bash
 sudo -i
 cd /etc/letsencrypt/live/www.386387.xyz
 cat fullchain.pem privkey.pem >> haproxy.pem
@@ -1091,14 +1091,13 @@ exit
 
 We will now update the HAProxy configuration to handle HTTPS traffic and load balance the backend servers.
 
-```
+```bash
 sudo nano /etc/haproxy/haproxy.cfg
 ```
 
 Replace the configuration at the end of the file with the following:
-
  
-```
+```text
 frontend fe_http
         bind 159.203.70.143:80
         bind 159.203.70.143:443 ssl crt /etc/letsencrypt/live/www.386387.xyz/haproxy.pem
@@ -1116,7 +1115,7 @@ backend be_http
 
 **Restart HAProxy:**
 
-```
+```bash
 sudo systemctl restart haproxy
 ```
 
@@ -1126,7 +1125,7 @@ HTTPS is now active, but we will add further refinements.
 
 Let's Encrypt certificates are valid for 90 days. Certbot can automatically renew them. Test the renewal process with a dry run:
 
-```
+```bash
 sudo certbot renew --dry-run
 ```
 
@@ -1138,13 +1137,13 @@ Certbot executes scripts in `/etc/letsencrypt/renewal-hooks/deploy/` after a suc
 
 **Create the hook script:**
 
-```
+```bash
 sudo nano /etc/letsencrypt/renewal-hooks/deploy/haproxy.sh
 ```
 
 Add the following content, replacing the domain name with yours:
 
-```
+```bash
 cat /etc/letsencrypt/live/www.386387.xyz/fullchain.pem /etc/letsencrypt/live/www.386387.xyz/privkey.pem \
   >> /etc/letsencrypt/live/www.386387.xyz/haproxy.pem
 systemctl restart haproxy
@@ -1152,7 +1151,7 @@ systemctl restart haproxy
 
 **Make the script executable:**
 
-```
+```bash
 sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/haproxy.sh
 ```
 
@@ -1166,20 +1165,20 @@ For enhanced security, especially if your web servers are internet-accessible, w
 
 **Enable the Apache SSL module:**
 
-```
+```bash
 sudo a2enmod ssl
 sudo systemctl restart apache2
 ```
 
 **Create a directory for certificates:**
 
-```
+```bash
 sudo mkdir /etc/apache2/certs
 ```
 
 **Generate a self-signed certificate (valid for ~20 years):**
 
-```
+```bash
 sudo openssl req -x509 -nodes -days 7300 -newkey rsa:2048 \
 -keyout /etc/apache2/certs/www.386387.xyz.key -out /etc/apache2/certs/www.386387.xyz.crt
 ```
@@ -1188,13 +1187,13 @@ Fill in the prompts appropriately when asked.
 
 **Create a new virtual host configuration for SSL:**
 
-```
+```bash
 sudo nano /etc/apache2/sites-available/000-virtual-ssl.conf
 ```
 
 Add the following configuration:
 
-```
+```apache
 <IfModule mod_ssl.c>
     <VirtualHost *:443>
         ServerName www.386387.xyz
@@ -1212,7 +1211,7 @@ Add the following configuration:
 
 **Enable the SSL site and reload Apache:**
 
-```
+```bash
 sudo a2ensite 000-virtual-ssl.conf
 sudo systemctl reload apache2
 ```
@@ -1221,14 +1220,14 @@ The web servers are now ready for HTTPS connections. The next step is to configu
 
 ### 8.10. Configure HAProxy for Backend HTTPS (TLS Re-Encryption) (Run on `www.386387.xyz`)
 
-```
+```bash
 sudo nano /etc/haproxy/haproxy.cfg
 ```
 
 Locate the `backend be_http` section and modify the `server` lines to use port 443 and the `ssl` and `verify none` parameters (since we are using self-signed certificates):
 
 
-```
+```text
 backend be_http
         balance  roundrobin
         server   srv1 64.225.29.174:443 check ssl verify none
@@ -1237,7 +1236,7 @@ backend be_http
 
 **Restart HAProxy:**
 
-```
+```bash
 sudo systemctl restart haproxy
 ```
 
@@ -1247,19 +1246,19 @@ To ensure all traffic uses encryption, we can force HTTP requests to redirect to
 
 Edit the HAProxy configuration:
 
-```
+```bash
 sudo nano /etc/haproxy/haproxy.cfg
 ```
 
 In the `frontend fe_http` section, add the following `redirect` rule after the `bind` lines:
 
-```
+```text
         redirect scheme https if !{ ssl_fc }
 ```
 
 The updated frontend section should look like this:
 
-```
+```text
 frontend fe_http
         bind 159.203.70.143:80
         bind 159.203.70.143:443 ssl crt /etc/letsencrypt/live/www.386387.xyz/haproxy.pem
@@ -1272,7 +1271,7 @@ frontend fe_http
 
 **Restart HAProxy:**
 
-```
+```bash
 sudo systemctl restart haproxy
 ```
 
@@ -1282,13 +1281,13 @@ For applications that require session persistence (e.g., when users are logged i
 
 Edit the HAProxy configuration:
 
-```
+```bash
 sudo nano /etc/haproxy/haproxy.cfg
 ```
 
 Modify the `backend be_http` section to include cookie-based persistence:
 
-```
+```text
 backend be_acme
         server self 127.0.0.1:80 check
 backend be_http
@@ -1300,7 +1299,7 @@ backend be_http
 
 **Restart HAProxy:**
 
-```
+```bash
 sudo systemctl restart haproxy
 ```
 
@@ -1308,7 +1307,7 @@ sudo systemctl restart haproxy
 
 The final `/etc/haproxy/haproxy.cfg` file should look similar to this:
 
-```
+```text
 global
         log /dev/log    local0
         log /dev/log    local1 notice

@@ -9,8 +9,8 @@ sidebar:
 ##### Installation, configuration, user management, cluster management, backup/restore on Debian
 
 ## 0. Specs
-
 ---
+
 ### 0.1. The What
 
 PostgreSQL is a powerful, open-source relational database management system known for its reliability, feature robustness, and performance. It supports both SQL and non-SQL queries, making it versatile for various applications.
@@ -36,8 +36,8 @@ Debian 13 and Ubuntu 24.04 LTS Server include packages for different PostgreSQL 
 <br>
 
 ## 1. Introduction
-
 ---
+
 ### 1.1. Terminology:
 - **Cluster**: A PostgreSQL Instance. Can contain multiple databases.
 - **Database**: Accessed by authorized users. Can contain schemas (namespaces).
@@ -67,25 +67,25 @@ The Debian `postgresql` package installs `postgresql-client` by default.
 <br>
 
 ## 2. Installation and Basic Management
-
 ---
+
 ### 2.1. Installation
 
 Update package repositories:
 
-```
+```bash
 sudo apt update
 ```
 
 Install PostgreSQL (Debian 13 installs version 17 by default):
 
-```
+```bash
 sudo apt install --yes postgresql
 ```
 
 Check the service status:
 
-```
+```bash
 systemctl status postgresql
 ```
 
@@ -95,13 +95,13 @@ Debian allows running multiple clusters (instances) on a single server.
 
 List clusters on the server:
 
-```
+```bash
 pg_lsclusters
 ```
 
 Sample output:
 
-```
+```text
 Ver Cluster Port Status Owner    Data directory              Log file
 17  main    5432 online postgres /var/lib/postgresql/17/main /var/log/...
 ```
@@ -112,19 +112,19 @@ The "Ver" (Version) and "Cluster" values are important for the `pg_ctlcluster` c
 
 Check the status of a specific cluster:
 
-```
+```bash
 sudo pg_ctlcluster 17 main status
 ```
 
 Start a cluster:
 
-```
+```bash
 sudo pg_ctlcluster 17 main start
 ```
 
 Stop a cluster:
 
-```
+```bash
 sudo pg_ctlcluster 17 main stop
 ```
 
@@ -134,7 +134,7 @@ There are three stop modes:
 - `immediate`: Force immediate shutdown (may cause database corruption)
 
 
-```
+```bash
 sudo pg_ctlcluster 17 main stop -m smart
 sudo pg_ctlcluster 17 main stop -m fast
 sudo pg_ctlcluster 17 main stop -m immediate
@@ -142,7 +142,7 @@ sudo pg_ctlcluster 17 main stop -m immediate
 
 Restart or reload a cluster:
 
-```
+```bash
 sudo pg_ctlcluster 17 main restart
 sudo pg_ctlcluster 17 main reload
 ```
@@ -155,43 +155,43 @@ Currently, we only have the `main` cluster. Let's add a second one named `second
 
 Create another PostgreSQL 17 cluster named `second`:
 
-```
+```bash
 sudo pg_createcluster 17 second
 ```
 
 Start it:
 
-```
+```bash
 sudo pg_ctlcluster 17 second start
 ```
 
 Create a third cluster and start it immediately:
 
-```
+```bash
 sudo pg_createcluster 17 third --start
 ```
 
 Delete (drop) the third cluster:
 
-```
+```bash
 sudo pg_dropcluster 17 third --stop
 ```
 
 Rename the `second` cluster to `secondary`:
 
-```
+```bash
 sudo pg_renamecluster 17 second secondary
 ```
 
 List clusters again:
 
-```
+```bash
 pg_lsclusters
 ```
 
 Sample output:
 
-```
+```text
 Ver Cluster   Port Status Owner    Data directory                   Log file
 17  main      5432 online postgres /var/lib/postgresql/17/main      /var/log/...
 17  secondary 5433 online postgres /var/lib/postgresql/17/secondary /var/log/...
@@ -209,13 +209,13 @@ PostgreSQL and its clusters can also be managed using `systemctl`.
 
 Stop all PostgreSQL clusters:
 
-```
+```bash
 sudo systemctl stop postgresql
 ```
 
 Stop only the `17-main` cluster:
 
-```
+```bash
 sudo systemctl stop postgresql@17-main
 ```
 
@@ -224,7 +224,8 @@ Other `systemctl` commands (`restart`, `enable`, `disable`, `reload`) work simil
 ### 2.5. Login to Postgres shell
 
 After default installation, the `postgres` Linux user can log into the `psql` shell without password authentication:
-```
+
+```bash
 sudo -u postgres psql
 ```
 
@@ -232,14 +233,13 @@ Type `exit` to quit the PostgreSQL shell.
 
 By default, you connect to the `17-main` cluster. To connect to the `17-secondary` cluster:
 
-```
+```bash
 sudo -u postgres psql -p 5433
 ```
 
 <br>
 
 ## 3. User and Connection Management
-
 ---
 
 After installing PostgreSQL, only the `postgres` user can log into the `psql` shell via Linux authentication. No other users are defined, and remote connections are not allowed.
@@ -248,7 +248,7 @@ We'll implement a user management scenario.
 
 ### 3.0. Backup Configuration Files
 
-```
+```bash
 cd /etc/postgresql/17/main/
 sudo cp postgresql.conf postgresql.conf.backup
 sudo cp pg_hba.conf pg_hba.conf.backup
@@ -265,7 +265,7 @@ sudo cp pg_hba.conf pg_hba.conf.backup
 
 Create users with passwords:
 
-```
+```bash
 sudo -u postgres createuser --pwprompt rwuser
 sudo -u postgres createuser --pwprompt rouser
 ```
@@ -274,7 +274,7 @@ sudo -u postgres createuser --pwprompt rouser
 
 Create the database:
 
-```
+```bash
 sudo -u postgres createdb test1
 ```
 
@@ -282,13 +282,13 @@ Create a sample table and populate it with data.
 
 Connect to the `test1` database:
 
-```
+```bash
 sudo -u postgres psql test1
 ```
 
 Run these commands in the `psql` shell:
 
-```
+```sql
 CREATE TABLE Employees (Name char(15), Age int, Occupation char(15));
 INSERT INTO Employees VALUES ('Joe Smith', '26', 'Ninja');
 GRANT ALL ON ALL TABLES IN SCHEMA public to rwuser;
@@ -300,38 +300,38 @@ GRANT SELECT ON ALL TABLES IN SCHEMA public to rouser;
 
 Edit `postgresql.conf` to allow network connections:
 
-```
+```bash
 sudo nano /etc/postgresql/17/main/postgresql.conf
 ```
 
 Uncomment and modify this line (around line 60):
 
-```
+```ini
 #listen_addresses = 'localhost'         # what IP address(es) to listen on;
 ```
 
 Change it to:
 
-```
+```ini
 listen_addresses = '*'                  # what IP address(es) to listen on;
 ```
 
 Edit `pg_hba.conf` to allow `rwuser` and `rouser` to connect from specified IPs/networks:
 
-```
+```bash
 sudo nano /etc/postgresql/17/main/pg_hba.conf
 ```
 
 Add these lines to the file:
 
-```
+```text
 host    test1           rwuser          192.168.1.181/32        scram-sha-256
 host    test1           rouser          192.168.1.0/24              scram-sha-256
 ```
 
 Restart the cluster:
 
-```
+```bash
 sudo pg_ctlcluster restart 17 main
 ```
 
@@ -341,33 +341,33 @@ sudo pg_ctlcluster restart 17 main
 
 Install the PostgreSQL client on the workstation:
 
-```
+```bash
 sudo apt update
 sudo apt install postgresql-client --yes	
 ```
  
 Connect as `rwuser` and test data insertion (should succeed):
 
-```
+```bash
 psql -h 192.168.1.201 -U rwuser test1
 ```
 
 In the `psql` shell:
 
-```
+```sql
 INSERT INTO Employees VALUES ('John Doe', '33', 'Kedi');
 \q
 ```
 
 Connect as `rouser` and test reading/inserting (reading should succeed, inserting should fail):
 
-```
+```bash
 psql -h 192.168.1.201 -U rouser test1
 ```
 
 In the `psql` shell:
 
-```
+```sql
 SELECT * from Employees;
 INSERT INTO Employees VALUES ('Halim Selim', '41', 'Hirsiz');
 \q
@@ -378,7 +378,6 @@ If you try to connect from another workstation in the `192.168.1.0/24` network, 
 <br>
 
 ## 4. Backup and Restore 
-
 ---
 
 You can back up individual databases or entire clusters. When backing up a single database, cluster-wide data like users and roles are not included. Therefore, when restoring a database to another cluster, you must recreate users and permissions.
@@ -391,7 +390,7 @@ We need to use the `postgres` user for backup and restore operations. When using
 
 Back up a database using `pg_dump`:
 
-```
+```bash
 pg_dump dbname > dumpfile
 ```
 
@@ -399,19 +398,19 @@ pg_dump dbname > dumpfile
 
 Change to the `/tmp` directory:
 
-```
+```bash
 cd /tmp
 ```
 
 Back up the `test1` database from the `17-main` cluster:
 
-```
+```bash
 sudo -u postgres pg_dump test1 > /tmp/test1.pg
 ```
 
 Back up the `postgres` database from the `17-secondary` cluster (specify port):
 
-```
+```bash
 sudo -u postgres pg_dump -p 5433 postgres > /tmp/sdb.pg
 ```
 
@@ -419,33 +418,33 @@ sudo -u postgres pg_dump -p 5433 postgres > /tmp/sdb.pg
 
 Restore a database dump using `psql`:
 
-```
+```bash
 psql dbname < dumpfile
 ```
 
 Restore the `test1` database to the `17-main` cluster:
 
-```
+```bash
 sudo -u postgres psql test1 < /tmp/test1.pg
 ```
 
 Restore the `test1` database to the secondary cluster. First, create an empty `test1` database:
 
 
-```
+```bash
 sudo -u postgres createdb -p 5433 test1
 ```
 
 Create `rwuser` and `rouser` on the secondary cluster (specify port 5433):
 
-```
+```bash
 sudo -u postgres createuser -p 5433 --pwprompt rwuser
 sudo -u postgres createuser -p 5433 --pwprompt rouser
 ```
  
 Import the database:
 
-```
+```bash
 sudo -u postgres psql -p 5433 test1 < /tmp/test1.pg
 ```
 
@@ -457,26 +456,26 @@ Back up a cluster using `pg_dumpall` (uses the same connection parameters as `ps
 
 Back up the `17-main` cluster:
 
-```
+```bash
 sudo -u postgres pg_dumpall > /tmp/main.pg
 ```
 
 Restore to the `17-secondary` cluster:
 
-```
+```bash
 sudo -u postgres psql -p 5433 -f /tmp/main.pg
 ```
 
 <br>
 
 ## 5. psql - PostgreSQL Shell
-
 ---
+
 ### 5.1. The Command
 
 The `psql` command opens a PostgreSQL shell. After a fresh installation, only the `postgres` Linux user can connect without authentication:
 
-```
+```bash
 sudo -u postgres psql
 ```
 
@@ -486,26 +485,26 @@ To allow other Linux users to log into `psql`, you would need to create them usi
 
 `psql` has many arguments. If no arguments are provided, it attempts to connect using the current Linux username as both the username and database name. For example, if my username is `exforge`:
 
-```
+```bash
 psql
 ```
 
 I would receive an error:
 
-```
+```text
 psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432"
 failed: FATAL:  role "exforge" does not exist
 ```
 
 Even if I create a role named `exforge`, I would get:
 
-```
+```bash
 psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "exforge" does not exist
 ```
 
 Instead, connect to an existing database:
 
-```
+```bash
 psql postgres
 ```
 
@@ -516,7 +515,7 @@ You can specify:
 
 View all arguments:
 
-```
+```bash
 psql --help
 ```
 
@@ -533,7 +532,6 @@ You can run SQL commands in the `psql` shell, as well as `psql` meta-commands (p
 <br>
 
 ## 6. Bonus: Postgres 17 and Postgres 18 together
-
 ---
 
 For testing purposes, we can install PostgreSQL 18 on the same server, allowing us to run clusters with different versions simultaneously.
@@ -544,47 +542,47 @@ Debian 13 includes PostgreSQL 17 in its repositories. For PostgreSQL 18, we need
 
 Install necessary software:
 
-
-```
+```bash
 sudo apt update
 sudo apt install gpg curl --yes
 ```
 
 Add the repository key:
 
-```
+```bash
 curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
     | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
 ```
 
 Add the Repository:
 
-```
+```bash
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt \
        $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 ```
 
 ### 6.2. Install PostgreSQL 18
-```
+
+```bash
 sudo apt update
 sudo apt install -y postgresql-18
 ```
 
 Create a PostgreSQL 18 clusterÇ
 
-```
+```bash
 sudo pg_createcluster 18 main --start
 ```
 
 ### 6.3. List Clusters
 
-```
+```bash
 pg_lsclusters
 ```
 
 Sample output (now with three clusters):
 
-```
+```text
 Ver Cluster   Port Status Owner    Data directory                   Log file
 17  main      5432 online postgres /var/lib/postgresql/17/main      /var/log/...
 17  secondary 5433 online postgres /var/lib/postgresql/17/secondary /var/log/...
@@ -595,19 +593,19 @@ Ver Cluster   Port Status Owner    Data directory                   Log file
 
 Connect to the first cluster (17-main, port 5432):
 
-```
+```bash
 sudo -u postgres psql -p 5432
 ```
 
 Connect to the second cluster (17-secondary, port 5433):
 
-```
+```bash
 sudo -u postgres psql -p 5433
 ```
 
 Connect to the third cluster (18-main, port 5434):
 
-```
+```bash
 sudo -u postgres psql -p 5434
 ```
 

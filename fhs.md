@@ -9,8 +9,8 @@ sidebar:
 ##### Linux filesystem structure specifications
 
 ## 0. Specs
-
 ---
+
 ### 0.1. Introduction 
 
 The Filesystem Hierarchy Standard (FHS) is a set of guidelines and specifications for organizing the directory structure in Unix-like operating systems.
@@ -138,7 +138,6 @@ The goal of the FHS is to establish a consistent and predictable directory layou
 <br>
 
 ## 1. /bin - Essential Command Binaries
-
 ---
 
 Contains essential command binaries for both system administrators and users. These commands must be available when no other filesystems are mounted (e.g., in single-user mode). It may also contain commands used indirectly by scripts.
@@ -154,7 +153,6 @@ Command binaries that are not essential enough to reside in `/bin` should be pla
 <br>
 
 ## 2. /boot - Static Files of the Boot Loader
-
 ---
 
 Contains all files required for the boot process, except for configuration files not needed at boot time and the map installer. It stores data used before the kernel begins executing user-mode programs, which may include saved master boot sectors and sector map files.
@@ -170,7 +168,6 @@ Contains all files required for the boot process, except for configuration files
 <br>
 
 ## 3. /dev - Device Files
-
 ---
 
 The /dev directory is the location of special or device files.
@@ -186,11 +183,7 @@ The devices in the /dev directory are created dynamically during the boot proces
 <br>
 
 
-
-
-
 ## 4. /etc - Host-specific System Configuration
-
 ---
 
 The `/etc` hierarchy contains configuration files.
@@ -285,7 +278,6 @@ Contains generic configuration files defining high-level parameters of XML syste
 <br>
 
 ## 5. /home - User Home Directories
-
 ---
 
 User home directories are stored here.
@@ -306,7 +298,6 @@ User home directories are stored here.
 <br>
 
 ## 6. /lib - Essential Shared Libraries and Kernel Modules
-
 ---
 
 In Debian 13 and Ubuntu 24.04, `/lib` is a symbolic link to `/usr/lib`.
@@ -326,7 +317,6 @@ Contains shared library images required to boot the system and run commands in `
 <br>
 
 ## 7. /lib* - Alternate format essential shared libraries
-
 ---
 
 Systems supporting multiple binary formats requiring separate libraries may have one or more variants of `/lib`, such as `/lib64`.
@@ -343,7 +333,6 @@ Systems supporting multiple binary formats requiring separate libraries may have
 <br>
 
 ## 8. /media - Mount Point for Removable Media
-
 ---
 
 Contains subdirectories used as mount points for removable media such as floppy disks, CD-ROMs, and ZIP drives.
@@ -362,7 +351,6 @@ Contains subdirectories used as mount points for removable media such as floppy 
 <br>
 
 ## 9. /mnt - Mount Point for Mounting a Filesystem Temporarily
-
 ---
 
 System administrators may temporarily mount filesystems here.
@@ -375,7 +363,6 @@ System administrators may temporarily mount filesystems here.
 <br>
 
 ## 10. /opt - Add-on Application Software Packages
-
 ---
 
 This directory is empty in default Debian 13 and Ubuntu 24.04 installations.
@@ -401,7 +388,6 @@ Reserved for the installation of add-on application software packages. Its purpo
 <br>
 
 ## 11. /root - Home directory for the root user
-
 ---
 
 Recommended home directory for the root user.
@@ -415,7 +401,6 @@ Recommended home directory for the root user.
 <br>
 
 ## 12. /run - Data Relevant to Running Processes
-
 ---
 
 Contains system information describing the system since it was booted.
@@ -434,7 +419,6 @@ Contains system information describing the system since it was booted.
 <br>
 
 ## 13. /sbin - Essential System Binaries
-
 ---
 
 In Debian 13 and Ubuntu 24.04, `/sbin` is a symbolic link to `/usr/sbin`.
@@ -474,7 +458,6 @@ In Debian 13 and Ubuntu 24.04, `/sbin` is a symbolic link to `/usr/sbin`.
 <br>
 
 ## 14. /srv - Data for Services Provided by This System
-
 ---
 
 This directory is empty in default Debian 13 and Ubuntu 24.04 installations.
@@ -489,7 +472,6 @@ This directory is empty in default Debian 13 and Ubuntu 24.04 installations.
 <br>
 
 ## 15. /tmp - Temporary Files
-
 ---
 
 Provides a location for temporary files used by programs and users during their activities.
@@ -503,7 +485,6 @@ Provides a location for temporary files used by programs and users during their 
 <br>
 
 ## 16. /usr - Secondary hierarchy
-
 ---
 
 Stands for "Unix System Resources".
@@ -711,7 +692,6 @@ May contain source code for reference purposes. Source should generally not be b
 <br>
 
 ## 17. /var - Variable Data
-
 ---
 
 Contains variable data files: spool directories, administrative and logging data, and transient/temporary files.
@@ -749,7 +729,6 @@ Contains variable data files: spool directories, administrative and logging data
 <br>
 
 ## 18. Special to Linux
-
 ---
 
 Two additional directory standards specific to Linux:

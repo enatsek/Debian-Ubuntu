@@ -10,10 +10,10 @@ sidebar:
 
 
 ## 0. Specs
-
-
 ---
+
 ### 0.0. The What
+
 Network configuration examples for Debian 12 and 13.
 
 Tried to be as thorough as possible: single NIC, multiple NICs, multiple networks, NIC bonding.
@@ -21,17 +21,18 @@ Tried to be as thorough as possible: single NIC, multiple NICs, multiple network
 Debian and Ubuntu network configurations are very different, so there are separate tutorials for Debian and Ubuntu.
 
 ### 0.1. Configuration Files
+
 Debian 12 & 13 use ifupdown for network configuration.
 
 The main configuration file is `/etc/network/interfaces`. This file includes all files in the `/etc/network/interfaces.d/` directory.
 
 It is good practice to keep `/etc/network/interfaces` as shown below and create a separate configuration file for each NIC in the `/etc/network/interfaces.d/` directory.
 
-```
+```bash
 sudo nano /etc/network/interfaces
 ```
 
-```
+```text
 # This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
 source /etc/network/interfaces.d/*
@@ -42,15 +43,16 @@ iface lo inet loopback
 ```
 
 ### 0.2. Name Server Configuration
+
 The name server configuration file is `/etc/resolv.conf`. It can be as simple as:
 
-```
+```text
 nameserver 192.168.1.1
 ```
 
 Or it may have more detailed configuration:
 
-```
+```text
 # /etc/resolv.conf
 # Primary DNS server
 nameserver 8.8.8.8
@@ -69,27 +71,28 @@ search localdomain
 ```
 
 ### 0.3. Configuration Commands
+
 Stop a NIC:
 
-```
+```bash
 sudo ifdown enp0s3
 ```
 
 Start a NIC:
 
-```
+```bash
 sudo ifup enp0s3
 ```
 
 To restart a NIC, stop it and start it again:
 
-```
+```bash
 sudo ifdown enp0s3 && sudo ifup enp0s3
 ```
 
 Restart networking (restarts all NICs and other networking services):
 
-```
+```bash
 sudo systemctl restart networking
 ```
 
@@ -105,39 +108,40 @@ sudo systemctl restart networking
 
 
 ## 1. Example Configurations
-
-
 ---
+
 ### 1.1. DHCP Configuration
+
 Our NIC is enp0s3.
 
-```
+```bash
 sudo nano /etc/network/interfaces.d/enp0s3
 ```
 
 Fill as below:
 
-```
+```text
 auto enp0s3
 iface enp0s3 inet dhcp
 ```
 
 Restart networking:
 
-```
+```bash
 sudo systemctl restart networking
 ```
 
 ### 1.2. Static IP Configuration
+
 Our NIC is enp0s3.
 
-```
+```bash
 sudo nano /etc/network/interfaces.d/enp0s3
 ```
 
 Fill as below:
 
-```
+```text
 auto enp0s3
 iface enp0s3 inet static
   address 192.168.1.135/24
@@ -146,20 +150,21 @@ iface enp0s3 inet static
   gateway 192.168.1.1
 ```
 
-```
+```bash
 sudo systemctl restart networking
 ```
 
 ### 1.3. Static IP Configuration with 2 IPs
+
 Our NIC is enp0s3.
 
-```
+```bash
 sudo nano /etc/network/interfaces.d/enp0s3
 ```
 
 Fill as below:
 
-```
+```text
 auto enp0s3
 iface enp0s3 inet static
   address 192.168.1.196/24
@@ -170,22 +175,23 @@ iface enp0s3 inet static
   address 10.1.1.1/8
 ```
 
-```
+```bash
 sudo systemctl restart networking
 ```
 
 ### 1.4. Static IP Configuration with 2 NICs
+
 Our NICs are enp0s3 and enp0s8.
 
 First NIC:
 
-```
+```bash
 sudo nano /etc/network/interfaces.d/enp0s3
 ```
 
 Fill as below:
 
-```
+```text
 auto enp0s3
 iface enp0s3 inet static
   address 192.168.1.196/24
@@ -196,13 +202,13 @@ iface enp0s3 inet static
 
 Second NIC:
 
-```
+```bash
 sudo nano /etc/network/interfaces.d/enp0s8
 ```
 
 Fill as below:
 
-```
+```text
 auto enp0s8
 iface enp0s8 inet static
   address 10.1.1.1/8
@@ -212,18 +218,16 @@ iface enp0s8 inet static
 
 Restart networking:
 
-```
+```bash
 sudo systemctl restart networking
 ```
 
 <br>
 
 
-
 ## 2. Case Study - Multiple Networks
-
-
 ---
+
 ### 2.0. Specs
 We have 2 separate networks (192.168.1.X and 10.X.X.X). Some hosts from one network need to reach hosts in the other network.
 
@@ -249,17 +253,18 @@ Then we'll check connectivity between them.
 
 
 ### 2.1. Configuration of the Router
+
 We have 2 NICs (enp0s3 - 192.168.1.X network, and enp0s8 -10.X.X.X network).
 
 Clean the `/etc/network/interfaces` file:
 
-```
+```bash
 sudo nano /etc/network/interfaces
 ```
 
 Set as below:
 
-```
+```text
 source /etc/network/interfaces.d/*
 auto lo
 iface lo inet loopback
@@ -269,14 +274,13 @@ Configure NICs:
 
 **enp0s3 (192.168.1.196/24):**
 
-
-```
+```bash
 sudo nano /etc/network/interfaces.d/enp0s3
 ```
 
 Fill as below:
 
-```
+```text
 auto enp0s3
 iface enp0s3 inet static
   address 192.168.1.196/24
@@ -287,13 +291,13 @@ iface enp0s3 inet static
 
 **enp0s8 (10.1.1.196/8):**
 
-```
+```bash
 sudo nano /etc/network/interfaces.d/enp0s8
 ```
 
 Fill as below:
 
-```
+```text
 auto enp0s8
 iface enp0s8 inet static
   address 10.1.1.196/8
@@ -304,51 +308,52 @@ iface enp0s8 inet static
 
 Restart networking (your SSH connection may break; reconnect if needed):
 
-```
+```bash
 sudo systemctl restart networking
 ```
 
 Enable IP Forwarding:
 
-```
+```bash
 sudo nano /etc/sysctl.conf
 ```
 
 Add the following line to the end:
 
-```
+```ini
 net.ipv4.ip_forward = 1
 ```
 
 Activate:
 
-```
+```bash
 sudo sysctl -p
 ```
 
 Set name server (if not already configured):
 
-```
+```bash
 sudo nano /etc/resolv.conf
 ```
 
-```
+```text
 nameserver 8.8.8.8
 nameserver 8.8.4.4
 ```
 
 ### 2.2. Configuration of the First Host
+
 We have 1 NIC (enp0s3 - 192.168.1.X network).
 
 Clear the `/etc/network/interfaces` file:
 
-```
+```bash
 sudo nano /etc/network/interfaces
 ```
 
 Set as below:
 
-```
+```text
 source /etc/network/interfaces.d/*
 auto lo
 iface lo inet loopback
@@ -358,11 +363,11 @@ Configure NIC:
 
 **enp0s3 (192.168.1.197/24):**
 
-```
+```bash
 sudo nano /etc/network/interfaces.d/enp0s3
 ```
 
-```
+```text
 auto enp0s3
 iface enp0s3 inet static
   address 192.168.1.197/24
@@ -375,13 +380,13 @@ Define route:
 
 Create a script file to add the route when the interface comes up:
 
-```
+```bash
 sudo nano /etc/network/if-up.d/routes
 ```
 
 Fill as below:
 
-```
+```bash
 #!/bin/sh
 if [ "$IFACE" = "enp0s3" ]; then
   ip route del 10.0.0.0/8 via 192.168.1.196 dev enp0s3 
@@ -391,39 +396,40 @@ fi
 
 Make the script executable:
 
-```
+```bash
 sudo chmod 750 /etc/network/if-up.d/routes
 ```
 
 Restart networking (your SSH connection may break; reconnect if needed):
 
-```
+```bash
 sudo systemctl restart networking
 ```
 
 Set name server (if not already configured):
 
-```
+```bash
 sudo nano /etc/resolv.conf
 ```
 
-```
+```text
 nameserver 8.8.8.8
 nameserver 8.8.4.4
 ```
 
 ### 2.3. Configuration of the Second Host
+
 We have 1 NIC (enp0s3 - 10.X.X.X network).
 
 Clear the `/etc/network/interfaces` file:
 
-```
+```bash
 sudo nano /etc/network/interfaces
 ```
 
 Set as below:
 
-```
+```text
 source /etc/network/interfaces.d/*
 auto lo
 iface lo inet loopback
@@ -433,11 +439,11 @@ Configure NIC:
 
 **enp0s3 (10.1.1.198/8):**
 
-```
+```bash
 sudo nano /etc/network/interfaces.d/enp0s3
 ```
 
-```
+```text
 auto enp0s3
 iface enp0s3 inet static
   address 10.1.1.198/8
@@ -450,13 +456,13 @@ Define route:
 
 Create a script file to add the route when the interface comes up:
 
-```
+```bash
 sudo nano /etc/network/if-up.d/routes
 ```
 
 Fill as below:
 
-```
+```bash
 #!/bin/sh
 if [ "$IFACE" = "enp0s3" ]; then
   ip route del 192.168.1.0/24 via 10.1.1.196 dev enp0s3 
@@ -466,39 +472,40 @@ fi
 
 Make the script executable:
 
-```
+```bash
 sudo chmod 750 /etc/network/if-up.d/routes
 ```
 
 Restart networking (your SSH connection may break; reconnect if needed):
 
-```
+```bash
 sudo systemctl restart networking
 ```
 
 Set name servers (if not already configured):
 
-```
+```bash
 sudo nano /etc/resolv.conf
 ```
 
-```
+```text
 nameserver 8.8.8.8
 nameserver 8.8.4.4
 ```
 
 ### 2.4. Notes
+
 The host in the first network can ping the host in the other network now, and vice versa.
 
 Try on the first host (192.168.1.197)
 
-```
+```bash
 ping 10.1.1.198
 ```
 
 Try on the second host (10.1.1.198)
 
-```
+```bash
 ping 192.168.1.197
 ```
 
@@ -509,9 +516,8 @@ For a host to connect to another host on the other network, routing must be defi
 
 
 ## 3. NIC Bonding
-
-
 ---
+
 Network Interface Card (NIC) bonding involves using two or more NICs together to achieve redundancy and/or increased throughput.
 
 The most commonly used bonding modes are:
@@ -527,42 +533,43 @@ The most commonly used bonding modes are:
 All examples below use 2 NICs (enp0s3 and enp0s8) on the same network (192.168.1.X).
 
 ### 3.0. Preliminary Steps
+
 Before configuring bonding of any type, there are some necessary preliminary steps.
 
 To use NIC bonding, the `ifenslave` package must be installed:
 
-```
+```bash
 sudo apt update
 sudo apt -y install ifenslave
 ```
 
 Ensure the bonding kernel module is loaded:
 
-```
+```bash
 sudo modprobe bonding
 ```
 
 Ensure the kernel module loads at startup:
 
-```
+```bash
 sudo nano /etc/modules
 ```
 
 Add to the end of the file (if it doesn't already exist):
 
-```
+```text
 bonding
 ```
 
 Clear the `/etc/network/interfaces` file:
 
-```
+```bash
 sudo nano /etc/network/interfaces
 ```
 
 Set as below:
 
-```
+```text
 source /etc/network/interfaces.d/*
 auto lo
 iface lo inet loopback
@@ -570,26 +577,27 @@ iface lo inet loopback
 
 Set Name Servers (if not already)
 
-```
+```bash
 sudo nano /etc/resolv.conf
 ```
 
-```
+```text
 nameserver 8.8.8.8
 nameserver 8.8.4.4
 ```
 
 
 ### 3.1. Active Backup Bonding
+
 Configure the bond:
 
-```
+```bash
 sudo nano /etc/network/interfaces.d/bond
 ```
 
 Fill as below:
 
-```
+```text
 auto enp0s3
 iface enp0s3 inet manual
     bond-master bond0
@@ -611,24 +619,25 @@ iface bond0 inet static
 
 Restart Networking:
 
-```
+```bash
 sudo systemctl restart networking
 ```
 
 Check the status of the bond
 
-```
+```bash
 sudo cat /proc/net/bonding/bond0
 ```
 
 ### 3.2. Balance-RR Bonding
+
 Configure the bond
 
-```
+```bash
 sudo nano /etc/network/interfaces.d/bond
 ```
 
-```
+```text
 auto enp0s3
 iface enp0s3 inet manual
     bond-master bond0
@@ -649,24 +658,25 @@ iface bond0 inet static
 
 Restart networking:
 
-```
+```bash
 sudo systemctl restart networking
 ```
 
 Check the status of the bond:
 
-```
+```bash
 sudo cat /proc/net/bonding/bond0
 ```
 
 ### 3.3. Balance-XOR Bonding
+
 Configure the bond
 
-```
+```bash
 sudo nano /etc/network/interfaces.d/bond
 ```
 
-```
+```text
 auto enp0s3
 iface enp0s3 inet manual
     bond-master bond0
@@ -687,24 +697,24 @@ iface bond0 inet static
 
 Restart networking:
 
-```
+```bash
 sudo systemctl restart networking
 ```
 
 Check the status of the bond:
 
-```
+```bash
 sudo cat /proc/net/bonding/bond0
 ```
 
 ### 3.4. Broadcast Bonding
 Configure the bond:
 
-```
+```bash
 sudo nano /etc/network/interfaces.d/bond
 ```
 
-```
+```text
 auto enp0s3
 iface enp0s3 inet manual
     bond-master bond0
@@ -725,15 +735,14 @@ iface bond0 inet static
 
 Restart networking:
 
-```
+```bash
 sudo systemctl restart networking
 ```
 
 Check the status of the bond:
 
-```
+```bash
 sudo cat /proc/net/bonding/bond0
 ```
-
 
 

@@ -46,7 +46,7 @@ We will install a single-domain Active Directory infrastructure using Debian or 
 
 - **File Server Shares:**
 
-```
+```ansi
 //filesrv/Xmrk01    mrk01 (RW)
 //filesrv/Xmrk02    mrk02 (RW)
 //filesrv/Xmrk03    mrk03 (RW)
@@ -105,7 +105,8 @@ While there might be ways to use DHCP, it is not recommended for Domain Controll
 The hostname must be in the format `name.example.com` (lowercase). Due to an incompatibility between Samba and Debian/Ubuntu (and other Debian-based distributions), you must remove the line starting with `127.0.1.1` (not `127.0.0.1`) from your `/etc/hosts` file and add the server's IP and hostname (both short and FQDN) as shown below.
 
 **Example `/etc/hosts`:**
-```
+
+```text
 127.0.0.1       localhost
 192.168.1.201   srv1.386387.xyz srv1
 ```
@@ -122,13 +123,14 @@ Remember to replace all occurrences of `386387`, `386387.XYZ`, and `386387.xyz` 
 ### 0.4. Sources
 - Based on the valuable documentation at: [Server-World](https://www.server-world.info/en/note?os=Ubuntu_18.04&p=samba&f=4)
 
-<br>
+---
 
 ## 1. Add First Domain Controller
 
 ---
 ### 1.0. Specs
-```
+
+```text
 Domain Name:  386387
 Realm:        386387.XYZ	
 Hostname:     srv1.386387.xyz
@@ -138,26 +140,26 @@ IP:           192.168.1.201
 ### 1.1. Set Hostname
 Set the hostname to the fully qualified domain name (if not done already):
 
-```
+```bash
 sudo hostnamectl hostname srv1.386387.xyz
 ```
 
 Update the /etc/hosts file
 
-```
+```bash
 sudo nano /etc/hosts
 ```
 
 Modify the beginning of the file as follows:
 
-```
+```text
 127.0.0.1       localhost
 192.168.1.201   srv1.386387.xyz srv1 
 ```
 
 ### 1.2. Install required packages
 
-```
+```bash
 sudo apt update
 sudo apt -y install samba krb5-config winbind smbclient 
 ```
@@ -172,13 +174,13 @@ Provide the following answers to the configuration prompts:
 
 Backup the original samba configuration:
 
-```
+```bash
 sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.original 
 ```
 
 Run the domain provisioning tool:
 
-```
+```bash
 sudo samba-tool domain provision
 ```
 
@@ -192,7 +194,7 @@ Provide the following answers:
 
 ### 1.4. Copy Kerberos Config, Stop and Disable Services
 
-```
+```bash
 sudo cp /var/lib/samba/private/krb5.conf /etc/
 sudo systemctl stop smbd nmbd winbind systemd-resolved
 sudo systemctl disable smbd nmbd winbind systemd-resolved
@@ -203,42 +205,45 @@ sudo systemctl unmask samba-ad-dc
 
 ### 1.5. Recreate resolv.conf
 
-```
+```bash
 sudo rm /etc/resolv.conf
 sudo nano /etc/resolv.conf
 ```
 
 Add the following lines:
 
-```
+```text
 domain 386387.xyz
 nameserver 127.0.0.1
 ```
 
 ### 1.6. Start DC Services
-```
+
+```bash
 sudo systemctl start samba-ad-dc
 sudo systemctl enable samba-ad-dc 
 ```
 
 Check the domain functional level:
 
-```
+```bash
 sudo samba-tool domain level show
 ```
 
 Create a test domain user:
 
-```
+```bash
 sudo samba-tool user create exforge
 ```
-<br>
+
+---
 
 ## 2. Add Additional Domain Controller
 
 ---
 ## 2.0. Specs
-```
+
+```text
 Domain Name: 386387
 Realm:       386387.XYZ	
 Hostname:    srv2.386387.xyz
@@ -249,26 +254,26 @@ Original DC: srv1.386387.xyz (192.168.1.201)
 ### 2.1. Set Hostname
 Set hostname as fully qualified (if you haven't done it before)
 
-```
+```bash
 sudo hostnamectl hostname srv2.386387.xyz
 ```
 
 Update the /etc/hosts file
 
-```
+```bash
 sudo nano /etc/hosts
 ```
 
 Modify the beginning of the file as follows:
 
-```
+```text
 127.0.0.1       localhost
 192.168.1.202   srv2.386387.xyz srv2 
 ```
 
 ### 2.2. Install Kerberos and Edit Configuration
 
-```
+```bash
 sudo apt update
 sudo apt -y install krb5-user
 ```
@@ -276,13 +281,14 @@ sudo apt -y install krb5-user
 (Press Enter through all prompts; we will configure manually.)
 
 Edit the Kerberos configuration:
-```
+
+```bash
 sudo nano /etc/krb5.conf 
 ```
 
 Ensure the beginning of the file contains:
 
-```
+```ini
 [libdefaults]
         default_realm = 386387.XYZ
         dns_lookup_realm = false
@@ -292,21 +298,21 @@ Ensure the beginning of the file contains:
 ### 2.3. Stop and disable systemd.resolved
 *This step is typically not necessary for Debian 12/13.*
 
-```
+```bash
 sudo systemctl stop systemd-resolved
 sudo systemctl disable systemd-resolved 
 ```
 
 ### 2.4. Recreate resolv.conf
 
-```
+```bash
 sudo rm /etc/resolv.conf
 sudo nano /etc/resolv.conf
 ```
 
 Add the following lines (pointing to the first DC):
 
-```
+```text
 domain 386387.xyz
 nameserver 192.168.1.201
 ```
@@ -315,13 +321,13 @@ nameserver 192.168.1.201
 
 You will be prompted for the Domain Administrator password (set during provisioning in section 1.3).
 
-```
+```bash
 sudo kinit administrator
 ```
 
 Verify the Kerberos ticket:
 
-```
+```bash
 sudo klist
 ```
 
@@ -329,13 +335,13 @@ sudo klist
 
 Install necessary packages:
 
-```
+```bash
 sudo apt -y install samba winbind smbclient 
 ```
 
 Back up and remove the default Samba config, then join the domain:
 
-```
+```bash
 sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.org 
 sudo samba-tool domain join 386387.XYZ DC -U "srv1\administrator" \
    --dns-backend=SAMBA_INTERNAL 
@@ -343,7 +349,7 @@ sudo samba-tool domain join 386387.XYZ DC -U "srv1\administrator" \
 
 ### 2.7. Stop, Disable Old Services, and Enable Samba AD DC
 
-```
+```bash
 sudo systemctl stop smbd nmbd winbind
 sudo systemctl disable smbd nmbd winbind
 sudo systemctl unmask samba-ad-dc
@@ -355,13 +361,13 @@ sudo systemctl enable samba-ad-dc
 
 Verify authentication locally:
 
-```
+```bash
 sudo smbclient //127.0.0.1/netlogon -U Administrator -c 'ls'
 ```
 
 Check replication status:
 
-```
+```bash
 sudo samba-tool drs showrepl
 ```
 
@@ -379,74 +385,74 @@ sudo samba-tool drs showrepl
 
 View all user-related commands:
 
-```
+```bash
 sudo samba-tool user --help
 ```
 
 List domain users:
 
-```
+```bash
 sudo samba-tool user list
 ```
 
 List users with full Distinguished Name (DN):
 
-```
+```bash
 sudo samba-tool user list --full-dn
 ```
 
 Create a domain user:
 
-```
+```bash
 sudo samba-tool user create ubuntu
 ```
 
 Create a user forced to change password at next login:
 
-```
+```bash
 sudo samba-tool user create ubuntu2 --must-change-at-next-login
 ```
  
 Delete a domain user:
 
-```
+```bash
 sudo samba-tool user delete ubuntu2
 ```
 
 Reset a user's password:
 
-```
+```bash
 sudo samba-tool user setpassword ubuntu
 ```
  
 Set an expiration date for a user account:
 
-```
+```bash
 sudo samba-tool user setexpiry ubuntu --days=7
 ```
 
 Remove expiration from a user account:
 
-```
+```bash
 sudo samba-tool user setexpiry --noexpiry ubuntu
 ```
  
 Disable/Enable a user account:
 
-```
+```bash
 sudo samba-tool user disable ubuntu
 sudo samba-tool user enable ubuntu
 ```
 
 Show user details:
 
-```
+```bash
 sudo samba-tool user show ubuntu
 ```
  
 Edit user details (opens in a text editor):
 
-```
+```bash
 sudo samba-tool user edit ubuntu
 ```
  
@@ -454,51 +460,51 @@ sudo samba-tool user edit ubuntu
 
 View all group-related commands:
 
-```
+```bash
 sudo samba-tool group --help
 ```
 
 List domain groups:
 
-```
+```bash
 sudo samba-tool group list
 ```
 
 List members of a specific group:
 
-```
+```bash
 sudo samba-tool group listmembers "Domain Users"
 ```
  
 Create a new domain group:
 
-```
+```bash
 sudo samba-tool group add TestUsers
 sudo samba-tool group add TestUsers2
 ```
  
 Delete a domain group:
 
-```
+```bash
 sudo samba-tool group delete TestUsers2
 ```
 
 Add/Remove a member to/from a group:
 
-```
+```bash
 sudo samba-tool group addmembers TestUsers ubuntu
 sudo samba-tool group removemembers TestUsers ubuntu
 ```
 
 Show group details:
 
-```
+```bash
 sudo samba-tool group show TestUsers
 ```
 
 Edit group details (opens in a text editor):
 
-```
+```bash
 sudo samba-tool group edit TestUsers
 ```
 
@@ -506,25 +512,25 @@ sudo samba-tool group edit TestUsers
 
 View all computer-related commands:
 
-```
+```bash
 sudo samba-tool computer --help
 ```
 
 List domain computers:
 
-```
+```bash
 sudo samba-tool computer list
 ```
 
 Show computer details:
 
-```
+```bash
 sudo samba-tool computer show srv1
 ```
 
 Edit computer details (opens in a text editor):
 
-```
+```bash
 sudo samba-tool computer edit srv1
 ```
 
@@ -532,77 +538,77 @@ sudo samba-tool computer edit srv1
 
 Check the local AD database for errors:
 
-```
+```bash
 sudo samba-tool dbcheck --help
 ```
 
 Manage delegation:
 
-```
+```bash
 sudo samba-tool delegation --help
 ```
 
 Manage DNS:
 
-```
+```bash
 sudo samba-tool dns --help
 ```
 
 Domain management:
 
-```
+```bash
 sudo samba-tool domain --help
 ```
 
 Manage Directory Replication Services (DRS):
 
-```
+```bash
 sudo samba-tool drs --help
 ```
 
 Forest management:
 
-```
+```bash
 sudo samba-tool forest --help
 ```
 
 Manage Flexible Single Master Operations (FSMO) roles:
 
-```
+```bash
 sudo samba-tool fsmo --help
 ```
 
 Manage Group Policy Objects (GPO):
 
-```
+```bash
 sudo samba-tool gpo --help
 ```
 
 Manage Organizational Units (OU):
 
-```
+```bash
 sudo samba-tool ou --help
 ```
 
 Schema querying and management:
 
-```
+```bash
 sudo samba-tool schema --help
 ```
 
 Sites management:
 
-```
+```bash
 sudo samba-tool sites --help
 ```
 
 Retrieve the time from a server:
 
-```
+```bash
 sudo samba-tool time --help
 ```
 
-<br>
+---
 
 ## 4. Create Users and Groups
 
@@ -611,7 +617,7 @@ sudo samba-tool time --help
 
 Create all users with `Password1` as the default password. Users will be required to change their password at first logon.
 
-```
+```bash
 sudo samba-tool user add mrk01 Password1 --given-name=Mrk --surname=01 \
     --must-change-at-next-login
 sudo samba-tool user add mrk02 Password1 --given-name=Mrk --surname=02 \
@@ -642,7 +648,7 @@ sudo samba-tool user add support Password1 --given-name=Support --surname=User \
 
 ### 4.2. Create Groups
 
-```
+```bash
 sudo samba-tool group add Marketing
 sudo samba-tool group add Sales
 sudo samba-tool group add Production
@@ -652,7 +658,8 @@ sudo samba-tool group add All
 ```
 
 ### 4.3. Add Users to the Corresponding Groups
-```
+
+```bash
 sudo samba-tool group addmembers Marketing mrk01,mrk02,mrk03
 sudo samba-tool group addmembers Sales sls01,sls02,sls03
 sudo samba-tool group addmembers Production prd01,prd02,prd03
@@ -661,7 +668,7 @@ sudo samba-tool group addmembers SysAdmin support
 sudo samba-tool group addmembers All Marketing,Sales,Production,IT,SysAdmin
 ```
 
-<br>
+---
 
 ## 5. Install and Configure the File Server
 
@@ -670,40 +677,41 @@ sudo samba-tool group addmembers All Marketing,Sales,Production,IT,SysAdmin
 
 Set the hostname:
 
-```
+```bash
 sudo hostnamectl hostname filesrv.386387.xyz
 ```
 
 Update `/etc/hosts`:
 
-```
+```bash
 sudo nano /etc/hosts
 ```
 
 Modify the beginning of the file:
 
-```
+```text
 127.0.0.1       localhost
 192.168.1.203   filesrv.386387.xyz filesrv 
 ```
  
 Recreate `/etc/resolv.conf`:
 
-```
+```bash
 sudo rm /etc/resolv.conf
 sudo nano /etc/resolv.conf
 ```
 
 Add:
 
-```
+```text
 domain 386387.xyz
 nameserver 192.168.1.201
 nameserver 192.168.1.202
 ```
 
 ### 5.2. Install necessary packages
-```
+
+```bash
 sudo apt update
 sudo apt -y install winbind libpam-winbind libnss-winbind krb5-config \
    samba-dsdb-modules samba-vfs-modules 
@@ -718,13 +726,13 @@ Provide the following answers if prompted:
 
 #### 5.3.1. Configure Samba
 
-```
+```bash
 sudo nano /etc/samba/smb.conf 
 ```
 
 Add/Modify the following lines in the `[global]` section:
 
-```
+```ini
    workgroup = 386387
    realm = 386387.XYZ
    security = ads
@@ -740,13 +748,13 @@ Add/Modify the following lines in the `[global]` section:
 
 #### 5.3.2. Configure PAM to Create Home Directories
 
-```
+```bash
 sudo nano /etc/pam.d/common-session 
 ```
 
 Add the following line:
 
-```
+```text
 session optional        pam_mkhomedir.so skel=/etc/skel umask=077
 ```
 
@@ -754,19 +762,19 @@ session optional        pam_mkhomedir.so skel=/etc/skel umask=077
 
 Join the server to the domain:
 
-```
+```bash
 sudo net ads join -U Administrator
 ```
 
 Restart the winbind service:
 
-```
+```bash
 sudo systemctl restart winbind
 ```
 
 Verify domain users are visible:
 
-```
+```bash
 sudo wbinfo -u
 ```
 
@@ -776,31 +784,32 @@ sudo wbinfo -u
 
 There will be 24 shares. Create the directory structure:
 
-```
+```bash
 sudo mkdir -p /srv/shares/{Xmrk01,Xmrk02,Xmrk03,XMrk,XMrkPub,Xsls01,Xsls02,Xsls03,XSls,XSlsPub,Xprd01,Xprd02,Xprd03,XPrd,XPrdPub,Xit01,Xit02,Xit03,Xsupport,XIT,XITPub,XSys,XSysPub,XAll}
 ```
 
 Set initial permissions (more specific permissions will be set via Samba):
 
-```
+```bash
 sudo chmod -R 777 /srv/shares
 ```
 
 
 #### 5.5.1. Install Samba
 
-```
+```bash
 sudo apt -y install samba
 ```
  
 #### 5.5.2. Configure samba for AD file server
-```
+
+```bash
 sudo nano /etc/samba/smb.conf
 ```
 
 Add the following lines to the `[global]` section:
 
-```
+```text
    netbios name = filesrv         
    socket options = TCP_NODELAY SO_RCVBUF=16384 SO_SNDBUF=16384         
    idmap uid = 10000-20000         
@@ -819,7 +828,7 @@ Add the following lines to the `[global]` section:
 
 Add the following share definitions to the end of the file. **Remember to replace `386387` with your domain NetBIOS name if different.**
 
-```
+```text
 # Marketing
 [Xmrk01]
    comment = Xmrk01
@@ -1030,11 +1039,12 @@ Add the following share definitions to the end of the file. **Remember to replac
 ```
 
 #### 5.5.3. Restart Samba
-```
+
+```bash
 sudo systemctl restart smbd
 ```
 
-<br>
+---
 
 ## 6. Add Windows Computers to the Domain 
 

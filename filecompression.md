@@ -26,13 +26,13 @@ There are very good tools for them:
 
 Package and compress the contents of a directory (including subdirs):
 
-```
+```bash
 tar -czvf archive.tar.gz /tmp/testdir
 ```
 
 Decompress and unpackage the archive:
 
-```
+```bash
 tar -xzvf archive.tar.gz
 ```
 
@@ -42,19 +42,19 @@ All commands are tested on Debian 12 & 13 and Ubuntu Server 22.04 & 24.04 LTS
 
 Create a temporary test directory
 
-```
+```bash
 mkdir /tmp/testdir
 ```
 
 Create 3 more directories d1, d2, d3
 
-```
+```bash
 mkdir /tmp/testdir/d{1..3}
 ```
 
 Create 3 files at each directory
 
-```
+```bash
 touch /tmp/testdir/d1/f1{1..3}
 touch /tmp/testdir/d2/f2{1..3}
 touch /tmp/testdir/d3/f3{1..3}
@@ -62,7 +62,7 @@ touch /tmp/testdir/d3/f3{1..3}
 
 Fill the files with random data with the given size
 
-```
+```bash
 < /dev/urandom tr -dc "[:space:][:print:]" | head -c1M > /tmp/testdir/d1/f11
 < /dev/urandom tr -dc "[:space:][:print:]" | head -c2M > /tmp/testdir/d1/f12
 < /dev/urandom tr -dc "[:space:][:print:]" | head -c3M > /tmp/testdir/d1/f13
@@ -76,7 +76,7 @@ Fill the files with random data with the given size
 
 Final tree
 
-```
+```text
 ├── d1
 │   ├── f11
 │   ├── f12
@@ -101,13 +101,13 @@ Final tree
 <br>
 
 ## 1. gzip
-
 ---
+
 ### 1.1. Info
 
 Installation (Most probably, it is already installed).
 
-```
+```bash
 sudo apt update
 sudo apt install gzip
 ```
@@ -119,53 +119,53 @@ gzip compresses (and decompresses) only 1 file, it is not used to prepare a pack
 Compress a file  
 (Original file is removed, a new file is created there with .gz extension)
 
-```
+```bash
 gzip /tmp/testdir/d1/f11
 ```
 
 Decompress a file  
 (.gz file is removed, a new file is created there without .gz extension)
 
-```
+```bash
 gzip -d /tmp/testdir/d1/f11.gz
 gunzip /tmp/testdir/d1/f11.gz
 ```
 
 Compress a file, keep the original file
 
-```
+```bash
 gzip -k /tmp/testdir/d1/f11
 ```
 
 Decompress a file, keep the .gz file
 
-```
+```bash
 gzip -kd /tmp/testdir/d1/f11.gz
 ```
 
 Compress all files in a directory  
 (All files are removed, new files are created there with .gz extensions)
 
-```
+```bash
 gzip /tmp/testdir/d1/*
 ```
 
 Decompress all files in a directory
 
-```
+```bash
 gzip -d /tmp/testdir/d1/*
 gunzip /tmp/testdir/d1/*
 ```
 
 Compress all files recursively (including subdirectories)
 
-```
+```bash
 gzip -r /tmp/testdir
 ```
 
 Decompress all files recursively (including subdirectories)
 
-```
+```bash
 gzip -rd /tmp/testdir
 ```
 
@@ -179,13 +179,13 @@ Some useful options:
 <br>
 
 ## 2. bzip2
-
 ---
+
 ### 2.1. Info
 
 Installation (Most probably, it is already installed).
 
-```
+```bash
 sudo apt update
 sudo apt install bzip2
 ```
@@ -199,40 +199,40 @@ Provides higher compression ratios compared to gzip, but may be slower.
 Compress a file  
 (Original file is removed, a new file is created there with .bz2 extension)
 
-```
+```bash
 bzip2 /tmp/testdir/d1/f11
 ```
 
 Decompress a file  
 (.bz2 file is removed, a new file is created there without .bz2 extension)
 
-```
+```bash
 bzip2 -d /tmp/testdir/d1/f11.bz2
 bunzip2 /tmp/testdir/d1/f11.bz2
 ```
 
 Compress a file, keep the original file
 
-```
+```bash
 bzip2 -k /tmp/testdir/d1/f11
 ```
 
 Decompress a file, keep the .bz2 file
 
-```
+```bash
 bzip2 -kd /tmp/testdir/d1/f11.bz2
 ```
 
 Compress all files in a directory  
 (All files are removed, new files are created there with .bz2 extensions)
 
-```
+```bash
 bzip2 /tmp/testdir/d1/*
 ```
 
 Decompress all files in a directory
 
-```
+```bash
 bzip2 -d /tmp/testdir/d1/*
 bunzip2 /tmp/testdir/d1/*
 ```
@@ -246,13 +246,13 @@ Some useful options:
 <br>
 
 ## 3. xz
-
 ---
+
 ### 3.1. Info
 
 Installation (Most probably, it is already installed).
 
-```
+```bash
 sudo apt update
 sudo apt install xz-utils
 ```
@@ -264,40 +264,40 @@ xz compresses (and decompresses) only 1 file, it is not used to prepare  a packa
 Compress a file  
 (Original file is removed, a new file is created there with .xz extension)
 
-```
+```bash
 xz /tmp/testdir/d1/f11
 ```
 
 Decompress a file  
 (.xz file is removed, a new file is created there without .xz extension)
 
-```
+```bash
 xz -d /tmp/testdir/d1/f11.xz
 unxz /tmp/testdir/d1/f11.xz
 ```
 
 Compress a file, keep the original file
 
-```
+```bash
 xz -k /tmp/testdir/d1/f11
 ```
 
 Decompress a file, keep the .xz file
 
-```
+```bash
 xz -kd /tmp/testdir/d1/f11.xz
 ```
 
 Compress all files in a directory  
 (All files are removed, new files are created there with .xz extensions)
 
-```
+```bash
 xz /tmp/testdir/d1/*
 ```
 
 Decompress all files in a directory
 
-```
+```bash
 xz -d /tmp/testdir/d1/*
 unxz /tmp/testdir/d1/*
 ```
@@ -312,13 +312,13 @@ Some useful options:
 <br>
 
 ## 4. tar
-
 ---
+
 #### 4.1. Info
 
 Installation (Most probably, it is already installed)
 
-```
+```bash
 sudo apt update
 sudo apt install tar
 ```
@@ -330,34 +330,34 @@ tar actually is an archiving utility, it is used to package files. It can  packa
 Package and compress (with gzip) the contents of a directory (including subdirectories).  
 Archive file is created in the current directory.
 
-```
+```bash
 tar -czvf archive.tar.gz /tmp/testdir
 ```
 
 Decompress and unpackage the archive  
 Creates the directory structure under current directory
 
-```
+```bash
 tar -xzvf archive.tar.gz
 ```
 
 (package) compress & decompress (unpackage) with bzip2
 
-```
+```bash
 tar -cjvf archive.tar.bz2 /tmp/testdir
 tar -xjvf archive.tar.bz2
 ```
 
 (package) compress & decompress (unpackage) with xz
 
-```
+```bash
 tar -cJvf archive.tar.xz /tmp/testdir
 tar -xJvf archive.tar.xz
 ```
 
 See the contents of an archive
 
-```
+```bash
 tar -tvf archive.tar.gz
 tar -tvf archive.tar.bz2
 tar -tvf archive.tar.xz
@@ -366,7 +366,7 @@ tar -tvf archive.tar.xz
 Extract files to another directory  
 Directory must exist.
 
-```
+```bash
 tar -xzvf archive.tar.gz -C /tmp
 tar -xjvf archive.tar.bz2 -C /tmp
 tar -xJvf archive.tar.xz -C /tmp
@@ -380,31 +380,31 @@ All the conditions apply in 4.2.1., if you skip compression options (-z, -j, -J)
 
 Archive a directory (and subdirectories)
 
-```
+```bash
 tar -cvf archive.tar /tmp/testdir
 ```
 
 List the contents
 
-```
+```bash
 tar -tvf archive.tar
 ```
 
 Unarchive it
 
-```
+```bash
 tar -xvf archive.tar
 ```
 
 Add a file to the archive
 
-```
+```bash
 tar -rvf archive.tar test.txt
 ```
 
 Remove a file from the archive
 
-```
+```bash
 tar -vf archive.tar --delete test.txt
 ```
 
@@ -412,7 +412,7 @@ tar -vf archive.tar --delete test.txt
 
 Tar has tons of options. You can list them all by:
 
-```
+```bash
 tar --help
 ```
 
@@ -437,15 +437,15 @@ Some selected options:
 <br>
 
 ## 5. zip
-
 ---
+
 ### 5.1. Info
 
 Although gzip, bzip2, xz, and tar is more than enough for compression and archiving; sometimes you may need to exchange files with the unlucky people using Wind*ws. zip tool may be helpful then.
 
 Installation
 
-```
+```bash
 sudo apt update
 sudo apt install zip
 ```
@@ -455,44 +455,44 @@ sudo apt install zip
 Compress a file
 (Zip file is created in the current dir, original file stays there)
 
-```
+```bash
 zip f11.zip /tmp/testdir/d1/f11
 ```
 
 Decompress a file
 (Decompress to the current dir by creating the directory structure in zip file, zip file stays where it is).
 
-```
+```bash
 unzip f11.zip
 ```
 
 Compress all the files in a directory
 
-```
+```bash
 zip d1.zip /tmp/testdir/d1/*
 ```
 
 Compress all the files in a directory including subdirectories
 
-```
+```bash
 zip -r test.zip /tmp/testdir/
 ```
 
 Compress and encrypt
 
-```
+```bash
 zip -er test.zip /tmp/testdir/
 ```
 
 List the contents of a zip file
 
-```
+```bash
 unzip -l test.zip
 ```
 
 Add new files to a zip file
 
-```
+```bash
 zip -u d1.zip /tmp/testdir/d2/*
 ```
 

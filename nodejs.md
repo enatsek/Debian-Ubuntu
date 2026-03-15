@@ -8,15 +8,16 @@ sidebar:
 ##### Node.js installation and basic setup
 
 ## 0. Specs
-
 ---
 
 ### 0.0. The What
+
 Node.js is an open-source, cross-platform JavaScript runtime environment that enables JavaScript execution on the server side.
 
 As system administrators, we may not write Node.js applications daily, but we frequently encounter them in various scenarios—whether running web applications, managing microservices, or troubleshooting performance issues.
 
 ### 0.1. Environment
+
 I used Debian and Ubuntu server editions, namely Debian 12 & 13, Ubuntu 22.04 & 24.04 LTS Servers.
 
 ### 0.2. Sources
@@ -26,13 +27,9 @@ I used Debian and Ubuntu server editions, namely Debian 12 & 13, Ubuntu 22.04 & 
 - [Npm.js](https://www.npmjs.com/)
 - [Deepseek](https://www.deepseek.com/)
 
-
-
 <br>
 
-
 ## 1. Installation
-
 ---
 
 Several installation methods exist, but we'll focus on the two most common approaches.
@@ -43,19 +40,19 @@ Installing distribution packages provides a stable but potentially older version
 
 Update package repositories:
 
-```
+```bash
 sudo apt update
 ```
 
 Install Node.js and NPM (Node Package Manager):
 
-```
+```bash
 sudo apt install -y nodejs npm
 ```
 
 Verify installation:
 
-```
+```bash
 node -v 
 npm -v 
 ```
@@ -66,129 +63,125 @@ NVM allows installation of the latest Node.js versions on a per-user basis. This
 
 Install curl (Debian 13 doesn't include it by default):
 
-```
+```bash
 sudo apt update
 sudo apt install -y curl
 ```
 
 Download and install NVM (Node Version Manager):
 
-```
+```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
 ```
 
 Either restart your shell or source the NVM script:
 
-```
+```bash
 \. "$HOME/.nvm/nvm.sh"
 ```
 
 Install the latest Node.js LTS version (22.x as of writing):
 
-```
+```bash
 nvm install 22
 ```
 
 Verify the installation:
 
-```
+```bash
 node -v 
 ```
 
 Check the active Node.js version:
 
-```
+```bash
 nvm current 
 ```
 
 Verify NPM version:
 
-```
+```bash
 npm -v 
 ```
 
 Install another version (e.g., current release 23.x):
 
-```
+```bash
 nvm install 23
 ```
 
 Check current active version:
 
-```
+```bash
 nvm current
 ```
 
 Switch to version 22:
 
-```
+```bash
 nvm use 22
 ```
 
 List installed versions:
 
-```
+```bash
 nvm ls
 ```
 
 Set version 22 as the default:
 
-```
+```bash
 nvm alias default 22
 ```
 
 Remove version 23
 
-```
+```bash
 nvm uninstall 23
 ```
-
-
 
 <br>
 
 
 ## 2. Using Node.js
-
-
 ---
 
 ### 2.1. Running Javascript Programs
 
 Create a simple JavaScript program:
 
-```
+```bash
 nano hello.js
 ```
 
 Fill as below:
 
-```
+```js
 console.log("Hello from Node.js!");
 ```
 
 Execute the program:
 
-```
+```bash
 node hello.js
 ```
 
 Create a more practical example:
 
-```
+```bash
 nano time.js
 ```
 
 Fill as below:
 
-```
+```js
 const now = new Date();
 console.log(`Time now is: ${now.toLocaleString()}`);
 ```
 
 Run the program:
 
-```
+```bash
 node time.js
 ```
 
@@ -198,13 +191,13 @@ You can install/run packages from ```https://www.npmjs.org/```
 
 Run a package without permanently installing. It asks to install, you can say Y.
 
-```
+```bash
 npm exec cowsay "Hello world"
 ```
 
 Install a package locally, we'll use it in a script
 
-```
+```bash
 npm install chalk@4
 ```
 
@@ -212,13 +205,13 @@ Saved to ./node_modules/
 
 Let's use it in a script
 
-```
+```bash
 nano chalktest.js
 ```
 
 Fill as below:
 
-```
+```js
 const chalk = require('chalk');
 
 console.log(chalk.green('Success message'));
@@ -229,37 +222,37 @@ console.log(chalk.yellow('Warning message'));
 
 Run it:
 
-```
+```bash
 node chalktest.js
 ```
 
 Update installed packages:
 
-```
+```bash
 npm update
 ```
 
 List locally installed packages:
 
-```
+```bash
 npm list
 ```
 
 View specific package details:
 
-```
+```bash
 npm list chalk
 ```
 
 Check for outdated packages:
 
-```
+```bash
 npm outdated
 ```
 
 If you want to uninstall a package:
 
-```
+```bash
 npm uninstall chalk
 ```
 

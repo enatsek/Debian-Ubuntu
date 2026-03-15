@@ -9,8 +9,8 @@ sidebar:
 ##### Additional systemd services and tools
 
 ## 0. Specs
-
 ---
+
 ### 0.1. The What
 
 The first Systemd Basics tutorial focused on systemd's init and service management capabilities.
@@ -30,7 +30,6 @@ AI still requires considerable refinement before becoming truly reliable.
 <br>
 
 ## 1. Services
-
 ---
 
 Several important systemd services present in Debian 13 and/or Ubuntu 24.04 Server include:
@@ -50,7 +49,6 @@ Several important systemd services present in Debian 13 and/or Ubuntu 24.04 Serv
 - `systemd-sysusers`
 
 ### 1.1. systemd-journald
-
 Responsible for collecting, storing, and managing log data on Linux systems. It is the default logging system on systems using systemd, including Debian and Ubuntu.
 
 #### 1.1.1. Key Points
@@ -64,12 +62,11 @@ Responsible for collecting, storing, and managing log data on Linux systems. It 
 
 
 #### 1.1.2. Configuration
-
 The configuration file is `/etc/systemd/journald.conf`.
 
 **Example configuration:**
 
-```
+```ini
 # /etc/systemd/journald.conf
 
 [Journal]
@@ -145,7 +142,7 @@ MaxFiles=200
 
 **Activate configuration changes:**
 
-```
+```bash
 sudo systemctl restart systemd-journald
 ```
 
@@ -168,7 +165,7 @@ Configuration file: `/etc/systemd/logind.conf`.
 
 **Example configuration:**
 
-```
+```ini
 # /etc/systemd/logind.conf
 
 [Login]
@@ -247,7 +244,7 @@ HandleLidSwitch=yes
 
 Activate the new conf
 
-```
+```bash
 sudo systemctl restart systemd-logind
 ```
 
@@ -270,7 +267,7 @@ Relies on configuration files (with `.network` extension) in `/etc/systemd/netwo
 
 **Example: DHCP configuration**
 
-```
+```ini
 # /etc/systemd/network/eth0.network
 [Match]
 Name=eth0
@@ -281,7 +278,7 @@ DHCP=yes
 
 **Example: Static IP configuration**
 
-```
+```ini
 # /etc/systemd/network/20-wired.network
 [Match]
 Name=enp0s3
@@ -336,7 +333,7 @@ Configuration file: `/etc/systemd/resolved.conf`.
 
 **Example configuration:**
 
-```
+```ini
 # /etc/systemd/resolved.conf
 [Resolve]
 DNS=8.8.8.8 8.8.4.4
@@ -346,7 +343,7 @@ DNSSEC=yes
 
 **Detailed example configuration:**
 
-```
+```ini
 # /etc/systemd/resolved.conf
 
 [Resolve]
@@ -424,7 +421,7 @@ Configuration file: `/etc/systemd/timesyncd.conf`.
 
 **Example configuration:**
 
-```
+```ini
 # /etc/systemd/timesyncd.conf
 
 [Time]
@@ -452,7 +449,7 @@ Configuration file: `/etc/systemd/timesyncd.conf`.
 
 **Detailed example configuration:**
 
-```
+```ini
 # /etc/systemd/timesyncd.conf
 
 [Time]
@@ -517,7 +514,7 @@ Rules are defined in the `/etc/udev/rules.d/` directory. They can specify action
 
 **Example rule** that runs a script when a USB drive with a specific vendor ID is inserted:
 
-```
+```text
 # /etc/udev/rules.d/80-custom-network.rules
 
 # Rule for a USB drive with vendor ID 1234
@@ -543,7 +540,7 @@ Configuration files are located in `/usr/lib/tmpfiles.d/` (system-provided) and 
 
 **Configuration Format:**
 
-```
+```text
 [Type] Path Mode Age Argument
 ```
 
@@ -555,7 +552,7 @@ Configuration files are located in `/usr/lib/tmpfiles.d/` (system-provided) and 
 
 **Example configuration:**
 
-```
+```text
 # /etc/tmpfiles.d/my_temporary_files.conf
 
 # Create a directory with specific permissions
@@ -580,7 +577,7 @@ D /var/log/my_logs/*.log - - - 7d
 
 **Create a temporary directory at boot:**
 
-```
+```text
 # /etc/tmpfiles.d/my_temp_directory.conf
 
 # Type 'd' indicates creating a directory
@@ -589,7 +586,7 @@ d /var/my_temp_directory 0755 root root -
 
 **Create an empty file:**
 
-```
+```text
 # /etc/tmpfiles.d/my_temp_file.conf
 
 # Type 'f' indicates creating an empty file
@@ -598,7 +595,7 @@ f /var/my_temp_file 0644 root root -
 
 **Remove log files older than 7 days:**
 
-```
+```text
 # /etc/tmpfiles.d/remove_old_logs.conf
 
 # Type 'D' indicates removing files older than a specified age
@@ -607,7 +604,7 @@ D /var/log/my_logs/*.log - - - 7d
 
 **Create a symbolic link:**
 
-```
+```text
 # /etc/tmpfiles.d/create_symlink.conf
 
 # Type 'L' indicates creating a symbolic link
@@ -616,7 +613,7 @@ L /var/my_symlink - /var/my_target_file
 
 **Apply changes:**
 
-```
+```bash
 sudo systemd-tmpfiles --create
 ```
 
@@ -641,7 +638,7 @@ Configuration files are in `/etc/binfmt.d/`. Each file defines rules for handlin
 
 Configuration files follow a simple key-value format. Each rule defines the binary format and specifies the interpreter to use.
 
-```
+```text
 # /etc/binfmt.d/my_format.conf
 #
 :my_format:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x03\x00\x3e\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/my_interpreter:OC
@@ -649,7 +646,7 @@ Configuration files follow a simple key-value format. Each rule defines the bina
 
 **Manage binfmt rules:**
 
-```
+```bash
 # Enable a rule
 sudo systemctl enable binfmt@my_format.service
 
@@ -669,7 +666,7 @@ Configuration files are in `/etc/modules-load.d/`. Each line specifies a module 
 
 **Example:**
 
-```
+```text
 # /etc/modules-load.d/my_modules.conf
 
 # Load the 'vboxdrv' module for VirtualBox
@@ -708,7 +705,7 @@ Key aspects of systemd-remount-fs:
 
 - The /etc/systemd/system.conf file contains settings for the system manager, and it may include parameters related to the root file system's remounting.
 
-```
+```ini
 # /etc/systemd/system.conf snippet:
 [Manager]
 # ...
@@ -739,7 +736,7 @@ The main configuration file is `/etc/sysctl.conf`, but custom settings are best 
 
 **Example configuration:**
 
-```
+```ini
 # /etc/sysctl.d/99-my-custom-settings.conf
 
 # Increase the maximum number of file handles
@@ -754,7 +751,7 @@ net.ipv4.ip_local_port_range=1024 65000
      
 **Apply changes:**
 
-```
+```bash
 sudo sysctl --system
 ```
 
@@ -779,7 +776,7 @@ Attributes such as UID (User ID), GID (Group ID), home directory, shell, and use
 
 **Example configuration:**
 
-```
+```text
 # /etc/sysusers.d/my_users.conf
 
 u johndoe - John Doe:/home/johndoe:/bin/bash
@@ -788,7 +785,7 @@ g mygroup - My Group
 
 **Apply changes:**
 
-```
+```bash
 sudo systemd-sysusers
 ```
 
@@ -804,91 +801,91 @@ Used to control and query the state of the systemd system and service manager. I
 
 **Check the status of a service:**
 
-```
+```bash
 systemctl status apache2
 ```
 
 **Stop a service:**
 
-```
+```bash
 sudo systemctl stop apache2
 ```
 
 **Start a service:**
 
-```
+```bash
 sudo systemctl start apache2
 ```
 
 **Disable a service from starting on boot:**
 
-```
+```bash
 sudo systemctl disable apache2
 ```
 
 **Enable a service to start on boot:**
 
-```
+```bash
 sudo systemctl enable apache2
 ```
 
 **Restart a service:**
 
-```
+```bash
 sudo systemctl restart apache2
 ```
 
 **Reload the configuration of a running service without restarting it:**
 
-```
+```bash
 sudo systemctl reload apache2
 ```
 
 **Show a service's dependencies:**
 
-```
+```bash
 systemctl list-dependencies apache2
 ```
 
 **List all loaded units (services, sockets, targets, etc.):**
 
-```
+```bash
 systemctl list-units
 ```
 
 **List failed units (units that failed to start):**
 
-```
+```bash
 systemctl --failed
 ```
 
 **Display detailed information about a unit, including its configuration:**
 
-```
+```bash
 systemctl show apache2
 ```
 
 **Mask a unit (prevent it from being started):**
 
-```
+```bash
 sudo systemctl mask apache2
 ```
 
 **Unmask a previously masked unit:**
 
-```
+```bash
 sudo systemctl unmask apache2
 ```
 
 **Enter rescue mode for system maintenance:**
 
-```
+```bash
 sudo systemctl rescue
 ```
 
 **Enter emergency mode for critical system recovery:**
 
-```
+```bash
 sudo systemctl emergency
 ```
       
@@ -898,19 +895,19 @@ Provides access to logs generated by the journal facility in the systemd system 
 
 **View the entire journal:**
 
-```
+```bash
 sudo journalctl
 ```
 
 **View logs for a specific systemd unit:**
 
-```
+```bash
 sudo journalctl -u apache2.service
 ```
 
 **Filter by time:**
 
-```
+```bash
 # Show logs from the last 30 minutes
 sudo journalctl --since "30 minutes ago"
 
@@ -920,49 +917,49 @@ sudo journalctl --since "2025-01-01 08:00:00" --until "2025-01-01 12:00:00"
 
 **Follow logs in real time (Ctrl+C to quit):**
 
-```
+```bash
 sudo journalctl -f
 ```
 
 **Display logs for the current boot:**
 
-```
+```bash
 sudo journalctl --boot
 ```
 
 **View kernel messages:**
 
-```
+```bash
 sudo journalctl -k
 ```
 
 **Export journal entries to a file:**
 
-```
+```bash
 sudo journalctl > journal.log
 ```
 
 **Change output format to JSON:**
 
-```
+```bash
 sudo journalctl -o json
 ```
 
 **Filter by priority level** (e.g., emerg, alert, crit, err, warning, notice, info,  debug):
 
-```
+```bash
 sudo journalctl -p err
 ```
 
 **View logs for a specific Process ID:**
 
-```
+```bash
 sudo journalctl _PID=1234
 ```
 
 **Clear the journal (e.g., limit to 50 MB):**
 
-```
+```bash
 sudo journalctl --vacuum-size=50M
 ```
 
@@ -975,31 +972,31 @@ Used to analyze and display information about the system's boot and initializati
 
 **Display basic boot time information:**
 
-```
+```bash
 systemd-analyze
 ```
 
 **Show the chain of units that took the most time during boot:**
 
-```
+```bash
 systemd-analyze critical-chain
 ```
 
 **List time taken by each service during boot (sorted by duration):**
 
-```
+```bash
 systemd-analyze blame
 ```
 
 **Generate an SVG plot of boot time per unit:**
 
-```
+```bash
 systemd-analyze plot > plot.svg
 ```
 
 **Display security-relevant information about the system's boot:**
 
-```
+```bash
 systemd-analyze security
 ```
 
@@ -1009,31 +1006,31 @@ Used for querying and changing the system hostname and related settings. It prov
 
 **Display current hostname and related settings:**
 
-```
+```bash
 hostnamectl
 ```
 
 **Set the static hostname (fully qualified domain name):**
 
-```
+```bash
 sudo hostnamectl hostname your-new-hostname
 ```
 
 **Set the transient hostname (temporary, does not persist after reboot):**
 
-```
+```bash
 sudo hostnamectl hostname --transient your-temporary-hostname
 ```
 
 **Set the pretty hostname (free-form descriptive string):**
 
-```
+```bash
 sudo hostnamectl hostname --pretty "Your Pretty Hostname"
 ```
 
 **Check hostname status:**
 
-```
+```bash
 hostnamectl status
 ```
 
@@ -1044,49 +1041,49 @@ Used for introspecting and interacting with the state of the systemd login manag
 
 **List current user sessions:**
 
-```
+```bash
 loginctl list-sessions
 ```
 
 **List available seats:**
 
-```
+```bash
 loginctl list-seats
 ```
 
 **Display properties of a specific session:**
 
-```
+```bash
 loginctl show-session SESSION_ID
 ```
 
 **Display properties of a seat:**
 
-```
+```bash
 loginctl show-seat SEAT_NAME
 ```
 
 **Show information about a user manager:**
 
-```
+```bash
 loginctl show-user USER_NAME
 ```
 
 **List processes associated with a session:**
 
-```
+```bash
 loginctl session-status SESSION_ID
 ```
 
 **Terminate a user session:**
 
-```
+```bash
 loginctl terminate-session SESSION_ID
 ```
 
 **List user session IDs:**
 
-```
+```bash
 loginctl list-users
 ```
 
@@ -1097,25 +1094,25 @@ Allows querying and changing system locale and keyboard layout settings. It prov
 
 **Show current system locale settings:**
 
-```
+```bash
 localectl
 ```
 
 **List available locales:**
 
-```
+```bash
 localectl list-locales
 ```
 
 **Set the system locale:**
 
-```
+```bash
 sudo localectl set-locale LANG=en_US.UTF-8
 ```
 
 **Display a concise status summary:**
 
-```
+```bash
 localectl status
 ```
 
@@ -1143,31 +1140,31 @@ A command-line utility that concatenates and sends messages to the systemd journ
 
 **Log a simple message:**
 
-```
+```bash
 systemd-cat echo "Hello, systemd!"
 ```
    
 **Capture command output with a specific priority:**
 
-```
+```bash
 systemd-cat -p info ls /etc
 ```
    
 **Log with error priority** The priority levels include "emerg," "alert," "crit," "err," "warning," "notice," "info," and "debug.":
 
-```
+```bash
 systemd-cat -p err echo "An error occurred."
 ```
    
 **Pipe script output to the journal:**
 
-```
+```bash
 echo "Script is running." | systemd-cat
 ```
    
 **Retrieve logged messages:**
 
-```
+```bash
 journalctl _SYSTEMD_UNIT=echo.service
 ```
 
@@ -1178,13 +1175,14 @@ journalctl _SYSTEMD_UNIT=echo.service
 Lists and displays the hierarchy of control groups (cgroups). Cgroups are a Linux kernel feature for organizing processes into hierarchical groups with resource constraints and accounting.
 
 **Display the cgroup hierarchy:**
-```
+
+```bash
 systemd-cgls
 ```
 
 **Example output (simplified):**
 
-```
+```text
  └─user.slice
    ├─user-1000.slice
    │ ├─session-c1.scope
@@ -1207,13 +1205,13 @@ Provides a real-time, dynamic view of resource usage by systemd control groups (
 
 **Monitor cgroup resource usage:**
 
-```
+```bash
 sudo systemd-cgtop
 ```
 
 **Display 5 updates and then exit:**
 
-```
+```bash
 sudo systemd-cgtop -n 5
 ```
 
@@ -1232,13 +1230,13 @@ Changes made by packages are marked with +/ (additions) or -/ (deletions).
 
 **List all changes to systemd configuration files:**
 
-```
+```bash
 sudo systemd-delta
 ```
  
 **Scan a specific directory for changes:**
 
-```
+```bash
 sudo systemd-delta /etc/systemd/system/
 ```
 
@@ -1257,7 +1255,7 @@ The command is typically used in shell scripts or systemd service files to condi
 
 **Detect virtualization type:**
 
-```
+```bash
 systemd-detect-virt
 ```
 
@@ -1276,7 +1274,7 @@ systemd-detect-virt
 
 **Example script usage:**
 
-```
+```bash
 if [ "$(systemd-detect-virt)" = "qemu" ]; then
   echo "Running on QEMU/KVM"
 else
@@ -1297,13 +1295,13 @@ Escapes strings to make them suitable for use as filenames, unit names, or other
 
 **Escape a string:**
 
-```
+```bash
 systemd-escape "My Service"
 ```
    
 **Output:**
 
-```
+```text
 My\x20Service
 ```
 
@@ -1323,7 +1321,7 @@ Used to inhibit the system from performing certain actions or events for the dur
 
 **Command Syntax:**
 
-```
+```bash
 systemd-inhibit [OPTIONS] COMMAND
 ```
      
@@ -1335,14 +1333,14 @@ systemd-inhibit [OPTIONS] COMMAND
 
 **Example: Inhibit shutdown during a backup:**
 
-```
+```bash
 sudo systemd-inhibit --what=shutdown --why="Backup in progress" \
     my_backup_script.sh
 ```
 
 **Example: Inhibit sleep during a presentation:**
 
-```
+```bash
 sudo  systemd-inhibit --what=sleep --why="Presentation in progress" \
     my_pres_command
 ```
@@ -1356,7 +1354,7 @@ sudo  systemd-inhibit --what=sleep --why="Presentation in progress" \
 
 **List current inhibitions:**
 
-```
+```bash
 systemd-inhibit --list
 ```
      
@@ -1372,7 +1370,7 @@ Used to initialize or regenerate the machine ID on a Linux system. The machine I
 
 **Regenerate the machine ID:**
 
-```
+```bash
 sudo systemd-machine-id-setup
 ```
 
@@ -1386,13 +1384,13 @@ Used for mounting and unmounting filesystems. It provides a convenient interface
 
 **Mount an NFS share:**
 
-```
+```bash
 sudo systemd-mount -t nfs server:/export /mnt/nfs
 ```
    
 **Unmount a filesystem:**
 
-```
+```bash
 sudo systemd-mount --umount /mnt/data
 ```
 
@@ -1409,7 +1407,7 @@ When a service uses systemd-notify, it sends signals to systemd, allowing  syste
 
 **Example service unit configuration:**
 
-```
+```ini
 [Service]
 Type=simple
 ExecStart=/path/to/myservice
@@ -1424,7 +1422,7 @@ Provides a way to query various system and user paths managed by systemd. It all
 
 **Print system and user paths:**
 
-```
+```bash
 systemd-path 
 ```
 
@@ -1436,13 +1434,13 @@ Runs transient systemd services without requiring custom unit files. Ideal for t
 
 **Basic usage:**
 
-```
+```bash
 sudo systemd-run echo "Hello, systemd-run!"
 ```
 
 **Capture output to journal:**
 
-```
+```bash
 sudo systemd-run --pipe --collect echo "Capturing output in journal logs"
 sudo journalctl -b -u transient-*.scope
 ```
@@ -1451,14 +1449,14 @@ sudo journalctl -b -u transient-*.scope
 
 This example sets a CPU time quota of 50% and a memory limit of 100 megabytes for the transient service.
 
-```
+```bash
 sudo systemd-run --unit=my-service --service-type=exec --property=CPUQuota=50% \
    --property=MemoryLimit=100M -- /path/to/executable
 ```
 
 **Run as a specific user:**
 
-```
+```bash
 sudo systemd-run --uid=username --gid=groupname command-to-be-executed
 ```
 
@@ -1466,7 +1464,7 @@ sudo systemd-run --uid=username --gid=groupname command-to-be-executed
 
 This example uses --scope to create a transient service in the background and runs the sleep command for 300 seconds.
 
-```
+```bash
 sudo systemd-run --scope --unit=my-background-service sleep 300
 ```
 

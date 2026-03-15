@@ -8,7 +8,6 @@ sidebar:
 ##### Linux, Apache, MariaDB, PHP stack installation and configuration
 
 ## 0. Specs
-
 ---
 
 ### 0.0. The What
@@ -36,25 +35,24 @@ In this guide, we will use **MariaDB** as our database and **PHP** as our server
 <br>
 
 ## 1. Install Packages
-
 ---
 
 Update package repositories and install Apache:
 
-```
+```bash
 sudo apt update
 sudo apt install --yes apache2
 ```
 
 Install MariaDB:
 
-```
+```bash
 sudo apt install --yes mariadb-server
 ```
 
 Run the security script to apply basic security settings to MariaDB:
 
-```
+```bash
 sudo mariadb-secure-installation
 ```
 
@@ -74,27 +72,26 @@ You will be asked a series of questions. Here are recommended answers:
 
 Install PHP along with the necessary modules for Apache and MySQL/MariaDB integration:
 
-```
+```bash
 sudo apt install --yes php libapache2-mod-php php-mysql
 ```
 
 **Optional:** Depending on your application (e.g., WordPress), you may need additional PHP extensions:
 
-```
+```bash
 sudo apt install --yes php-curl php-gd php-mbstring php-xml php-xmlrpc \
      php-soap php-intl php-zip
 ```
 
 Restart Apache to load the PHP module:
 
-```
+```bash
 sudo systemctl restart apache2
 ```
 
 <br>
 
 ## 2. Test LAMP Stack
-
 ---
 
 We will create a test database, add a table with sample data, and then create a PHP script to retrieve this data and display it in a web page.
@@ -103,14 +100,14 @@ We will create a test database, add a table with sample data, and then create a 
 
 Access the MariaDB shell:
 
-```
+```bash
 sudo mariadb
 ```
 
 Run the following commands within the MariaDB shell to create a database, a table, sample data, and a dedicated database user:
 
 
-```
+```sql
 CREATE DATABASE mysampledb;
 USE mysampledb;
 CREATE TABLE Employees (Name CHAR(15), Age INT, Occupation CHAR(15));
@@ -126,13 +123,13 @@ EXIT;
 
 Create a new PHP file in the web server's root directory:
 
-```
+```bash
 sudo nano /var/www/html/test.php
 ```
 
 Copy and paste the following content into the file:
 
-```
+```php
 <?php
    $mycon = new mysqli("localhost", "appuser", "password", "mysampledb");
    if ($mycon->connect_errno)
@@ -185,12 +182,11 @@ Copy and paste the following content into the file:
 
 Open a web browser on your workstation and navigate to the following URL, replacing `srv` with your server's IP address or hostname:
 
-`http://srv/test.php`
+```http
+http://srv/test.php
+```
 
 You should see a table displaying the data from the `Employees` table.
-
-
-
 
 
 

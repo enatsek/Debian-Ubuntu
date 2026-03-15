@@ -1,8 +1,8 @@
 ---
 title: "Docker"
-description: "Docker tutorial for Debian and Ubuntu server"
+description: "Docker tutorial for Debian and Ubuntu servers"
 sidebar: 
-   label: Docker tutorial
+   label: Docker
    badge:
       text: New
       variant: tip
@@ -185,7 +185,6 @@ sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin dock
 
 ```bash
 sudo usermod -aG docker $USER
-
 ```
 
 ⚠ **Security Note:** Membership in the `docker` group effectively grants root-level privileges on the host system. This should be treated accordingly in production environments.
@@ -193,7 +192,7 @@ sudo usermod -aG docker $USER
 
 Verification:
 
-```
+```bash
 docker version
 docker info
 docker compose version
@@ -221,7 +220,7 @@ An image is identified by a four-part fully qualified name (defaults in parenthe
 **Examples:**
 All the following commands pull the same `nginx` image from Docker Hub:
 
-```
+```bash
 docker image pull docker.io/library/nginx:latest
 docker image pull library/nginx:latest
 docker image pull nginx:latest
@@ -230,20 +229,20 @@ docker image pull nginx
 
 List the downloaded images:
 
-```
+```bash
 docker image ls
 ```
 
 Example output:
 
-```
+```ansi
 REPOSITORY   TAG       IMAGE ID       CREATED      SIZE
 nginx        latest    058f4935d1cb   8 days ago   152MB
 ```
 
 Remove an image by Name or ID (partial ID is sufficient):
 
-```
+```bash
 docker image rm nginx
 docker image rm 058f
 ```
@@ -354,7 +353,7 @@ func main() {
 
 Create the **Multi-Stage Dockerfile**:
 
-```
+```bash
 nano Dockerfile
 ```
 
@@ -379,7 +378,7 @@ CMD ["./go-binary"]
 
 Build the image:
 
-```
+```bash
 docker image build -t go-app .
 ```
 
@@ -501,7 +500,7 @@ docker container stats
 
 Accessing containers:
 
-```
+```http
 http://docker:8080/
 http://docker:8088/
 ```
@@ -604,14 +603,14 @@ If we point our browser to: ```http:/docker:8080/``` we'll see our new Bind Moun
 
 Remove the container after testing it:
 
-```
+```bash
 docker container stop bind-test
 docker container rm bind-test
 ```
 
 Or combined:
 
-```
+```bash
 docker container rm -f bind-test
 ```
 
@@ -665,7 +664,7 @@ docker volume inspect lv-web-data
 
 Remove the container and the volume after testing it:
 
-```
+```bash
 docker container rm -f volume-test
 docker volume rm lv-web-data
 ```
@@ -1066,13 +1065,13 @@ func main() {
 
 Create the Multi-Stage Dockerfile for the web app:
 
-```
+```bash
 nano Dockerfile
 ```
 
 Contents:
 
-```
+```dockerfile
 # --- STAGE 1: Build (Compile) ---
 # Use a heavy image containing the Go SDK
 FROM golang:1.21-alpine AS builder
@@ -1101,7 +1100,7 @@ CMD ["./go-binary"]
 
 **Defining the Infrastructure (`docker-compose.yml`):**
 
-```
+```bash
 nano docker-compose.yml
 ```
 
@@ -1225,7 +1224,7 @@ docker context use default
 
 **Quick Reference:**
 
-```
+```bash
 docker context ls                  # list all contexts
 docker context show                # show current active context
 docker context create <name> ...   # create a new context
@@ -1265,7 +1264,7 @@ docker system prune -a --volumes
 
 **Quick Reference:**
 
-```
+```bash
 docker trust inspect <image>        # show signing info for an image
 docker trust sign <image>           # sign an image
 docker trust revoke <image>         # revoke a signature
@@ -1396,7 +1395,7 @@ docker swarm init --advertise-addr 192.168.1.201
 **Execution Output:**
 The daemon will generate a unique join token. All subsequent nodes will join as workers by default using this token:
 
-```text
+```ansi
 Swarm initialized: current node (zm22...) is now a manager.
 
 To add a worker to this swarm, run the following command:
@@ -1863,14 +1862,14 @@ We modify the `stack.yaml` to point to the new image and define how Swarm should
 
 **Update `stack.yaml` on node1:**
 
-```
+```bash
 cd ~/example2
 nano stack.yaml
 ```
 
 Change as below:
 
-```
+```yaml
 services:
   backend-service:
     # We will change this to :v2 for the update test
@@ -2125,7 +2124,7 @@ The final piece of our puzzle is the `stack.yaml` file. This manifest bridges ou
 nano stack.yaml
 ```
 
-```
+```yaml
 ############################################################
 # Swarm Stack: Reverse Proxy + Replicated Backend
 #
@@ -2286,24 +2285,24 @@ Update image definition in stack file too:
 
 Change the line:
 
-```
+```dockerfile
 image: 192.168.1.201:5000/example3-backend:1.0
 ```
 
 to:
 
-```
+```dockerfile
 image: 192.168.1.201:5000/example3-backend:2.0
 ```
 
-```
+```bash
 cd ~/example3
 nano stack.yaml
 ```
 
 The final state of the file will be as below:
 
-```
+```yaml
 ############################################################
 # Swarm Stack: Reverse Proxy + Replicated Backend
 #
@@ -2477,7 +2476,7 @@ The secret to a smooth rotation is the `source` and `target` definition. We chan
 
 **Edit `stack.yaml` on node1:**
 
-```
+```bash
 nano stack.yaml
 ```
 
@@ -2693,21 +2692,21 @@ configs:
 
 Replication:
 
-```
+```yaml
 deploy:
   replicas: 3
 ```
 
 Global Mode (run on every node):
 
-```
+```yaml
 deploy:
   mode: global
 ```
 
 Placement Constraints:
 
-```
+```yaml
 deploy:
   placement:
     constraints:
@@ -2722,7 +2721,7 @@ To add a label:
 
 Restart Policy:
 
-```
+```yaml
 restart_policy:
   condition: on-failure
   delay: 5s
@@ -2731,7 +2730,7 @@ restart_policy:
 
 Rolling Update Strategy:
 
-```
+```yaml
 update_config:
   parallelism: 1
   delay: 10s
@@ -2751,20 +2750,20 @@ Explanations:
 
 Simple
 
-```
+```yaml
 secrets:
   - my_secret
 ```
 
 Mounted at:
 
-```
+```text
 /run/secrets/my_secret
 ```
 
 Advanced (rename target inside container):
 
-```
+```yaml
 secrets:
   - source: db_password_v2
     target: db_password
@@ -2774,7 +2773,7 @@ Secrets are immutable. Rotation = new secret + service update.
 
 Configs:
 
-```
+```yaml
 configs:
   - source: nginx_conf
     target: /etc/nginx/nginx.conf
@@ -2787,7 +2786,7 @@ Unlike secrets; Not encrypted at rest, Intended for non-sensitive configuration
 
 Internal Service (not exposed):
 
-```
+```yaml
 networks:
   - backend_net
 ```
@@ -2796,7 +2795,7 @@ No `ports:` → not reachable from host.
 
 Public Service:
 
-```
+```yaml
 ports:
   - "443:443"
 ```
@@ -2804,7 +2803,7 @@ ports:
 
 Volumes (Persistent Storage):
 
-```
+```yaml
 volumes:
   - db_data:/var/lib/mysql
 ```
@@ -2835,31 +2834,31 @@ Database + App
 
 Deploy:
 
-```
+```bash
 docker stack deploy -c stack.yaml mystack
 ```
 
 List services:
 
-```
+```bash
 docker stack services mystack
 ```
 
 Watch tasks:
 
-```
+```bash
 docker service ps mystack_service
 ```
 
 Inspect service:
 
-```
+```bash
 docker service inspect mystack_service --pretty
 ```
 
 Remove stack:
 
-```
+```bash
 docker stack rm mystack
 ```
 

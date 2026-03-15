@@ -8,8 +8,8 @@ sidebar:
 ##### Introduction to systemd service management
 
 ## 0. Specs
-
 ---
+
 ### 0.1. The What 
 
 systemd is a suite of basic building blocks for a Linux system. It provides a system and service manager that runs as PID 1 and starts the rest of the system (from systemd.io).
@@ -27,6 +27,7 @@ A strong alternative to systemd is OpenRC.
 **cgroups (Control Groups):** A kernel feature that allows setting resource utilization limits for processes, such as CPU shares, memory usage, and block I/O per process. Originally developed by Google.
 
 ### 0.3. Sources
+
 - [wiki.debian.org](https://wiki.debian.org/systemd/documentation)
 - [www.digitalocean.com](https://www.digitalocean.com/community/tutorials/systemd-essentials-working-with-services-units-and-the-journal)
 - [www.digitalocean.com](https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units)
@@ -43,7 +44,6 @@ A strong alternative to systemd is OpenRC.
 <br>
 
 ## 1. systemd Units
-
 ---
 
 Units are the resources that systemd knows how to manage and to operate.
@@ -76,7 +76,7 @@ Unit files are located in the following directories (listed in increasing order 
 
 **Contents of `/lib/systemd/system/apache2.service`:**
 
-```
+```ini
 [Unit]
 Description=The Apache HTTP Server
 After=network.target remote-fs.target nss-lookup.target
@@ -99,7 +99,7 @@ WantedBy=multi-user.target
 
 **Contents of `/lib/systemd/system/ssh.service`:**
 
-```
+```ini
 [Unit]
 Description=OpenBSD Secure Shell server
 Documentation=man:sshd(8) man:sshd_config(5)
@@ -126,7 +126,7 @@ Alias=sshd.service
 
 **Contents of `/lib/systemd/system/ssh.socket`:**
 
-```
+```ini
 [Unit]
 Description=OpenBSD Secure Shell server socket
 Before=sockets.target
@@ -142,7 +142,7 @@ WantedBy=sockets.target
 
 **Contents of `/etc/systemd/system/snap-firefox-2356.mount`:**
 
-```
+```ini
 [Unit]
 Description=Mount unit for firefox, revision 2356
 After=snapd.mounts-pre.target
@@ -281,19 +281,19 @@ For a complete list of directives, see:
 <br>
 
 ## 2. Targets
-
 ---
+
 ### 2.1. Definition and List
 
 Targets are similar to SysV init runlevels. Their purpose is to group other systemd units through chains of dependencies.
 
 A fresh Debian 13 server installation includes the following targets:
 
-```
+```bash
 systemctl list-unit-files --type=target
 ```
 
-```
+```text
 UNIT FILE                     STATE    PRESET  
 basic.target                  static   -       
 blockdev@.target              static   -       
@@ -392,7 +392,7 @@ Target configuration files are located in `/lib/systemd/system/`.
 
 **`network.target`:**
 
-```
+```ini
 [Unit]
 Description=Network
 Documentation=man:systemd.special(7)
@@ -403,7 +403,7 @@ RefuseManualStart=yes
 
 **`multi-user.target`:**
 
-```
+```ini
 [Unit]
 Description=Multi-User System
 Documentation=man:systemd.special(7)
@@ -415,7 +415,7 @@ AllowIsolate=yes
 
 **`graphical.target`:**
 
-```
+```ini
 [Unit]
 Description=Graphical Interface
 Documentation=man:systemd.special(7)
@@ -434,255 +434,254 @@ AllowIsolate=yes
 
 **Start a service:**
 
-```
+```bash
 sudo systemctl start apache2.service
 ```
 
 **Stop a service:**
 
-```
+```bash
 sudo systemctl stop apache2.service
 ```
 
 **Reload a service** (reloads configuration without restarting):
 
-```
+```bash
 sudo systemctl reload apache2.service
 ```
 
 **Restart a service:**
 
-```
+```bash
 sudo systemctl restart apache2.service
 ```
 
 **Reload if possible, otherwise restart:**
 
-```
+```bash
 sudo systemctl reload-or-restart apache2.service
 ```
 
 **Enable a service** (starts automatically at boot):
 
-```
+```bash
 sudo systemctl enable apache2.service
 ```
 
 **Disable a service** (does not start at boot):
 
-```
+```bash
 sudo systemctl disable apache2.service
 ```
 
 **Show status of a service:**
 
-```
+```bash
 sudo systemctl status apache2.service
 ```
 
 **Check if a service is active:**
 
-```
+```bash
 systemctl is-active apache2.service
 ```
 
 **Check if a service is enabled:**
 
-```
+```bash
 systemctl is-enabled apache2.service
 ```
 
 **Check if a service has failed:**
 
-```
+```bash
 systemctl is-failed apache2.service
 ```
 
 **Mask a service** (prevents it from being started, even manually):
 
-```
+```bash
 sudo systemctl mask apache2.service
 ```
 
 **Unmask a service:**
 
-```
+```bash
 sudo systemctl unmask apache2.service
 ```
 
 **List all active units:**
 
-```
+```bash
 sudo systemctl list-units
 ```
 
 **List all units** (including loaded and attempted):
 
-```
+```bash
 sudo systemctl list-units --all
 ```
 
 **List all installed unit files:**
 
-```
+```bash
 sudo systemctl list-unit-files
 ```
 
 **List services only:**
 
-```
+```bash
 systemctl list-units --type=service
 ```
 
 **View the contents of a unit file:**
 
-```
+```bash
 systemctl cat apache2.service
 ```
 
 **View dependencies of a unit:**
 
-```
+```bash
 systemctl list-dependencies apache2.service
 ```
 
 **View dependencies recursively:**
 
-```
+```bash
 systemctl list-dependencies apache2.service --all
 ```
 
 **View low-level details of a unit:**
 
-```
+```bash
 systemctl show apache2.service
 ```
 
 **Create an override or modify settings** (creates/edit a drop-in file):
 
-```
+```bash
 sudo systemctl edit apache2.service
 ```
 
 **Edit the entire unit file:**
 
-```
+```bash
 sudo systemctl edit --full apache2.service
 ```
 
 **Reload systemd** (after modifying unit files):
 
-```
+```bash
 sudo systemctl daemon-reload
 ```
 
 **Show the default target** (equivalent to runlevel):
 
-```
+```bash
 systemctl get-default
 ```
 
 **Set the default target:**
 
-```
+```bash
 sudo systemctl set-default graphical.target
 sudo systemctl set-default multi-user.target
 ```
 
 **List available targets:**
 
-```
+```bash
 systemctl list-unit-files --type=target
 ```
 
 **List units associated with a target:**
 
-```
+```bash
 systemctl list-dependencies multi-user.target
 ```
 
 **Power off and reboot the system:**
 
-```
+```bash
 sudo systemctl poweroff
 sudo systemctl reboot
 ```
 
 **Boot into rescue mode:**
 
-```
+```bash
 sudo systemctl rescue
 ```
 
 **Halt the system** (does not power off the machine):
 
-```
+```bash
 sudo systemctl halt
 ```
 
 **Control systemd on a remote system:**
 
-```
+```bash
 systemctl --host user_name@host_name command
 ```
 
 <br>
 
 ## 4. Log Management: journalctl Command
-
 ---
 
 **View all log entries:**
 
-```
+```bash
 journalctl
 ```
 
 **View all log entries for the current boot:**
 
-```
+```bash
 journalctl -b
 ```
 
 **View only kernel entries:**
 
-```
+```bash
 journalctl -k
 ```
 
 **View only kernel entries for the current boot:**
 
-```
+```bash
 journalctl -k -b
 ```
 
 **View log entries for a specific unit (e.g., Apache):**
 
-```
+```bash
 journalctl -u apache2.service
 ```
 
 **View unit logs for the current boot:**
 
-```
+```bash
 journalctl -b -u apache2.service
 ```
 
 **View logs from the previous boot:**
 
-```
+```bash
 journalctl -b -1
 ```
 
 **View the list of the boots boots:**
 
-```
+```bash
 journalctl --list-boots
 ```
 
 **View logs within a time interval:**
 
-```
+```bash
 journalctl --since "2023-01-10 17:15:00"
 journalctl --since "2023-01-10" --until "2023-01-11 03:00"
 journalctl --since yesterday
@@ -692,57 +691,56 @@ journalctl -u apache2.service --since today
 
 **View log entries for a specific executable:**
 
-```
+```bash
 journalctl /usr/bin/bash
 ```
 
 **Output logs in JSON format:**
 
-```
+```bash
 journalctl -b -u apache2 -o json
 journalctl -b -u apache2 -o json-pretty
 ```
 
 **Show the most recent 10 entries:**
 
-```
+```bash
 journalctl -n
 ```
 
 **Show the most recent 20 entries:**
 
-```
+```bash
 journalctl -n 20
 ```
 
 **Follow logs in real-time** (similar to `tail -f`; press Ctrl+C to exit):
 
-```
+```bash
 journalctl -f
 ```
 
 **Show disk usage of journal logs:**
 
-```
+```bash
 journalctl --disk-usage
 ```
 
 **Delete old logs to reduce size to a specified limit:**
 
-```
+```bash
 sudo journalctl --vacuum-size=1G
 ```
 
 **Delete logs older than a specified time:**
 
-```
+```bash
 sudo journalctl --vacuum-time=1years
 ```
 
 <br>
 
 ## 5. Other systemd Components
-
 ---
 
 systemd includes several additional components. Some notable ones are:
@@ -782,7 +780,6 @@ systemd includes several additional components. Some notable ones are:
 <br>
 
 ## 6. Creating a Custom Service
-
 ---
 
 We will create a simple custom service that pings an IP address every 10 minutes. It logs an informational message if the ping succeeds, and an error message if it fails.
@@ -793,13 +790,13 @@ The service consists of a shell script placed in `/usr/local/bin`, a systemd uni
 
 Create a script named `ipcheck.sh`:
 
-```
+```bash
 nano ipcheck.sh
 ```
 
 Add the following content:
 
-```
+```bash
 #!/bin/bash
 echo "ipcheck.service: Start. $(date)" | systemd-cat -p info
 while true ; do
@@ -817,7 +814,7 @@ done
 
 Make the script executable and copy it:
 
-```
+```bash
 chmod +x ipcheck.sh
 sudo cp ipcheck.sh /usr/local/bin
 ```
@@ -826,13 +823,13 @@ sudo cp ipcheck.sh /usr/local/bin
 
 Use `systemctl edit` to create the service unit:
 
-```
+```bash
 sudo systemctl edit --force --full ipcheck.service
 ```
 
 This command opens an editor. Add the following configuration:
 
-```
+```ini
 [Unit]
 Description=IPCheck Demo Service
 Wants=network.target
@@ -851,7 +848,8 @@ WantedBy=multi-user.target
 Save and exit the editor.
 
 ### 6.4. Enable and Start The Service
-```
+
+```bash
 sudo systemctl enable ipcheck.service
 sudo systemctl start ipcheck.service
 ```
@@ -860,10 +858,7 @@ sudo systemctl start ipcheck.service
 
 Check the recent logs to verify the service is working:
 
-```
+```bash
 sudo journalctl -n 20
 ```
-
-
-
 

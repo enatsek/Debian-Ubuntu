@@ -8,7 +8,6 @@ sidebar:
 ##### Apache HTTP server configuration with SSL support and sample configurations
 
 ## 0. Specs
-
 ---
 
 ### 0.0. The What
@@ -39,28 +38,26 @@ If you want to run more than a static website, you'll need PHP and a database se
 
 <br>
 
-
 ## 1. Installation and Configuration Files
-
-
 ---
+
 ### 1.1. Installation
 Update package repositories and install the apache2 package:
 
-```
+```bash
 sudo apt update
 sudo apt install apache2 --yes
 ```
 
 When installed on Debian and Ubuntu, Apache (like other service packages) starts automatically. You can check the service status:
 
-```
+```bash
 systemctl status apache2
 ```
 
 The Debian package managers include a sample page for the web server. You can view it:
 
-```
+```bash
 sudo nano /var/www/html/index.html
 ```
 
@@ -103,13 +100,13 @@ Debian provides six commands for easy Apache configuration. These commands, prep
 
 After enabling or disabling a site, reload Apache:
 
-```
+```bash
 sudo systemctl reload apache2
 ```
 
 After enabling or disabling a configuration or module, restart Apache:
 
-```
+```bash
 sudo systemctl restart apache2
 ```
 
@@ -117,9 +114,8 @@ sudo systemctl restart apache2
 
 
 ## 2. Creating Our First Website
-
-
 ---
+
 ### 2.0. Explanations
 
 When the Apache package is installed, it creates two configuration files in the `sites-available/` directory: `000-default.conf` and `default-ssl.conf`.
@@ -135,22 +131,23 @@ There are four steps to create a website on Apache Web Server:
 4. Reload the Apache service.
 
 ### 2.1. Configure the Website
+
 #### 2.1.1. Prepare Website Home
 Create a home directory for our website:
 
-```
+```bash
 sudo mkdir /var/www/386387.xyz
 ```
 
 Create a sample home page:
 
-```
+```bash
 sudo nano /var/www/386387.xyz/index.html
 ```
 
 Fill as below:
 
-```
+```html
 <html>
 <title>386387.xyz Test Page</title>
 <body>
@@ -162,13 +159,13 @@ Fill as below:
 
 Make the Apache service user own the directory and files:
 
-```
+```bash
 sudo chown -R www-data:www-data /var/www/386387.xyz
 ```
 
 Set directory permissions to 755 and file permissions to 644:
 
-```
+```bash
 sudo find /var/www/386387.xyz -type d -exec chmod 755 {} \;
 sudo find /var/www/386387.xyz -type f -exec chmod 644 {} \;
 ```
@@ -177,19 +174,19 @@ sudo find /var/www/386387.xyz -type f -exec chmod 644 {} \;
 
 Disable the default site configuration (we don't need it anymore):
 
-```
+```bash
 sudo a2dissite 000-default.conf
 ```
 
 Create the configuration file for the site:
 
-```
+```bash
 sudo nano /etc/apache2/sites-available/386387.xyz.conf
 ```
 
 Fill as below:
 
-```
+```apache
 <VirtualHost *:80>
    ServerAdmin webmaster@386387.xyz	
    ServerName 386387.xyz
@@ -212,16 +209,17 @@ Line-by-line explanation of the configuration file:
 - `</VirtualHost>`: End of site configuration.
 
 #### 2.1.3. Enable the Website
+
 Enable the site and reload Apache:
 
-```
+```bash
 sudo a2ensite 386387.xyz.conf
 sudo systemctl reload apache2
 ```
 
 Test the website (assuming 386387.xyz points to your server's IP):
 
-```
+```text
 http://386387.xyz
 ```
 
@@ -234,7 +232,7 @@ Let's Encrypt certificates are valid for 90 days and must be renewed periodicall
 
 Install Certbot:
 
-```
+```bash
 sudo apt update
 sudo apt install certbot --yes
 ```
@@ -243,7 +241,7 @@ sudo apt install certbot --yes
 
 To enable HTTPS and redirect HTTP to HTTPS, enable these Apache modules:
 
-```
+```bash
 sudo a2enmod ssl
 sudo a2enmod rewrite
 sudo systemctl restart apache2
@@ -253,7 +251,7 @@ sudo systemctl restart apache2
 
 Obtain certificates with Certbot:
 
-```
+```bash
 sudo certbot certonly -d 386387.xyz,www.386387.xyz --agree-tos --webroot
 ```
 
@@ -281,13 +279,13 @@ Key is saved at:         /etc/letsencrypt/live/386387.xyz/privkey.pem
 
 Create a configuration for the HTTPS site:
 
-```
+```bash
 sudo nano /etc/apache2/sites-available/386387.xyz-ssl.conf
 ```
 
 Fill as below:
 
-```
+```apache
 <VirtualHost *:443>
    ServerName 386387.xyz
    ServerAlias www.386387.xyz
@@ -308,7 +306,7 @@ The SSL-specific lines:
 
 Enable the HTTPS configuration and restart Apache:
 
-```
+```bash
 sudo a2ensite 386387.xyz-ssl.conf
 sudo systemctl restart apache2
 ```
@@ -319,13 +317,13 @@ Our HTTPS site is now ready at `https://386387.xyz`.
 
 While our HTTPS site works, users accessing `http://386387.xyz` still reach the plain HTTP site. To redirect all HTTP traffic to HTTPS, modify the HTTP site configuration:
 
-```
+```bash
 sudo nano /etc/apache2/sites-available/386387.xyz.conf
 ```
 
 Update to include redirection rules:
 
-```
+```apache
 <VirtualHost *:80>
    ServerAdmin webmaster@386387.xyz	
    ServerName 386387.xyz
@@ -350,7 +348,7 @@ The added rules:
 
 Reload Apache:
 
-```
+```bash
 sudo systemctl reload apache2
 ```
 
@@ -362,29 +360,28 @@ Certbot automatically renews certificates before they expire, but Apache continu
 
 Certbot executes all scripts in `/etc/letsencrypt/renewal-hooks/deploy` after successful renewal. Create a script:
 
-```
+```bash
 sudo nano /etc/letsencrypt/renewal-hooks/deploy/reloadapache.sh
 ```
 
 Fill as below:
 
-```
+```bash
 #!/bin/bash
 systemctl reload apache2
 ```
 
 Make the script executable:
 
-```
+```bash
 sudo chmod +x /etc/letsencrypt/renewal-hooks/deploy/reloadapache.sh
 ```
 <br>
 
 
 ## 3. Adding More Sites to Our Server
-
-
 ---
+
 ### 3.0. Explanations
 
 Apache can host multiple websites simultaneously. There's no inherent limit to the number of sites you can host, constrained only by your server's CPU and RAM resources.
@@ -405,7 +402,7 @@ This site will only allow access from the server itself, blocking all external I
 
 Create the site directory, sample HTML file, and set proper permissions:
 
-```
+```bash
 sudo mkdir /var/www/srv1
 sudo touch /var/www/srv1/index.html
 sudo chown -R www-data:www-data /var/www/srv1
@@ -415,13 +412,13 @@ sudo find /var/www/srv1 -type f -exec chmod 644 {} \;
 
 Create the sample HTML content:
 
-```
+```bash
 sudo nano /var/www/srv1/index.html
 ```
 
 Fill as below:
 
-```
+```html
 <html>
 <title>srv1.386387.xyz Test Page</title>
 <body>
@@ -433,13 +430,13 @@ Fill as below:
 
 Create the site configuration:
 
-```
+```bash
 sudo nano /etc/apache2/sites-available/srv1.conf
 ```
 
 Fill as below:
 
-```
+```apache
 <VirtualHost 127.0.0.1:80>
    ServerAdmin admin@386387.xyz	
    ServerName srv1.386387.xyz
@@ -451,23 +448,24 @@ Fill as below:
 
 Enable the site and reload Apache:
 
-```
+```bash
 sudo a2ensite srv1.conf
 sudo systemctl reload apache2
 ```
 
 You won't be able to access `http://srv1.386387.xyz` from external systems, but running this command on the server will retrieve the HTML:
 
-```
+```bash
 curl 127.0.0.1
 ```
 
 ### 3.2. Only Accessible by 2 IPs
+
 This site will only be accessible from two specified IP addresses. This configuration is useful for serving content to specific users or locations.
 
 Create the site directory and set permissions:
 
-```
+```bash
 sudo mkdir /var/www/srv2
 sudo touch /var/www/srv2/index.html
 sudo chown -R www-data:www-data /var/www/srv2
@@ -477,13 +475,13 @@ sudo find /var/www/srv2 -type f -exec chmod 644 {} \;
 
 Create the sample HTML content:
 
-```
+```bash
 sudo nano /var/www/srv2/index.html
 ```
 
 Fill as below:
 
-```
+```html
 <html>
 <title>srv2.386387.xyz Test Page</title>
 <body>
@@ -495,13 +493,13 @@ Fill as below:
 
 Create the site configuration with IP restrictions:
 
-```
+```bash
 sudo nano /etc/apache2/sites-available/srv2.conf
 ```
 
 Fill as below:
 
-```
+```apache
 <VirtualHost *:80>
     <Directory "/var/www/srv2">
         Require ip 195.174.44.28
@@ -517,7 +515,7 @@ Fill as below:
 
 Enable the site and reload Apache:
 
-```
+```bash
 sudo a2ensite srv2.conf
 sudo systemctl reload apache2
 ```
@@ -526,7 +524,7 @@ Only the specified IPs can access the site; others will receive a "403 Forbidden
 
 You can add more IPs or entire subnets:
 
-```
+```apache
         Require ip 195.174.44.0/24
 ```
 
@@ -536,7 +534,7 @@ Some applications provide locally-running web servers (e.g., Rspamd). Using Apac
 
 First, simulate a local web server. Open a terminal and run:
 
-```
+```bash
 mkdir /tmp/test
 echo Test > /tmp/test/index.html
 cd /tmp/test
@@ -545,13 +543,13 @@ python3 -m http.server 8080 --bind 127.0.0.1
 
 This Python server runs locally on port 8080. Test it in another terminal:
 
-```
+```bash
 curl 127.0.0.1:8080
 ```
 
 Enable Apache's proxy modules:
 
-```
+```bash
 sudo a2enmod proxy
 sudo a2enmod proxy_http
 sudo systemctl restart apache2
@@ -559,13 +557,13 @@ sudo systemctl restart apache2
 
 Create the reverse proxy configuration:
 
-```
+```bash
 sudo nano /etc/apache2/sites-available/srv3.conf
 ```
 
 Fill as below:
 
-```
+```apache
 <VirtualHost *:80>
    ServerAdmin admin@386387.xyz
    ServerName srv3.386387.xyz
@@ -587,7 +585,7 @@ Enable the site and reload Apache:
 
 Enable the site and reload Apache daemon
 
-```
+```bash
 sudo a2ensite srv3.conf
 sudo systemctl reload apache2
 ```
@@ -602,7 +600,7 @@ Apache serves default error pages, but you can customize them. The most common e
 
 Create the site directory and files:
 
-```
+```bash
 sudo mkdir /var/www/srv4
 sudo touch /var/www/srv4/index.html
 sudo touch /var/www/srv4/404.html
@@ -613,13 +611,13 @@ sudo find /var/www/srv4 -type f -exec chmod 644 {} \;
 
 Create the main page:
 
-```
+```bash
 sudo nano /var/www/srv4/index.html
 ```
 
 Fill as below:
 
-```
+```html
 <html>
 <title>srv4.386387.xyz Test Page</title>
 <body>
@@ -631,13 +629,13 @@ Fill as below:
 
 Create the custom 404 page:
 
-```
+```bash
 sudo nano /var/www/srv4/404.html
 ```
 
 Fill as below:
 
-```
+```html
 <html>
 <title>I cannot find the page</title>
 <body>
@@ -649,13 +647,13 @@ Fill as below:
 
 Create the site configuration with custom error document:
 
-```
+```bash
 sudo nano /etc/apache2/sites-available/srv4.conf
 ```
 
 Fill as below:
 
-```
+```apache
 <VirtualHost *:80>
     ServerAdmin admin@386387.xyz
     ServerName srv4.386387.xyz
@@ -669,7 +667,7 @@ Fill as below:
 
 Enable the site and reload Apache:
 
-```
+```bash
 sudo a2ensite srv4.conf
 sudo systemctl reload apache2
 ```
@@ -682,25 +680,25 @@ While web servers typically use ports 80 (HTTP) and 443 (HTTPS), you might need 
 
 First, configure Apache to listen on port 8080:
 
-```
+```bash
 sudo nano /etc/apache2/ports.conf
 ```
 
 Add to the end of the file:
 
-```
+```text
 Listen 8080
 ```
 
 Restart Apache (restart required, not reload):
 
-```
+```bash
 sudo systemctl restart apache2
 ```
 
 Create the site directory and files:
 
-```
+```bash
 sudo mkdir /var/www/srv5
 sudo touch /var/www/srv5/index.html
 sudo chown -R www-data:www-data /var/www/srv5
@@ -710,13 +708,13 @@ sudo find /var/www/srv5 -type f -exec chmod 644 {} \;
 
 Create the sample HTML content:
 
-```
+```bash
 sudo nano /var/www/srv5/index.html
 ```
 
 Fill as below:
 
-```
+```html
 <html>
 <title>srv5.386387.xyz Test Page</title>
 <body>
@@ -728,13 +726,13 @@ Fill as below:
 
 Create the site configuration for port 8080:
 
-```
+```bash
 sudo nano /etc/apache2/sites-available/srv5.conf
 ```
 
 Fill as below:
 
-```
+```apache
 <VirtualHost *:8080>
     ServerAdmin admin@386387.xyz
     ServerName srv5.386387.xyz
@@ -746,7 +744,7 @@ Fill as below:
 
 Enable the site and reload Apache:
 
-```
+```bash
 sudo a2ensite srv5.conf
 sudo systemctl reload apache2
 ```
@@ -761,7 +759,7 @@ For privacy or performance reasons, you might want to disable access logging for
 
 Create the site directory and files:
 
-```
+```bash
 sudo mkdir /var/www/srv6
 sudo touch /var/www/srv6/index.html
 sudo chown -R www-data:www-data /var/www/srv6
@@ -771,13 +769,13 @@ sudo find /var/www/srv6 -type f -exec chmod 644 {} \;
 
 Create the sample HTML content:
 
-```
+```bash
 sudo nano /var/www/srv6/index.html
 ```
 
 Fill as below:
 
-```
+```html
 <html>
 <title>srv6.386387.xyz Test Page</title>
 <body>
@@ -789,13 +787,13 @@ Fill as below:
 
 Create the site configuration without access logs:
 
-```
+```bash
 sudo nano /etc/apache2/sites-available/srv6.conf
 ```
 
 Fill as below:
 
-```
+```apache
 <VirtualHost *:80>
     ServerAdmin admin@386387.xyz
     ServerName srv6.386387.xyz
@@ -807,7 +805,7 @@ Fill as below:
 
 Enable the site and reload Apache:
 
-```
+```bash
 sudo a2ensite srv6.conf
 sudo systemctl reload apache2
 ```
@@ -816,43 +814,38 @@ Access the site at `http://srv6.386387.xyz`. No access logs will be recorded.
 
 To also disable error logging, modify the configuration:
 
-```
+```text
     ErrorLog ${APACHE_LOG_DIR}/srv6-error.log
 ```
 
 as
 
-```
+```text
     ErrorLog /dev/null
 ```
 
 <br>
 
-
-
-
 ## 4. Adding PHP Support to Apache
-
-
 ---
 
 ### 4.1. Install PHP and Apache Dependencies
 Install PHP and the Apache PHP module:
 
-```
+```bash
 sudo apt update
 sudo apt install php libapache2-mod-php --yes
 ```
 
 Test PHP using the srv4 site. Create a PHP info page:
 
-```
+```bash
 sudo nano /var/www/srv4/info.php
 ```
 
 Fill as below:
 
-```
+```php
 <?php phpinfo(); ?>
 ```
 
@@ -862,13 +855,13 @@ Visit `http://srv4.386387.xyz/info.php` to see PHP configuration details.
 
 Adjust PHP settings by editing the configuration file. The path varies by PHP version:
 
-```
+```bash
 sudo nano /etc/php/*/apache2/php.ini
 ```
 
 Common settings to adjust:
 
-```
+```ini
 upload_max_filesize = 16M
 post_max_size = 16M
 memory_limit = 128M
@@ -877,8 +870,8 @@ display_errors = Off  # Set to On for development
 
 After making changes you need to restart Apache:
 
-```
-After making changes, restart Apache:
+```bash
+sudo systemctl restart apache2
 ```
 
 ### 4.3. Additional PHP Packages
@@ -896,7 +889,7 @@ After making changes, restart Apache:
 
 Install all recommended packages:
 
-```
+```bash
 sudo apt install php-mysql php-pgsql php-sqlite3 php-json \
    php-xml php-mbstring php-curl php-opcache php-zip php-gd
 sudo systemctl restart apache2

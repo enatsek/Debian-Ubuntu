@@ -25,7 +25,7 @@ This tutorial demonstrates how to set up High Availability Load Balancing with f
 - srvaw2 : App/Web Server 2 --> 192.168.1.204
 - srvaw3 : App/Web Server 3 --> 192.168.1.205
 
-Tested on Debian 13/12 and Ubuntu 24.04/22.04 LTS Servers.
+Tested on Debian 12/13 and Ubuntu 24.04/26.04 LTS Servers.
 
 ### 0.3. Notes
 

@@ -15,16 +15,16 @@ sidebar:
 
 PostgreSQL is a powerful, open-source relational database management system known for its reliability, feature robustness, and performance. It supports both SQL and non-SQL queries, making it versatile for various applications.
 
-Debian 13 and Ubuntu 24.04 LTS Server include packages for different PostgreSQL versions (17 and 16). For ease of following tutorials, I've prepared separate guides for Debian and Ubuntu.
+Debian 13 and Ubuntu 26.04 LTS Server include packages for different PostgreSQL versions (17 and 18). For ease of following tutorials, I've prepared separate guides for Debian and Ubuntu.
 
 ### 0.2. The Environment
 
 **Server:**
-- Ubuntu 24.04 LTS Server 
-- IP: 192.168.1.221
+- Ubuntu 26.04 LTS Server 
+- IP: 192.168.1.226
 
 **Workstation:**
-- Ubuntu 24.04 LTS Server 
+- Ubuntu 26.04 LTS Server 
 - IP: 192.168.1.182
 
 ### 0.3. Resources
@@ -80,7 +80,7 @@ Update package repositories:
 sudo apt update
 ```
 
-Install PostgreSQL (Ubuntu 24.04 installs version 16 by default):
+Install PostgreSQL (Ubuntu 26.04 installs version 18 by default):
 
 ```bash
 sudo apt install --yes postgresql
@@ -106,7 +106,7 @@ Sample output:
 
 ```text
 Ver Cluster Port Status Owner    Data directory              Log file
-16  main    5432 online postgres /var/lib/postgresql/16/main /var/log/...
+18  main    5432 online postgres /var/lib/postgresql/18/main /var/log/...
 ```
 
 The "Ver" (Version) and "Cluster" values are important for the `pg_ctlcluster` command. In this case, they are `16` and `main`.
@@ -116,19 +116,19 @@ The "Ver" (Version) and "Cluster" values are important for the `pg_ctlcluster` c
 Check the status of a specific cluster:
 
 ```bash
-sudo pg_ctlcluster 16 main status
+sudo pg_ctlcluster 18 main status
 ```
 
 Start a cluster:
 
 ```bash
-sudo pg_ctlcluster 16 main start
+sudo pg_ctlcluster 18 main start
 ```
 
 Stop a cluster:
 
 ```bash
-sudo pg_ctlcluster 16 main stop
+sudo pg_ctlcluster 18 main stop
 ```
 
 There are three stop modes:
@@ -138,16 +138,16 @@ There are three stop modes:
 
 
 ```bash
-sudo pg_ctlcluster 16 main stop -m smart
-sudo pg_ctlcluster 16 main stop -m fast
-sudo pg_ctlcluster 16 main stop -m immediate
+sudo pg_ctlcluster 18 main stop -m smart
+sudo pg_ctlcluster 18 main stop -m fast
+sudo pg_ctlcluster 18 main stop -m immediate
 ```
 
 Restart or reload a cluster:
 
 ```bash
-sudo pg_ctlcluster 16 main restart
-sudo pg_ctlcluster 16 main reload
+sudo pg_ctlcluster 18 main restart
+sudo pg_ctlcluster 18 main reload
 ```
 
 ### 2.3. Adding and Deleting Clusters
@@ -156,34 +156,34 @@ You can run multiple clusters on a single server. While this might seem unnecess
 
 Currently, we only have the `main` cluster. Let's add a second one named `second`.
 
-Create another PostgreSQL 16 cluster named `second`:
+Create another PostgreSQL 18 cluster named `second`:
 
 ```bash
-sudo pg_createcluster 16 second
+sudo pg_createcluster 18 second
 ```
 
 Start it:
 
 ```bash
-sudo pg_ctlcluster 16 second start
+sudo pg_ctlcluster 18 second start
 ```
 
 Create a third cluster and start it immediately:
 
 ```bash
-sudo pg_createcluster 16 third --start
+sudo pg_createcluster 18 third --start
 ```
 
 Delete (drop) the third cluster:
 
 ```bash
-sudo pg_dropcluster 16 third --stop
+sudo pg_dropcluster 18 third --stop
 ```
 
 Rename the `second` cluster to `secondary`:
 
 ```bash
-sudo pg_renamecluster 16 second secondary
+sudo pg_renamecluster 18 second secondary
 ```
 
 List clusters again:
@@ -196,15 +196,15 @@ Sample output:
 
 ```text
 Ver Cluster   Port Status Owner    Data directory                   Log file
-16  main      5432 online postgres /var/lib/postgresql/16/main      /var/log/...
-16  secondary 5433 online postgres /var/lib/postgresql/16/secondary /var/log/...
+18  main      5432 online postgres /var/lib/postgresql/18/main      /var/log/...
+18  secondary 5433 online postgres /var/lib/postgresql/18/secondary /var/log/...
 ```
 
 From this output, we can see:
 
-- The `16-main` cluster listens on port 5432 (PostgreSQL's default port)
-- The `16-secondary` cluster listens on port 5433
-- Data directories are `/var/lib/postgresql/16/main/` and `/var/lib/postgresql/16/secondary/`
+- The `18-main` cluster listens on port 5432 (PostgreSQL's default port)
+- The `18-secondary` cluster listens on port 5433
+- Data directories are `/var/lib/postgresql/18/main/` and `/var/lib/postgresql/18/secondary/`
 
 ### 2.4. Service vs Cluster Management
 
@@ -216,10 +216,10 @@ Stop all PostgreSQL clusters:
 sudo systemctl stop postgresql
 ```
 
-Stop only the `16-main` cluster:
+Stop only the `18-main` cluster:
 
 ```bash
-sudo systemctl stop postgresql@16-main
+sudo systemctl stop postgresql@18-main
 ```
 
 Other `systemctl` commands (`restart`, `enable`, `disable`, `reload`) work similarly.
@@ -252,7 +252,7 @@ We'll implement a user management scenario.
 ### 3.0. Backup Configuration Files
 
 ```bash
-cd /etc/postgresql/16/main/
+cd /etc/postgresql/18/main/
 sudo cp postgresql.conf postgresql.conf.backup
 sudo cp pg_hba.conf pg_hba.conf.backup
 ```
@@ -304,7 +304,7 @@ GRANT SELECT ON ALL TABLES IN SCHEMA public to rouser;
 Edit `postgresql.conf` to allow network connections:
 
 ```bash
-sudo nano /etc/postgresql/16/main/postgresql.conf
+sudo nano /etc/postgresql/18/main/postgresql.conf
 ```
 
 Uncomment and modify this line (around line 60):
@@ -322,10 +322,10 @@ listen_addresses = '*'                  # what IP address(es) to listen on;
 Edit `pg_hba.conf` to allow `rwuser` and `rouser` to connect from specified IPs/networks:
 
 ```bash
-sudo nano /etc/postgresql/16/main/pg_hba.conf
+sudo nano /etc/postgresql/18/main/pg_hba.conf
 ```
 
-Add these lines to the file:
+Add these lines to the end of the file:
 
 ```text
 host    test1           rwuser          192.168.1.182/32        scram-sha-256
@@ -335,7 +335,7 @@ host    test1           rouser          192.168.1.0/24          scram-sha-256
 Restart the cluster:
 
 ```bash
-sudo pg_ctlcluster restart 16 main
+sudo pg_ctlcluster restart 18 main
 ```
 
 ### 3.5. Connection Test from Workstation (192.168.1.182)
@@ -352,7 +352,7 @@ sudo apt install postgresql-client --yes
 Connect as `rwuser` and test data insertion (should succeed):
 
 ```bash
-psql -h 192.168.1.221 -U rwuser test1
+psql -h 192.168.1.226 -U rwuser test1
 ```
 
 In the `psql` shell:
@@ -365,7 +365,7 @@ INSERT INTO Employees VALUES ('John Doe', '33', 'Kedi');
 Connect as `rouser` and test reading/inserting (reading should succeed, inserting should fail):
 
 ```bash
-psql -h 192.168.1.221 -U rouser test1
+psql -h 192.168.1.226 -U rouser test1
 ```
 
 In the `psql` shell:
@@ -534,12 +534,12 @@ You can run SQL commands in the `psql` shell, as well as `psql` meta-commands (p
 
 <br>
 
-## 6. Bonus: Postgres 16 and Postgres 17 together
+## 6. Bonus: Postgres 18 and Postgres 17 together
 ---
 
 For testing purposes, we can install PostgreSQL 17 on the same server, allowing us to run clusters with different versions simultaneously.
 
-Ubuntu 24.04 includes PostgreSQL 16 in its repositories. For PostgreSQL 17, we need to add a PPA.
+Ubuntu 26.04 includes PostgreSQL 18 in its repositories. For PostgreSQL 17, we need to add a PPA.
 
 ### 6.1. Add Postgresql PPA
 
@@ -556,7 +556,7 @@ Add the PPA:
 ```bash
 echo deb [arch=amd64,arm64,ppc64el \
     signed-by=/usr/share/keyrings/postgresql.gpg] \
-    http://apt.postgresql.org/pub/repos/apt/ noble-pgdg main \
+    http://apt.postgresql.org/pub/repos/apt/ resolute-pgdg main \
     | sudo tee -a /etc/apt/sources.list.d/postgresql.list
 ```
 
@@ -565,6 +565,12 @@ echo deb [arch=amd64,arm64,ppc64el \
 ```bash
 sudo apt update
 sudo apt install -y postgresql-17
+```
+
+Create a main cluster for Postgresql 17
+
+```
+sudo pg_createcluster 17 main --start
 ```
 
 ### 6.3. List Clusters
@@ -577,20 +583,20 @@ Sample output (now with three clusters):
 
 ```text
 Ver Cluster   Port Status Owner    Data directory                   Log file
-16  main      5432 online postgres /var/lib/postgresql/16/main      /var/log/...
-16  secondary 5433 online postgres /var/lib/postgresql/16/secondary /var/log/...
-17  main      5434 online postgres /var/lib/postgresql/17/main      /var/log/...
+17  main      5434 online postgres /var/lib/postgresql/18/main      /var/log/...
+18  main      5432 online postgres /var/lib/postgresql/18/main      /var/log/...
+18  secondary 5433 online postgres /var/lib/postgresql/18/secondary /var/log/...
 ```
 
 ### 6.4. Connecting to the clusters with psql
 
-Connect to the first cluster (16-main, port 5432):
+Connect to the first cluster (18-main, port 5432):
 
 ```bash
 sudo -u postgres psql -p 5432
 ```
 
-Connect to the second cluster (16-secondary, port 5433):
+Connect to the second cluster (18-secondary, port 5433):
 
 ```bash
 sudo -u postgres psql -p 5433

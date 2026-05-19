@@ -25,7 +25,7 @@ In this guide, we will use **MariaDB** as our database and **PHP** as our server
 
 ### 0.1. Environment
 
-- **Server Distro:** Debian 12/13 or Ubuntu 22.04/24.04 LTS Server
+- **Server Distro:** Debian 12/13 or Ubuntu 24.04/26.04 LTS Server
 
 ### 0.2. Sources
 

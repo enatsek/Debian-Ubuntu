@@ -19,7 +19,7 @@ In this tutorial, we'll configure two servers with various Keepalived scenarios 
 
 ### 0.1. The Environment
 
-- **Server OS:** Debian 13 or Ubuntu 24.04 Server
+- **Server OS:** Debian 13 or Ubuntu 26.04 Server
 - **Virtual IP Address (VIP):** `192.168.1.240`
 
 

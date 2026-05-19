@@ -15,7 +15,7 @@ sidebar:
 
 PostgreSQL is a powerful, open-source relational database management system known for its reliability, feature robustness, and performance. It supports both SQL and non-SQL queries, making it versatile for various applications.
 
-Debian 13 and Ubuntu 24.04 LTS Server include packages for different PostgreSQL versions (17 and 16). For ease of following tutorials, I've prepared separate guides for Debian and Ubuntu.
+Debian 13 and Ubuntu 26.04 LTS Server include packages for different PostgreSQL versions (17 and 18). For ease of following tutorials, I've prepared separate guides for Debian and Ubuntu.
 
 ### 0.2. The Environment
 

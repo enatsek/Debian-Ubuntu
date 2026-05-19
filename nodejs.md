@@ -18,7 +18,7 @@ As system administrators, we may not write Node.js applications daily, but we fr
 
 ### 0.1. Environment
 
-I used Debian and Ubuntu server editions, namely Debian 12 & 13, Ubuntu 22.04 & 24.04 LTS Servers.
+I used Debian and Ubuntu server editions, namely Debian 12 & 13, Ubuntu 24.04 & 26.04 LTS Servers.
 
 ### 0.2. Sources
 
@@ -80,10 +80,10 @@ Either restart your shell or source the NVM script:
 \. "$HOME/.nvm/nvm.sh"
 ```
 
-Install the latest Node.js LTS version (22.x as of writing):
+Install the latest Node.js LTS version (24.x as of writing):
 
 ```bash
-nvm install 22
+nvm install 24
 ```
 
 Verify the installation:
@@ -116,10 +116,10 @@ Check current active version:
 nvm current
 ```
 
-Switch to version 22:
+Switch to version 24:
 
 ```bash
-nvm use 22
+nvm use 24
 ```
 
 List installed versions:
@@ -128,10 +128,10 @@ List installed versions:
 nvm ls
 ```
 
-Set version 22 as the default:
+Set version 24 as the default:
 
 ```bash
-nvm alias default 22
+nvm alias default 24
 ```
 
 Remove version 23

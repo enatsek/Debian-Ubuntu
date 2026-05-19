@@ -17,7 +17,7 @@ This tutorial covers MariaDB installation, configuration, basic user and databas
 
 ### 0.1. Environment
 
-- **Server Distro:** Debian 12/13 or Ubuntu 22.04/24.04 LTS Server
+- **Server Distro:** Debian 12/13 or Ubuntu 24.04/26.04 LTS Server
 
 ### 0.2. Sources
 
@@ -153,6 +153,12 @@ Remove a user:
 DELETE FROM mysql.user WHERE user='myuser' AND host='localhost';
 ```
 
+Exit from MariaDB shell:
+
+```sql
+exit;
+```
+
 <br>
 
 ## 3. Database Manipulation
@@ -253,9 +259,9 @@ sudo mariadb < mysampledb.sql
 ### 5.0. Specs and Preliminary Tasks
 
 
-- Primary Server            : 192.168.1.144 
-- Replica Server            : 192.168.1.145
-- Replication User          : 'replicate'@'192.168.1.145'
+- Primary Server            : 192.168.1.221 
+- Replica Server            : 192.168.1.226
+- Replication User          : 'replicate'@'192.168.1.226'
 - Replication User Password : Pass1234 
 - Database to replicate     : mysampledb
 
@@ -263,16 +269,16 @@ Mariadb Knowledge Base says that; primary and  replica server do not need to hav
 
 Mariadb versions on Debian and Ubuntu Servers:
 
-- Ubuntu 22.04 : 10.6.12
 - Debian 12    : 10.11.3
 - Ubuntu 24.04 : 10.11.7
 - Debian 13    : 11.8.3
+- Ubuntu 26.04 : 11.8.6
 
 This tutorial has been tested with the following pairs:
-- Ubuntu 22.04 Primary - Ubuntu 24.04 Replica
+
 - Debian 12 Primary - Debian 13 Replica
 - Ubuntu 24.04 Primary - Debian 13 Replica
-
+- Ubuntu 24.04 Primary - Ubuntu 26.04 Replica
    
 **Preliminary Setup:**
 
@@ -330,7 +336,7 @@ sudo mariadb
 Run the following command in the MariaDB shell:
 
 ```sql
-GRANT REPLICATION REPLICA ON *.* to 'replicate'@'192.168.1.145' identified by 'Pass1234';
+GRANT REPLICATION REPLICA ON *.* to 'replicate'@'192.168.1.226' identified by 'Pass1234';
 FLUSH PRIVILEGES;
 EXIT;
 ```
@@ -403,7 +409,7 @@ sudo mariadb
 Point to the primary server:
 
 ```sql
-CHANGE MASTER TO MASTER_HOST="192.168.1.144", MASTER_USER='replicate', MASTER_PASSWORD='Pass1234', MASTER_SSL=0, MASTER_SSL_VERIFY_SERVER_CERT=0;
+CHANGE MASTER TO MASTER_HOST="192.168.1.221", MASTER_USER='replicate', MASTER_PASSWORD='Pass1234', MASTER_SSL=0, MASTER_SSL_VERIFY_SERVER_CERT=0;
 START REPLICA;
 ```
 

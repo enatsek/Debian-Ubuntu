@@ -30,10 +30,10 @@ While I personally prefer using services like [Cloudflare](https://www.cloudflar
 
 **Example Specifications (Replace with your own values):**
 
-- **Server OS:** Debian 13/12 or Ubuntu 24.04/22.04 Server (for both DNS servers)
+- **Server OS:** Debian 12/13 or Ubuntu 24.04/26.04 Server (for both DNS servers)
 - **Domain Name:** `386387.xyz`
-- **Primary DNS Server:** `ns1.386387.xyz` at `192.168.1.201`
-- **Replica DNS Server:** `ns2.386387.xyz` at `192.168.1.202`
+- **Primary DNS Server:** `ns1.386387.xyz` at `192.168.1.226`
+- **Replica DNS Server:** `ns2.386387.xyz` at `192.168.1.227`
 - **Sample Host Records:**
    - `filesrv.386387.xyz`: `192.168.1.171`
    - `mail.386387.xyz`: `192.168.1.172`
@@ -73,7 +73,7 @@ options {
    # Cache Directory
    directory "/var/cache/bind";
    # Allow replica to transfer zone files
-   allow-transfer { localhost; 192.168.1.202; };
+   allow-transfer { localhost; 192.168.1.227; };
    # Allow queries from any hosts
    allow-query { any; };
    # Use Google DNS as forwarder
@@ -136,8 +136,8 @@ $TTL 1D
 @               IN      MX 10   mail.386387.xyz.
 
 ; A Records for Hosts
-ns1             IN      A       192.168.1.201
-ns2             IN      A       192.168.1.202
+ns1             IN      A       192.168.1.226
+ns2             IN      A       192.168.1.227
 filesrv         IN      A       192.168.1.171
 mail            IN      A       192.168.1.172
 
@@ -167,8 +167,8 @@ $TTL 1D
 ; Name Servers
 @    IN    NS     ns1.386387.xyz.
 @    IN    NS     ns2.386387.xyz.
-ns1  IN    A      192.168.1.201
-ns2  IN    A      192.168.1.202
+ns1  IN    A      192.168.1.226
+ns2  IN    A      192.168.1.227
 
 ; PTR Records (IP address to HostName)
 201  IN    PTR    ns1.386387.xyz.
@@ -234,12 +234,12 @@ Fill as below
 ```text
 zone "386387.xyz" IN {
    type slave;
-   masters { 192.168.1.201; };
+   masters { 192.168.1.226; };
    file "/var/lib/bind/forward.386387.xyz";
 };
 zone "1.168.192.in-addr.arpa" IN {
    type slave;
-   masters { 192.168.1.201; };
+   masters { 192.168.1.226; };
    file "/var/lib/bind/reverse.386387.xyz";
 };
 ```
@@ -273,21 +273,21 @@ Your name servers should now be operational. You can test them using the `dig` c
 Test forward lookup (hostname to IP):
 
 ```bash
-dig @192.168.1.201 mail.386387.xyz
-dig @192.168.1.202 filesrv.386387.xyz
+dig @192.168.1.226 mail.386387.xyz
+dig @192.168.1.227 filesrv.386387.xyz
 ```
 
 Test reverse lookup (IP to hostname):
 
 ```bash
-dig @192.168.1.201 -x 192.168.1.171
-dig @192.168.1.202 -x 192.168.1.172
+dig @192.168.1.226 -x 192.168.1.171
+dig @192.168.1.227 -x 192.168.1.172
 ```
 
 Test zone transfer (should only work from replica to primary):
 
 ```bash
-dig @192.168.1.201 386387.xyz AXFR
+dig @192.168.1.226 386387.xyz AXFR
 ```
 
 
@@ -298,7 +298,7 @@ dig @192.168.1.201 386387.xyz AXFR
 - A common format is `YYYYMMDDNN` (e.g., `2025111001` for the first change on Nov 10, 2025).
 
 **Client Configuration:**
-- To use your new DNS servers, update the DNS settings on your client machines to point to `192.168.1.201` and `192.168.1.202`.
+- To use your new DNS servers, update the DNS settings on your client machines to point to `192.168.1.226` and `192.168.1.227`.
 - You can also configure the DNS servers themselves to use each other as primary resolvers by editing `/etc/resolv.conf`.
 
 

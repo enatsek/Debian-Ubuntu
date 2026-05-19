@@ -27,7 +27,7 @@ This guide attempts to cover all files and folders under `/etc` for a default in
 
 <br>
 
-##/etc/.pwd.lock
+## /etc/.pwd.lock
 
 ---
 This file exists in default Ubuntu and Debian installations.
@@ -159,8 +159,8 @@ UTC
 
 <br>
 
-## /etc/aliases
 
+## /etc/aliases
 
 ---
 This file does **not** exist in default Ubuntu or Debian installations.
@@ -227,8 +227,8 @@ Key files and folders:
 
 <br>
 
-## /etc/apparmor/ Folder and /etc/apparmor.d/ Folder
 
+## /etc/apparmor/ Folder and /etc/apparmor.d/ Folder
 
 ---
 These folders exist in default Ubuntu and Debian installations.
@@ -473,7 +473,7 @@ ESCAPE_CHARACTERS=b
 
 ---
 - **Debian:** This folder does **not** exist in default installations.  
-- **Ubuntu:** This folder exists in default installations.
+- **Ubuntu:** This folder does **not** exist in default installations.
 
 It contains configuration files and scripts related to **Byobu**, a terminal multiplexer that enhances GNU Screen or tmux functionality.
 
@@ -543,6 +543,29 @@ mozilla/Amazon_Root_CA_1.crt
 ```
 
 <br>
+
+## /etc/chrony folder
+
+---
+- **Debian:** This folder does **not** exist in default installations.  
+- **Ubuntu:** This folder exists in default installations.
+
+Starting with 26.04 LTS version, Ubuntu changed from systemd-timesyncd to chrony for time synchronization. This folder contains configuration data for chrony daemon. 
+
+The files and folders:
+
+- chrony.conf : The primary configuration file for the chrony daemon. It tells the service which servers to sync time with, sets up security parameters, defines where to store the system clock drift file, and controls access rules if your server acts as an NTP server for other machines.
+
+- conf.d/ : A directory used for modular configuration snippets. Instead of hacking up the main chrony.conf file, you can drop custom configuration files here (usually ending in .conf). 
+
+- sources.d/ : A specific subdirectory meant solely for adding or removing NTP source definitions (like server or pool lines). This keeps your actual upstream time servers separated from your main system settings.
+
+- chrony.keys : Holds shared cryptographic keys used for legacy Symmetric Key Authentication between an NTP client and server. 
+
+nts-bootstrap-*.crt : The trusted root certificate bundles used specifically for Network Time Security (NTS). NTS is the modern, secure successor to traditional NTP; it uses TLS to authenticate time servers. 
+
+<br>
+
 
 ## /etc/cloud/ Folder
 
@@ -618,51 +641,6 @@ Each line in `/etc/crontab` follows the format:
 
 <br>
 
-## /etc/cryptsetup-initramfs/ Folder
-
-
----
-- **Debian:** This folder does **not** exist in default installations.  
-- **Ubuntu:** This folder exists in default installations.
-
-It contains configuration files for the `cryptsetup` tool, specifically for setting up encrypted volumes during the initial ramdisk (initramfs) stage of boot.
-
-It may include hooks, configuration options, and scripts.  
-Ubuntu installations contain only the `conf-hook` file by default.
-
-Excerpt from `/etc/cryptsetup-initramfs/conf-hook`:
-
-```text
-# Configuration file for the cryptroot initramfs hook.
-
-# KEYFILE_PATTERN: ...
-
-# The value of this variable is interpreted as a shell pattern.
-# Matching key files from the crypttab(5) are included in the initramfs
-# image.  The associated devices can then be unlocked without manual
-# intervention.  (For instance if /etc/crypttab lists two key files
-# /etc/keys/{root,swap}.key, you can set KEYFILE_PATTERN="/etc/keys/*.key"
-# to add them to the initrd.)
-
-# If KEYFILE_PATTERN if null or unset (default) then no key file is
-# copied to the initramfs image.
-
-# Note that the glob(7) is not expanded for crypttab(5) entries with a
-# 'keyscript=' option.  In that case, the field is not treated as a file
-# name but given as argument to the keyscript.
-#KEYFILE_PATTERN=
-
-# ASKPASS: [ y | n ]
-
-# Whether to include the askpass binary to the initramfs image.  askpass
-# is required for interactive passphrase prompts, and ASKPASS=y (the
-# default) is implied when the hook detects that same device needs to be
-# unlocked interactively (i.e., not via keyfile nor keyscript) at
-# initramfs stage.  Setting ASKPASS=n also skips `cryptroot-unlock`
-# inclusion as it requires the askpass executable.
-
-#ASKPASS=y
-```
 
 <br>
 
@@ -771,11 +749,23 @@ Example contents:
 13.1
 ```
 
-**Ubuntu 24.04:**
+**Ubuntu 26.04:**
 
 ```text
-trixie/sid
+forky/sid
 ```
+
+<br>
+
+## /etc/debuginfod Folder
+
+---
+- **Debian:** This folder does **not** exist in default installations.  
+- **Ubuntu:** This folder exists in default installations.
+
+Holds the system-wide configuration files for how the local machine interacts with debugging symbol servers.
+
+Contains a file named `elfutils.urls` which has the value of `https://debuginfod.ubuntu.com`. 
 
 <br>
 

@@ -19,7 +19,7 @@ This tutorial demonstrates how to install WordPress on Debian and Ubuntu servers
 ### 0.2. The Environment
 
 - **Server Name:** `www.386387.xyz`
-- **Server Distro:** Debian 12/13 or Ubuntu 22.04/24.04 LTS Server
+- **Server Distro:** Debian 12/13 or Ubuntu 24.04/26.04 LTS Server
 
 **WordPress Configuration:**
 - **MariaDB Database Name:** `wordpress`

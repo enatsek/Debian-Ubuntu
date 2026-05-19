@@ -11,7 +11,7 @@ sidebar:
 ---
 
 ### 0.0. Info
-Network configuration examples on Ubuntu 22.04 LTS and 24.04 LTS Servers.
+Network configuration examples on Ubuntu 24.04 LTS and 26.04 LTS Servers.
 
 Tried to be as thorough as possible: single NIC, multiple NICs, multiple networks.
 
@@ -19,7 +19,7 @@ Debian and Ubuntu network configurations are very different, so there are separa
 
 ### 0.1. Configuration Files
 
-Ubuntu 22.04 and 24.04 LTS Servers use Systemd-Networkd and Netplan for network configuration.
+Ubuntu 24.04 and 26.04 LTS Servers use Systemd-Networkd and Netplan for network configuration.
 
 Configuration files reside as YAML files in the `/etc/netplan` directory. A good practice is to have one configuration file there.
 
@@ -40,6 +40,8 @@ This configuration file contains all network configurations, including name serv
 ### 1.1. DHCP Configuration
 
 Our NIC is enp0s3.
+
+Edit configuration file. Yours might be named something else, in that case, edit that file.
 
 ```bash
 sudo nano /etc/netplan/50-cloud-init.yaml
@@ -76,7 +78,7 @@ network:
   ethernets:
     enp0s3:
       addresses:
-        - 192.168.1.221/24
+        - 192.168.1.226/24
       nameservers:
         search:
           - "x386.org"
@@ -109,7 +111,7 @@ network:
   ethernets:
     enp0s3:
       addresses:
-        - 192.168.1.221/24
+        - 192.168.1.226/24
         - 10.1.1.1/8
       nameservers:
         search:
@@ -143,7 +145,7 @@ network:
   ethernets:
     enp0s3:
       addresses:
-        - 192.168.1.221/24
+        - 192.168.1.226/24
       nameservers:
         search:
           - "x386.org"
@@ -179,15 +181,15 @@ This way, hosts in one network will be able to reach hosts in the other network.
 
 Hosts in the 192.168.1.X network use 192.168.1.1 as the default gateway; hosts in the 10.X.X.X network use 10.1.1.1 as the default gateway.
 
-Our router will have 2 NICs: one with IP 192.168.1.216 and the other with IP 10.1.1.216.
+Our router will have 2 NICs: one with IP 192.168.1.226 and the other with IP 10.1.1.226.
 
-Hosts in the 192.168.1.X network will use 192.168.1.216 to reach the 10.X.X.X network. Hosts in the 10.X.X.X network will use 10.1.1.216 to reach the 192.168.1.X network.
+Hosts in the 192.168.1.X network will use 192.168.1.226 to reach the 10.X.X.X network. Hosts in the 10.X.X.X network will use 10.1.1.226 to reach the 192.168.1.X network.
 
 We will configure:
 
-- The router (192.168.1.216 & 10.1.1.216)
-- The host in the first network (192.168.1.217)
-- The host in the second network (10.1.1.218)
+- The router (192.168.1.226 & 10.1.1.226)
+- The host in the first network (192.168.1.227)
+- The host in the second network (10.1.1.228)
 
 Then we'll check connectivity between them.
 
@@ -196,8 +198,8 @@ Then we'll check connectivity between them.
 We have 2 NICs (enp0s3 - 192.168.1.X network, and enp0s8 - 10.X.X.X network).
 
 Configure NICs:
-- enp0s3: 192.168.1.216/24
-- enp0s8: 10.1.1.216/8
+- enp0s3: 192.168.1.226/24
+- enp0s8: 10.1.1.226/8
 
 ```bash
 sudo nano /etc/netplan/50-cloud-init.yaml
@@ -212,7 +214,7 @@ network:
   ethernets:
     enp0s3:
       addresses:
-        - 192.168.1.216/24
+        - 192.168.1.226/24
       nameservers:
         search:
           - "x386.org"
@@ -224,7 +226,7 @@ network:
           via: 192.168.1.1
     enp0s8:
       addresses:
-        - 10.1.1.216/8
+        - 10.1.1.226/8
 ```
 
 Restart networking (your SSH connection may break; reconnect if needed):
@@ -268,7 +270,7 @@ network:
   ethernets:
     enp0s3:
       addresses:
-        - 192.168.1.217/24
+        - 192.168.1.227/24
       nameservers:
         search:
           - "x386.org"
@@ -279,7 +281,7 @@ network:
         - to: default
           via: 192.168.1.1
         - to: 10.0.0.0/8
-          via: 192.168.1.216
+          via: 192.168.1.226
 ```
 
 Restart networking (your SSH connection may break; reconnect if needed):
@@ -305,7 +307,7 @@ network:
   ethernets:
     enp0s3:
       addresses:
-        - 10.1.1.218/8
+        - 10.1.1.228/8
       nameservers:
         search:
           - "x386.org"
@@ -316,7 +318,7 @@ network:
         - to: default
           via: 10.1.1.1
         - to: 192.168.1.0/24
-          via: 10.1.1.216
+          via: 10.1.1.226
 ```
 
 Restart networking (your SSH connection may break; reconnect if needed):
@@ -329,16 +331,16 @@ sudo netplan apply
 
 The host in the first network can ping the host in the other network now, and vice versa.
 
-Try on the first host (192.168.1.217)
+Try on the first host (192.168.1.227)
 
 ```bash
-ping 10.1.1.218
+ping 10.1.1.228
 ```
 
-Try on the second host (10.1.1.218)
+Try on the second host (10.1.1.228)
 
 ```bash
-ping 192.168.1.217
+ping 192.168.1.227
 ```
 
 For a host to connect to another host on the other network, routing must be defined on both hosts.

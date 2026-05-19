@@ -19,7 +19,7 @@ This is a basic UFW tutorial covering enabling/disabling, adding and deleting ru
 
 ### 0.2. Environment
 
-Prepared for and tested on Debian 13/12 and Ubuntu 24.04/22.04 LTS Server.
+Prepared for and tested on Debian 12/13 and Ubuntu 24.04/26.04 LTS Server.
 
 ### 0.3. Sources:
 
@@ -42,7 +42,7 @@ This represents the deepest layer of Linux firewall functionality.
 
 ### 1.2. Nftables and Iptables
 
-Nftables is the successor to iptables and serves as the second layer of Linux firewalls. It can be considered a generic firewall system that allows administrators to define rulesets based on network packets.
+Nftables is the successor to iptables and serves as the second layer of Linux firewalls. It can be considered as a generic firewall system that allows administrators to define rulesets based on network packets.
 
 While nftables (or iptables on older distributions) can be used directly for firewall configuration, their complexity has led distributions to provide higher-level tools for easier management.
 
@@ -268,7 +268,7 @@ sudo ufw allow ssh
 - Allow MariaDB for network `192.168.1.0/24`, except for IP `192.168.1.231`.
 - Allow HTTP and HTTPS for everyone.
 - Deny outgoing SMTP (port 25/TCP).
-- Add an additional MariaDB exception for IP `192.168.1.232`.
+- Add an additional MariaDB deny exception for IP `192.168.1.232`.
 
 ### 4.1. Always Allow SSH First
 

@@ -33,8 +33,8 @@ Tested on the following distributions:
 
 - Debian 12
 - Debian 13
-- Ubuntu 22.04 LTS Server
 - Ubuntu 24.04 LTS Server
+- Ubuntu 26.04 LTS Server
 
 ### 0.3. Sources
 
@@ -931,7 +931,7 @@ sda               8:0    0   20G  0 disk
 
 **Note on Naming:**
 
-When installing with LVM, Debian lets you choose the VG name (I chose `myvg`). Debian names the root LV `root`. Ubuntu uses `ubuntu-vg` and `lv-root` by default.
+When installing with LVM, Debian lets you choose the VG name (I chose `myvg`). Debian names the root LV `root`. Ubuntu uses `ubuntu-vg` and `ubuntu-lv` by default.
 
 **In this section, replace `myvg` with your actual Volume Group name (`ubuntu-vg` for Ubuntu) in all commands.**
 

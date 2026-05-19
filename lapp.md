@@ -25,7 +25,7 @@ In this guide, we will use **PHP** as our server-side scripting language.
 
 ### 0.2. Environment
 
-- **Server Distribution:** Debian 12/13 or Ubuntu 22.04/24.04 LTS Server
+- **Server Distribution:** Debian 12/13 or Ubuntu 24.04/26.04 LTS Server
 
 ### 0.3. Sources
 
@@ -96,12 +96,6 @@ sudo -u postgres psql testdb
 ```
 
 Create a table, populate it with data, and grant the test user access permissions.
-
-Enter PostgreSQL shell:
-
-```bash
-sudo -u postgres psql testdb
-```
 
 **Run the following commands in the PostgreSQL shell:**
 

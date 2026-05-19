@@ -32,6 +32,8 @@ All scenarios and commands in this documentation have been validated on:
 
 * **Debian 13 (Trixie)**
 * **Ubuntu Server 24.04 LTS**
+* **Ubuntu Server 26.04 LTS**
+
 
 **Topology:**
 
@@ -96,14 +98,14 @@ Docker is composed of multiple layers:
 
 ```bash
 sudo apt update
-sudo apt install docker.io docker-compose
+sudo apt -y install docker.io docker-compose
 ```
 
-### 1.4. Ubuntu 24.04 Installing from Ubuntu Packages
+### 1.4. Ubuntu 24.04/26.04 Installing from Ubuntu Packages
 
 ```bash
 sudo apt update
-sudo apt install docker.io docker-compose-v2
+sudo apt -y install docker.io docker-compose-v2
 ```
 
 
@@ -140,10 +142,10 @@ sudo apt update
 Install Docker packages:
 
 ```bash
-sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
-### 1.6. Ubuntu 24.04 Installing from Docker Repos
+### 1.6. Ubuntu 24.04/26.04 Installing from Docker Repos
 
 Remove any previously installed docker packages:
 
@@ -176,7 +178,7 @@ sudo apt update
 Install Docker packages:
 
 ```bash
-sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
 ### 1.7. Post-Installation Steps 
@@ -1008,6 +1010,7 @@ Some important ```docker network``` commands:
 
 ---
 
+
 ## 6. Docker Compose
 
 ### 6.1. Overview
@@ -1368,6 +1371,7 @@ Use these essential commands to verify the operational state:
 - `docker service inspect --pretty <name>`: Shows detailed configuration of a service.
 
 
+
 ### 8.3. Practical Lab: Deploying a 5-Node Cluster
 
 In this scenario, we will implement a fault-tolerant Swarm cluster. To maintain a quorum while distributing the workload, we will configure **three nodes as Managers** and **two nodes as dedicated Workers**.
@@ -1376,11 +1380,11 @@ In this scenario, we will implement a fault-tolerant Swarm cluster. To maintain 
 
 | Hostname | IP Address | Role | OS |
 | --- | --- | --- | --- |
-| `node1` | 192.168.1.201 | Manager (Leader) | Debian 13 / Ubuntu 24.04 |
-| `node2` | 192.168.1.202 | Manager (Reachable) | Debian 13 / Ubuntu 24.04 |
-| `node3` | 192.168.1.203 | Manager (Reachable) | Debian 13 / Ubuntu 24.04 |
-| `node4` | 192.168.1.204 | Worker | Debian 13 / Ubuntu 24.04 |
-| `node5` | 192.168.1.205 | Worker | Debian 13 / Ubuntu 24.04 |
+| `node1` | 192.168.1.226 | Manager (Leader) | Debian 13 / Ubuntu 24.04 - 26.04 |
+| `node2` | 192.168.1.227 | Manager (Reachable) | Debian 13 / Ubuntu 24.04 - 26.04 |
+| `node3` | 192.168.1.228 | Manager (Reachable) | Debian 13 / Ubuntu 24.04 - 26.04 |
+| `node4` | 192.168.1.229 | Worker | Debian 13 / Ubuntu 24.04 - 26.04 |
+| `node5` | 192.168.1.230 | Worker | Debian 13 / Ubuntu 24.04 - 26.04 |
 
 #### 8.3.1. Cluster Initialization
 
@@ -1389,7 +1393,7 @@ Initialize the Swarm on `node1`. We specify `--advertise-addr` to ensure the man
 **Run on node1:**
 
 ```bash
-docker swarm init --advertise-addr 192.168.1.201
+docker swarm init --advertise-addr 192.168.1.226
 ```
 
 **Execution Output:**
@@ -1399,7 +1403,7 @@ The daemon will generate a unique join token. All subsequent nodes will join as 
 Swarm initialized: current node (zm22...) is now a manager.
 
 To add a worker to this swarm, run the following command:
-    docker swarm join --token SWMTKN-1-2xqz... 192.168.1.201:2377
+    docker swarm join --token SWMTKN-1-2xqz... 192.168.1.226:2377
 
 ```
 
@@ -1410,7 +1414,7 @@ Execute the join command provided in the previous step on the remaining four nod
 **Run on node2, node3, node4, and node5:**
 
 ```bash
-docker swarm join --token <WORKER_TOKEN> 192.168.1.201:2377
+docker swarm join --token <WORKER_TOKEN> 192.168.1.226:2377
 
 ```
 
@@ -1575,11 +1579,11 @@ docker stack ps example1
 
 Thanks to the **Ingress Routing Mesh**, we can access the web service using the IP address of any node in the cluster (even if a specific node were only acting as a routing jump).
 
-* `http://192.168.1.201:8080/`
-* `http://192.168.1.202:8080/`
-* `http://192.168.1.203:8080/`
-* `http://192.168.1.204:8080/`
-* `http://192.168.1.205:8080/`
+* `http://192.168.1.226:8080/`
+* `http://192.168.1.227:8080/`
+* `http://192.168.1.228:8080/`
+* `http://192.168.1.229:8080/`
+* `http://192.168.1.230:8080/`
 
 #### 8.4.5. Teardown
 
@@ -1607,7 +1611,7 @@ sudo nano /etc/docker/daemon.json
 
 ```json
 {
-  "insecure-registries" : ["192.168.1.201:5000"]
+  "insecure-registries" : ["192.168.1.226:5000"]
 }
 ```
 
@@ -1653,10 +1657,10 @@ FROM debian:trixie
 CMD ['bash'] 
 EOF
 # Build and Tag the image for the local registry
-docker build -t 192.168.1.201:5000/local-test:v1 .
+docker build -t 192.168.1.226:5000/local-test:v1 .
 
 # Push the image to the local repository
-docker push 192.168.1.201:5000/local-test:v1
+docker push 192.168.1.226:5000/local-test:v1
 ```
 
 
@@ -1667,9 +1671,10 @@ Since the registry is now reachable across the network, any node in the Swarm ca
 **Run on any other node (e.g., node4):**
 
 ```bash
-docker pull 192.168.1.201:5000/local-test:v1
+docker pull 192.168.1.226:5000/local-test:v1
 ```
 
+!!!
 
 ### 8.6. Scenario 2: Two-Tier Microservices Architecture
 
@@ -1723,8 +1728,8 @@ CMD ["python", "app.py"]
 EOF
 
 # Build, Tag, and Push to Local Registry
-docker image build -t 192.168.1.201:5000/example2-backend:v1 .
-docker image push 192.168.1.201:5000/example2-backend:v1
+docker image build -t 192.168.1.226:5000/example2-backend:v1 .
+docker image push 192.168.1.226:5000/example2-backend:v1
 ```
 
 #### 8.6.3. Frontend Development (Nginx Reverse Proxy)
@@ -1758,8 +1763,8 @@ COPY custom.conf /etc/nginx/conf.d/default.conf
 EOF
 
 # Build, Tag, and Push to Local Registry
-docker image build -t 192.168.1.201:5000/example2-frontend:v1 .
-docker image push 192.168.1.201:5000/example2-frontend:v1
+docker image build -t 192.168.1.226:5000/example2-frontend:v1 .
+docker image push 192.168.1.226:5000/example2-frontend:v1
 ```
 
 #### 8.6.4. Orchestration & Deployment (The Stack)
@@ -1779,7 +1784,7 @@ nano stack.yaml
 services:
   # BACKEND: Isolated tier running on worker nodes only
   backend-service:
-    image: 192.168.1.201:5000/example2-backend:v1
+    image: 192.168.1.226:5000/example2-backend:v1
     environment:
       # Templating: Automatically injects the host's name into the container
       MY_NODE_NAME: "{{.Node.Hostname}}"
@@ -1801,7 +1806,7 @@ services:
 
   # FRONTEND: Gateway tier acting as the cluster entry point
   frontend-service:
-    image: 192.168.1.201:5000/example2-frontend:v1
+    image: 192.168.1.226:5000/example2-frontend:v1
     ports:
       - "80:80"
     networks:
@@ -1851,9 +1856,8 @@ cd ~/example2/backend
 sed -i 's/Response from Backend/Updated response (v2) from Backend/g' app.py
 
 # Build and Push the NEW version
-docker image build -t 192.168.1.201:5000/example2-backend:v2 .
-docker image push 192.168.1.201:5000/example2-backend:v2
-
+docker image build -t 192.168.1.226:5000/example2-backend:v2 .
+docker image push 192.168.1.226:5000/example2-backend:v2
 ```
 
 **Implementing the Advanced Update Strategy**
@@ -1873,7 +1877,7 @@ Change as below:
 services:
   backend-service:
     # We will change this to :v2 for the update test
-    image: 192.168.1.201:5000/example2-backend:v2
+    image: 192.168.1.226:5000/example2-backend:v2
     environment:
       MY_NODE_NAME: "{{.Node.Hostname}}"
     networks:
@@ -1908,7 +1912,7 @@ services:
         order: stop-first
 
   frontend-service:
-    image: 192.168.1.201:5000/example2-frontend:v1
+    image: 192.168.1.226:5000/example2-frontend:v1
     ports:
       - "80:80"
     networks:
@@ -2021,8 +2025,8 @@ CMD ["python", "app.py"]
 EOF
 
 # Build, Tag, and Push to Enterprise Registry
-docker image build -t 192.168.1.201:5000/example3-backend:1.0 .
-docker image push 192.168.1.201:5000/example3-backend:1.0
+docker image build -t 192.168.1.226:5000/example3-backend:1.0 .
+docker image push 192.168.1.226:5000/example3-backend:1.0
 ```
 
 #### 8.7.3. Infrastructure Security: Secrets & Configs
@@ -2185,7 +2189,7 @@ services:
   # Backend Service (Internal Only)
   ##########################################################
   backend:
-    image: 192.168.1.201:5000/example3-backend:1.0
+    image: 192.168.1.226:5000/example3-backend:1.0
 
     networks:
       - frontend
@@ -2252,14 +2256,14 @@ Use `curl -k` (to ignore the self-signed certificate warning) and observe the **
 
 ```bash
 # Repeat this command to see different Hostnames (Container IDs)
-curl -k https://192.168.1.201
+curl -k https://192.168.1.226
 ```
 
 If we run repeatedly, we can see that hostname changes.
 
 **Accessing via Browser**
 
-we can point our browser to any node IP in the cluster (e.g., `https://192.168.1.204`). The **Ingress Routing Mesh** will intercept the traffic on port 443 and route it to the `proxy` service running on the Manager node, which in turn proxies it to a `backend` task on a Worker node.
+we can point our browser to any node IP in the cluster (e.g., `https://192.168.1.229`). The **Ingress Routing Mesh** will intercept the traffic on port 443 and route it to the `proxy` service running on the Manager node, which in turn proxies it to a `backend` task on a Worker node.
 
 
 #### 8.7.5. Executing the Rolling Update (v1.0 to v2.0)
@@ -2277,8 +2281,8 @@ cd ~/example3/backend
 sed -i 's/APP_VERSION=1.0/APP_VERSION=2.0/g' Dockerfile
 
 # Build and Push the v2.0 image to our local registry
-docker image build -t 192.168.1.201:5000/example3-backend:2.0 .
-docker image push 192.168.1.201:5000/example3-backend:2.0
+docker image build -t 192.168.1.226:5000/example3-backend:2.0 .
+docker image push 192.168.1.226:5000/example3-backend:2.0
 ```
 
 Update image definition in stack file too:
@@ -2286,13 +2290,13 @@ Update image definition in stack file too:
 Change the line:
 
 ```dockerfile
-image: 192.168.1.201:5000/example3-backend:1.0
+image: 192.168.1.226:5000/example3-backend:1.0
 ```
 
 to:
 
 ```dockerfile
-image: 192.168.1.201:5000/example3-backend:2.0
+image: 192.168.1.226:5000/example3-backend:2.0
 ```
 
 ```bash
@@ -2363,7 +2367,7 @@ services:
   # Backend Service (Internal Only)
   ##########################################################
   backend:
-    image: 192.168.1.201:5000/example3-backend:2.0
+    image: 192.168.1.226:5000/example3-backend:2.0
 
     networks:
       - frontend
@@ -2435,7 +2439,7 @@ While the update is running, we can hit any node in the cluster. we will notice 
 
 ```bash
 # Test from terminal
-curl -k https://192.168.1.201
+curl -k https://192.168.1.226
 ```
 
 **Expected Outcome:** Eventually, all responses will show `Backend Version: 2.0`. The TLS proxy (Nginx) continues to run without interruption on the Manager node throughout this process.
@@ -2501,7 +2505,6 @@ secrets:
     external: true
   tls_key_v2:
     external: true
-
 ```
 
 
@@ -2568,7 +2571,7 @@ services:
   # Backend Service (Internal Only)
   ##########################################################
   backend:
-    image: 192.168.1.201:5000/example3-backend:2.0
+    image: 192.168.1.226:5000/example3-backend:2.0
 
     networks:
       - frontend

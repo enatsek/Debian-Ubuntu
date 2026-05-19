@@ -24,16 +24,16 @@ We will install a single-domain Active Directory infrastructure using Debian or 
 - **Domain NetBIOS Name:** `386387`
 - **First DC:**
     - `srv1.386387.xyz`
-    - `192.168.1.201`
-    - Debian 13/12 or Ubuntu 24.04/22.04 LTS Server
+    - `192.168.1.226`
+    - Debian 12/13 or Ubuntu 24.04/26.04 LTS Server
 - **Second DC:**
     - `srv2.386387.xyz`
-    - `192.168.1.202`
-    - Debian 13/12 or Ubuntu 24.04/22.04 LTS Server
+    - `192.168.1.227`
+    - Debian 12/13 or Ubuntu 24.04/26.04 LTS Server
 - **File Server:**
     - `filesrv.386387.xyz`
-    - `192.168.1.203`
-    - Debian 13/12 or Ubuntu 24.04/22.04 LTS Server
+    - `192.168.1.228`
+    - Debian 12/13 or Ubuntu 24.04/26.04 LTS Server
 - Windows workstations will be able to connect to the domain.
 
 - **Groups and Users:**
@@ -73,7 +73,7 @@ We will install a single-domain Active Directory infrastructure using Debian or 
 //filesrv/XAll      All (RW)
 ```
 
-In my tests, I used distributions uniformly (i.e., all servers were either Debian 12, Debian 13, Ubuntu 22.04, or Ubuntu 24.04). I believe the system would work with a mix of distributions, but this has not been tested.
+In my tests, I used distributions uniformly (i.e., all servers were either Debian 12, Debian 13, Ubuntu 24.04, or Ubuntu 26.04). I believe the system would work with a mix of distributions, but this has not been tested.
 
 ### 0.2. Phases
 
@@ -108,7 +108,7 @@ The hostname must be in the format `name.example.com` (lowercase). Due to an inc
 
 ```text
 127.0.0.1       localhost
-192.168.1.201   srv1.386387.xyz srv1
+192.168.1.226   srv1.386387.xyz srv1
 ```
 
  
@@ -134,7 +134,7 @@ Remember to replace all occurrences of `386387`, `386387.XYZ`, and `386387.xyz` 
 Domain Name:  386387
 Realm:        386387.XYZ	
 Hostname:     srv1.386387.xyz
-IP:           192.168.1.201
+IP:           192.168.1.226
 ```
 
 ### 1.1. Set Hostname
@@ -154,14 +154,14 @@ Modify the beginning of the file as follows:
 
 ```text
 127.0.0.1       localhost
-192.168.1.201   srv1.386387.xyz srv1 
+192.168.1.226   srv1.386387.xyz srv1 
 ```
 
 ### 1.2. Install required packages
 
 ```bash
 sudo apt update
-sudo apt -y install samba krb5-config winbind smbclient 
+sudo apt -y install samba samba-ad-dc krb5-config winbind smbclient 
 ```
 
 Provide the following answers to the configuration prompts:
@@ -201,7 +201,7 @@ sudo systemctl disable smbd nmbd winbind systemd-resolved
 sudo systemctl unmask samba-ad-dc 
 ```
 
-**Note:** On Debian 12, you may see an error `Failed to stop systemd-resolved.service: Unit systemd-resolved.service not loaded.` This can be safely ignored.
+**Note:** On Debian 12 & 13, you may see an error `Failed to stop systemd-resolved.service: Unit systemd-resolved.service not loaded.` This can be safely ignored.
 
 ### 1.5. Recreate resolv.conf
 
@@ -247,8 +247,8 @@ sudo samba-tool user create exforge
 Domain Name: 386387
 Realm:       386387.XYZ	
 Hostname:    srv2.386387.xyz
-IP:          192.168.1.202
-Original DC: srv1.386387.xyz (192.168.1.201)
+IP:          192.168.1.227
+Original DC: srv1.386387.xyz (192.168.1.226)
 ```
 
 ### 2.1. Set Hostname
@@ -268,7 +268,7 @@ Modify the beginning of the file as follows:
 
 ```text
 127.0.0.1       localhost
-192.168.1.202   srv2.386387.xyz srv2 
+192.168.1.227   srv2.386387.xyz srv2 
 ```
 
 ### 2.2. Install Kerberos and Edit Configuration
@@ -314,7 +314,7 @@ Add the following lines (pointing to the first DC):
 
 ```text
 domain 386387.xyz
-nameserver 192.168.1.201
+nameserver 192.168.1.226
 ```
 
 ### 2.5. Obtain a Kerberos Ticket
@@ -336,7 +336,7 @@ sudo klist
 Install necessary packages:
 
 ```bash
-sudo apt -y install samba winbind smbclient 
+sudo apt -y install samba samba-ad-dc winbind smbclient 
 ```
 
 Back up and remove the default Samba config, then join the domain:
@@ -691,7 +691,7 @@ Modify the beginning of the file:
 
 ```text
 127.0.0.1       localhost
-192.168.1.203   filesrv.386387.xyz filesrv 
+192.168.1.228   filesrv.386387.xyz filesrv 
 ```
  
 Recreate `/etc/resolv.conf`:
@@ -705,8 +705,8 @@ Add:
 
 ```text
 domain 386387.xyz
-nameserver 192.168.1.201
-nameserver 192.168.1.202
+nameserver 192.168.1.226
+nameserver 192.168.1.227
 ```
 
 ### 5.2. Install necessary packages
@@ -822,7 +822,7 @@ Add the following lines to the `[global]` section:
    winbind separator = +         
    encrypt passwords = yes         
    dns proxy = no         
-   wins server = 192.168.1.201         
+   wins server = 192.168.1.226         
    wins proxy = no  
 ```
 
@@ -1050,7 +1050,7 @@ sudo systemctl restart smbd
 
 ---
 
-1.  On the Windows computer, configure its DNS settings to point to your Domain Controllers (e.g., `192.168.1.201` and `192.168.1.202`).
+1.  On the Windows computer, configure its DNS settings to point to your Domain Controllers (e.g., `192.168.1.226` and `192.168.1.227`).
 2.  Proceed with the standard "Join a Domain" process through System Properties, using the domain name (`386387`) and an administrative account.
 3.  After joining, you can install **RSAT (Remote Server Administration Tools)** on the Windows workstation to manage AD, DNS, and other services.
 4.  You can connect to the file shares using `\\filesrv\ShareName` (e.g., `\\filesrv\XMrk`) from any domain-joined Windows computer.

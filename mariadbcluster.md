@@ -29,9 +29,9 @@ MariaDB Galera Cluster is a Linux-exclusive, multi-primary cluster solution for 
 
 
 ### 0.3. Environment
-- **srv1**: 192.168.1.201 (Debian 13/12 or Ubuntu 24.04/22.04 LTS Server)
-- **srv2**: 192.168.1.202 (Debian 13/12 or Ubuntu 24.04/22.04 LTS Server)
-- **srv3**: 192.168.1.203 (Debian 13/12 or Ubuntu 24.04/22.04 LTS Server)
+- **srv1**: 192.168.1.226 (Debian 13/12 or Ubuntu 24.04/26.04 LTS Server)
+- **srv2**: 192.168.1.227 (Debian 13/12 or Ubuntu 24.04/26.04 LTS Server)
+- **srv3**: 192.168.1.228 (Debian 13/12 or Ubuntu 24.04/262.04 LTS Server)
 
 **Important:** All nodes must run the same version of MariaDB. Using identical Linux distributions is recommended to ensure compatibility.
 
@@ -122,7 +122,7 @@ innodb_autoinc_lock_mode = 2
 wsrep_cluster_name    = "x386_cluster"
 
 # List of all cluster nodes
-wsrep_cluster_address = "gcomm://192.168.1.201,192.168.1.202,192.168.1.203"
+wsrep_cluster_address = "gcomm://192.168.1.226,192.168.1.227,192.168.1.228"
 
 # Galera plugin path
 wsrep_provider = /usr/lib/galera/libgalera_smm.so
@@ -145,8 +145,27 @@ binlog_format = ROW
 
 <br>
 
+## Ubuntu 26.04 LTS Workaround
+---
+
+You can skip this section for distros other than Ubuntu 26.04 LTS
+
+There is an incompatibility or misconfiguration on Ubuntu 26.04 LTS for MariaDB and AppArmor. In some ways, AppArmor doesn't let MariaDB to use Galera Cluster. I believe it will be fixed by Canonical sometime, but for now we can disable AppArmor for MariaDB
+
+
+**Run on all servers**
+
+```
+# Disable the profile at boot
+sudo ln -s /etc/apparmor.d/mariadbd /etc/apparmor.d/disable/
+# Unload it from the running kernel immediately
+sudo apparmor_parser -R /etc/apparmor.d/mariadbd
+```
+
+
 ## 3. Starting The Cluster
 ---
+
 
 **Step 1: Start the Cluster on One Node**  
 **Run this command on ONLY ONE server (e.g., srv1):**
@@ -332,6 +351,13 @@ Run on each node:
 sudo cat /var/lib/mysql/grastate.dat
 ```
 
+**Note:** For Ubuntu 26.04 run:
+
+```bash
+sudo cat /var/lib/mariadb/grastate.dat
+```
+
+
 Sample output:
 
 ```text
@@ -383,6 +409,12 @@ Change the line to:
 safe_to_bootstrap: 1
 ```
 
+**Note:** For Ubuntu 26.04 edit the following file:
+
+```bash
+sudo cat /var/lib/mariadb/grastate.dat
+```
+
 ### 6.3. Restarting the Galera Cluster
 
 **On the safe node:**
@@ -419,7 +451,7 @@ sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
 ```
 
 ```ini
-wsrep_cluster_address = "gcomm://192.168.1.203"  # IP of safe node only
+wsrep_cluster_address = "gcomm://192.168.1.228"  # IP of safe node only
 ```
 
 Re-enable and start the cluster:
@@ -452,7 +484,7 @@ sudo nano /etc/mysql/mariadb.conf.d/99-cluster.cnf
 ```
 
 ```ini
-wsrep_cluster_address = "gcomm://192.168.1.201,192.168.1.202,192.168.1.203"
+wsrep_cluster_address = "gcomm://192.168.1.226,192.168.1.227,192.168.1.228"
 ```
 
 Restart MariaDB:

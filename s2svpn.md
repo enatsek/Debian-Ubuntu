@@ -22,9 +22,9 @@ It's different from the VPN you might use on your personal computer, which typic
 
 - **Name:** net1
 - **Network:** 192.168.56.0/24
-- **Wireguard Server (Debian 13 Server/Ubuntu 24.04 LTS Server):** 
+- **Wireguard Server (Debian 13 Server/Ubuntu 26.04 LTS Server):** 
     - **Name:** net1-1
-    - **Public IP:** 192.168.1.251
+    - **Public IP:** 192.168.1.226
     - **Private IP:** 192.168.56.1
 - **Hosts in the network (Linux/Mac/Wind*ws/etc):** 
     - **Name:** net1-2 
@@ -35,9 +35,9 @@ It's different from the VPN you might use on your personal computer, which typic
 
 - **Name:** net2
 - **Network:** 192.168.57.0/24
-- **Wireguard Server (Debian 13 Server/Ubuntu 24.04 LTS Server):** 
+- **Wireguard Server (Debian 13 Server/Ubuntu 26.04 LTS Server):** 
     - **Name:** net2-1
-    - **Public IP:** 192.168.1.252
+    - **Public IP:** 192.168.1.227
     - **Private IP:** 192.168.57.1
 - **Hosts in the network (Linux/Mac/Wind*ws/etc):** 
     - **Name:** net2-2 
@@ -140,7 +140,7 @@ ListenPort = 51820
 
 [Peer]
 PublicKey = 8ZqdXWlcrJaYgOOrVZI3Aygz90CBnsQa1qtyL4/8LwU=
-Endpoint = 192.168.1.252:51820
+Endpoint = 192.168.1.227:51820
 AllowedIPs = 10.200.0.2/32, 192.168.57.0/24
 PersistentKeepalive = 25
 ```
@@ -164,7 +164,7 @@ ListenPort = 51820
 
 [Peer]
 PublicKey = fZjce9XED9g6LN0CJPjpeNueq7mzHFbIc9yIh/c+HVY=
-Endpoint = 192.168.1.251:51820
+Endpoint = 192.168.1.226:51820
 AllowedIPs = 10.200.0.1/32, 192.168.56.0/24
 PersistentKeepalive = 25
 ```
@@ -298,12 +298,11 @@ A sample configuration for **net1-2** could be as follows. Edit `/etc/netplan/01
 # /etc/netplan/01-netcfg.yaml
 network:
   version: 2
-  renderer: NetworkManager
+  renderer: networkd
   ethernets:
     enp0s3:
       addresses:
         - 192.168.56.2/24
-      gateway4: 192.168.56.101
       nameservers:
         addresses: [8.8.8.8, 1.1.1.1]
       routes:
@@ -317,18 +316,16 @@ Similarly, a sample configuration for **net2-2**:
 ```yaml
 network:
   version: 2
-  renderer: NetworkManager
+  renderer: networkd
   ethernets:
     enp0s3:
       addresses:
         - 192.168.57.2/24
-      gateway4: 192.168.57.101
       nameservers:
         addresses: [8.8.8.8, 1.1.1.1]
       routes:
       - to: 192.168.56.0/24
         via: 192.168.57.1
-
 ```
 
 

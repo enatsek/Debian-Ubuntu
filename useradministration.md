@@ -12,7 +12,7 @@ sidebar:
 
 ### 0.1. The What
 
-This tutorial covers basic user and group administration on Debian 13/12 and Ubuntu 24.04/22.04 Servers.
+This tutorial covers basic user and group administration on Debian 12/13 and Ubuntu 24.04/26.04 Servers.
 
 The commands and concepts also work on Debian, Ubuntu, and their derivatives' desktop environments (Ubuntu, Kubuntu, Xubuntu, Lubuntu, MX Linux, Mint, etc.).
 
@@ -202,7 +202,7 @@ groups
 Or view all groups on the system:
 
 ```bash
-cat /etc/group  
+cat /etc/group
 ```
 
 The `/etc/group` file format is similar to `/etc/passwd`: `group_name:password:GID:user_list`
@@ -230,20 +230,20 @@ getent group admins
 Add a user to a group as a secondary group membership:
 
 ```bash
-sudo usermod -aG admins jdoe
+sudo usermod -aG admins jdoe2
 sudo usermod -a -G admins user1
 ```
 
 Change a user's primary group:
 
 ```bash
-sudo usermod -g admins jdoe
+sudo usermod -g admins jdoe2
 ```
 
 Remove a user from a group:
 
 ```bash
-sudo gpasswd -d user1 admins
+sudo gpasswd -d jdoe2 admins
 ```
 
 <br>
@@ -254,31 +254,31 @@ sudo gpasswd -d user1 admins
 Change a user's home directory and move the contents:
 
 ```bash
-sudo usermod -d /home/jsmith -m jdoe
+sudo usermod -d /home/jsmith -m jdoe2
 ```
 
 Change a username:
 
 ```bash
-sudo usermod -l jsmith jdoe
+sudo usermod -l jsmith jdoe2
 ```
 
 Lock a user account (prevents login):
 
 ```bash
-sudo passwd -l user1
+sudo passwd -l jsmith
 ```
 
 Unlock a user account:
 
 ```bash
-sudo passwd -u user1
+sudo passwd -u jsmith
 ```
 
 View password expiration information:
 
 ```bash
-sudo chage -l user1
+sudo chage -l jsmith
 ```
 
 <br>

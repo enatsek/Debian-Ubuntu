@@ -34,8 +34,8 @@ While this tutorial focuses on Debian and Ubuntu servers, most concepts can be a
 Local Virtual Servers:
 - `debian13` -> Debian 13 Server
 - `debian12` -> Debian 12 Server
+- `ubuntu26` -> Ubuntu 26.04 LTS Server
 - `ubuntu24` -> Ubuntu 24.04 LTS Server
-- `ubuntu22` -> Ubuntu 22.04 LTS Server
         
 ### 0.3. Resources:
 - Book: 978-1-4842-1660-6 Ansible From Beginner to Pro by Michael Heap
@@ -95,8 +95,8 @@ Copy the SSH public key to all servers:
 ```bash
 ssh-copy-id -i ~/.ssh/id_rsa.pub debian13
 ssh-copy-id -i ~/.ssh/id_rsa.pub debian12
+ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu26
 ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu24
-ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu22
 ```
 
 You should now be able to SSH to all servers as the ansible user without a password.
@@ -133,6 +133,7 @@ From this point forward, all commands should be run on the workstation unless ot
 ### 2.1. Configuration File
 
 Ansible looks for configuration files in the following order:
+
 1. File specified by the `ANSIBLE_CONFIG` environment variable
 2. `./ansible.cfg` (in the current directory)
 3. `~/.ansible.cfg` (in your home directory)
@@ -176,7 +177,7 @@ Many other options are available; you can reference `/etc/ansible/ansible.cfg` f
 Create a directory structure for Ansible files:
 
 ```bash
-mkdir /home/ansible/ansible/playbooks
+mkdir -p /home/ansible/ansible/playbooks
 ```
 
 Create the inventory file:
@@ -188,8 +189,8 @@ touch /home/ansible/.hosts
 Set appropriate ownership and permissions:
 
 ```bash
-sudo chown ansible /home/ansible/.hosts
-sudo chmod 600 /home/ansible/.hosts
+chown ansible /home/ansible/.hosts
+chmod 600 /home/ansible/.hosts
 ```
 
 Populate the inventory file with server information:
@@ -206,8 +207,8 @@ debian13
 debian12
 
 [ubuntu]
+ubuntu26
 ubuntu24
-ubuntu22
 ```
 
 You can group hosts as shown above for organizational purposes.
@@ -276,8 +277,8 @@ nano /home/ansible/ansible/inventory/inventory1
 Content:
 
 ```text
+ubuntu26
 ubuntu24
-ubuntu22
 ```
 
 Create the second inventory file:
@@ -311,7 +312,7 @@ Content:
 
 ```python
 #!/usr/bin/env python3
-print('{"ubuntu": {"hosts" : ["ubuntu24", "ubuntu22"]}}')
+print('{"ubuntu": {"hosts" : ["ubuntu26", "ubuntu24"]}}')
 ```
 
 Make it executable and test it:
@@ -333,8 +334,8 @@ debian13
 debian12
 
 [ubuntu]
+ubuntu26
 ubuntu24
-ubuntu22
 
 [ubuntuanddebian:children]
 ubuntu
@@ -351,8 +352,8 @@ debian13
 debian12
 
 [ubuntu]
+ubuntu26
 ubuntu24
-ubuntu22
 
 [ubuntu:vars]
 role="dbserver"
@@ -415,7 +416,7 @@ ansible all -m file -a "dest=/tmp/testfile state=absent"
 Copy a file from a server to the workstation:
 
 ```bash
-ansible debian13 -m fetch -a "src=/var/log/dmesg dest=/home/ansible/backup flat=yes" --become
+ansible ubuntu26 -m fetch -a "src=/var/log/dmesg dest=/home/ansible/backup flat=yes" --become
 ```
 
 **Reboot Servers**
@@ -449,13 +450,13 @@ ansible all -a "/sbin/reboot" --become --ask-become-pass
 Add a user:
 
 ```bash
-ansible debian13 -m ansible.builtin.user -a "name=foo" --become
+ansible ubuntu26 -m ansible.builtin.user -a "name=foo" --become
 ```
 
 Remove a user:
 
 ```bash
-ansible debian13 -m ansible.builtin.user -a "name=foo state=absent" --become
+ansible ubuntu26 -m ansible.builtin.user -a "name=foo state=absent" --become
 ```
 
 **Package Management (APT)**
@@ -463,43 +464,43 @@ ansible debian13 -m ansible.builtin.user -a "name=foo state=absent" --become
 Update package cache:
 
 ```bash
-ansible debian13 -m apt -a "update_cache=yes" --become
+ansible ubuntu26 -m apt -a "update_cache=yes" --become
 ```
 
 Update cache and upgrade packages:
 
 ```bash
-ansible debian13 -m apt -a "upgrade=dist update_cache=yes" --become
+ansible ubuntu26 -m apt -a "upgrade=dist update_cache=yes" --become
 ```
 
 Install Apache (if not already installed):
 
 ```bash
-ansible debian13 -m apt -a "name=apache2 state=present" --become 
+ansible ubuntu26 -m apt -a "name=apache2 state=present" --become 
 ```
 
 Install/upgrade Apache to the latest version:
 
 ```bash
-ansible debian13 -m apt -a "name=apache2 state=latest" --become
+ansible ubuntu26 -m apt -a "name=apache2 state=latest" --become
 ```
 
 Remove Apache:
 
 ```bash
-ansible debian13 -m apt -a "name=apache2 state=absent" --become
+ansible ubuntu26 -m apt -a "name=apache2 state=absent" --become
 ```
 
 Remove Apache and its configuration files:
 
 ```bash
-ansible debian13 -m apt -a "name=apache2 state=absent purge=yes" --become
+ansible ubuntu26 -m apt -a "name=apache2 state=absent purge=yes" --become
 ```
 
 Remove Apache, configurations, and unused dependencies:
 
 ```bash
-ansible debian13 -m apt -a "name=apache2 state=absent purge=yes autoremove=yes" --become
+ansible ubuntu26 -m apt -a "name=apache2 state=absent purge=yes autoremove=yes" --become
 ```
 
 **Service Management**
@@ -507,19 +508,19 @@ ansible debian13 -m apt -a "name=apache2 state=absent purge=yes autoremove=yes" 
 Start and enable Apache service:
 
 ```bash
-ansible debian13 -m service -a "name=apache2 state=started enabled=yes" --become
+ansible ubuntu26 -m service -a "name=apache2 state=started enabled=yes" --become
 ```
 
 Stop Apache service:
 
 ```bash
-ansible debian13 -m service -a "name=apache2 state=stopped" --become
+ansible ubuntu26 -m service -a "name=apache2 state=stopped" --become
 ```
 
 Restart Apache service:
 
 ```bash
-ansible debian13 -m service -a "name=apache2 state=restarted" --become
+ansible ubuntu26 -m service -a "name=apache2 state=restarted" --become
 ```
 
 <br>
@@ -550,7 +551,7 @@ Content:
 #!/usr/bin/env ansible-playbook
 - name: Create webserver with apache
   become: True
-  hosts: debian13
+  hosts: ubuntu26
   tasks:
   - name: install apache
     apt: name=apache2 update_cache=yes
@@ -643,7 +644,7 @@ Content:
 #!/usr/bin/env ansible-playbook
 - name: Install LAMP; Apache, MariaDB, PHP
   become: True
-  hosts: debian13
+  hosts: ubuntu26
   tasks:
   - name: Update apt cache if not updated in 1 hour
     apt:
@@ -1740,7 +1741,7 @@ Content:
 ```yaml
 #!/usr/bin/env ansible-playbook
 ---
-- hosts: debian13
+- hosts: ubuntu26
   become: true
   roles:
   - exforge.aptcache
@@ -1844,19 +1845,19 @@ ansible-playbook lamp.yml
 Gather all facts for a server:
 
 ```bash
-ansible debian13 -m setup
+ansible ubuntu26 -m setup
 ```
 
 The output will be long, something like:
 
 ```json
-debian13 | SUCCESS => {
+ubuntu26 | SUCCESS => {
     "ansible_facts": {
         "ansible_all_ipv4_addresses": [
-            "192.168.1.135"
+            "192.168.1.145"
         ],
         "ansible_all_ipv6_addresses": [
-            "fe80::a00:27ff:feac:87e2"
+            "fe80::a00:27ff:fe23:98cc"
         ],
         "ansible_apparmor": {
             "status": "enabled"
@@ -1875,47 +1876,46 @@ debian13 | SUCCESS => {
         "ansible_chassis_vendor": "Oracle Corporation",
         "ansible_chassis_version": "NA",
         "ansible_cmdline": {
-            "BOOT_IMAGE": "/boot/vmlinuz-6.12.48+deb13-amd64",
-            "quiet": true,
+            "BOOT_IMAGE": "/vmlinuz-7.0.0-15-generic",
+            "crashkernel": "2G-4G:320M,4G-32G:512M,32G-64G:1024M,64G-128G:2048M,128G-:4096M",
             "ro": true,
-            "root": "UUID=76649b5f-2b95-4d0d-bf4a-4f21f8bbf1bd"
+            "root": "/dev/mapper/ubuntu--vg-ubuntu--lv"
         },
         "ansible_date_time": {
-            "date": "2025-11-19",
-            "day": "19",
-            "epoch": "1763581389",
-            "epoch_int": "1763581389",
-            "hour": "22",
-            "iso8601": "2025-11-19T19:43:09Z",
-            "iso8601_basic": "20251119T224309290590",
-            "iso8601_basic_short": "20251119T224309",
-            "iso8601_micro": "2025-11-19T19:43:09.290590Z",
-            "minute": "43",
-            "month": "11",
-            "second": "09",
-            "time": "22:43:09",
-            "tz": "+03",
-            "tz_dst": "+03",
-            "tz_offset": "+0300",
+            "date": "2026-05-13",
+            "day": "13",
+            "epoch": "1778699708",
+            "epoch_int": "1778699708",
+            "hour": "19",
+            "iso8601": "2026-05-13T19:15:08Z",
+            "iso8601_basic": "20260513T191508603070",
+            "iso8601_basic_short": "20260513T191508",
+            "iso8601_micro": "2026-05-13T19:15:08.603070Z",
+            "minute": "15",
+            "month": "05",
+            "second": "08",
+            "time": "19:15:08",
+            "tz": "UTC",
+            "tz_dst": "UTC",
+            "tz_offset": "+0000",
             "weekday": "Wednesday",
             "weekday_number": "3",
-            "weeknumber": "46",
-            "year": "2025"
+            "weeknumber": "19",
+            "year": "2026"
         },
         "ansible_default_ipv4": {
-            "address": "192.168.1.135",
+            "address": "192.168.1.145",
             "alias": "enp0s3",
             "broadcast": "192.168.1.255",
             "gateway": "192.168.1.1",
             "interface": "enp0s3",
-            "macaddress": "08:00:27:ac:87:e2",
+            "macaddress": "08:00:27:23:98:cc",
             "mtu": 1500,
             "netmask": "255.255.255.0",
             "network": "192.168.1.0",
             "prefix": "24",
             "type": "ether"
         },
-
 ```
 
 **Accessing Facts in Playbooks:**
@@ -2394,7 +2394,7 @@ Content:
 #!/usr/bin/env ansible-playbook
 - name: Simple handler example
   become: true
-  hosts: debian13
+  hosts: ubuntu26
   tasks:
   - name: Install Apache
     apt:

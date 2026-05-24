@@ -19,11 +19,11 @@ This tutorial demonstrates how to set up High Availability Load Balancing with f
 ### 0.2. Environment
 
 - srv    : Load Balancer floating (virtual) IP --> 192.168.1.200
-- srvlb1 : Load Balancer 1  --> 192.168.1.201
-- srvlb2 : Load Balancer 2  --> 192.168.1.202
-- srvaw1 : App/Web Server 1 --> 192.168.1.203
-- srvaw2 : App/Web Server 2 --> 192.168.1.204
-- srvaw3 : App/Web Server 3 --> 192.168.1.205
+- srvlb1 : Load Balancer 1  --> 192.168.1.226
+- srvlb2 : Load Balancer 2  --> 192.168.1.227
+- srvaw1 : App/Web Server 1 --> 192.168.1.228
+- srvaw2 : App/Web Server 2 --> 192.168.1.229
+- srvaw3 : App/Web Server 3 --> 192.168.1.230
 
 Tested on Debian 12/13 and Ubuntu 24.04/26.04 LTS Servers.
 
@@ -219,7 +219,7 @@ Around line 212, add the first two lines and modify the next two lines as shown 
 
 ```apache
 RemoteIPHeader X-Forwarded-For
-RemoteIPInternalProxy 192.168.1.201 192.168.1.202
+RemoteIPInternalProxy 192.168.1.226 192.168.1.227
 LogFormat "%v:%p %a %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" vhost_combined
 LogFormat "%a %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\"" combined
 ```
@@ -264,8 +264,8 @@ sudo mariadb
 In the MariaDB shell, execute:
 
 ```sql
-GRANT ALL ON *.* TO 'admin'@'192.168.1.201' IDENTIFIED BY 'Password12';
-GRANT ALL ON *.* TO 'admin'@'192.168.1.202' IDENTIFIED BY 'Password12';
+GRANT ALL ON *.* TO 'admin'@'192.168.1.226' IDENTIFIED BY 'Password12';
+GRANT ALL ON *.* TO 'admin'@'192.168.1.227' IDENTIFIED BY 'Password12';
 FLUSH PRIVILEGES;
 EXIT;
 ```
@@ -310,7 +310,7 @@ Fill it with the following content, replacing the IP addresses with your own:
 [galera]
 innodb_autoinc_lock_mode = 2
 wsrep_cluster_name    = "x386_cluster"
-wsrep_cluster_address = "gcomm://192.168.1.203,192.168.1.204,192.168.1.205"
+wsrep_cluster_address = "gcomm://192.168.1.228,192.168.1.229,192.168.1.230"
 wsrep_provider = /usr/lib/galera/libgalera_smm.so
 wsrep_provider_options = "evs.suspect_timeout=PT10S"
 wsrep_on = on 
@@ -318,6 +318,25 @@ default_storage_engine = InnoDB
 innodb_doublewrite = 1 
 binlog_format = ROW
 ```
+
+**Ubuntu 26.04 LTS Workaround**
+
+You can skip this section for distros other than Ubuntu 26.04 LTS
+
+There is an incompatibility or misconfiguration on Ubuntu 26.04 LTS for MariaDB and AppArmor. In some ways, AppArmor doesn't let MariaDB to use Galera Cluster. I believe it will be fixed by Canonical sometime, but for now we can disable AppArmor for MariaDB
+
+
+Disable apparmor for MariaDB (srvaw1, srvaw2, and srvaw3):
+
+```
+# Create apparmor exceptions directory
+sudo mkdir -p /etc/apparmor.d/disable
+# Disable the profile at boot
+sudo ln -s /etc/apparmor.d/mariadbd /etc/apparmor.d/disable/
+# Unload it from the running kernel immediately
+sudo apparmor_parser -R /etc/apparmor.d/mariadbd
+```
+
 
 **Start the Galera Cluster**
 
@@ -340,7 +359,7 @@ sudo systemctl start mariadb
 ## 3. Configure Web Server Load Balancing 
 
 ---
-We will configure HAProxy to load balance the three web servers (192.168.1.203, 192.168.1.204, and 192.168.1.205).
+We will configure HAProxy to load balance the three web servers (192.168.1.228, 192.168.1.229, and 192.168.1.230).
 
 **Configure HAProxy on both Load Balancers (srvlb1 and srvlb2):**
 
@@ -364,9 +383,9 @@ backend be_http_80
         # use roundrobin algorithm for balancing
         balance  roundrobin
         # define backend servers
-        server   srvaw1 192.168.1.203:80 check
-        server   srvaw2 192.168.1.204:80 check
-        server   srvaw3 192.168.1.205:80 check
+        server   srvaw1 192.168.1.228:80 check
+        server   srvaw2 192.168.1.229:80 check
+        server   srvaw3 192.168.1.230:80 check
 ```
 
 **Restart HAProxy on both Load Balancers (srvlb1 and srvlb2):**
@@ -400,14 +419,14 @@ Let's break down the configuration:
 *   `balance roundrobin`
     Uses the Round Robin algorithm for load balancing. This means requests are distributed to the backend servers one after the other in a circular order. Other algorithms will be explained in Section 5.
 
-*   `server srvaw1 192.168.1.203:80 check`
-    `server srvaw2 192.168.1.204:80 check`
-    `server srvaw3 192.168.1.205:80 check`
+*   `server srvaw1 192.168.1.228:80 check`
+    `server srvaw2 192.168.1.229:80 check`
+    `server srvaw3 192.168.1.230:80 check`
     These lines list the backend servers. `srvaw1`, `srvaw2`, and `srvaw3` are labels. The IP and port specify where to forward the traffic. The `check` parameter instructs the LB to perform health checks on the backend server to see if it is alive. Other parameters will be explained in Section 5.
 
 **Testing**
 
-You can now connect to the website at `http://192.168.1.200` from different workstations. You should see that connections are being distributed across `192.168.1.203`, `192.168.1.204`, and `192.168.1.205`.
+You can now connect to the website at `http://192.168.1.200` from different workstations. You should see that connections are being distributed across `192.168.1.228`, `192.168.1.229`, and `192.168.1.230`.
 
 <br>
 
@@ -442,9 +461,9 @@ backend be_mariadb_3306
         # use roundrobin algorithm for balancing
         balance  roundrobin
         # define backend servers
-        server   srvaw1 192.168.1.203:3306 check
-        server   srvaw2 192.168.1.204:3306 check
-        server   srvaw3 192.168.1.205:3306 check
+        server   srvaw1 192.168.1.228:3306 check
+        server   srvaw2 192.168.1.229:3306 check
+        server   srvaw3 192.168.1.230:3306 check
 ```
 
 We can reload the configuration to apply these changes without interrupting the existing web server load balancing:
@@ -585,9 +604,9 @@ frontend fe_http_80
         default_backend    be_http_80
 backend be_http_80
         balance  roundrobin
-        server   srv1 192.168.1.203:80 check
-        server   srv2 192.168.1.204:80 check
-        server   srv3 192.168.1.205:80 check
+        server   srv1 192.168.1.228:80 check
+        server   srv2 192.168.1.229:80 check
+        server   srv3 192.168.1.230:80 check
 ```
 
 ### 6.2. Weighted Round Robin Algorithm
@@ -602,15 +621,15 @@ frontend fe_http_80
         default_backend    be_http_80
 backend be_http_80
         balance  roundrobin
-        server   srv1 192.168.1.202:80 weight 2 check
-        server   srv2 192.168.1.203:80 weight 2 check
-        server   srv3 192.168.1.204:80 weight 1 check
+        server   srv1 192.168.1.227:80 weight 2 check
+        server   srv2 192.168.1.228:80 weight 2 check
+        server   srv3 192.168.1.229:80 weight 1 check
 ```
 
 You can temporarily disable a backend server using the `disabled` keyword:
 
 ```
-        server   srv3 192.168.1.204:80 weight 1 disabled
+        server   srv3 192.168.1.229:80 weight 1 disabled
 ```
 
 ### 6.3. Leastconn Algorithm
@@ -628,9 +647,9 @@ frontend fe_mariadb_3306
 backend be_mariadb_3306
         mode            tcp
         balance  leastconn
-        server   srv1 192.168.1.203:3306 check
-        server   srv2 192.168.1.204:3306 check
-        server   srv3 192.168.1.205:3306 check
+        server   srv1 192.168.1.228:3306 check
+        server   srv2 192.168.1.229:3306 check
+        server   srv3 192.168.1.230:3306 check
 ```
 
 With this algorithm, a newly added server might immediately receive all new traffic because it has zero connections. To avoid this, use the `slowstart` parameter followed by a time period:
@@ -653,9 +672,9 @@ frontend fe_mariadb_3306
 backend be_mariadb_3306
         mode            tcp
         balance  leastconn
-        server   srv1 192.168.1.203:3306 weight 2 check
-        server   srv2 192.168.1.204:3306 weight 2 check
-        server   srv3 192.168.1.205:3306 weight 1 check
+        server   srv1 192.168.1.228:3306 weight 2 check
+        server   srv2 192.168.1.229:3306 weight 2 check
+        server   srv3 192.168.1.230:3306 weight 1 check
 ```
 
 ### 6.5. HASH Uri Algorithm
@@ -670,9 +689,9 @@ frontend fe_http_80
         default_backend    be_http_80
 backend be_http_80
         balance  uri
-        server   srv1 192.168.1.203:80 check
-        server   srv2 192.168.1.204:80 check
-        server   srv3 192.168.1.205:80 check
+        server   srv1 192.168.1.228:80 check
+        server   srv2 192.168.1.229:80 check
+        server   srv3 192.168.1.230:80 check
 ```
 
 This algorithm can also be used in weighted mode to better utilize faster servers.
@@ -685,9 +704,9 @@ frontend fe_http_80
         default_backend    be_http_80
 backend be_http_80
         balance  uri
-        server   srv1 192.168.1.202:80 weight 2 check
-        server   srv2 192.168.1.203:80 weight 2 check
-        server   srv3 192.168.1.204:80 weight 1 check
+        server   srv1 192.168.1.227:80 weight 2 check
+        server   srv2 192.168.1.228:80 weight 2 check
+        server   srv3 192.168.1.229:80 weight 1 check
 ```
 
 ### 6.6. First Available Algorithm
@@ -702,9 +721,9 @@ frontend fe_http_80
         default_backend    be_http_80
 backend be_http_80
         balance  first
-        server   srv1 192.168.1.203:80 maxconn 50
-        server   srv2 192.168.1.204:80 maxconn 50
-        server   srv3 192.168.1.205:80 maxconn 50
+        server   srv1 192.168.1.228:80 maxconn 50
+        server   srv2 192.168.1.229:80 maxconn 50
+        server   srv3 192.168.1.230:80 maxconn 50
 ```
 
 <br>
@@ -742,16 +761,16 @@ frontend fe_http_80
 	default_backend    be_http_80
         option   forwardfor
 backend be_folder1
-        server   srvaw1 192.168.1.203:80 check
+        server   srvaw1 192.168.1.228:80 check
 backend be_folder2
-        server   srvaw2 192.168.1.204:80 check
+        server   srvaw2 192.168.1.229:80 check
 backend be_folder3
-        server   srvaw3 192.168.1.205:80 check
+        server   srvaw3 192.168.1.230:80 check
 backend be_http_80
         balance  roundrobin
-        server   srvaw1 192.168.1.203:80 check
-        server   srvaw2 192.168.1.204:80 check
-        server   srvaw3 192.168.1.205:80 check
+        server   srvaw1 192.168.1.228:80 check
+        server   srvaw2 192.168.1.229:80 check
+        server   srvaw3 192.168.1.230:80 check
 ```
 
 **Restart or Reload HAProxy**
@@ -907,12 +926,12 @@ All steps described here have been tested. Since Let's Encrypt requires internet
 
 **Server Setup:**
 
-- `www.386387.xyz`: Load Balancer → `159.203.70.143`
-- `srv1.386387.xyz`: Web Server 1 → `64.225.29.174`
-- `srv2.386387.xyz`: Web Server 2 → `165.227.176.14`
+- `www.386387.xyz`: Load Balancer → `46.224.88.57`
+- `srv1.386387.xyz`: Web Server 1 → `46.225.121.215`
+- `srv2.386387.xyz`: Web Server 2 → `46.225.119.147`
 
 
-Tested on Debian 13/12 and Ubuntu 24.04/22.04 LTS Servers.
+Tested on Debian 12/13 and Ubuntu 24.04/26.04 LTS Servers.
 
 We start with freshly installed servers.
 
@@ -1039,7 +1058,7 @@ Add the following to the end of the file. Replace the IP address in the `bind` d
 
 ```text
 frontend fe_http
-        bind 159.203.70.143:80
+        bind 46.224.88.57:80
         acl acl_acme path_beg -i /.well-known/acme-challenge
         use_backend be_acme if acl_acme
 backend be_acme
@@ -1099,8 +1118,8 @@ Replace the configuration at the end of the file with the following:
  
 ```text
 frontend fe_http
-        bind 159.203.70.143:80
-        bind 159.203.70.143:443 ssl crt /etc/letsencrypt/live/www.386387.xyz/haproxy.pem
+        bind 46.224.88.57:80
+        bind 46.224.88.57:443 ssl crt /etc/letsencrypt/live/www.386387.xyz/haproxy.pem
         acl acl_acme path_beg -i /.well-known/acme-challenge
         use_backend be_acme if acl_acme
         default_backend    be_http
@@ -1109,8 +1128,8 @@ backend be_acme
         server self 127.0.0.1:80 check
 backend be_http
         balance  roundrobin
-        server   srv1 64.225.29.174:80 check
-        server   srv2 165.227.176.14:80 check
+        server   srv1 46.225.121.215:80 check
+        server   srv2 46.225.119.147:80 check
 ```
 
 **Restart HAProxy:**
@@ -1230,8 +1249,8 @@ Locate the `backend be_http` section and modify the `server` lines to use port 4
 ```text
 backend be_http
         balance  roundrobin
-        server   srv1 64.225.29.174:443 check ssl verify none
-        server   srv2 165.227.176.14:443 check ssl verify none
+        server   srv1 46.225.121.215:443 check ssl verify none
+        server   srv2 46.225.119.147:443 check ssl verify none
 ```
 
 **Restart HAProxy:**
@@ -1260,8 +1279,8 @@ The updated frontend section should look like this:
 
 ```text
 frontend fe_http
-        bind 159.203.70.143:80
-        bind 159.203.70.143:443 ssl crt /etc/letsencrypt/live/www.386387.xyz/haproxy.pem
+        bind 46.224.88.57:80
+        bind 46.224.88.57:443 ssl crt /etc/letsencrypt/live/www.386387.xyz/haproxy.pem
         redirect scheme https if !{ ssl_fc }
         acl acl_acme path_beg -i /.well-known/acme-challenge
         use_backend be_acme if acl_acme
@@ -1293,8 +1312,8 @@ backend be_acme
 backend be_http
         balance roundrobin
         cookie ACTIVESERVER insert indirect nocache
-        server srv1 64.225.29.174:443 check cookie srv1 ssl verify none 
-        server srv2 165.227.176.14:443 check cookie srv2 ssl verify none 
+        server srv1 46.225.121.215:443 check cookie srv1 ssl verify none 
+        server srv2 46.225.119.147:443 check cookie srv2 ssl verify none 
 ```
 
 **Restart HAProxy:**
@@ -1340,8 +1359,8 @@ defaults
         errorfile 503 /etc/haproxy/errors/503.http
         errorfile 504 /etc/haproxy/errors/504.http
 frontend fe_http
-        bind 159.203.70.143:80
-        bind 159.203.70.143:443 ssl crt /etc/letsencrypt/live/www.386387.xyz/haproxy.pem
+        bind 46.224.88.57:80
+        bind 46.224.88.57:443 ssl crt /etc/letsencrypt/live/www.386387.xyz/haproxy.pem
         redirect scheme https if !{ ssl_fc }
         acl acl_acme path_beg -i /.well-known/acme-challenge
         use_backend be_acme if acl_acme
@@ -1352,8 +1371,8 @@ backend be_acme
 backend be_http
         balance  roundrobin
         cookie ACTIVESERVER insert indirect nocache
-        server srv1 64.225.29.174:443 check cookie srv1 ssl verify none 
-        server srv2 165.227.176.14:443 check cookie srv2 ssl verify none 
+        server srv1 46.225.121.215:443 check cookie srv1 ssl verify none 
+        server srv2 46.225.119.147:443 check cookie srv2 ssl verify none 
 ```
 
 

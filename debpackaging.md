@@ -22,8 +22,8 @@ This tutorial is introductory and does not cover every detail. Its purpose is to
 
 ### 0.2. The Environment
 
-**Workstation:** Debian 13 or Ubuntu 24.04 LTS  
-**Test Servers:** Ubuntu 24.04 LTS, Ubuntu 22.04 LTS, Debian 13, Debian 12.
+**Workstation:** Debian 13 or Ubuntu 26.04 LTS  
+**Test Servers:** Ubuntu 26.04 LTS, Ubuntu 24.04 LTS, Debian 13, Debian 12.
 
 ### 0.3. Sources
 
@@ -106,7 +106,7 @@ Control files are located in the `control.tar.zst` archive. Some key files were 
 
 This file contains metadata used by package managers. It consists of fields and their corresponding values.
 
-Most fields have single-line values, but some support multiple lines. For multi-line fields, each line after the first must begin with a space or tab.
+Most fields have single-line values, but some support multiple lines. For multi-line fields, each line after the first one must begin with a space or tab.
 
 **Fields in a binary package:**
 
@@ -873,7 +873,7 @@ dpkg-deb -Z xz --build --root-owner-group distro_1.0.0-1_all
 
 Your package, `distro_1.0.0-1_all.deb`, is now located in the `~/packages` folder.
 
-**Note:** `dpkg-deb` typically uses `zst` compression, but we override it with the `-Z xz` flag for broader compatibility. Packages compressed with `zst` (default in Ubuntu 22.04) may not work on older Debian distributions.
+**Note:** `dpkg-deb` typically uses `zst` compression, but we override it with the `-Z xz` flag for broader compatibility. Packages compressed with `zst` may not work on older Debian distributions.
 
 <br>
 

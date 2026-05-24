@@ -25,7 +25,7 @@ While this tutorial focuses on Debian and Ubuntu servers, most concepts can be a
 ### 0.1. Environment
 
 **Workstation:**
-- `wrk` -> Debian 13 or Ubuntu 24.04 LTS Desktop
+- `wrk` -> Debian 13 or Ubuntu 26.04 LTS Desktop
 
 **Hint:** You can use server editions as well, as Ansible does not require a graphical user interface.
 

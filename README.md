@@ -43,7 +43,7 @@ This documentation started as personal notes to compensate for a terrible memory
 
 ### Infrastructure & Virtualization
 
-- [*New* **Docker**](docker.md) - Docker installation, configuration including Compose and Swarm
+- [**Docker**](docker.md) - Docker installation, configuration including Compose and Swarm
 - [**KVM Virtualization (Beginner)**](kvm1.md) — Introduction to KVM virtualization
 - [**KVM Virtualization (Networking)**](kvm2.md) — Advanced KVM networking configurations
 - [**Keepalived**](keepalived.md) — High-availability clustering
@@ -57,10 +57,8 @@ This documentation started as personal notes to compensate for a terrible memory
 ### System Administration Guides
 
 - [**User and Group Administration**](useradministration.md) — User and group management essentials
-- [**/etc Folder Contents**](etcfolder.md) — Overview of the /etc directory structure
 - [**Regular Expressions**](regex.md) — Regex tutorial for text processing
 - [**File Compression**](filecompression.md) — Compression utilities overview and usage
-- [**FHS (Filesystem Hierarchy Standard)**](fhs.md) — Linux filesystem structure specifications
 - [**Systemd Basics**](systemd.md) — Introduction to systemd service management
 - [**Systemd Additional**](systemd2.md) — Additional systemd services and tools
 - [**Debian Packaging**](debpackaging.md) — Creating and managing .deb packages

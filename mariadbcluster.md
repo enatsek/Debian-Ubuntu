@@ -156,6 +156,8 @@ There is an incompatibility or misconfiguration on Ubuntu 26.04 LTS for MariaDB 
 **Run on all servers**
 
 ```
+# Create apparmor exceptions directory
+sudo mkdir -p /etc/apparmor.d/disable
 # Disable the profile at boot
 sudo ln -s /etc/apparmor.d/mariadbd /etc/apparmor.d/disable/
 # Unload it from the running kernel immediately

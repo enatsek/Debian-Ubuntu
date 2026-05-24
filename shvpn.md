@@ -20,9 +20,9 @@ Essentially, it provides a safe and private connection for a single user, even w
 
 - Server: 
     - IP: 192.227.167.142
-    - OS: Debian 13 Server or Ubuntu 24.04 LTS Server
+    - OS: Debian 13 Server or Ubuntu 24.04 - 26.04 LTS Server
     - nic: eth0
-- Client1: Debian 13 / Ubuntu 24.04 Desktop & Server, Linux Mint
+- Client1: Debian 13 / Ubuntu 24.04 - 26.04 Desktop & Server, Linux Mint
 - Client2: Windows 11
 - Client3: Android
 
@@ -46,7 +46,7 @@ Server Configuration (/etc/wireguard/wg0.conf):
 ```ini
 [Interface]
 Address = 10.100.0.100/24
-ListenPort = 53
+ListenPort = 443
 PrivateKey = serverprivkey
 
 # NAT for clients
@@ -78,7 +78,7 @@ Notes on the server configuration:
 
 - The network 10.100.0.0/24 is arbitrarily chosen for the WireGuard tunnel. You can use any private IP range, though 10.x.x.x is often a good choice.
 
-- Port 53 is selected for WireGuard. It is the same port used for DNS, which may help obfuscate VPN traffic from ISPs that attempt to block it.
+- Port 443 is selected for WireGuard. It is the same port used for HTTPS, which may help obfuscate VPN traffic from ISPs that attempt to block it.
 
 - We need to assign a unique IP address (e.g., 10.100.0.1, 10.100.0.2, ...) and a public/private key pair for the server and every client.
 
@@ -96,7 +96,7 @@ DNS = 1.1.1.1
 
 [Peer]
 PublicKey = serverpubkey
-Endpoint = serverpublicip:53
+Endpoint = serverpublicip:443
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25
 ```
@@ -110,7 +110,7 @@ DNS = 1.1.1.1
 
 [Peer]
 PublicKey = serverpubkey
-Endpoint = serverpublicip:53
+Endpoint = serverpublicip:443
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25
 ```
@@ -124,7 +124,7 @@ DNS = 1.1.1.1
 
 [Peer]
 PublicKey = serverpubkey
-Endpoint = serverpublicip:53
+Endpoint = serverpublicip:443
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25
 ```
@@ -157,33 +157,6 @@ The VPN server needs to forward traffic between its physical network interface a
 echo 'net.ipv4.ip_forward=1' | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p                    # Apply the change
 sudo sysctl net.ipv4.ip_forward   # Verify it's set to 1
-```
-
-Free Port 53 (Ubuntu Systems)
-
-On Ubuntu, port 53 is often used by the systemd-resolved service. We need to free it or choose a different port for WireGuard. To free port 53, edit the systemd-resolved configuration:
-
-
-```bash
-sudo nano /etc/systemd/resolved.conf
-```
-
-Find the line (around line 19) that says:
-
-```ini
-#DNSStubListener=yes
-```
-
-Change it to:
-
-```ini
-DNSStubListener=no
-```
-
-Save the file and restart the service:
-
-```bash
-sudo systemctl restart systemd-resolved
 ```
 
 
@@ -244,7 +217,7 @@ Populate the file with the configuration below. Remember to use your actual serv
 ```ini
 [Interface]
 Address = 10.100.0.100/24
-ListenPort = 53
+ListenPort = 443
 PrivateKey = kAy+LgQ3EkJtTKyB1N0BnbXGZVJE/pX6SH2yCG2l1lI=
 
 # NAT for clients
@@ -266,6 +239,28 @@ AllowedIPs = 10.100.0.2/32
 PublicKey = IG/wUYUGSDuZI0+DZsE6lq1OLNzx8aNIp8SUjllAwj8=
 AllowedIPs = 10.100.0.3/32
 ```
+
+### Ubuntu 26.04 LTS Workaround Begin
+---
+
+You can skip this section for distros other than Ubuntu 26.04 LTS
+
+There is an incompatibility or misconfiguration on Ubuntu 26.04 LTS for WireGuard and AppArmor. In some ways, AppArmor doesn't let WireGuard to change network structure. I believe it will be fixed by Canonical sometime, but for now we can disable AppArmor for WireGuard
+
+
+```
+# Create apparmor exceptions directory
+sudo mkdir -p /etc/apparmor.d/disable
+# Disable the profiles at boot
+sudo ln -s /etc/apparmor.d/wg /etc/apparmor.d/disable/
+sudo ln -s /etc/apparmor.d/wg-quick /etc/apparmor.d/disable/
+# Unload it from the running kernel immediately
+sudo apparmor_parser -R /etc/apparmor.d/wg
+sudo apparmor_parser -R /etc/apparmor.d/wg-quick
+```
+
+### Ubuntu 26.04 LTS Workaround End
+
 
 
 Enable, start, verify the service.
@@ -308,7 +303,7 @@ DNS = 1.1.1.1
 
 [Peer]
 PublicKey = OCtqLy2OkpuiBPhmXR0DbhbaVDhpuS4AVDm3yZDP1XU=
-Endpoint = 192.227.167.142:53
+Endpoint = 192.227.167.142:443
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25
 ```
@@ -366,7 +361,7 @@ DNS = 1.1.1.1
 
 [Peer]
 PublicKey = OCtqLy2OkpuiBPhmXR0DbhbaVDhpuS4AVDm3yZDP1XU=
-Endpoint = 192.227.167.142:53
+Endpoint = 192.227.167.142:443
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25
 ```
@@ -396,7 +391,7 @@ DNS = 1.1.1.1
 
 [Peer]
 PublicKey = OCtqLy2OkpuiBPhmXR0DbhbaVDhpuS4AVDm3yZDP1XU=
-Endpoint = 192.227.167.142:53
+Endpoint = 192.227.167.142:443
 AllowedIPs = 0.0.0.0/0, ::/0
 PersistentKeepalive = 25
 ```
@@ -493,7 +488,7 @@ echo > confs/wg0.conf
 
 echo '[Interface]' >> confs/wg0.conf
 echo Address = 10.100.0.1/16 >> confs/wg0.conf
-echo ListenPort = 53 >> confs/wg0.conf
+echo ListenPort = 443 >> confs/wg0.conf
 echo PrivateKey = `cat keys/serverprivkey` >> confs/wg0.conf
 echo >> confs/wg0.conf
 echo "#" NAT for clients >> confs/wg0.conf
@@ -556,7 +551,7 @@ do
     echo >> confs/wg"$i"-"$j".conf
     echo '[Peer]' >> confs/wg"$i"-"$j".conf
     echo PublicKey = `cat keys/serverpubkey` >> confs/wg"$i"-"$j".conf
-    echo Endpoint = "$serverip":53  >> confs/wg"$i"-"$j".conf
+    echo Endpoint = "$serverip":443  >> confs/wg"$i"-"$j".conf
     echo AllowedIPs = 0.0.0.0/0, ::/0  >> confs/wg"$i"-"$j".conf
     echo PersistentKeepalive = 25  >> confs/wg"$i"-"$j".conf
   done

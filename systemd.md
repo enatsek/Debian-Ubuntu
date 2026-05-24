@@ -26,7 +26,12 @@ A strong alternative to systemd is OpenRC.
 
 **cgroups (Control Groups):** A kernel feature that allows setting resource utilization limits for processes, such as CPU shares, memory usage, and block I/O per process. Originally developed by Google.
 
-### 0.3. Sources
+### 0.3. Environment
+
+This tutorial is prepared using Debian 12/13 and Ubuntu 24.04/26.04 editions. I believe it will be valid with any distro with systemd.
+
+
+### 0.4. Sources
 
 - [wiki.debian.org](https://wiki.debian.org/systemd/documentation)
 - [www.digitalocean.com](https://www.digitalocean.com/community/tutorials/systemd-essentials-working-with-services-units-and-the-journal)
@@ -673,7 +678,7 @@ journalctl -b -u apache2.service
 journalctl -b -1
 ```
 
-**View the list of the boots boots:**
+**View the list of the boots:**
 
 ```bash
 journalctl --list-boots

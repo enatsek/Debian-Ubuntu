@@ -29,11 +29,11 @@ This tutorial aims to bring you (and me) to a moderate level of virtualization a
 **virt-manager** is a GUI for managing virtual machines. I use it on my workstation for simple tasks.
 
 ### 0.2. Infrastructure
-- **Server (Host)**: Debian (12/13) or Ubuntu (24.04/22.04) Server
+- **Server (Host)**: Debian (12/13) or Ubuntu (24.04/26.04) Server
     - IP: 192.168.1.121
     - Name: elma
-    - NIC: enp3s0f0
-- **Workstation**: Debian 13 or Ubuntu 24.04 LTS Desktop
+    - NIC: enp3s0
+- **Workstation**: Debian 13 or Ubuntu 26.04 LTS Desktop
 - **Network**: 192.168.1.0/24 supplied by my internet modem/router
 
 ### 0.3. (Very) Basic Terminology
@@ -60,7 +60,9 @@ This tutorial aims to bring you (and me) to a moderate level of virtualization a
 ---
 
 ### 1.1. Installation
-Install necessary packages:
+Install necessary packages
+
+For Debian 12, Debian 13, & Ubuntu 24.04:
 
 ```bash
 sudo apt update
@@ -68,10 +70,19 @@ sudo apt install libvirt-clients libvirt-daemon-system qemu-kvm \
      virtinst virt-manager virt-viewer bridge-utils --yes
 ```
 
-Add your user to the libvirt group (replace `exforge` with your username):
+For Ubuntu 26.04:
 
 ```bash
-sudo usermod -aG libvirt exforge
+sudo apt update
+sudo apt install libvirt-clients libvirt-daemon-system qemu-system-x86 \
+     virtinst virt-manager virt-viewer bridge-utils --yes
+```
+
+
+Add your user to the libvirt group (you need to logout and login again):
+
+```bash
+sudo usermod -aG libvirt $USER
 ```
 
 ### 1.2. Bridge Configuration
@@ -143,17 +154,17 @@ Edit your network configuration:
 sudo nano /etc/netplan/50-cloud-init.yaml
 ```
 
-Replace the content with the following (adjust `enp3s0f0` to your interface name, and use your local network IP and gateway):
+Replace the content with the following (adjust `enp3s0` to your interface name, and use your local network IP and gateway):
 
 ```yaml
 network:
   ethernets:
-    enp3s0f0:
+    enp3s0:
       dhcp4: false
       dhcp6: false
   bridges:
     br0:
-      interfaces: [enp3s0f0]
+      interfaces: [enp3s0]
       addresses:
       - 192.168.1.121/24
       routes:
@@ -227,7 +238,7 @@ Edit your network configuration:
 sudo nano /etc/network/interfaces
 ```
 
-Replace the content with the following (adjust `enp3s0f0` to your interface name, and use your local network IP and gateway):
+Replace the content with the following (adjust `enp3s0` to your interface name, and use your local network IP and gateway):
 
 ```text
 # This file describes the network interfaces available on your system
@@ -240,9 +251,9 @@ auto lo
 iface lo inet loopback
 
 # The primary network interface
-allow-hotplug enp3s0f0
+allow-hotplug enp3s0
 #make sure we don't get addresses on our raw device
-iface enp3s0f0 inet manual
+iface enp3s0 inet manual
 #set up bridge and give it a static ip
 auto br0
 iface br0 inet static
@@ -251,7 +262,7 @@ iface br0 inet static
         network 192.168.1.0
         broadcast 192.168.1.255
         gateway 192.168.1.1
-        bridge_ports enp3s0f0
+        bridge_ports enp3s0
         bridge_stp off
         bridge_fd 0
         bridge_maxwait 0
@@ -298,7 +309,7 @@ sudo mkdir /srv/kvm /srv/isos
 sudo virsh pool-create-as srv-kvm dir --target /srv/kvm
 ```
 
-At this point, you may want to copy some installation ISOs to the server's `/srv/isos` directory.
+At this point, you may want to copy some OS installation ISOs to the server's `/srv/isos` directory.
 
 <br>
 
@@ -341,7 +352,7 @@ Parameters explained:
 - `--os-variant`: Guest OS optimization profile
 - `--noautoconsole`: Don't automatically connect to console
 
-**Note**: Ubuntu 22.04 may not recognize `ubuntu24.04` OS variant; use `ubuntu22.04` instead.
+**Note**: Ubuntu 24.04 may not recognize `ubuntu24.04` OS variant; use `ubuntu22.04` instead.
 
 
 ### 2.2. OS Variant List
@@ -407,11 +418,11 @@ Search for cloud images:
 - **Ubuntu**: [cloud-images.ubuntu.com](https://cloud-images.ubuntu.com/)
 - **Debian**: [cloud.debian.org](https://cloud.debian.org/images/cloud/)
 
-Download the latest images (e.g., Ubuntu 24.04 Noble and Debian 13 Trixie) to `/srv/isos`.
+Download the latest images (e.g., Ubuntu 26.04 Resolute and Debian 13 Trixie) to `/srv/isos`.
 
 ```bash
 cd /srv/isos
-sudo wget https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img
+sudo wget https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-amd64.img
 sudo wget https://cloud.debian.org/images/cloud/trixie/latest/debian-13-generic-amd64.qcow2
 ```
 
@@ -422,7 +433,7 @@ Create new images with increased size (20 GB) and convert to qcow2 format.
 **Ubuntu image:**
 
 ```bash
-sudo qemu-img create -b /srv/isos/noble-server-cloudimg-amd64.img \
+sudo qemu-img create -b /srv/isos/resolute-server-cloudimg-amd64.img \
     -F qcow2 -f qcow2 /srv/kvm/ubuntusrv-cloudimg.qcow2 20G
 ```
 
@@ -477,7 +488,7 @@ Fill as below (Remember updating password with the hash you get):
 ```yaml
 #cloud-config
 hostname: ubuntu24
-fqdn: ubuntu24.x386.org
+fqdn: ubuntu24.386387.xyz
 manage_etc_hosts: true
 groups: exforge
 users:
@@ -504,7 +515,7 @@ Fill as below (Again remember updating password with the hash you get):
 ```yaml
 #cloud-config
 hostname: debian13
-fqdn: debian13.x386.org
+fqdn: debian13.386387.xyz
 manage_etc_hosts: true
 groups: exforge
 users:
@@ -618,7 +629,7 @@ virt-install --name debian13 \
   --install no_install=yes
 ```
 
-**Note**: If `--os-variant debian13` fails on Ubuntu servers, try `--os-variant debian11`.
+**Note**: If `--os-variant debian13` fails on Ubuntu servers, try `--os-variant debian12`.
 
 Cloud-init may take several minutes to complete. Connect via virt-viewer:
 

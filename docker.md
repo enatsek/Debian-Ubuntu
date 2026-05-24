@@ -3,9 +3,6 @@ title: "Docker"
 description: "Docker tutorial for Debian and Ubuntu servers"
 sidebar: 
    label: Docker
-   badge:
-      text: New
-      variant: tip
 ---
 
 ##### Docker Tutorial for Debian and Ubuntu Server

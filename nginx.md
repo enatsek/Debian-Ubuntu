@@ -16,7 +16,7 @@ Nginx is an open-source web server that also functions as a reverse proxy, load 
 
 ### 0.1. Environment
 
-I used Debian and Ubuntu server editions, specifically Debian 12 & 13, and Ubuntu 22.04 & 24.04 LTS Servers.
+I used Debian and Ubuntu server editions, specifically Debian 12 & 13, and Ubuntu 24.04 & 26.04 LTS Servers.
 
 I have a test domain name: 386387.xyz, which I used for testing.
 
@@ -60,7 +60,7 @@ When installed on Debian and Ubuntu, Nginx (like other service packages) starts 
 systemctl status nginx
 ```
 
-The Debian package maintainers include a sample page for the web server. You can view it:
+The Debian/Ubuntu package maintainers include a sample page for the web server. You can view it:
 
 ```bash
 sudo nano /var/www/html/index.nginx-debian.html
@@ -710,7 +710,7 @@ This Python server runs locally on port 8080. Test it in another terminal:
 curl 127.0.0.1:8080
 ```
 
-This Python server runs locally on port 8080. Test it in another terminal:
+Create the site configuration with reverse proxy:
 
 ```bash
 sudo nano /etc/nginx/sites-available/srv3

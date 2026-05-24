@@ -13,7 +13,7 @@ sidebar:
 
 ### 0.0. The What
 
-This tutorial covers MariaDB installation, configuration, basic user and database management, and Primary-Replica (Master-Slave) Replication on Debian 12/13 and Ubuntu 22.04/24.04 Servers.
+This tutorial covers MariaDB installation, configuration, basic user and database management, and Primary-Replica (Master-Slave) Replication on Debian 12/13 and Ubuntu 24.04/26.04 Servers.
 
 ### 0.1. Environment
 

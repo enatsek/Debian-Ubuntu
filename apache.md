@@ -14,9 +14,9 @@ sidebar:
 Apache HTTP Server is a free and open-source web server software that facilitates the delivery of web content to users. It is one of the most popular web servers, known for its reliability, security, and extensive customization options.
 
 ### 0.1. Environment
-I used Debian and Ubuntu server editions, specifically Debian 12 & 13, and Ubuntu 22.04 & 24.04 LTS Servers.
+I used Debian and Ubuntu server editions, specifically Debian 12 & 13, and Ubuntu 24.04 & 26.04 LTS Servers.
 
-I have a test domain name: 386387.xyz, which I used for testing. The test hostnames used are:
+I have a test domain name: 386387.xyz, which I use for testing. The test hostnames used are:
 
 - 386387.xyz
 - www.386387.xyz
@@ -55,7 +55,7 @@ When installed on Debian and Ubuntu, Apache (like other service packages) starts
 systemctl status apache2
 ```
 
-The Debian package managers include a sample page for the web server. You can view it:
+The Debian/Ubuntu package managers include a sample page for the web server. You can view it:
 
 ```bash
 sudo nano /var/www/html/index.html
@@ -883,7 +883,6 @@ sudo systemctl restart apache2
 - **php-xml**: XML parsing and generation
 - **php-mbstring**: Multibyte string handling (UTF-8 support)
 - **php-curl**: HTTP requests to external APIs
-- **php-opcache**: Opcode cache for performance
 - **php-zip**: ZIP archive manipulation
 - **php-gd**: Image processing
 
@@ -891,7 +890,7 @@ Install all recommended packages:
 
 ```bash
 sudo apt install php-mysql php-pgsql php-sqlite3 php-json \
-   php-xml php-mbstring php-curl php-opcache php-zip php-gd
+   php-xml php-mbstring php-curl php-zip php-gd
 sudo systemctl restart apache2
 ```
 

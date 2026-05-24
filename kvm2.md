@@ -18,10 +18,10 @@ Please refer to the KVM Virtualization Beginner tutorial before reading this one
 This tutorial focuses on KVM networking configurations.
 
 ### 0.1. Infrastructure
-- **Server (Host)**: Debian (13/12) or Ubuntu (24.04/22.04) Server
+- **Server (Host)**: Debian (12/13) or Ubuntu (24.04/26.04) Server
    - IP: 192.168.1.121
    - Name: elma
-   - NIC1: enp3s0f0
+   - NIC1: enp3s0
    - NIC2: enx00e04c534458 (USB network adapter)
 - **Network1**: 192.168.1.0/24 (internet modem/router, first interface)
 - **Network2**: 10.1.1.0/24 (external switch, second interface)
@@ -119,7 +119,7 @@ Replace content with (adjust interface names and IPs):
 ```yaml
 network:
   ethernets:
-    enp3s0f0:
+    enp3s0:
       dhcp4: false
       dhcp6: false
     enx00e04c534458:
@@ -127,7 +127,7 @@ network:
       dhcp6: false
   bridges:
     br0:
-      interfaces: [ enp3s0f0 ]
+      interfaces: [ enp3s0 ]
       addresses: [192.168.1.121/24]
       routes:
       - to: default
@@ -180,9 +180,9 @@ source /etc/network/interfaces.d/*
 auto lo
 iface lo inet loopback
 # The primary network interface
-auto enp3s0f0
+auto enp3s0
 #make sure we don't get addresses on our raw device
-iface enp3s0f0 inet manual
+iface enp3s0 inet manual
 #set up bridge and give it a static ip
 auto br0
 iface br0 inet static
@@ -191,7 +191,7 @@ iface br0 inet static
         network 192.168.1.0
         broadcast 192.168.1.255
         gateway 192.168.1.1
-        bridge_ports enp3s0f0
+        bridge_ports enp3s0
         bridge_stp off
         bridge_fd 0
         bridge_maxwait 0
@@ -493,7 +493,7 @@ sudo virt-install --name vm1 \
     --network bridge=br0 \
     --network bridge=brisolated \
     --graphics vnc,port=5901,listen=0.0.0.0 \
-    --os-variant ubuntu22.04 \
+    --os-variant ubuntu24.04 \
     --noautoconsole
 ```
 
@@ -507,7 +507,7 @@ sudo virt-install --name vm2 \
     --cdrom /srv/isos/ubuntu-24.04.2-live-server-amd64.iso  \
     --network bridge=brisolated \
     --graphics vnc,port=5902,listen=0.0.0.0 \
-    --os-variant ubuntu22.04 \
+    --os-variant ubuntu24.04 \
     --noautoconsole
 ```
 
@@ -537,7 +537,7 @@ Separating host and VM network traffic is a recommended practice for improved se
 
 - **Network**: 192.168.1.0/24 (single subnet)
 - **Host Interfaces**:
-  - NIC1 (enp3s0f0): VM traffic via bridge (192.168.1.121)
+  - NIC1 (enp3s0): VM traffic via bridge (192.168.1.121)
   - NIC2 (enx00e04c534458): Host management (192.168.1.122)
 - **VM Configuration**: Single interface on bridged network
 
@@ -563,7 +563,7 @@ Change as below:
 ```yaml
 network:
   ethernets:
-    enp3s0f0:
+    enp3s0:
       dhcp4: false
       dhcp6: false
     enx00e04c534458:
@@ -577,7 +577,7 @@ network:
         - 8.8.4.4
   bridges:
     br0:
-      interfaces: [ enp3s0f0 ]
+      interfaces: [ enp3s0 ]
       addresses: [192.168.1.121/24]
       routes:
       - to: default
@@ -615,8 +615,8 @@ auto lo
 iface lo inet loopback
 
 # VM traffic interface (bridged)
-auto enp3s0f0
-iface enp3s0f0 inet manual
+auto enp3s0
+iface enp3s0 inet manual
 
 # Bridge for VMs
 auto br0
@@ -626,7 +626,7 @@ iface br0 inet static
         network 192.168.1.0
         broadcast 192.168.1.255
         gateway 192.168.1.1
-        bridge_ports enp3s0f0
+        bridge_ports enp3s0
         bridge_stp off
         bridge_fd 0
         bridge_maxwait 0
@@ -745,7 +745,7 @@ We will create a VM, in a NAT network.
 Create a VM within a NAT (Network Address Translation) network for enhanced security and isolation.
 
 **Server Configuration**:
-- Interface 1 (enp3s0f0): Bridged mode for VMs (as configured in Section 4)
+- Interface 1 (enp3s0): Bridged mode for VMs (as configured in Section 4)
 - Interface 2 (enx00e04c534458): Standard mode for host management
 - Additional NAT network for isolated VMs
 
@@ -826,7 +826,7 @@ sudo virt-install --name vmn \
     --cdrom /srv/isos/ubuntu-24.04.2-live-server-amd64.iso  \
     --network bridge=brnat \
     --graphics vnc,port=5902,listen=0.0.0.0 \
-    --os-variant ubuntu22.04 \
+    --os-variant ubuntu24.04 \
     --noautoconsole
 ```
 
@@ -882,7 +882,7 @@ sudo virt-install --name vmtest \
     --cdrom /srv/isos/ubuntu-24.04.2-live-server-amd64.iso  \
     --network bridge=br0 \
     --graphics vnc,port=5902,listen=0.0.0.0 \
-    --os-variant ubuntu22.04 \
+    --os-variant ubuntu24.04 \
     --noautoconsole
 ```
 
@@ -993,10 +993,10 @@ Example output:
 
 ```text
 2: enp1s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
-    link/ether 52:54:00:83:3c:a0 brd ff:ff:ff:ff:ff:ff
+    link/ether 52:54:00:24:58:04 brd ff:ff:ff:ff:ff:ff
 ```
 
-**MAC Address**: `52:54:00:83:3c:a0`
+**MAC Address**: `52:54:00:24:58:04`
 
 **On the Host**:
 
@@ -1005,7 +1005,7 @@ Detach interface using MAC address:
 ```bash
 virsh detach-interface vmtest \
     bridge \
-    --mac 52:54:00:f7:6d:66 \
+    --mac 52:54:00:24:58:04 \
     --config
 ```
 
@@ -1019,7 +1019,7 @@ virsh detach-interface vmtest \
 ```bash
 virsh detach-interface vmtest \
     bridge \
-    --mac 52:54:00:83:3c:a0 \
+    --mac 52:54:00:24:58:04 \
     --live \
     --config
 ```

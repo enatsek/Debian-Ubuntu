@@ -19,9 +19,13 @@ However, systemd includes many more services and tools. This tutorial explores t
 
 You might think I like systemd. On the contrary—I don't like it; in fact, I dislike it. But since my preferred distributions (Debian and Ubuntu) use it, I've had to learn it as well.
 
-### 0.2. Sources
+### 0.2. Environment
 
-For this tutorial, I tried a different approach. Instead of gathering information solely from the internet and books, I posed questions to ChatGPT and compiled the answers.
+This tutorial is prepared using Debian 12/13 and Ubuntu 24.04/26.04 editions. I believe it will be valid with any distro with systemd.
+
+### 0.3. Sources
+
+For this tutorial, I tried a different approach. Instead of gathering information solely from the internet and books, I posted questions to ChatGPT and compiled the answers.
 
 Unfortunately (or perhaps fortunately), ChatGPT provided a significant amount of incorrect information. I verified every answer before preparing this tutorial.
 
@@ -32,7 +36,7 @@ AI still requires considerable refinement before becoming truly reliable.
 ## 1. Services
 ---
 
-Several important systemd services present in Debian 13 and/or Ubuntu 24.04 Server include:
+Several important systemd services present in Debian 13 and/or Ubuntu 26.04 Server include:
 
 - `systemd-journald`
 - `systemd-logind`
@@ -307,7 +311,7 @@ MACAddressPolicy=persistent
 #### 1.3.3. Important Notes
 
 - Debian 13 does not use `systemd-networkd` by default.
-- Ubuntu 24.04 uses Netplan, which generates `networkd` configuration files in `/run/systemd/network/`—these should not be edited directly.
+- Ubuntu 24.04/26.04 uses Netplan, which generates `networkd` configuration files in `/run/systemd/network/`—these should not be edited directly.
 
 
 
@@ -407,7 +411,7 @@ DNSSEC=yes
 
 ### 1.5. systemd-timesyncd
 
-Synchronizes the system clock across a network using NTP (Network Time Protocol).
+Synchronizes the system clock across a network using NTP (Network Time Protocol). Starting with Ubuntu 26.04 LTS, Ubuntu replaced it with chrony tool.
 
 #### 1.5.1. Key Points
 
@@ -632,7 +636,7 @@ Responsible for handling binary formats (executable file formats) on the system.
 
 The configuration files are in /etc/binfmt.d/. 
 
-Configuration files are in `/etc/binfmt.d/`. Each file defines rules for handling specific binary formats. This directory is empty by default on Debian 13 and Ubuntu 24.04.
+Configuration files are in `/etc/binfmt.d/`. Each file defines rules for handling specific binary formats. This directory is empty by default on Debian 13 and Ubuntu 26.04.
 
 **Example configuration:**
 

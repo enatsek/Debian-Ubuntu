@@ -22,7 +22,7 @@ The certificates are free but need to be renewed every 90 days. This tutorial gu
 ### 0.1. Environment
 
 - **Server Name:** `srv1.386387.xyz`
-- **Server Distro:** Debian 13 or Ubuntu 24.04 Server
+- **Server Distro:** Debian 13 or Ubuntu 24.04 - 26.04 Server
 - **HTTP Server:** Apache2 or Nginx
 
 **Remember to use your server's actual hostname instead of `srv1.386387.xyz` in your configurations.**

@@ -24,7 +24,7 @@ Main topics covered:
 
 Distributions covered:
 - Debian 13 and 12
-- Ubuntu 24.04 and 22.04 LTS
+- Ubuntu 26.04 and 24.04 LTS
 - RHEL (CentOS, AlmaLinux, Rocky Linux) 10.x, 9.x
 - Alpine 3.23
 - Devuan 6 and 5
@@ -297,7 +297,7 @@ sudo systemctl disable apache2
 
 <br>
 
-## 2. Ubuntu 24.04 LTS & 22.04 LTS
+## 2. Ubuntu 26.04 LTS & 24.04 LTS
 
 ---
 
@@ -320,31 +320,31 @@ sudo apt upgrade
 #### 2.1.3. Install a Package
 
 ```bash
-sudo install apache2
+sudo apt install apache2
 ```
 
 #### 2.1.4. Remove a Package
 
 ```bash
-sudo remove apache2
+sudo apt remove apache2
 ```
 
 #### 2.1.5. Search for a Package
 
 ```bash
-sudo search apache2
+sudo apt search apache2
 ```
 
 #### 2.1.6. Clean Unused Packages
 
 ```bash
-sudo autoremove
+sudo apt autoremove
 ```
 
 #### 2.1.7. Show Package Information
 
 ```bash
-sudo show apache2
+sudo apt show apache2
 ```
  
 ### 2.2. Network Configuration
